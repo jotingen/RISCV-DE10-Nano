@@ -1,0 +1,46 @@
+import LC3_pkg::*;
+
+module LC3_core (
+  input  logic           clk,
+  input  logic           rst,
+
+  input  logic           start,
+
+  output logic           bus_req,
+  input  logic           bus_ack,
+  output logic           bus_write,
+  output logic [15:0]    bus_addr,
+  inout  logic [15:0]    bus_data,
+
+  output logic [7:0]     led
+);
+
+LC3_pkg::state state;
+logic [15:0]    PC;
+
+LC3_ifu ifu (
+  .clk (clk),
+  .rst (rst),
+
+  .state (state),
+  .PC    (PC),
+
+  .bus_req   (bus_req),   
+  .bus_ack   (bus_ack),   
+  .bus_write (bus_write), 
+  .bus_addr  (bus_addr),  
+  .bus_data  (bus_data)  
+);
+
+
+always_ff @(posedge clk)
+  begin
+  if(rst)
+    led <= 8'd0;
+  else if(start)
+    led <= 8'd1;
+  else
+    led <= {led[6:0],led[7]};
+  end
+
+endmodule
