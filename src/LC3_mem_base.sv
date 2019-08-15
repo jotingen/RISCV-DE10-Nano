@@ -34,12 +34,12 @@ always_comb
     if(bus_write)
       begin
       wren     = '1;
-      bus_data = 'z;
+      //bus_data = 'z;
       end
     else
       begin
       wren     = '0;
-      bus_data = q;
+      //bus_data = q;
       end
     end
   else
@@ -50,7 +50,7 @@ always_comb
 
     wren     = '0;
     data     = '0;
-    bus_data = 'z;
+    //bus_data = 'z;
     end
   end
 
