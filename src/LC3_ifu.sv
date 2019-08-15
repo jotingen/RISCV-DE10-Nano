@@ -22,21 +22,21 @@ always_comb
     bus_req   = '1;
     bus_write = '0;
     bus_addr  = 'h0000;
-    bus_data  = 'z;
+    //bus_data  = 'z;
     end
   else if(state == LC3_pkg::IFU_FETCH)
     begin
     bus_req   = '1;
     bus_write = '0;
     bus_addr  = PC;
-    bus_data  = 'z;
+    //bus_data  = 'z;
     end
   else
     begin
     bus_req   = 'z;
     bus_write = 'z;
     bus_addr  = 'z;
-    bus_data  = 'z;
+    //bus_data  = 'z;
     end
 
 

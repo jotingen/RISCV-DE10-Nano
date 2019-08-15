@@ -15,6 +15,8 @@ module LC3_core (
   output logic [7:0]     led
 );
 
+logic [32:0] timer;
+
 LC3_pkg::state state;
 logic [15:0]    PC;
 
@@ -33,14 +35,15 @@ LC3_ifu ifu (
 );
 
 
+assign led[7:0] = timer[32:25];
 always_ff @(posedge clk)
   begin
   if(rst)
-    led <= 8'd0;
+    timer <= 'd1;
   else if(start)
-    led <= 8'd1;
+    timer <= 'd1;
   else
-    led <= {led[6:0],led[7]};
+    timer <= timer + 'd1;
   end
 
 endmodule
