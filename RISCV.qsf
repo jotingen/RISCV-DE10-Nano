@@ -6,7 +6,7 @@ set_global_assignment -name RESERVE_DATA0_AFTER_CONFIGURATION "USE AS REGULAR IO
 
 set_global_assignment -name DEVICE 5CSEBA6U23I7
 set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name TOP_LEVEL_ENTITY "LC3"
+set_global_assignment -name TOP_LEVEL_ENTITY "RISCV"
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.0.2
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:41:47 AUGUST 03,2019"
@@ -214,7 +214,7 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb -section_id tb
 
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 us" -section_id tb
 set_global_assignment -name SYSTEMVERILOG_FILE src/LC3_pkg.sv
-set_global_assignment -name SDC_FILE LC3.SDC
+set_global_assignment -name SDC_FILE RISCV.SDC
 set_global_assignment -name EDA_TEST_BENCH_FILE verif/tb.sv -section_id tb
 set_global_assignment -name EDA_MAINTAIN_DESIGN_HIERARCHY ON -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST ON -section_id eda_simulation

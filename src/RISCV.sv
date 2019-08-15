@@ -1,4 +1,4 @@
-module LC3(
+module RISCV(
 
 //////////// CLOCK //////////
 input  logic           FPGA_CLK1_50,

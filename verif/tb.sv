@@ -44,7 +44,7 @@ logic reset_n;
 
 assign ARDUINO_RESET_N = (reset_en)? reset_n : 'hz;
 
-LC3 dut (
+RISCV dut (
 
 //////////// CLOCK //////////
 .FPGA_CLK1_50,
