@@ -1,2 +1,2 @@
 cd simulation\modelsim
-vsim -c -do .\LC3.do
+vsim -c -do .\RISCV.do
