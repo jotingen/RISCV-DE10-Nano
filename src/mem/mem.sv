@@ -8,8 +8,8 @@ module mem #(
   input  logic           bus_req,
   output logic           bus_ack,
   input  logic           bus_write,
-  input  logic [15:0]    bus_addr,
-  inout  logic [15:0]    bus_data
+  input  logic [31:0]    bus_addr,
+  inout  logic [31:0]    bus_data
 
 );
 
@@ -39,7 +39,7 @@ always_comb
     end
   end
 
-ram_1r1w_64kbx32b	ram_1r1w_64kbx32b_inst (
+ram_1r1w_64kbx32b ram (
 	.address ( bus_addr_adjusted ),
 	.clock   ( clk ),
 	.data    ( bus_data ),

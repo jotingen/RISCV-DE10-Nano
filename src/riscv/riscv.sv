@@ -9,16 +9,20 @@ module riscv (
   output logic           bus_req,
   input  logic           bus_ack,
   output logic           bus_write,
-  output logic [15:0]    bus_addr,
-  inout  logic [15:0]    bus_data,
-
-  output logic [7:0]     led
+  output logic [31:0]    bus_addr,
+  inout  logic [31:0]    bus_data
 );
 
-logic [32:0] timer;
-
 riscv_pkg::state state;
-logic [15:0]    PC;
+logic [31:0]    PC;
+
+riscv_fsm fsm (
+  .clk (clk),
+  .rst (rst),
+
+  .state (state),
+  .PC    (PC)
+);
 
 riscv_ifu ifu (
   .clk (clk),
@@ -34,16 +38,5 @@ riscv_ifu ifu (
   .bus_data  (bus_data)  
 );
 
-
-assign led[7:0] = timer[32:25];
-always_ff @(posedge clk)
-  begin
-  if(rst)
-    timer <= 'd1;
-  else if(start)
-    timer <= 'd1;
-  else
-    timer <= timer + 'd1;
-  end
 
 endmodule
