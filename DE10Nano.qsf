@@ -215,11 +215,11 @@ set_global_assignment -name EDA_TEST_BENCH_FILE verif/tb.sv -section_id tb
 set_global_assignment -name EDA_MAINTAIN_DESIGN_HIERARCHY ON -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST ON -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_RTL_SIMULATION_COMMAND_SCRIPT ON -section_id eda_simulation
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 
 set_global_assignment -name SEARCH_PATH src
 set_global_assignment -name SEARCH_PATH src/quartus
 set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
+set_global_assignment -name SEARCH_PATH src/quartus/ram_1r1w_64kbx32b
 set_global_assignment -name SEARCH_PATH src/quartus/pll
 set_global_assignment -name SEARCH_PATH src/riscv
 set_global_assignment -name SEARCH_PATH src/mem
@@ -227,3 +227,5 @@ set_global_assignment -name SEARCH_PATH src/shield
 set_global_assignment -name SEARCH_PATH src/st7735r
 
 set_global_assignment -name SYSTEMVERILOG_FILE src/riscv/riscv_pkg.sv
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

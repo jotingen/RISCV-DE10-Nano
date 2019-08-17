@@ -51,12 +51,11 @@ logic        bus_write;
 logic [15:0] bus_addr;
 wire  [15:0] bus_data;
 
-assign clk = FPGA_CLK1_50;
-//PLL pll (
-//  .inclk0 (FPGA_CLK1_50),
-//  .c0     (clk),
-//  .locked ()
-//);
+PLL pll (
+  .inclk0 (FPGA_CLK1_50),
+  .c0     (clk),
+  .locked ()
+);
 
 assign start = ~KEY[1];
 
@@ -87,7 +86,7 @@ mem #(.ADDR_LO(16'h0000), .ADDR_HI(16'h0FFF)) mem (
 );
 
 shield_V1 shield (
-  .clk (clk),
+  .clk (FPGA_CLK1_50),
   .rst (rst),
   .inv(LED[1]),
   

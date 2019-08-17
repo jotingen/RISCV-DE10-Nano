@@ -7,6 +7,7 @@ vmap work rtl_work
 
 vlog -vlog01compat -work work +incdir+../../src/quartus/PLL             {../../src/quartus/PLL/PLL.v}
 vlog -vlog01compat -work work +incdir+../../src/quartus/ram_1rw_8192x16 {../../src/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v}
+vlog -vlog01compat -work work +incdir+../../src/quartus/ram_1r1w_64kbx32b {../../src/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v}
 
 vlog -sv -work work +incdir+../../src {../../src/de10nano.sv}
 
