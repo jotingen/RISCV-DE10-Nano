@@ -1,4 +1,4 @@
-module shield_display (
+module st7735r (
   input  logic clk,
   input  logic rst,
   output logic inv,

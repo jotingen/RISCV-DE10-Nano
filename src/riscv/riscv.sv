@@ -1,6 +1,6 @@
-import LC3_pkg::*;
+import riscv_pkg::*;
 
-module LC3_core (
+module riscv (
   input  logic           clk,
   input  logic           rst,
 
@@ -17,10 +17,10 @@ module LC3_core (
 
 logic [32:0] timer;
 
-LC3_pkg::state state;
+riscv_pkg::state state;
 logic [15:0]    PC;
 
-LC3_ifu ifu (
+riscv_ifu ifu (
   .clk (clk),
   .rst (rst),
 

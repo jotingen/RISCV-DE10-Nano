@@ -1,4 +1,4 @@
-module RISCV(
+module de10nano(
 
 //////////// CLOCK //////////
 input  logic           FPGA_CLK1_50,
@@ -61,7 +61,7 @@ assign clk = FPGA_CLK1_50;
 assign start = ~KEY[1];
 
 
-LC3_core core (
+riscv riscv (
   .clk (clk),
   .rst (rst),
   .start (start),
@@ -75,7 +75,7 @@ LC3_core core (
   .led ()
 );
 
-LC3_mem_base #(.ADDR_LO(16'h0000), .ADDR_HI(16'h0FFF)) mem_base (
+mem #(.ADDR_LO(16'h0000), .ADDR_HI(16'h0FFF)) mem (
   .clk (clk),
   .rst (rst),
 
@@ -105,27 +105,5 @@ assign LED[6] = ARDUINO_IO[08]; //DC
 assign LED[5] = ARDUINO_IO[10]; //CS
 assign LED[4] = ARDUINO_IO[13]; //CLK
 assign LED[0] = rst;
-  
-//LC3_mem #(.ADDR_LO(16'h1000), .ADDR_HI(16'h2FFF)) mem (
-//  .clk (clk),
-//  .rst (KEY[0]),
-//
-//  .bus_req   (bus_req),   
-//  .bus_ack   (bus_ack),   
-//  .bus_write (bus_write), 
-//  .bus_addr  (bus_addr),  
-//  .bus_data  (bus_data),  
-//
-//  .DRAM_ADDR  (DRAM_ADDR),  
-//  .DRAM_BA    (DRAM_BA),    
-//  .DRAM_CAS_N (DRAM_CAS_N), 
-//  .DRAM_CKE   (DRAM_CKE),   
-//  .DRAM_CLK   (DRAM_CLK),   
-//  .DRAM_CS_N  (DRAM_CS_N),  
-//  .DRAM_DQ    (DRAM_DQ),    
-//  .DRAM_DQM   (DRAM_DQM),   
-//  .DRAM_RAS_N (DRAM_RAS_N), 
-//  .DRAM_WE_N  (DRAM_WE_N)   
-//);
 
 endmodule

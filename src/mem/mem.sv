@@ -1,4 +1,4 @@
-module LC3_mem #(
+module mem #(
   parameter logic [15:0] ADDR_LO = 16'h0000,
   parameter logic [15:0] ADDR_HI = 16'h1FFF
 ) (
@@ -47,14 +47,14 @@ always_comb
     if(bus_write)
       begin
       DRAM_WE_N  = '1;
-      DRAM_DQ    = bus_data;
-      bus_data   = 'z;
+      //DRAM_DQ    = bus_data;
+      //bus_data   = 'z;
       end
     else
       begin
       DRAM_WE_N  = '0;
-      bus_data   = DRAM_DQ;
-      DRAM_DQ    = 'z;
+      //bus_data   = DRAM_DQ;
+      //DRAM_DQ    = 'z;
       end
     end
   else
@@ -70,8 +70,8 @@ always_comb
     DRAM_RAS_N = '0;
 
     DRAM_WE_N  = '0;
-    bus_data   = 'z;
-    DRAM_DQ    = 'z;
+    //bus_data   = 'z;
+    //DRAM_DQ    = 'z;
     end
   end
 

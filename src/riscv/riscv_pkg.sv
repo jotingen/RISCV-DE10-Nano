@@ -1,4 +1,4 @@
-package LC3_pkg;
+package riscv_pkg;
 
 typedef enum {
   IFU_FETCH,
