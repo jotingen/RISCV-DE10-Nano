@@ -1,10 +1,10 @@
-import LC3_pkg::*;
+import riscv_pkg::*;
 
-module LC3_ifu (
+module riscv_ifu (
   input  logic           clk,
   input  logic           rst,
 
-  input  LC3_pkg::state  state,
+  input  riscv_pkg::state  state,
   input  logic [15:0]    PC,
 
   output logic           bus_req,
@@ -24,7 +24,7 @@ always_comb
     bus_addr  = 'h0000;
     //bus_data  = 'z;
     end
-  else if(state == LC3_pkg::IFU_FETCH)
+  else if(state == riscv_pkg::IFU_FETCH)
     begin
     bus_req   = '1;
     bus_write = '0;

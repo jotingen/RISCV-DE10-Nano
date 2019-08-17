@@ -45,7 +45,7 @@ assign ARDUINO_IO[14] = GND;
 assign ARDUINO_IO[15] = 'z;
 assign rst = ~ARDUINO_RESET_N;
 
-shield_display display (
+st7735r display (
   .clk (clk),
   .rst (rst),
   .inv (inv),
