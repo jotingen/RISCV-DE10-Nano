@@ -1,7 +1,8 @@
 module shield_V1 (
 
 input  logic           clk,
-output logic           rst,
+input  logic           rst,
+output logic           arst,
 output logic           inv,
 
 //////////// ADC //////////
@@ -43,7 +44,7 @@ assign ARDUINO_IO[12] = MISO;
 assign ARDUINO_IO[13] = SCK;
 assign ARDUINO_IO[14] = GND;
 assign ARDUINO_IO[15] = 'z;
-assign rst = ~ARDUINO_RESET_N;
+assign arst = ~ARDUINO_RESET_N;
 
 st7735r display (
   .clk (clk),

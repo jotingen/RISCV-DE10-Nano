@@ -1,26 +1,50 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Aug 15 23:18:07 2019
+[*] Sat Aug 17 17:36:24 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.vcd"
-[dumpfile_mtime] "Thu Aug 15 23:17:29 2019"
-[dumpfile_size] 85292677
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
+[dumpfile_mtime] "Sat Aug 17 17:35:21 2019"
+[dumpfile_size] 3355779
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 0
-[size] 1000 600
+[timestart] 204000
+[size] 1858 1057
 [pos] -1 -1
-*0.000000 1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-12.056773 225000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
+[treeopen] tb.dut.riscv.
 [treeopen] tb.dut.shield.
 [sst_width] 197
-[signals_width] 126
+[signals_width] 142
 [sst_expanded] 1
-[sst_vpaned_height] 153
+[sst_vpaned_height] 314
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
-@29
 tb.FPGA_CLK3_50
+tb.dut.clk
+tb.dut.arst
+@201
+-
+@28
+tb.dut.rst
+@200
+-
+@28
+tb.dut.bus_req
+tb.dut.bus_write
+@22
+tb.dut.bus_addr[31:0]
+#{tb.dut.bus_data[31:0]} tb.dut.bus_data[31] tb.dut.bus_data[30] tb.dut.bus_data[29] tb.dut.bus_data[28] tb.dut.bus_data[27] tb.dut.bus_data[26] tb.dut.bus_data[25] tb.dut.bus_data[24] tb.dut.bus_data[23] tb.dut.bus_data[22] tb.dut.bus_data[21] tb.dut.bus_data[20] tb.dut.bus_data[19] tb.dut.bus_data[18] tb.dut.bus_data[17] tb.dut.bus_data[16] tb.dut.bus_data[15] tb.dut.bus_data[14] tb.dut.bus_data[13] tb.dut.bus_data[12] tb.dut.bus_data[11] tb.dut.bus_data[10] tb.dut.bus_data[9] tb.dut.bus_data[8] tb.dut.bus_data[7] tb.dut.bus_data[6] tb.dut.bus_data[5] tb.dut.bus_data[4] tb.dut.bus_data[3] tb.dut.bus_data[2] tb.dut.bus_data[1] tb.dut.bus_data[0]
+@28
+tb.dut.bus_ack
+@200
+-
+@22
+tb.dut.riscv.PC[31:0]
+@200
+-
+@420
+tb.dut.riscv.fsm.state
 [pattern_trace] 1
 [pattern_trace] 0
