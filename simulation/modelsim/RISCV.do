@@ -14,6 +14,7 @@ vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_pkg.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_fsm.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_ifu.sv}
+vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_idu.sv}
 
 vlog -sv -work work +incdir+../../src/mem {../../src/mem/mem.sv}
 

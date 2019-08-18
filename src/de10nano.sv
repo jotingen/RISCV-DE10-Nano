@@ -82,7 +82,9 @@ riscv riscv (
   .bus_ack   (bus_ack),   
   .bus_write (bus_write), 
   .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)
+  .bus_data  (bus_data),
+ 
+  .dbg_led (LED[3:2])
 );
 
 mem #(.ADDR_LO(16'h0000), .ADDR_HI(16'h0FFF)) mem (

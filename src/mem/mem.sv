@@ -13,37 +13,67 @@ module mem #(
 
 );
 
-logic wren;
+typedef enum {
+  IDLE,
+  ACCESS,
+  DATA
+} mem_state_s;
+
+mem_state_s mem_state;
+
+logic wr;
+logic rd;
+logic [15:0] addr;
+logic [31:0] data;
 logic [31:0] q;
-logic [15:0] bus_addr_adjusted;
 
-assign bus_data = bus_req ? q : 'z;
-
-always_comb
+logic put_data;
+assign bus_data = put_data ? q : 'z;
+always_ff @(posedge clk)
   begin
-  wren  = '0;
-  bus_ack = 'z;
-  bus_addr_adjusted = '0;
-  if(bus_req &
-     bus_addr >= ADDR_LO &
-     bus_addr <= ADDR_HI)
-    begin
-
-    bus_ack = '1;
-    bus_addr_adjusted = bus_addr - ADDR_LO;
-
-    if(bus_write)
-      begin
-      wren  = '1;
-      end
-    end
+  bus_ack  <= 'z;
+  wr   <= '0;
+  rd   <= '0;
+  addr <= addr;
+  data <= data;
+  put_data <= '0;
+  case(mem_state)
+    IDLE : begin
+           if(bus_req &
+	      bus_addr >= ADDR_LO &
+	      bus_addr <= ADDR_HI)
+             begin
+             mem_state <= ACCESS;
+             wr <= bus_write;
+             addr <= bus_addr - ADDR_LO;
+             if(bus_write)
+               begin
+               wr <= '1;
+               data <= bus_data;
+               end
+             else           
+               begin
+               rd <= '1;
+               end
+             end
+           end
+    ACCESS : begin
+             mem_state <= DATA;
+             end
+    DATA : begin
+           mem_state <= IDLE;
+           bus_ack <= '1;
+           put_data <= '1;
+           end
+  endcase
   end
-
+             
 ram_1r1w_64kbx32b ram (
-	.address ( bus_addr_adjusted ),
+	.address ( addr ),
 	.clock   ( clk ),
-	.data    ( bus_data ),
-	.wren    ( wren ),
+	.data    ( data ),
+	.rden    ( rd ),
+	.wren    ( wr ),
 	.q       ( q )
 	);
 

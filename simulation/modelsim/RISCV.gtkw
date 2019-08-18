@@ -1,21 +1,26 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Aug 17 17:36:24 2019
+[*] Sun Aug 18 20:42:23 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Aug 17 17:35:21 2019"
-[dumpfile_size] 3355779
+[dumpfile_mtime] "Sun Aug 18 20:41:22 2019"
+[dumpfile_size] 3295147
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 204000
+[timestart] 203650
 [size] 1858 1057
 [pos] -1 -1
-*-12.056773 225000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-13.056773 228000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
+[treeopen] tb.dut.mem.ram.
+[treeopen] tb.dut.mem.ram.altsyncram_component.
+[treeopen] tb.dut.mem.ram.altsyncram_component.m_default.
+[treeopen] tb.dut.mem.ram.altsyncram_component.m_default.altsyncram_inst.
+[treeopen] tb.dut.mem.ram.altsyncram_component.m_default.altsyncram_inst.mem.
 [treeopen] tb.dut.riscv.
 [treeopen] tb.dut.shield.
-[sst_width] 197
-[signals_width] 142
+[sst_width] 401
+[signals_width] 313
 [sst_expanded] 1
 [sst_vpaned_height] 314
 @28
@@ -24,7 +29,7 @@ tb.FPGA_CLK2_50
 tb.FPGA_CLK3_50
 tb.dut.clk
 tb.dut.arst
-@201
+@200
 -
 @28
 tb.dut.rst
@@ -40,11 +45,54 @@ tb.dut.bus_addr[31:0]
 tb.dut.bus_ack
 @200
 -
+-MEM
+@420
+tb.dut.mem.mem_state
+@28
+tb.dut.mem.rd
+tb.dut.mem.ram.wren
+@22
+#{tb.dut.mem.ram.address[15:0]} tb.dut.mem.ram.address[15] tb.dut.mem.ram.address[14] tb.dut.mem.ram.address[13] tb.dut.mem.ram.address[12] tb.dut.mem.ram.address[11] tb.dut.mem.ram.address[10] tb.dut.mem.ram.address[9] tb.dut.mem.ram.address[8] tb.dut.mem.ram.address[7] tb.dut.mem.ram.address[6] tb.dut.mem.ram.address[5] tb.dut.mem.ram.address[4] tb.dut.mem.ram.address[3] tb.dut.mem.ram.address[2] tb.dut.mem.ram.address[1] tb.dut.mem.ram.address[0]
+#{tb.dut.mem.ram.data[31:0]} tb.dut.mem.ram.data[31] tb.dut.mem.ram.data[30] tb.dut.mem.ram.data[29] tb.dut.mem.ram.data[28] tb.dut.mem.ram.data[27] tb.dut.mem.ram.data[26] tb.dut.mem.ram.data[25] tb.dut.mem.ram.data[24] tb.dut.mem.ram.data[23] tb.dut.mem.ram.data[22] tb.dut.mem.ram.data[21] tb.dut.mem.ram.data[20] tb.dut.mem.ram.data[19] tb.dut.mem.ram.data[18] tb.dut.mem.ram.data[17] tb.dut.mem.ram.data[16] tb.dut.mem.ram.data[15] tb.dut.mem.ram.data[14] tb.dut.mem.ram.data[13] tb.dut.mem.ram.data[12] tb.dut.mem.ram.data[11] tb.dut.mem.ram.data[10] tb.dut.mem.ram.data[9] tb.dut.mem.ram.data[8] tb.dut.mem.ram.data[7] tb.dut.mem.ram.data[6] tb.dut.mem.ram.data[5] tb.dut.mem.ram.data[4] tb.dut.mem.ram.data[3] tb.dut.mem.ram.data[2] tb.dut.mem.ram.data[1] tb.dut.mem.ram.data[0]
+#{tb.dut.mem.ram.q[31:0]} tb.dut.mem.ram.q[31] tb.dut.mem.ram.q[30] tb.dut.mem.ram.q[29] tb.dut.mem.ram.q[28] tb.dut.mem.ram.q[27] tb.dut.mem.ram.q[26] tb.dut.mem.ram.q[25] tb.dut.mem.ram.q[24] tb.dut.mem.ram.q[23] tb.dut.mem.ram.q[22] tb.dut.mem.ram.q[21] tb.dut.mem.ram.q[20] tb.dut.mem.ram.q[19] tb.dut.mem.ram.q[18] tb.dut.mem.ram.q[17] tb.dut.mem.ram.q[16] tb.dut.mem.ram.q[15] tb.dut.mem.ram.q[14] tb.dut.mem.ram.q[13] tb.dut.mem.ram.q[12] tb.dut.mem.ram.q[11] tb.dut.mem.ram.q[10] tb.dut.mem.ram.q[9] tb.dut.mem.ram.q[8] tb.dut.mem.ram.q[7] tb.dut.mem.ram.q[6] tb.dut.mem.ram.q[5] tb.dut.mem.ram.q[4] tb.dut.mem.ram.q[3] tb.dut.mem.ram.q[2] tb.dut.mem.ram.q[1] tb.dut.mem.ram.q[0]
+@28
+tb.dut.riscv.ifu.req
+@200
+-
+-FSM
+@25
+tb.dut.riscv.fsm.state
 @22
 tb.dut.riscv.PC[31:0]
 @200
 -
+-IFU
 @420
-tb.dut.riscv.fsm.state
+tb.dut.riscv.ifu.ifu_state
+@28
+tb.dut.riscv.ifu.rdy
+tb.dut.riscv.ifu.done
+@22
+tb.dut.riscv.ifu.inst[31:0]
+@200
+-
+-IDU
+@420
+tb.dut.riscv.idu.idu_state
+@22
+tb.dut.riscv.idu.inst[31:0]
+tb.dut.riscv.idu.opcode[6:0]
+tb.dut.riscv.idu.rd[4:0]
+tb.dut.riscv.idu.rs1[4:0]
+tb.dut.riscv.idu.rs2[4:0]
+@28
+tb.dut.riscv.idu.funct3[2:0]
+@22
+tb.dut.riscv.idu.funct7[6:0]
+tb.dut.riscv.idu.imm[31:0]
+tb.dut.riscv.idu.shamt[4:0]
+tb.dut.riscv.idu.succ[3:0]
+tb.dut.riscv.idu.pred[3:0]
+tb.dut.riscv.idu.fm[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
