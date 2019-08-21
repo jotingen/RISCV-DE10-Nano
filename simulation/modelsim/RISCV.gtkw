@@ -1,12 +1,12 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Aug 18 20:42:23 2019
+[*] Mon Aug 19 23:48:13 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sun Aug 18 20:41:22 2019"
-[dumpfile_size] 3295147
+[dumpfile_mtime] "Mon Aug 19 23:45:17 2019"
+[dumpfile_size] 3315742
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 203650
+[timestart] 215570
 [size] 1858 1057
 [pos] -1 -1
 *-13.056773 228000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
@@ -59,8 +59,44 @@ tb.dut.mem.ram.wren
 tb.dut.riscv.ifu.req
 @200
 -
+-REG
+@22
+tb.dut.riscv.regfile.x00[31:0]
+tb.dut.riscv.regfile.x01[31:0]
+tb.dut.riscv.regfile.x02[31:0]
+tb.dut.riscv.regfile.x03[31:0]
+tb.dut.riscv.regfile.x04[31:0]
+tb.dut.riscv.regfile.x05[31:0]
+tb.dut.riscv.regfile.x06[31:0]
+tb.dut.riscv.regfile.x07[31:0]
+tb.dut.riscv.regfile.x08[31:0]
+tb.dut.riscv.regfile.x09[31:0]
+tb.dut.riscv.regfile.x10[31:0]
+tb.dut.riscv.regfile.x11[31:0]
+tb.dut.riscv.regfile.x12[31:0]
+tb.dut.riscv.regfile.x13[31:0]
+tb.dut.riscv.regfile.x14[31:0]
+tb.dut.riscv.regfile.x15[31:0]
+tb.dut.riscv.regfile.x16[31:0]
+tb.dut.riscv.regfile.x17[31:0]
+tb.dut.riscv.regfile.x18[31:0]
+tb.dut.riscv.regfile.x19[31:0]
+tb.dut.riscv.regfile.x20[31:0]
+tb.dut.riscv.regfile.x21[31:0]
+tb.dut.riscv.regfile.x22[31:0]
+tb.dut.riscv.regfile.x23[31:0]
+tb.dut.riscv.regfile.x24[31:0]
+tb.dut.riscv.regfile.x25[31:0]
+tb.dut.riscv.regfile.x26[31:0]
+tb.dut.riscv.regfile.x27[31:0]
+tb.dut.riscv.regfile.x28[31:0]
+tb.dut.riscv.regfile.x29[31:0]
+tb.dut.riscv.regfile.x30[31:0]
+tb.dut.riscv.regfile.x31[31:0]
+@200
+-
 -FSM
-@25
+@24
 tb.dut.riscv.fsm.state
 @22
 tb.dut.riscv.PC[31:0]

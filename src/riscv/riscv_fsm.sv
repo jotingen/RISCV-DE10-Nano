@@ -4,8 +4,6 @@ module riscv_fsm (
   input  logic             clk,
   input  logic             rst,
 
-  output logic [31:0]      PC,
-
   input  logic             ifu_rdy,
   output logic             ifu_req,
   input  logic             ifu_done,
@@ -27,7 +25,6 @@ state_s  state;
 
 always_ff @(posedge clk)
   begin
-  PC    <= PC;
   state <= state;
 
   ifu_req  <= '0;
@@ -58,17 +55,15 @@ always_ff @(posedge clk)
                end
     ALU_EXECUTE: begin
                  state <= IFU_FETCH;
-                 PC <= PC + 1;
                  end
   endcase
     
   if(rst)
     begin
-    PC    <= '0;
-    state <= IFU_FETCH;
+    state   <= IFU_FETCH;
     ifu_req <= '0;
     idu_req <= '0;
     end
   end
-
+  
 endmodule
