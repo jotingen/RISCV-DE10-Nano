@@ -104,6 +104,9 @@ always_ff @(posedge clk)
     begin
     PC <= 'h200;
     x  <= '0;
+    //TMP Move up until we figure out how to compile with limited memory
+    //Used for stack pointer
+    x[2] <= 'hE800;
     end
   end
 
