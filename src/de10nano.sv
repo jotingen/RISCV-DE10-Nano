@@ -87,7 +87,7 @@ riscv riscv (
   .dbg_led (LED[3:2])
 );
 
-mem #(.ADDR_LO(16'h0000), .ADDR_HI(16'h0FFF)) mem (
+mem #(.ADDR_LO(16'h0000), .ADDR_HI(16'hFFFF)) mem (
   .clk (clk),
   .rst (rst),
 

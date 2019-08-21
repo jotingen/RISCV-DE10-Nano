@@ -58,7 +58,14 @@ always_ff @(posedge clk)
              end
            end
     ACCESS : begin
-             mem_state <= DATA;
+             if(wr)
+               begin
+               mem_state <= IDLE;
+               end
+             else
+               begin
+               mem_state <= DATA;
+               end
              end
     DATA : begin
            mem_state <= IDLE;

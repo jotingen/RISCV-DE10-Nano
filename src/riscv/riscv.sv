@@ -266,7 +266,13 @@ riscv_alu alu (
                              
   .x_wr      (x_wr    ),
   .x_in      (x_in    ),
-  .x         (x       )
+  .x         (x       ),
+
+  .bus_req   (bus_req),   
+  .bus_ack   (bus_ack),   
+  .bus_write (bus_write), 
+  .bus_addr  (bus_addr),  
+  .bus_data  (bus_data)
 );
 
 endmodule
