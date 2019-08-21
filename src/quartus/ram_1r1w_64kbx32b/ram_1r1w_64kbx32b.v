@@ -92,7 +92,7 @@ module ram_1r1w_64kbx32b (
 `ifdef NO_PLI
 		altsyncram_component.init_file = "./verif/test.rif"
 `else
-		altsyncram_component.init_file = "../../verif/test.hex"
+		altsyncram_component.init_file = "../../verif/tests/add.hex"
 `endif
 ,
 		altsyncram_component.intended_device_family = "Cyclone V",

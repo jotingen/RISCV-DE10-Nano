@@ -15,7 +15,7 @@ module riscv_ifu (
   output logic             bus_req,
   input  logic             bus_ack,
   output logic             bus_write,
-  output logic [15:0]      bus_addr,
+  output logic [31:0]      bus_addr,
   inout  logic [31:0]      bus_data
 
 );
@@ -49,7 +49,11 @@ always_ff @(posedge clk)
           if(bus_ack)
             begin
             ifu_state <= DATA;
-					  inst <= bus_data;
+            //Convert from little endian to big endian
+					  inst <= {bus_data[7:0],
+					           bus_data[15:8],
+					           bus_data[23:16],
+					           bus_data[31:24]};
             end
           end
     DATA : begin

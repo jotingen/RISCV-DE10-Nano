@@ -12,9 +12,11 @@ vlog -sv -work work +incdir+../../src {../../src/de10nano.sv}
 
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_pkg.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv.sv}
+vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_regfile.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_fsm.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_ifu.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_idu.sv}
+vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_alu.sv}
 
 vlog -sv -work work +incdir+../../src/mem {../../src/mem/mem.sv}
 
@@ -28,7 +30,7 @@ vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lns
 
 vcd on
 vcd file sim.vcd
-show -all
+#show -all
 vcd add -r *
 
 run 1000 ns

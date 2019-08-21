@@ -21,6 +21,48 @@ module riscv_idu (
   output logic  [4:0] rd,
   output logic  [6:0] opcode,
 
+  output logic LUI,
+  output logic AUIPC,
+  output logic JAL,
+  output logic JALR,
+  output logic BEQ,
+  output logic BNE,
+  output logic BLT,
+  output logic BGE,
+  output logic BLTU,
+  output logic BGEU,
+  output logic LB,
+  output logic LH,
+  output logic LW,
+  output logic LBU,
+  output logic LHU,
+  output logic SB,
+  output logic SH,
+  output logic SW,
+  output logic ADDI,
+  output logic SLTI,
+  output logic SLTIU,
+  output logic XORI,
+  output logic ORI,
+  output logic ANDI,
+  output logic SLLI,
+  output logic SRLI,
+  output logic SRAI,
+  output logic ADD,
+  output logic SUB,
+  output logic SLL,
+  output logic SLT,
+  output logic SLTU,
+  output logic XOR,
+  output logic SRL,
+  output logic SRA,
+  output logic OR,
+  output logic AND,
+  output logic FENCE,
+  output logic FENCE_I,
+  output logic ECALL,
+  output logic EBREAK,
+
   output logic  [1:0] dbg_led
 
 );
@@ -118,32 +160,75 @@ inst_JType_s inst_J;
 always_comb
   begin
   inst_opcode = inst[6:0];
-  inst_R = inst;
-  inst_I = inst;
-  inst_S = inst;
-  inst_B = inst;
-  inst_U = inst;
-  inst_J = inst;
+  inst_R  = inst;
+  inst_I  = inst;
+  inst_S  = inst;
+  inst_B  = inst;
+  inst_U  = inst;
+  inst_J  = inst;
 
-  fm     = '0;
-  pred   = '0;
-  succ   = '0;
-  shamt  = '0;
-  imm    = '0;
-  funct7 = '0;
-  funct3 = '0;
-  rs2    = '0;
-  rs1    = '0;
-  rd     = '0;
-  opcode = inst_opcode;
+  fm      = '0;
+  pred    = '0;
+  succ    = '0;
+  shamt   = '0;
+  imm     = '0;
+  funct7  = '0;
+  funct3  = '0;
+  rs2     = '0;
+  rs1     = '0;
+  rd      = '0;
+  opcode  = inst_opcode;
+  LUI     = '0;
+	AUIPC   = '0;
+	JAL     = '0;
+	JALR    = '0;
+	BEQ     = '0;
+	BNE     = '0;
+	BLT     = '0;
+	BGE     = '0;
+	BLTU    = '0;
+	BGEU    = '0;
+	LB      = '0;
+	LH      = '0;
+	LW      = '0;
+	LBU     = '0;
+	LHU     = '0;
+	SB      = '0;
+	SH      = '0;
+	SW      = '0;
+	ADDI    = '0;
+	SLTI    = '0;
+	SLTIU   = '0;
+	XORI    = '0;
+	ORI     = '0;
+	ANDI    = '0;
+	SLLI    = '0;
+	SRLI    = '0;
+	SRAI    = '0;
+	ADD     = '0;
+	SUB     = '0;
+	SLL     = '0;
+	SLT     = '0;
+	SLTU    = '0;
+	XOR     = '0;
+	SRL     = '0;
+	SRA     = '0;
+	OR      = '0;
+	AND     = '0;
+	FENCE   = '0;
+	FENCE_I = '0;
+	ECALL   = '0;
+	EBREAK  = '0;
   case (inst_opcode)
     'b0110111 : begin //LUI
                 imm[31:12] = inst_U.imm_31_12;
                 rd         = inst_U.rd;
+                LUI        = '1;
                 end
     'b0010111 : begin //AUIPC
                 imm[31:12] = inst_U.imm_31_12;
                 rd         = inst_U.rd;
+                AUIPC      = '1;
                 end
     'b1101111 : begin //JAL
                 imm[20]    = inst_J.imm_20;
@@ -151,12 +236,14 @@ always_comb
                 imm[11]    = inst_J.imm_11;
                 imm[19:12] = inst_J.imm_19_12;
                 rd         = inst_J.rd;
+                JAL        = '1;
                 end
     'b1100111 : begin //JALR
                 imm[11:0]  = inst_I.imm_11_0;
                 rs1        = inst_I.rs1;
                 funct3     = inst_I.funct3;
                 rd         = inst_I.rd;
+                JALR       = '1;
                 end
     'b1100111 : begin 
                 case (inst_B.funct3)
@@ -168,6 +255,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+												  BEQ        = '1;
                           end
                   'b001 : begin //BNE
                           imm[12]    = inst_B.imm_12;
@@ -177,6 +265,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+                          BNE        = '1;
                           end
                   'b100 : begin //BLT
                           imm[12]    = inst_B.imm_12;
@@ -186,6 +275,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+                          BLT        = '1;
                           end
                   'b101 : begin //BGE
                           imm[12]    = inst_B.imm_12;
@@ -195,6 +285,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+                          BGE        = '1;
                           end
                   'b110 : begin //BLTU
                           imm[12]    = inst_B.imm_12;
@@ -204,6 +295,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+                          BLTU       = '1;
                           end
                   'b111 : begin //BGEU
                           imm[12]    = inst_B.imm_12;
@@ -213,6 +305,7 @@ always_comb
                           funct3     = inst_B.funct3;
                           imm[4:1]   = inst_B.imm_4_1;
                           imm[11]    = inst_B.imm_11;
+                          BGEU       = '1;
                           end
                 endcase
                 end
@@ -223,30 +316,35 @@ always_comb
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          LB         = '1;
                           end
-                  'b000 : begin //LH
+                  'b001 : begin //LH
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          LH         = '1;
                           end
-                  'b000 : begin //LW
+                  'b010 : begin //LW
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          LW         = '1;
                           end
-                  'b000 : begin //LBU
+                  'b100 : begin //LBU
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          LBU        = '1;
                           end
-                  'b000 : begin //LHU
+                  'b101 : begin //LHU
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          LHU        = '1;
                           end
                 endcase
                 end
@@ -258,6 +356,7 @@ always_comb
                           rs1        = inst_S.rs1;
                           funct3     = inst_S.funct3;
                           imm[4:0]   = inst_S.imm_4_0;
+                          SB         = '1;
                           end
                   'b001 : begin //SH
                           imm[11:5]  = inst_S.imm_11_5;
@@ -265,6 +364,7 @@ always_comb
                           rs1        = inst_S.rs1;
                           funct3     = inst_S.funct3;
                           imm[4:0]   = inst_S.imm_4_0;
+                          SH         = '1;
                           end
                   'b010 : begin //SW
                           imm[11:5]  = inst_S.imm_11_5;
@@ -272,6 +372,7 @@ always_comb
                           rs1        = inst_S.rs1;
                           funct3     = inst_S.funct3;
                           imm[4:0]   = inst_S.imm_4_0;
+                          SW         = '1;
                           end
                 endcase
                 end
@@ -282,36 +383,42 @@ always_comb
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          ADDI       = '1;
                           end
                   'b010 : begin //SLTI
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          SLTI       = '1;
                           end
                   'b011 : begin //SLTIU
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          SLTIU      = '1;
                           end
                   'b100 : begin //XORI
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          XORI       = '1;
                           end
                   'b110 : begin //ORI
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          ORI        = '1;
                           end
                   'b111 : begin //ANDI
                           imm[11:0]  = inst_I.imm_11_0;
                           rs1        = inst_I.rs1;
                           funct3     = inst_I.funct3;
                           rd         = inst_I.rd;
+                          ANDI       = '1;
                           end
                   'b001 : begin //SLLI
                           funct7     = inst_R.funct7;  
@@ -319,6 +426,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          SLLI       = '1;
                           end
                   'b101 : begin 
                           case (inst_R.funct7)
@@ -328,6 +436,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        SRLI       = '1;
                                         end
                             'b0100000 : begin //SRAI
                                         funct7     = inst_R.funct7;  
@@ -335,6 +444,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        SRAI       = '1;
                                         end
                           endcase
                           end
@@ -350,6 +460,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        ADD        = '1;
                                         end
                             'b0100000 : begin //SUB
                                         funct7     = inst_R.funct7;  
@@ -357,6 +468,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        SUB        = '1;
                                         end
                           endcase
                           end
@@ -366,6 +478,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          SLL        = '1;
                           end
                   'b010 : begin //SLT
                           funct7     = inst_R.funct7;  
@@ -373,6 +486,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          SLT        = '1;
                           end
                   'b011 : begin //SLTU
                           funct7     = inst_R.funct7;  
@@ -380,6 +494,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          SLTU       = '1;
                           end
                   'b100 : begin //XOR
                           funct7     = inst_R.funct7;  
@@ -387,6 +502,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          XOR        = '1;
                           end
                   'b101 : begin 
                           case (inst_R.funct7)
@@ -396,6 +512,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        SRL        = '1;
                                         end
                             'b0100000 : begin //SRA
                                         funct7     = inst_R.funct7;  
@@ -403,6 +520,7 @@ always_comb
                                         rs1        = inst_R.rs1;
                                         funct3     = inst_R.funct3;
                                         rd         = inst_R.rd;
+                                        SRA        = '1;
                                         end
                           endcase
                           end
@@ -412,6 +530,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          OR         = '1;
                           end
                   'b101 : begin //AND
                           funct7     = inst_R.funct7;  
@@ -419,6 +538,7 @@ always_comb
                           rs1        = inst_R.rs1;
                           funct3     = inst_R.funct3;
                           rd         = inst_R.rd;
+                          AND        = '1;
                           end
                 endcase
                 end
@@ -427,10 +547,13 @@ always_comb
                 rs1            = inst_I.rs1;
                 funct3         = inst_I.funct3;
                 rd             = inst_I.rd;
+                FENCE      = '1;
                 end
     'b1110011 : begin //ECALL
+                ECALL      = '1;
                 end
     'b1110011 : begin //EBREAK
+                EBREAK     = '1;
                 end
   endcase
   end
