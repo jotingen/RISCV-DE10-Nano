@@ -157,294 +157,294 @@ inst_SType_s inst_S;
 inst_BType_s inst_B;
 inst_UType_s inst_U;
 inst_JType_s inst_J;
-always_comb
+always_ff @(posedge clk)
   begin
-  inst_opcode = inst[6:0];
-  inst_R  = inst;
-  inst_I  = inst;
-  inst_S  = inst;
-  inst_B  = inst;
-  inst_U  = inst;
-  inst_J  = inst;
+  inst_opcode <= inst[6:0];
+  inst_R  <= inst;
+  inst_I  <= inst;
+  inst_S  <= inst;
+  inst_B  <= inst;
+  inst_U  <= inst;
+  inst_J  <= inst;
 
-  fm      = '0;
-  pred    = '0;
-  succ    = '0;
-  shamt   = '0;
-  imm     = '0;
-  funct7  = '0;
-  funct3  = '0;
-  rs2     = '0;
-  rs1     = '0;
-  rd      = '0;
-  opcode  = inst_opcode;
-  LUI     = '0;
-	AUIPC   = '0;
-	JAL     = '0;
-	JALR    = '0;
-	BEQ     = '0;
-	BNE     = '0;
-	BLT     = '0;
-	BGE     = '0;
-	BLTU    = '0;
-	BGEU    = '0;
-	LB      = '0;
-	LH      = '0;
-	LW      = '0;
-	LBU     = '0;
-	LHU     = '0;
-	SB      = '0;
-	SH      = '0;
-	SW      = '0;
-	ADDI    = '0;
-	SLTI    = '0;
-	SLTIU   = '0;
-	XORI    = '0;
-	ORI     = '0;
-	ANDI    = '0;
-	SLLI    = '0;
-	SRLI    = '0;
-	SRAI    = '0;
-	ADD     = '0;
-	SUB     = '0;
-	SLL     = '0;
-	SLT     = '0;
-	SLTU    = '0;
-	XOR     = '0;
-	SRL     = '0;
-	SRA     = '0;
-	OR      = '0;
-	AND     = '0;
-	FENCE   = '0;
-	FENCE_I = '0;
-	ECALL   = '0;
-	EBREAK  = '0;
+  fm      <= '0;
+  pred    <= '0;
+  succ    <= '0;
+  shamt   <= '0;
+  imm     <= '0;
+  funct7  <= '0;
+  funct3  <= '0;
+  rs2     <= '0;
+  rs1     <= '0;
+  rd      <= '0;
+  opcode  <= inst_opcode;
+  LUI     <= '0;
+	AUIPC   <= '0;
+	JAL     <= '0;
+	JALR    <= '0;
+	BEQ     <= '0;
+	BNE     <= '0;
+	BLT     <= '0;
+	BGE     <= '0;
+	BLTU    <= '0;
+	BGEU    <= '0;
+	LB      <= '0;
+	LH      <= '0;
+	LW      <= '0;
+	LBU     <= '0;
+	LHU     <= '0;
+	SB      <= '0;
+	SH      <= '0;
+	SW      <= '0;
+	ADDI    <= '0;
+	SLTI    <= '0;
+	SLTIU   <= '0;
+	XORI    <= '0;
+	ORI     <= '0;
+	ANDI    <= '0;
+	SLLI    <= '0;
+	SRLI    <= '0;
+	SRAI    <= '0;
+	ADD     <= '0;
+	SUB     <= '0;
+	SLL     <= '0;
+	SLT     <= '0;
+	SLTU    <= '0;
+	XOR     <= '0;
+	SRL     <= '0;
+	SRA     <= '0;
+	OR      <= '0;
+	AND     <= '0;
+	FENCE   <= '0;
+	FENCE_I <= '0;
+	ECALL   <= '0;
+	EBREAK  <= '0;
   case (inst_opcode)
     'b0110111 : begin //LUI
-                imm[31:12] = inst_U.imm_31_12;
-                rd         = inst_U.rd;
-                LUI        = '1;
+                imm[31:12] <= inst_U.imm_31_12;
+                rd         <= inst_U.rd;
+                LUI        <= '1;
                 end
     'b0010111 : begin //AUIPC
-                imm[31:12] = inst_U.imm_31_12;
-                rd         = inst_U.rd;
-                AUIPC      = '1;
+                imm[31:12] <= inst_U.imm_31_12;
+                rd         <= inst_U.rd;
+                AUIPC      <= '1;
                 end
     'b1101111 : begin //JAL
-                imm[20]    = inst_J.imm_20;
-                imm[10:1]  = inst_J.imm_10_1;
-                imm[11]    = inst_J.imm_11;
-                imm[19:12] = inst_J.imm_19_12;
-                rd         = inst_J.rd;
-                JAL        = '1;
+                imm[20]    <= inst_J.imm_20;
+                imm[10:1]  <= inst_J.imm_10_1;
+                imm[11]    <= inst_J.imm_11;
+                imm[19:12] <= inst_J.imm_19_12;
+                rd         <= inst_J.rd;
+                JAL        <= '1;
                 end
     'b1100111 : begin //JALR
-                imm[11:0]  = inst_I.imm_11_0;
-                rs1        = inst_I.rs1;
-                funct3     = inst_I.funct3;
-                rd         = inst_I.rd;
-                JALR       = '1;
+                imm[11:0]  <= inst_I.imm_11_0;
+                rs1        <= inst_I.rs1;
+                funct3     <= inst_I.funct3;
+                rd         <= inst_I.rd;
+                JALR       <= '1;
                 end
     'b1100111 : begin 
                 case (inst_B.funct3)
                   'b000 : begin //BEQ
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-												  BEQ        = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+												  BEQ        <= '1;
                           end
                   'b001 : begin //BNE
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-                          BNE        = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+                          BNE        <= '1;
                           end
                   'b100 : begin //BLT
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-                          BLT        = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+                          BLT        <= '1;
                           end
                   'b101 : begin //BGE
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-                          BGE        = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+                          BGE        <= '1;
                           end
                   'b110 : begin //BLTU
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-                          BLTU       = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+                          BLTU       <= '1;
                           end
                   'b111 : begin //BGEU
-                          imm[12]    = inst_B.imm_12;
-                          imm[10:5]  = inst_B.imm_10_5;
-                          rs2        = inst_B.rs2;
-                          rs1        = inst_B.rs1;
-                          funct3     = inst_B.funct3;
-                          imm[4:1]   = inst_B.imm_4_1;
-                          imm[11]    = inst_B.imm_11;
-                          BGEU       = '1;
+                          imm[12]    <= inst_B.imm_12;
+                          imm[10:5]  <= inst_B.imm_10_5;
+                          rs2        <= inst_B.rs2;
+                          rs1        <= inst_B.rs1;
+                          funct3     <= inst_B.funct3;
+                          imm[4:1]   <= inst_B.imm_4_1;
+                          imm[11]    <= inst_B.imm_11;
+                          BGEU       <= '1;
                           end
                 endcase
                 end
     'b0000011 : begin     
                 case (inst_I.funct3)
                   'b000 : begin //LB
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          LB         = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          LB         <= '1;
                           end
                   'b001 : begin //LH
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          LH         = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          LH         <= '1;
                           end
                   'b010 : begin //LW
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          LW         = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          LW         <= '1;
                           end
                   'b100 : begin //LBU
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          LBU        = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          LBU        <= '1;
                           end
                   'b101 : begin //LHU
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          LHU        = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          LHU        <= '1;
                           end
                 endcase
                 end
     'b0100011 : begin 
                 case (inst_S.funct3)
                   'b000 : begin //SB
-                          imm[11:5]  = inst_S.imm_11_5;
-                          rs2        = inst_S.rs2;
-                          rs1        = inst_S.rs1;
-                          funct3     = inst_S.funct3;
-                          imm[4:0]   = inst_S.imm_4_0;
-                          SB         = '1;
+                          imm[11:5]  <= inst_S.imm_11_5;
+                          rs2        <= inst_S.rs2;
+                          rs1        <= inst_S.rs1;
+                          funct3     <= inst_S.funct3;
+                          imm[4:0]   <= inst_S.imm_4_0;
+                          SB         <= '1;
                           end
                   'b001 : begin //SH
-                          imm[11:5]  = inst_S.imm_11_5;
-                          rs2        = inst_S.rs2;
-                          rs1        = inst_S.rs1;
-                          funct3     = inst_S.funct3;
-                          imm[4:0]   = inst_S.imm_4_0;
-                          SH         = '1;
+                          imm[11:5]  <= inst_S.imm_11_5;
+                          rs2        <= inst_S.rs2;
+                          rs1        <= inst_S.rs1;
+                          funct3     <= inst_S.funct3;
+                          imm[4:0]   <= inst_S.imm_4_0;
+                          SH         <= '1;
                           end
                   'b010 : begin //SW
-                          imm[11:5]  = inst_S.imm_11_5;
-                          rs2        = inst_S.rs2;
-                          rs1        = inst_S.rs1;
-                          funct3     = inst_S.funct3;
-                          imm[4:0]   = inst_S.imm_4_0;
-                          SW         = '1;
+                          imm[11:5]  <= inst_S.imm_11_5;
+                          rs2        <= inst_S.rs2;
+                          rs1        <= inst_S.rs1;
+                          funct3     <= inst_S.funct3;
+                          imm[4:0]   <= inst_S.imm_4_0;
+                          SW         <= '1;
                           end
                 endcase
                 end
     'b0010011 : begin 
                 case (inst_I.funct3)
                   'b000 : begin //ADDI
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          ADDI       = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          ADDI       <= '1;
                           end
                   'b010 : begin //SLTI
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          SLTI       = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          SLTI       <= '1;
                           end
                   'b011 : begin //SLTIU
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          SLTIU      = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          SLTIU      <= '1;
                           end
                   'b100 : begin //XORI
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          XORI       = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          XORI       <= '1;
                           end
                   'b110 : begin //ORI
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          ORI        = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          ORI        <= '1;
                           end
                   'b111 : begin //ANDI
-                          imm[11:0]  = inst_I.imm_11_0;
-                          rs1        = inst_I.rs1;
-                          funct3     = inst_I.funct3;
-                          rd         = inst_I.rd;
-                          ANDI       = '1;
+                          imm[11:0]  <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          ANDI       <= '1;
                           end
                   'b001 : begin //SLLI
-                          funct7     = inst_R.funct7;  
-                          shamt      = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          SLLI       = '1;
+                          funct7     <= inst_R.funct7;  
+                          shamt      <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          SLLI       <= '1;
                           end
                   'b101 : begin 
                           case (inst_R.funct7)
                             'b0000000 : begin //SRLI
-                                        funct7     = inst_R.funct7;  
-                                        shamt      = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        SRLI       = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        shamt      <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        SRLI       <= '1;
                                         end
                             'b0100000 : begin //SRAI
-                                        funct7     = inst_R.funct7;  
-                                        shamt      = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        SRAI       = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        shamt      <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        SRAI       <= '1;
                                         end
                           endcase
                           end
@@ -455,115 +455,115 @@ always_comb
                   'b000 : begin 
                           case (inst_R.funct7)
                             'b0000000 : begin //ADD
-                                        funct7     = inst_R.funct7;  
-                                        rs2        = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        ADD        = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        rs2        <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        ADD        <= '1;
                                         end
                             'b0100000 : begin //SUB
-                                        funct7     = inst_R.funct7;  
-                                        rs2        = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        SUB        = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        rs2        <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        SUB        <= '1;
                                         end
                           endcase
                           end
                   'b001 : begin //SLL
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          SLL        = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          SLL        <= '1;
                           end
                   'b010 : begin //SLT
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          SLT        = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          SLT        <= '1;
                           end
                   'b011 : begin //SLTU
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          SLTU       = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          SLTU       <= '1;
                           end
                   'b100 : begin //XOR
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          XOR        = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          XOR        <= '1;
                           end
                   'b101 : begin 
                           case (inst_R.funct7)
                             'b0000000 : begin //SRL
-                                        funct7     = inst_R.funct7;  
-                                        rs2        = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        SRL        = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        rs2        <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        SRL        <= '1;
                                         end
                             'b0100000 : begin //SRA
-                                        funct7     = inst_R.funct7;  
-                                        rs2        = inst_R.rs2;
-                                        rs1        = inst_R.rs1;
-                                        funct3     = inst_R.funct3;
-                                        rd         = inst_R.rd;
-                                        SRA        = '1;
+                                        funct7     <= inst_R.funct7;  
+                                        rs2        <= inst_R.rs2;
+                                        rs1        <= inst_R.rs1;
+                                        funct3     <= inst_R.funct3;
+                                        rd         <= inst_R.rd;
+                                        SRA        <= '1;
                                         end
                           endcase
                           end
                   'b110 : begin //OR
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          OR         = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          OR         <= '1;
                           end
                   'b101 : begin //AND
-                          funct7     = inst_R.funct7;  
-                          rs2        = inst_R.rs2;
-                          rs1        = inst_R.rs1;
-                          funct3     = inst_R.funct3;
-                          rd         = inst_R.rd;
-                          AND        = '1;
+                          funct7     <= inst_R.funct7;  
+                          rs2        <= inst_R.rs2;
+                          rs1        <= inst_R.rs1;
+                          funct3     <= inst_R.funct3;
+                          rd         <= inst_R.rd;
+                          AND        <= '1;
                           end
                 endcase
                 end
     'b0001111 : begin //FENCE
-                {fm,pred,succ} = inst_I.imm_11_0;
-                rs1            = inst_I.rs1;
-                funct3         = inst_I.funct3;
-                rd             = inst_I.rd;
-                FENCE      = '1;
+                {fm,pred,succ} <= inst_I.imm_11_0;
+                rs1            <= inst_I.rs1;
+                funct3         <= inst_I.funct3;
+                rd             <= inst_I.rd;
+                FENCE      <= '1;
                 end
     'b1110011 : begin //ECALL
-                ECALL      = '1;
+                ECALL      <= '1;
                 end
     'b1110011 : begin //EBREAK
-                EBREAK     = '1;
+                EBREAK     <= '1;
                 end
   endcase
   end
 
 
 
-always_comb
+always_ff @(posedge clk)
   begin
-  dbg_led[0] = inst[0];
-  dbg_led[1] = inst[1];
+  dbg_led[0] <= inst[0];
+  dbg_led[1] <= inst[1];
   end
 
 endmodule

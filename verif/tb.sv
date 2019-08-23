@@ -86,6 +86,14 @@ de10nano dut (
 
 );
 
+initial
+  begin
+    $readmemh("../../verif/tests/add_3.v", dut.mem.mem_array_3);
+    $readmemh("../../verif/tests/add_2.v", dut.mem.mem_array_2);
+    $readmemh("../../verif/tests/add_1.v", dut.mem.mem_array_1);
+    $readmemh("../../verif/tests/add_0.v", dut.mem.mem_array_0);
+  end
+
 initial 
   begin 
   FPGA_CLK1_50 = 0; 
@@ -107,4 +115,6 @@ always
   FPGA_CLK2_50 =  ! FPGA_CLK2_50;
   FPGA_CLK3_50 =  ! FPGA_CLK3_50;
   end
+
+
 endmodule
