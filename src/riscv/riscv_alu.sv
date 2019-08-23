@@ -108,16 +108,233 @@ always_ff @(posedge clk)
         x_wr[rd] <= '1;
         x_in[rd] <= x[rs1] + x[rs2];
         PC_wr <= '1;
-        PC_in <= PC+1;
+        PC_in <= PC+'d4;
       end
-    if(ADDI)
+    else if(SLT)
       begin
         x_wr[rd] <= '1;
-        x_in[rd] <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
+        if($signed(x[rs1]) < $signed(x[rs2]))
+          x_in[rd] <= 'd1;
+        else
+          x_in[rd] <= 'd0;
         PC_wr <= '1;
-        PC_in <= PC+1;
+        PC_in <= PC+'d4;
       end
-    if(LW)
+    else if(SLTU)
+      begin
+        x_wr[rd] <= '1;
+        if(x[rs1] < x[rs2])
+          x_in[rd] <= 'd1;
+        else
+          x_in[rd] <= 'd0;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(AND)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] & x[rs2];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(OR)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] | x[rs2];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(XOR)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] ^ x[rs2];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SLL)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] << x[rs2][4:0];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SRL)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] >> x[rs2][4:0];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SUB)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] - x[rs2];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SRA)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] >>> x[rs2];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+
+
+    else if(ADDI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] + {{20{imm[11]}},imm[11:0]};
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SLTI)
+      begin
+        x_wr[rd] <= '1;
+        if($signed(x[rs1]) < $signed({{20{imm[11]}},imm[11:0]}))
+          x_in[rd] <= 'd1;
+        else
+          x_in[rd] <= 'd0;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SLTIU)
+      begin
+        x_wr[rd] <= '1;
+        if(x[rs1] < {{20{imm[11]}},imm[11:0]})
+          x_in[rd] <= 'd1;
+        else
+          x_in[rd] <= 'd0;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(ANDI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] & {{20{imm[11]}},imm[11:0]};
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(ORI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] | {{20{imm[11]}},imm[11:0]};
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(XORI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] ^ {{20{imm[11]}},imm[11:0]};
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SLLI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] << imm[4:0];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SRLI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] >> imm[4:0];
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(SRAI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= x[rs1] >>> imm;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+
+
+    else if(JAL)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= PC+'d4;
+        PC_wr <= '1;
+        PC_in <= (PC+'d4)+{{11{imm[20]}},imm[20:0]};
+      end
+    else if(JALR)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= PC+'d4;
+        PC_wr <= '1;
+        PC_in <= (x[rs1]+{{20{imm[11]}},imm[11:0]}) & 31'hFFFFFFFE;
+      end
+
+
+    else if(BEQ)
+      begin
+        PC_wr <= '1;
+        if(x[rs1] == x[rs2])
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+    else if(BNE)
+      begin
+        PC_wr <= '1;
+        if(x[rs1] != x[rs2])
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+    else if(BLT)
+      begin
+        PC_wr <= '1;
+        if($signed(x[rs1]) < $signed(x[rs2]))
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+    else if(BLTU)
+      begin
+        PC_wr <= '1;
+        if(x[rs1] < x[rs2])
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+    else if(BGE)
+      begin
+        PC_wr <= '1;
+        if($signed(x[rs1]) >= $signed(x[rs2]))
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+    else if(BGEU)
+      begin
+        PC_wr <= '1;
+        if(x[rs1] >= x[rs2])
+          PC_in <= PC+{{19{imm[12]}},imm[12:0]};
+        else                  
+          PC_in <= PC+'d4;
+      end
+
+
+    else if(LUI)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= imm;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(AUIPC)
+      begin
+        x_wr[rd] <= '1;
+        x_in[rd] <= PC + imm;
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+
+
+    else if(LW)
       begin
         if(cnt=='d0)
           begin
@@ -132,7 +349,7 @@ always_ff @(posedge clk)
           x_wr[rd] <= '1;
           x_in[rd] <= bus_data;
           PC_wr <= '1;
-          PC_in <= PC+1;
+          PC_in <= PC+'d4;
           cnt <= '0;
           end
         else
@@ -140,7 +357,7 @@ always_ff @(posedge clk)
           cnt <= cnt + 1;
           end
       end
-    if(SW)
+    else if(SW)
       begin
         bus_put <= '1;
         bus_req_out   <= '1;
@@ -148,8 +365,31 @@ always_ff @(posedge clk)
         bus_addr_out  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
         bus_data_out  <= x[rs2];
         PC_wr <= '1;
-        PC_in <= PC+1;
+        PC_in <= PC+'d4;
       end
+
+
+    else if(FENCE)
+      begin
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+
+
+    else if(ECALL)
+      begin
+        //TODO
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+    else if(EBREAK)
+      begin
+        //TODO
+        PC_wr <= '1;
+        PC_in <= PC+'d4;
+      end
+
+
     end
    
   if(rst)
