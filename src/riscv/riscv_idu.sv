@@ -4,10 +4,12 @@ module riscv_idu (
   input  logic        clk,
   input  logic        rst,
 
+  input  logic        ifu_vld,
+  input  logic [31:0] ifu_inst,
+  output logic        idu_vld,
+
   output logic        idu_rdy,
   input  logic        idu_req,
-  input  logic [31:0] idu_inst,
-  output logic        idu_done,
 
   output logic  [3:0] fm,
   output logic  [3:0] pred,
@@ -113,59 +115,24 @@ typedef struct packed {
   logic  [6:0] opcode;
 } inst_JType_s;
 
-typedef enum {
-  IDLE,
-  DECODE
-} idu_state_e;
-idu_state_e idu_state;
-
-logic [31:0] inst;
-always_ff @(posedge clk)
-  begin
-  idu_state <= idu_state;
-  idu_rdy  <= idu_rdy;
-  idu_done <= '0;
-  inst <= inst;
-  case (idu_state)
-    IDLE : begin
-           if(idu_req)
-             begin
-						 idu_state <= DECODE;
-					   inst <= idu_inst;
-             idu_rdy <= '0;
-             end
-           end
-    DECODE : begin
-           idu_state <= IDLE;
-           idu_rdy <= '1;
-           idu_done <= '1;
-           end
-  endcase
-  if(rst)
-    begin
-    idu_state <= IDLE;
-		inst <= '0;
-    idu_rdy <= '1;
-    end
-  end
-
   
-logic [6:0]  inst_opcode;
 inst_RType_s inst_R;
 inst_IType_s inst_I;
 inst_SType_s inst_S;
 inst_BType_s inst_B;
 inst_UType_s inst_U;
 inst_JType_s inst_J;
+assign  inst_R  = ifu_inst;
+assign  inst_I  = ifu_inst;
+assign  inst_S  = ifu_inst;
+assign  inst_B  = ifu_inst;
+assign  inst_U  = ifu_inst;
+assign  inst_J  = ifu_inst;
+
 always_ff @(posedge clk)
   begin
-  inst_opcode <= inst[6:0];
-  inst_R  <= inst;
-  inst_I  <= inst;
-  inst_S  <= inst;
-  inst_B  <= inst;
-  inst_U  <= inst;
-  inst_J  <= inst;
+  idu_vld     <= ifu_vld;
+  opcode <= ifu_inst[6:0];
 
   fm      <= '0;
   pred    <= '0;
@@ -177,7 +144,6 @@ always_ff @(posedge clk)
   rs2     <= '0;
   rs1     <= '0;
   rd      <= '0;
-  opcode  <= inst_opcode;
   LUI     <= '0;
 	AUIPC   <= '0;
 	JAL     <= '0;
@@ -219,7 +185,7 @@ always_ff @(posedge clk)
 	FENCE_I <= '0;
 	ECALL   <= '0;
 	EBREAK  <= '0;
-  case (inst_opcode)
+  case (ifu_inst[6:0])
     'b0110111 : begin //LUI
                 imm[31:12] <= inst_U.imm_31_12;
                 rd         <= inst_U.rd;
@@ -532,7 +498,7 @@ always_ff @(posedge clk)
                           rd         <= inst_R.rd;
                           OR         <= '1;
                           end
-                  'b101 : begin //AND
+                  'b111 : begin //AND
                           funct7     <= inst_R.funct7;  
                           rs2        <= inst_R.rs2;
                           rs1        <= inst_R.rs1;
@@ -562,8 +528,8 @@ always_ff @(posedge clk)
 
 always_ff @(posedge clk)
   begin
-  dbg_led[0] <= inst[0];
-  dbg_led[1] <= inst[1];
+  dbg_led[0] <= ifu_inst[0];
+  dbg_led[1] <= ifu_inst[1];
   end
 
 endmodule
