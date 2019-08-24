@@ -13,7 +13,6 @@ vlog -sv -work work +incdir+../../src {../../src/de10nano.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_pkg.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_regfile.sv}
-vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_fsm.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_ifu.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_idu.sv}
 vlog -sv -work work +incdir+../../src/riscv   {../../src/riscv/riscv_alu.sv}
