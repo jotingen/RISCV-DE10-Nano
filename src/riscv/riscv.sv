@@ -33,6 +33,9 @@ logic             idu_req;
 logic [31:0]      idu_inst;
 logic             idu_done;
 
+logic        ifu_vld;
+logic        alu_vld;
+
 logic  [3:0] fm;
 logic  [3:0] pred;
 logic  [3:0] succ;
@@ -100,31 +103,20 @@ riscv_regfile regfile (
   .x     (x    )
 );
 
-riscv_fsm fsm (
-  .clk (clk),
-  .rst (rst),
-
-  .ifu_rdy  (ifu_rdy),
-  .ifu_req  (ifu_req),
-  .ifu_done (ifu_done),
-  .ifu_inst (ifu_inst),
-
-  .idu_req  (idu_req),
-  .idu_inst (idu_inst),
-  .idu_done (idu_done)
-);
-
 riscv_ifu ifu (
   .clk (clk),
   .rst (rst),
 
-  .PC    (PC),
+  .PC    (PC_in),
+
+  .alu_vld (alu_vld),
+  .ifu_vld (ifu_vld),
+  .ifu_inst (ifu_inst),
 
   .rdy  (ifu_rdy),
   .req  (ifu_req),
   .done (ifu_done),
 
-  .inst (ifu_inst),
 
   .bus_req   (bus_req),   
   .bus_ack   (bus_ack),   
@@ -137,10 +129,12 @@ riscv_idu idu (
   .clk (clk),
   .rst (rst),
 
+  .ifu_vld (ifu_vld),
+  .ifu_inst (ifu_inst),
+  .idu_vld (idu_vld),
+
   .idu_rdy  (idu_rdy),
   .idu_req  (idu_req),
-  .idu_inst (idu_inst), 
-  .idu_done (idu_done),
                              
   .fm        (fm      ),
   .pred      (pred    ),
@@ -204,7 +198,8 @@ riscv_alu alu (
   .clk       (clk     ),
   .rst       (rst     ),
                              
-  .idu_done  (idu_done),
+  .idu_vld (idu_vld),
+  .alu_vld   (alu_vld),
                              
   .fm        (fm      ),
   .pred      (pred    ),
