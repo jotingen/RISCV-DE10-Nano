@@ -9,7 +9,7 @@ OUTPUT_ARCH(riscv)
 /* >>> Our addition. <<< */
 MEMORY
 {
-   RAM (rwx)  : ORIGIN = 0x0000, LENGTH = 2M 
+   RAM (rwx)  : ORIGIN = 0x0000, LENGTH = 64K 
 }
 /* >>> End of our addition. <<< */
 ENTRY(_start)
