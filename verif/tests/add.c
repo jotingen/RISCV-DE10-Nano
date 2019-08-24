@@ -1,6 +1,7 @@
 int main(void) {
-  int a,b;
+  int a;
   a = 1;
-  b = 2;
-  return a + b;
+while(a<20) {
+  a++;
+  }
 }
