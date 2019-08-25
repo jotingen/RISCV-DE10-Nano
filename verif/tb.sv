@@ -88,10 +88,10 @@ de10nano dut (
 
 initial
   begin
-    $readmemh("../../verif/tests/add_3.v", dut.mem.mem_array_3);
-    $readmemh("../../verif/tests/add_2.v", dut.mem.mem_array_2);
-    $readmemh("../../verif/tests/add_1.v", dut.mem.mem_array_1);
-    $readmemh("../../verif/tests/add_0.v", dut.mem.mem_array_0);
+    $readmemh("../../tests/add_3.v", dut.mem.mem_array_3);
+    $readmemh("../../tests/add_2.v", dut.mem.mem_array_2);
+    $readmemh("../../tests/add_1.v", dut.mem.mem_array_1);
+    $readmemh("../../tests/add_0.v", dut.mem.mem_array_0);
   end
 
 initial 
