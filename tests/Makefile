@@ -14,7 +14,7 @@ VERILOG3_SUFFIX=_3.v
 VERILOG3 := $(patsubst %,%$(VERILOG3_SUFFIX),$(TESTS))
 
 .PHONY: all
-all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3)
+all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3) sim
 
 %$(ASSEMBLY_SUFFIX) : $(SRCS)
 	riscv64-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -S -o $@ $<
@@ -34,6 +34,10 @@ all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3)
 %$(VERILOG3_SUFFIX) : %$(OUT_SUFFIX)
 	riscv64-unknown-elf-objcopy -O verilog --interleave=4 -b 3 $< $@
 
+.PHONY: sim
+	$(MAKE) -f simulation/modelsim
+
 .PHONY: clean
 clean: 
 	$(foreach var, $(ASSEMBLY) $(OUT) $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3), del /f /q $(var);)
+	$(MAKE) -f simulation/modelsim clean
