@@ -295,7 +295,8 @@ always_ff @(posedge clk)
 
     else if(JAL)
       begin
-        $display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{imm[20]}},imm[20:0]}, rd);
+        if(imm!='0 || rd!='0)
+          $display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{imm[20]}},imm[20:0]}, rd);
         alu_vld <= '1;
         x_wr[rd] <= '1;
         x_in[rd] <= PC+'d4;

@@ -211,7 +211,7 @@ always_ff @(posedge clk)
                 rd         <= inst_I.rd;
                 JALR       <= '1;
                 end
-    'b1100111 : begin 
+    'b1100011 : begin 
                 case (inst_B.funct3)
                   'b000 : begin //BEQ
                           imm[12]    <= inst_B.imm_12;
@@ -221,7 +221,7 @@ always_ff @(posedge clk)
                           funct3     <= inst_B.funct3;
                           imm[4:1]   <= inst_B.imm_4_1;
                           imm[11]    <= inst_B.imm_11;
-												  BEQ        <= '1;
+			  BEQ        <= '1;
                           end
                   'b001 : begin //BNE
                           imm[12]    <= inst_B.imm_12;
