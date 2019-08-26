@@ -9,6 +9,9 @@ module riscv_ifu (
   output logic             done,
 
   input  logic             alu_vld,
+
+  output riscv_pkg::ifu_s  ifu_out,
+
   output logic             ifu_vld,
  
   output logic [31:0]      ifu_inst,
@@ -43,6 +46,7 @@ always_ff @(posedge clk)
 
 always_ff @(posedge clk)
   begin
+  ifu_out.Vld <= '0;
   ifu_vld <= '0;
   //PC_wr <= '0;
   //PC_in <= PC;
@@ -51,7 +55,9 @@ always_ff @(posedge clk)
   bus_req <= 'z;
   bus_write <= 'z;
   bus_addr <= 'z;
+  ifu_out.Inst <= ifu_out.Inst;
   ifu_inst <= ifu_inst;
+  ifu_out.PC <= ifu_out.PC;
   ifu_inst_PC <= ifu_inst_PC;
   case (ifu_state)
     IDLE : begin
@@ -71,6 +77,9 @@ always_ff @(posedge clk)
             ifu_state <= IDLE;
 					  ifu_inst <= bus_data;
             ifu_inst_PC <= PC;
+            ifu_out.Vld <= '1;
+					  ifu_out.Inst <= bus_data;
+            ifu_out.PC <= PC;
             //PC_wr <= '1;
             //PC_in <= PC + 'd4;
             end
@@ -85,6 +94,9 @@ always_ff @(posedge clk)
     rdy <= '1;
     ifu_inst <= '0;
     ifu_inst_PC <= '0;
+    ifu_out.Vld <= '0;
+    ifu_out.Inst <= '0;
+    ifu_out.PC <= '0;
 
     end
   end

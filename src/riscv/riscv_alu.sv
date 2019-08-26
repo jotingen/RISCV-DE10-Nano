@@ -406,7 +406,7 @@ always_ff @(posedge clk)
           bus_addr_out  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
           cnt <= cnt + 1;
           end
-        else if(cnt=='d4)
+        else if(cnt=='d2)
           begin
           $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
           alu_vld <= '1;

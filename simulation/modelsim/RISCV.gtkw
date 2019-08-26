@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Aug 24 02:57:56 2019
+[*] Mon Aug 26 02:56:38 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Aug 24 02:50:48 2019"
-[dumpfile_size] 3228414
+[dumpfile_mtime] "Mon Aug 26 02:53:39 2019"
+[dumpfile_size] 340954504
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 238500
-[size] 1854 1046
-[pos] -1 -1
-*-14.546139 292000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 256180
+[size] 1233 1048
+[pos] -8 -1
+*-13.206656 272530 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -18,7 +18,7 @@
 [sst_width] 401
 [signals_width] 368
 [sst_expanded] 1
-[sst_vpaned_height] 310
+[sst_vpaned_height] 311
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -78,13 +78,27 @@ tb.dut.bus_ack
 @200
 -
 -MEM
-@420
-tb.dut.mem.mem_state
 @28
-tb.dut.mem.rd
-tb.dut.riscv.ifu.req
+tb.dut.mem.bus_req
+tb.dut.mem.bus_write
 @22
-tb.dut.mem.q[31:0]
+#{tb.dut.mem.bus_addr[31:0]} tb.dut.mem.bus_addr[31] tb.dut.mem.bus_addr[30] tb.dut.mem.bus_addr[29] tb.dut.mem.bus_addr[28] tb.dut.mem.bus_addr[27] tb.dut.mem.bus_addr[26] tb.dut.mem.bus_addr[25] tb.dut.mem.bus_addr[24] tb.dut.mem.bus_addr[23] tb.dut.mem.bus_addr[22] tb.dut.mem.bus_addr[21] tb.dut.mem.bus_addr[20] tb.dut.mem.bus_addr[19] tb.dut.mem.bus_addr[18] tb.dut.mem.bus_addr[17] tb.dut.mem.bus_addr[16] tb.dut.mem.bus_addr[15] tb.dut.mem.bus_addr[14] tb.dut.mem.bus_addr[13] tb.dut.mem.bus_addr[12] tb.dut.mem.bus_addr[11] tb.dut.mem.bus_addr[10] tb.dut.mem.bus_addr[9] tb.dut.mem.bus_addr[8] tb.dut.mem.bus_addr[7] tb.dut.mem.bus_addr[6] tb.dut.mem.bus_addr[5] tb.dut.mem.bus_addr[4] tb.dut.mem.bus_addr[3] tb.dut.mem.bus_addr[2] tb.dut.mem.bus_addr[1] tb.dut.mem.bus_addr[0]
+#{tb.dut.mem.bus_data[31:0]} tb.dut.mem.bus_data[31] tb.dut.mem.bus_data[30] tb.dut.mem.bus_data[29] tb.dut.mem.bus_data[28] tb.dut.mem.bus_data[27] tb.dut.mem.bus_data[26] tb.dut.mem.bus_data[25] tb.dut.mem.bus_data[24] tb.dut.mem.bus_data[23] tb.dut.mem.bus_data[22] tb.dut.mem.bus_data[21] tb.dut.mem.bus_data[20] tb.dut.mem.bus_data[19] tb.dut.mem.bus_data[18] tb.dut.mem.bus_data[17] tb.dut.mem.bus_data[16] tb.dut.mem.bus_data[15] tb.dut.mem.bus_data[14] tb.dut.mem.bus_data[13] tb.dut.mem.bus_data[12] tb.dut.mem.bus_data[11] tb.dut.mem.bus_data[10] tb.dut.mem.bus_data[9] tb.dut.mem.bus_data[8] tb.dut.mem.bus_data[7] tb.dut.mem.bus_data[6] tb.dut.mem.bus_data[5] tb.dut.mem.bus_data[4] tb.dut.mem.bus_data[3] tb.dut.mem.bus_data[2] tb.dut.mem.bus_data[1] tb.dut.mem.bus_data[0]
+@28
+tb.dut.mem.bus_ack
+@200
+-
+-LED
+@22
+tb.dut.led.LED[7:0]
+@28
+tb.dut.led.bus_req
+tb.dut.led.bus_write
+@22
+#{tb.dut.led.bus_addr[31:0]} tb.dut.led.bus_addr[31] tb.dut.led.bus_addr[30] tb.dut.led.bus_addr[29] tb.dut.led.bus_addr[28] tb.dut.led.bus_addr[27] tb.dut.led.bus_addr[26] tb.dut.led.bus_addr[25] tb.dut.led.bus_addr[24] tb.dut.led.bus_addr[23] tb.dut.led.bus_addr[22] tb.dut.led.bus_addr[21] tb.dut.led.bus_addr[20] tb.dut.led.bus_addr[19] tb.dut.led.bus_addr[18] tb.dut.led.bus_addr[17] tb.dut.led.bus_addr[16] tb.dut.led.bus_addr[15] tb.dut.led.bus_addr[14] tb.dut.led.bus_addr[13] tb.dut.led.bus_addr[12] tb.dut.led.bus_addr[11] tb.dut.led.bus_addr[10] tb.dut.led.bus_addr[9] tb.dut.led.bus_addr[8] tb.dut.led.bus_addr[7] tb.dut.led.bus_addr[6] tb.dut.led.bus_addr[5] tb.dut.led.bus_addr[4] tb.dut.led.bus_addr[3] tb.dut.led.bus_addr[2] tb.dut.led.bus_addr[1] tb.dut.led.bus_addr[0]
+#{tb.dut.led.bus_data[31:0]} tb.dut.led.bus_data[31] tb.dut.led.bus_data[30] tb.dut.led.bus_data[29] tb.dut.led.bus_data[28] tb.dut.led.bus_data[27] tb.dut.led.bus_data[26] tb.dut.led.bus_data[25] tb.dut.led.bus_data[24] tb.dut.led.bus_data[23] tb.dut.led.bus_data[22] tb.dut.led.bus_data[21] tb.dut.led.bus_data[20] tb.dut.led.bus_data[19] tb.dut.led.bus_data[18] tb.dut.led.bus_data[17] tb.dut.led.bus_data[16] tb.dut.led.bus_data[15] tb.dut.led.bus_data[14] tb.dut.led.bus_data[13] tb.dut.led.bus_data[12] tb.dut.led.bus_data[11] tb.dut.led.bus_data[10] tb.dut.led.bus_data[9] tb.dut.led.bus_data[8] tb.dut.led.bus_data[7] tb.dut.led.bus_data[6] tb.dut.led.bus_data[5] tb.dut.led.bus_data[4] tb.dut.led.bus_data[3] tb.dut.led.bus_data[2] tb.dut.led.bus_data[1] tb.dut.led.bus_data[0]
+@29
+tb.dut.led.bus_ack
 @200
 -
 -REG
@@ -147,9 +161,8 @@ tb.dut.riscv.ifu.ifu_vld
 -IDU
 @28
 tb.dut.riscv.idu.ifu_vld
-@23
-#{tb.dut.riscv.idu.ifu_inst[31:0]} tb.dut.riscv.idu.ifu_inst[31] tb.dut.riscv.idu.ifu_inst[30] tb.dut.riscv.idu.ifu_inst[29] tb.dut.riscv.idu.ifu_inst[28] tb.dut.riscv.idu.ifu_inst[27] tb.dut.riscv.idu.ifu_inst[26] tb.dut.riscv.idu.ifu_inst[25] tb.dut.riscv.idu.ifu_inst[24] tb.dut.riscv.idu.ifu_inst[23] tb.dut.riscv.idu.ifu_inst[22] tb.dut.riscv.idu.ifu_inst[21] tb.dut.riscv.idu.ifu_inst[20] tb.dut.riscv.idu.ifu_inst[19] tb.dut.riscv.idu.ifu_inst[18] tb.dut.riscv.idu.ifu_inst[17] tb.dut.riscv.idu.ifu_inst[16] tb.dut.riscv.idu.ifu_inst[15] tb.dut.riscv.idu.ifu_inst[14] tb.dut.riscv.idu.ifu_inst[13] tb.dut.riscv.idu.ifu_inst[12] tb.dut.riscv.idu.ifu_inst[11] tb.dut.riscv.idu.ifu_inst[10] tb.dut.riscv.idu.ifu_inst[9] tb.dut.riscv.idu.ifu_inst[8] tb.dut.riscv.idu.ifu_inst[7] tb.dut.riscv.idu.ifu_inst[6] tb.dut.riscv.idu.ifu_inst[5] tb.dut.riscv.idu.ifu_inst[4] tb.dut.riscv.idu.ifu_inst[3] tb.dut.riscv.idu.ifu_inst[2] tb.dut.riscv.idu.ifu_inst[1] tb.dut.riscv.idu.ifu_inst[0]
 @22
+#{tb.dut.riscv.idu.ifu_inst[31:0]} tb.dut.riscv.idu.ifu_inst[31] tb.dut.riscv.idu.ifu_inst[30] tb.dut.riscv.idu.ifu_inst[29] tb.dut.riscv.idu.ifu_inst[28] tb.dut.riscv.idu.ifu_inst[27] tb.dut.riscv.idu.ifu_inst[26] tb.dut.riscv.idu.ifu_inst[25] tb.dut.riscv.idu.ifu_inst[24] tb.dut.riscv.idu.ifu_inst[23] tb.dut.riscv.idu.ifu_inst[22] tb.dut.riscv.idu.ifu_inst[21] tb.dut.riscv.idu.ifu_inst[20] tb.dut.riscv.idu.ifu_inst[19] tb.dut.riscv.idu.ifu_inst[18] tb.dut.riscv.idu.ifu_inst[17] tb.dut.riscv.idu.ifu_inst[16] tb.dut.riscv.idu.ifu_inst[15] tb.dut.riscv.idu.ifu_inst[14] tb.dut.riscv.idu.ifu_inst[13] tb.dut.riscv.idu.ifu_inst[12] tb.dut.riscv.idu.ifu_inst[11] tb.dut.riscv.idu.ifu_inst[10] tb.dut.riscv.idu.ifu_inst[9] tb.dut.riscv.idu.ifu_inst[8] tb.dut.riscv.idu.ifu_inst[7] tb.dut.riscv.idu.ifu_inst[6] tb.dut.riscv.idu.ifu_inst[5] tb.dut.riscv.idu.ifu_inst[4] tb.dut.riscv.idu.ifu_inst[3] tb.dut.riscv.idu.ifu_inst[2] tb.dut.riscv.idu.ifu_inst[1] tb.dut.riscv.idu.ifu_inst[0]
 tb.dut.riscv.idu.opcode[6:0]
 tb.dut.riscv.idu.rd[4:0]
 tb.dut.riscv.idu.rs1[4:0]
