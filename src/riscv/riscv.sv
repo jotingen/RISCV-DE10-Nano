@@ -23,6 +23,7 @@ logic [31:0]       x_wr;
 logic [31:0][31:0] x_in;
 logic [31:0][31:0] x;
 
+riscv_pkg::ifu_s  ifu_out;
 logic             ifu_rdy;
 logic             ifu_req;
 logic             ifu_done;

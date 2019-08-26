@@ -82,14 +82,25 @@ riscv riscv (
   .bus_ack   (bus_ack),   
   .bus_write (bus_write), 
   .bus_addr  (bus_addr),  
-  .bus_data  (bus_data),
- 
-  .dbg_led (LED[3:2])
+  .bus_data  (bus_data)
 );
 
 mem #(.ADDR_LO(32'h00000000), .ADDR_HI(32'h0003FFFF)) mem (
   .clk (clk),
   .rst (rst),
+
+  .bus_req   (bus_req),   
+  .bus_ack   (bus_ack),   
+  .bus_write (bus_write), 
+  .bus_addr  (bus_addr),  
+  .bus_data  (bus_data)  
+);
+
+led #(.ADDR_LO(32'h00040000), .ADDR_HI(32'h0004FFFF)) led (
+  .clk (clk),
+  .rst (rst),
+
+  .LED (LED),
 
   .bus_req   (bus_req),   
   .bus_ack   (bus_ack),   
@@ -104,8 +115,12 @@ shield_V1 shield (
 
   .arst (arst),
 
-  .inv(LED[1]),
-  
+  .bus_req   (bus_req),   
+  .bus_ack   (bus_ack),   
+  .bus_write (bus_write), 
+  .bus_addr  (bus_addr),  
+  .bus_data  (bus_data), 
+
   .ADC_CONVST      (ADC_CONVST),     
   .ADC_SCK         (ADC_SCK),        
   .ADC_SDI         (ADC_SDI),        
@@ -114,11 +129,5 @@ shield_V1 shield (
   .ARDUINO_IO      (ARDUINO_IO),     
   .ARDUINO_RESET_N (ARDUINO_RESET_N) 
 );
-
-assign LED[7] = ARDUINO_IO[11]; //MOSI
-assign LED[6] = ARDUINO_IO[08]; //DC
-assign LED[5] = ARDUINO_IO[10]; //CS
-assign LED[4] = ARDUINO_IO[13]; //CLK
-assign LED[0] = rst;
 
 endmodule
