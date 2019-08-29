@@ -4,22 +4,24 @@ module riscv_ifu (
   input  logic             clk,
   input  logic             rst,
 
-  output logic             rdy,
-  input  logic             req,
-  output logic             done,
+  //output logic              PC_wr,
+  //output logic [31:0]       PC_in,
+  input  logic [31:0]       PC,
 
   input  logic             alu_vld,
-
-  output riscv_pkg::ifu_s  ifu_out,
+  input  logic             alu_access_mem,
 
   output logic             ifu_vld,
  
   output logic [31:0]      ifu_inst,
   output logic [31:0]      ifu_inst_PC,
 
-  //output logic              PC_wr,
-  //output logic [31:0]       PC_in,
-  input  logic [31:0]       PC,
+  output logic             rdy,
+  input  logic             req,
+  output logic             done,
+
+
+  output riscv_pkg::ifu_s  ifu_out,
 
   output logic             bus_req,
   input  logic             bus_ack,
@@ -61,7 +63,7 @@ always_ff @(posedge clk)
   ifu_inst_PC <= ifu_inst_PC;
   case (ifu_state)
     IDLE : begin
-           if(alu_vld | (init & ~rst))
+           if(~alu_access_mem & (alu_vld | (init & ~rst)))
              begin
 						 ifu_state <= REQ;
              rdy <= '0;

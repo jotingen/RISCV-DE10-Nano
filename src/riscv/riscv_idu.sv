@@ -16,6 +16,8 @@ module riscv_idu (
   output logic  [3:0] succ,
   output logic  [4:0] shamt,
   output logic [31:0] imm,
+  output logic  [4:0] uimm,
+  output logic [11:0] csr,
   output logic  [6:0] funct7,
   output logic  [2:0] funct3,
   output logic  [4:0] rs2,
@@ -63,10 +65,13 @@ module riscv_idu (
   output logic FENCE,
   output logic FENCE_I,
   output logic ECALL,
-  output logic EBREAK,
-
-  output logic  [1:0] dbg_led
-
+  output logic CSRRW,
+  output logic CSRRS,
+  output logic CSRRC,
+  output logic CSRRWI,
+  output logic CSRRSI,
+  output logic CSRRCI,
+  output logic EBREAK
 );
 typedef struct packed {
   logic  [6:0] funct7;
@@ -184,6 +189,12 @@ always_ff @(posedge clk)
 	FENCE   <= '0;
 	FENCE_I <= '0;
 	ECALL   <= '0;
+        CSRRW   <= '0;
+        CSRRS   <= '0;
+        CSRRC   <= '0;
+        CSRRWI  <= '0;
+        CSRRSI  <= '0;
+        CSRRCI  <= '0;
 	EBREAK  <= '0;
   case (ifu_inst[6:0])
     'b0110111 : begin //LUI
@@ -516,20 +527,58 @@ always_ff @(posedge clk)
                 FENCE      <= '1;
                 end
     'b1110011 : begin //ECALL
-                ECALL      <= '1;
+                case (inst_R.funct3)
+                  'b001 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRW      <= '1;
+                          end
+                  'b010 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRS      <= '1;
+                          end
+                  'b011 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRC      <= '1;
+                          end
+                  'b101 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRWI     <= '1;
+                          end
+                  'b110 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRSI     <= '1;
+                          end
+                  'b111 : begin 
+                          csr        <= inst_I.imm_11_0;
+                          rs1        <= inst_I.rs1;
+                          funct3     <= inst_I.funct3;
+                          rd         <= inst_I.rd;
+                          CSRRCI     <= '1;
+                          end
+                  default:begin
+                          ECALL      <= '1;
+                          end
+                endcase
                 end
     'b1110011 : begin //EBREAK
                 EBREAK     <= '1;
                 end
   endcase
-  end
-
-
-
-always_ff @(posedge clk)
-  begin
-  dbg_led[0] <= ifu_inst[0];
-  dbg_led[1] <= ifu_inst[1];
   end
 
 endmodule

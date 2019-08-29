@@ -10,10 +10,16 @@ module riscv (
   input  logic           bus_ack,
   output logic           bus_write,
   output logic [31:0]    bus_addr,
-  inout  logic [31:0]    bus_data,
-
-  output logic [1:0]     dbg_led
+  inout  logic [31:0]    bus_data
 );
+
+logic           csr_req;
+logic           csr_ack;
+logic           csr_write;
+logic [31:0]    csr_addr;
+logic [31:0]    csr_mask;
+logic [31:0]    csr_data_wr;
+logic [31:0]    csr_data_rd;
 
 logic              PC_wr;
 logic [31:0]       PC_in;
@@ -28,6 +34,7 @@ logic             ifu_rdy;
 logic             ifu_req;
 logic             ifu_done;
 logic [31:0]      ifu_inst;
+logic [31:0]      ifu_inst_PC;
 
 logic             idu_rdy;
 logic             idu_req;
@@ -36,12 +43,15 @@ logic             idu_done;
 
 logic        ifu_vld;
 logic        alu_vld;
+logic        alu_access_mem;
 
 logic  [3:0] fm;
 logic  [3:0] pred;
 logic  [3:0] succ;
 logic  [4:0] shamt;
 logic [31:0] imm;
+logic  [4:0] uimm;
+logic [11:0] csr;
 logic  [6:0] funct7;
 logic  [2:0] funct3;
 logic  [4:0] rs2;
@@ -89,6 +99,12 @@ logic AND;
 logic FENCE;
 logic FENCE_I;
 logic ECALL;
+logic CSRRW;
+logic CSRRS;
+logic CSRRC;
+logic CSRRWI;
+logic CSRRSI;
+logic CSRRCI;
 logic EBREAK;
 
 riscv_regfile regfile (
@@ -104,6 +120,19 @@ riscv_regfile regfile (
   .x     (x    )
 );
 
+riscv_csr csrfile (
+  .clk (clk),
+  .rst (rst),
+
+  .csr_req   (csr_req),   
+  .csr_ack   (csr_ack),   
+  .csr_write (csr_write), 
+  .csr_addr  (csr_addr),  
+  .csr_mask  (csr_mask),  
+  .csr_data_wr  (csr_data_wr), 
+  .csr_data_rd  (csr_data_rd)  
+);
+
 riscv_ifu ifu (
   .clk (clk),
   .rst (rst),
@@ -111,8 +140,11 @@ riscv_ifu ifu (
   .PC    (PC_in),
 
   .alu_vld (alu_vld),
+  .alu_access_mem (alu_access_mem),
   .ifu_vld (ifu_vld),
   .ifu_inst (ifu_inst),
+  .ifu_inst_PC (ifu_inst_PC),
+  //.ifu_out (ifu_out),
 
   .rdy  (ifu_rdy),
   .req  (ifu_req),
@@ -142,6 +174,8 @@ riscv_idu idu (
   .succ      (succ    ),
   .shamt     (shamt   ),
   .imm       (imm     ),
+  .uimm      (uimm    ),
+  .csr       (csr     ),
   .funct7    (funct7  ),
   .funct3    (funct3  ),
   .rs2       (rs2     ),
@@ -189,10 +223,13 @@ riscv_idu idu (
   .FENCE     (FENCE   ),
   .FENCE_I   (FENCE_I ),
   .ECALL     (ECALL   ),
-  .EBREAK    (EBREAK  ),
- 
-  .dbg_led (dbg_led)
-
+  .CSRRW     (CSRRW   ),
+  .CSRRS     (CSRRS   ),
+  .CSRRC     (CSRRC   ),
+  .CSRRWI    (CSRRWI  ),
+  .CSRRSI    (CSRRSI  ),
+  .CSRRCI    (CSRRCI  ),
+  .EBREAK    (EBREAK  )
 );
 
 riscv_alu alu (
@@ -201,12 +238,15 @@ riscv_alu alu (
                              
   .idu_vld (idu_vld),
   .alu_vld   (alu_vld),
+  .alu_access_mem (alu_access_mem),
                              
   .fm        (fm      ),
   .pred      (pred    ),
   .succ      (succ    ),
   .shamt     (shamt   ),
   .imm       (imm     ),
+  .uimm      (uimm    ),
+  .csr       (csr     ),
   .funct7    (funct7  ),
   .funct3    (funct3  ),
   .rs2       (rs2     ),
@@ -254,6 +294,12 @@ riscv_alu alu (
   .FENCE     (FENCE   ),
   .FENCE_I   (FENCE_I ),
   .ECALL     (ECALL   ),
+  .CSRRW     (CSRRW   ),
+  .CSRRS     (CSRRS   ),
+  .CSRRC     (CSRRC   ),
+  .CSRRWI    (CSRRWI  ),
+  .CSRRSI    (CSRRSI  ),
+  .CSRRCI    (CSRRCI  ),
   .EBREAK    (EBREAK  ),
                              
   .PC_wr     (PC_wr   ),
@@ -263,6 +309,14 @@ riscv_alu alu (
   .x_wr      (x_wr    ),
   .x_in      (x_in    ),
   .x         (x       ),
+
+  .csr_req   (csr_req),   
+  .csr_ack   (csr_ack),   
+  .csr_write (csr_write), 
+  .csr_addr  (csr_addr),  
+  .csr_mask  (csr_mask),  
+  .csr_data_wr  (csr_data_wr),
+  .csr_data_rd  (csr_data_rd),
 
   .bus_req   (bus_req),   
   .bus_ack   (bus_ack),   
