@@ -99,10 +99,10 @@ initial
     $readmemh("../../tests/timer_0.v", mem_array_0);
     for(int i = 0; i < 2**19; i++)
       begin
-      dut.mem.mem_array_3[i] = mem_array_3[i+'h4000];
-      dut.mem.mem_array_2[i] = mem_array_2[i+'h4000];
-      dut.mem.mem_array_1[i] = mem_array_1[i+'h4000];
-      dut.mem.mem_array_0[i] = mem_array_0[i+'h4000];
+      dut.mem.mem_array_3[i] = mem_array_3[i];
+      dut.mem.mem_array_2[i] = mem_array_2[i];
+      dut.mem.mem_array_1[i] = mem_array_1[i];
+      dut.mem.mem_array_0[i] = mem_array_0[i];
       end
   end
 
@@ -277,8 +277,8 @@ final
 
 
     if(data !== 32'hxxxxxxxx)
-      $display("(%6d)0x%08x: %08x %s", (addr+'h4000)*4, (addr+'h4000)*4, data, assembly);
-    end                                                            
-  end                                                              
+      $display("(%6d)0x%08x: %08x %s", (addr)*4, (addr)*4, data, assembly);
+    end                                               
+  end                                                 
 
 endmodule
