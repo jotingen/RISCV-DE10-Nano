@@ -85,7 +85,7 @@ riscv riscv (
   .bus_data  (bus_data)
 );
 
-mem #(.ADDR_LO(32'h00000000), .ADDR_HI(32'h0003FFFF)) mem (
+mem #(.SIZE(19),.ADDR_BASE(32'h00010000)) mem (
   .clk (clk),
   .rst (rst),
 
@@ -96,7 +96,7 @@ mem #(.ADDR_LO(32'h00000000), .ADDR_HI(32'h0003FFFF)) mem (
   .bus_data  (bus_data)  
 );
 
-led #(.ADDR_LO(32'h00040000), .ADDR_HI(32'h0004FFFF)) led (
+led #(.SIZE(1),.ADDR_BASE(32'hC0000000)) led (
   .clk (clk),
   .rst (rst),
 

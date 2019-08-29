@@ -10,8 +10,6 @@ input  logic           bus_write,
 input  logic [31:0]    bus_addr,
 inout  logic [31:0]    bus_data,
 
-output logic           inv,
-
 //////////// ADC //////////
 output logic           ADC_CONVST,
 output logic           ADC_SCK,
@@ -59,7 +57,6 @@ assign bus_data = 'z;
 st7735r display (
   .clk (clk),
   .rst (rst),
-  .inv (inv),
   .RS_DC (TFT_DC),
   .SCK   (SCK),
   .DATA  (MOSI),

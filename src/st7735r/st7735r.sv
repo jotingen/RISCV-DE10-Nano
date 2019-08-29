@@ -1,12 +1,12 @@
 module st7735r (
   input  logic clk,
   input  logic rst,
-  output logic inv,
   output logic SCK,
   output logic RS_DC,
   output logic DATA,
   output logic CS
 );
+  logic inv;
 
 typedef struct packed {
   logic cmd;

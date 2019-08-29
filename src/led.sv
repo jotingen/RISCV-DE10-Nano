@@ -1,6 +1,6 @@
 module led #(
-  parameter logic [31:0] ADDR_LO = 32'h00000000,
-  parameter logic [31:0] ADDR_HI = 32'h0007FFFF
+  parameter integer      SIZE = 4,
+  parameter logic [31:0] ADDR_BASE = 32'h00000000
 ) (
   input  logic           clk,
   input  logic           rst,
@@ -25,8 +25,8 @@ always_ff @(posedge clk)
   data <= '0;
   LED <= LED;
   if(bus_req &
-     bus_addr >= ADDR_LO &
-     bus_addr <= ADDR_HI)
+     bus_addr >= ADDR_BASE &
+     bus_addr <= ADDR_BASE + 2**SIZE - 1)
     begin
     bus_ack <= '1;
     if (bus_write)
