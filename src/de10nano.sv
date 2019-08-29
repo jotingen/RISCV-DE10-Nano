@@ -85,7 +85,7 @@ riscv riscv (
   .bus_data  (bus_data)
 );
 
-mem #(.SIZE(19),.ADDR_BASE(32'h00010000)) mem (
+mem #(.SIZE(19),.ADDR_BASE(32'h00000000)) mem (
   .clk (clk),
   .rst (rst),
 
