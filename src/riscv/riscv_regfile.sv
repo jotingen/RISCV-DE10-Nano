@@ -102,7 +102,7 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
-    PC <= 'h10000;// Temporary until I figure out how to make the boot rom
+    PC <= '0;
     x  <= '0;
     end
   end

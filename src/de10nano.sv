@@ -49,7 +49,13 @@ logic        bus_req;
 logic        bus_ack;
 logic        bus_write;
 logic [31:0] bus_addr;
-wire  [31:0] bus_data;
+logic [31:0] bus_data_wr;
+logic [31:0] bus_data_rd;
+
+logic        mem_bus_ack;
+logic [31:0] mem_bus_data_rd;
+logic        led_bus_ack;
+logic [31:0] led_bus_data_rd;
 
 logic arst;
 logic arst_1;
@@ -64,14 +70,25 @@ always @(posedge clk)
   rst    <= arst_3;
   end  
   
-PLL pll (
-  .inclk0 (FPGA_CLK1_50),
-  .c0     (clk),
-  .locked ()
-);
+//PLL pll (
+//  .inclk0 (FPGA_CLK1_50),
+//  .c0     (clk),
+//  .locked ()
+//);
+assign clk = FPGA_CLK1_50;
 
 assign start = ~KEY[1];
 
+always_ff @(posedge clk)
+  begin
+  bus_ack     <= mem_bus_ack     | led_bus_ack    ;
+  bus_data_rd <= mem_bus_data_rd | led_bus_data_rd;
+  if(rst)
+    begin
+    bus_ack     <= '0;
+    bus_data_rd <= '0;
+    end
+  end
 
 riscv riscv (
   .clk (clk),
@@ -82,18 +99,20 @@ riscv riscv (
   .bus_ack   (bus_ack),   
   .bus_write (bus_write), 
   .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)
+  .bus_data_rd  (bus_data_rd),
+  .bus_data_wr  (bus_data_wr)
 );
 
-mem #(.SIZE(19),.ADDR_BASE(32'h00000000)) mem (
+mem #(.SIZE(18),.ADDR_BASE(32'h00000000)) mem (
   .clk (clk),
   .rst (rst),
 
   .bus_req   (bus_req),   
-  .bus_ack   (bus_ack),   
+  .bus_ack   (mem_bus_ack),   
   .bus_write (bus_write), 
   .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)  
+  .bus_data_rd  (mem_bus_data_rd),
+  .bus_data_wr  (bus_data_wr)
 );
 
 led #(.SIZE(1),.ADDR_BASE(32'hC0000000)) led (
@@ -103,10 +122,11 @@ led #(.SIZE(1),.ADDR_BASE(32'hC0000000)) led (
   .LED (LED),
 
   .bus_req   (bus_req),   
-  .bus_ack   (bus_ack),   
+  .bus_ack   (led_bus_ack),   
   .bus_write (bus_write), 
   .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)  
+  .bus_data_rd  (led_bus_data_rd),
+  .bus_data_wr  (bus_data_wr)
 );
 
 shield_V1 shield (
@@ -115,11 +135,11 @@ shield_V1 shield (
 
   .arst (arst),
 
-  .bus_req   (bus_req),   
-  .bus_ack   (bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data  (bus_data), 
+  //.bus_req   (bus_req),   
+  //.bus_ack   (bus_ack),   
+  //.bus_write (bus_write), 
+  //.bus_addr  (bus_addr),  
+  //.bus_data  (bus_data), 
 
   .ADC_CONVST      (ADC_CONVST),     
   .ADC_SCK         (ADC_SCK),        

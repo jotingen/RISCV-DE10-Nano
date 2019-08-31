@@ -86,25 +86,13 @@ de10nano dut (
 
 );
 
-logic [7:0] mem_array_3 [2**(19-2)-1+1:0]; //Larger array to load into, then copy with offset
-logic [7:0] mem_array_2 [2**(19-2)-1+1:0];
-logic [7:0] mem_array_1 [2**(19-2)-1+1:0];
-logic [7:0] mem_array_0 [2**(19-2)-1+1:0];
-
-initial
-  begin
-    $readmemh("../../tests/timer_3.v", mem_array_3);
-    $readmemh("../../tests/timer_2.v", mem_array_2);
-    $readmemh("../../tests/timer_1.v", mem_array_1);
-    $readmemh("../../tests/timer_0.v", mem_array_0);
-    for(int i = 0; i < 2**19; i++)
-      begin
-      dut.mem.mem_array_3[i] = mem_array_3[i];
-      dut.mem.mem_array_2[i] = mem_array_2[i];
-      dut.mem.mem_array_1[i] = mem_array_1[i];
-      dut.mem.mem_array_0[i] = mem_array_0[i];
-      end
-  end
+//initial
+//  begin
+//    $readmemh("../../tests/timer_3.v", dut.mem.mem_array_3);
+//    $readmemh("../../tests/timer_2.v", dut.mem.mem_array_2);
+//    $readmemh("../../tests/timer_1.v", dut.mem.mem_array_1);
+//    $readmemh("../../tests/timer_0.v", dut.mem.mem_array_0);
+//  end
 
 initial 
   begin 
@@ -276,7 +264,7 @@ final
     endcase
 
 
-    if(data !== 32'hxxxxxxxx)
+    if(data !== 32'h00000000 & data !== 32'hxxxxxxxx)
       $display("(%6d)0x%08x: %08x %s", (addr)*4, (addr)*4, data, assembly);
     end                                               
   end                                                 

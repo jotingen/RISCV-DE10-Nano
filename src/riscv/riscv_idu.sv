@@ -196,6 +196,7 @@ always_ff @(posedge clk)
         CSRRSI  <= '0;
         CSRRCI  <= '0;
 	EBREAK  <= '0;
+  unique
   case (ifu_inst[6:0])
     'b0110111 : begin //LUI
                 imm[31:12] <= inst_U.imm_31_12;
@@ -223,6 +224,7 @@ always_ff @(posedge clk)
                 JALR       <= '1;
                 end
     'b1100011 : begin 
+                unique
                 case (inst_B.funct3)
                   'b000 : begin //BEQ
                           imm[12]    <= inst_B.imm_12;
@@ -284,9 +286,13 @@ always_ff @(posedge clk)
                           imm[11]    <= inst_B.imm_11;
                           BGEU       <= '1;
                           end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
                 endcase
                 end
     'b0000011 : begin     
+                unique
                 case (inst_I.funct3)
                   'b000 : begin //LB
                           imm[11:0]  <= inst_I.imm_11_0;
@@ -323,9 +329,13 @@ always_ff @(posedge clk)
                           rd         <= inst_I.rd;
                           LHU        <= '1;
                           end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
                 endcase
                 end
     'b0100011 : begin 
+                unique
                 case (inst_S.funct3)
                   'b000 : begin //SB
                           imm[11:5]  <= inst_S.imm_11_5;
@@ -351,9 +361,13 @@ always_ff @(posedge clk)
                           imm[4:0]   <= inst_S.imm_4_0;
                           SW         <= '1;
                           end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
                 endcase
                 end
     'b0010011 : begin 
+                unique
                 case (inst_I.funct3)
                   'b000 : begin //ADDI
                           imm[11:0]  <= inst_I.imm_11_0;
@@ -406,6 +420,7 @@ always_ff @(posedge clk)
                           SLLI       <= '1;
                           end
                   'b101 : begin 
+                          unique
                           case (inst_R.funct7)
                             'b0000000 : begin //SRLI
                                         funct7     <= inst_R.funct7;  
@@ -423,13 +438,21 @@ always_ff @(posedge clk)
                                         rd         <= inst_R.rd;
                                         SRAI       <= '1;
                                         end
+                            default : begin 
+                                      idu_vld <= '0;
+                                      end
                           endcase
                           end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
                 endcase
                 end
     'b0110011 : begin 
+                unique
                 case (inst_R.funct3)
                   'b000 : begin 
+                          unique
                           case (inst_R.funct7)
                             'b0000000 : begin //ADD
                                         funct7     <= inst_R.funct7;  
@@ -447,6 +470,9 @@ always_ff @(posedge clk)
                                         rd         <= inst_R.rd;
                                         SUB        <= '1;
                                         end
+                            default : begin 
+                                      idu_vld <= '0;
+                                      end
                           endcase
                           end
                   'b001 : begin //SLL
@@ -482,6 +508,7 @@ always_ff @(posedge clk)
                           XOR        <= '1;
                           end
                   'b101 : begin 
+                          unique
                           case (inst_R.funct7)
                             'b0000000 : begin //SRL
                                         funct7     <= inst_R.funct7;  
@@ -499,6 +526,9 @@ always_ff @(posedge clk)
                                         rd         <= inst_R.rd;
                                         SRA        <= '1;
                                         end
+                            default : begin 
+                                      idu_vld <= '0;
+                                      end
                           endcase
                           end
                   'b110 : begin //OR
@@ -517,6 +547,9 @@ always_ff @(posedge clk)
                           rd         <= inst_R.rd;
                           AND        <= '1;
                           end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
                 endcase
                 end
     'b0001111 : begin //FENCE
@@ -526,8 +559,23 @@ always_ff @(posedge clk)
                 rd             <= inst_I.rd;
                 FENCE      <= '1;
                 end
-    'b1110011 : begin //ECALL
-                case (inst_R.funct3)
+    'b1110011 : begin 
+                unique
+                case (inst_I.funct3)
+                  'b000 : begin 
+                          unique
+                          case (inst_I.imm_11_0)
+                            'b000000000000 : begin //ECALL
+                                             ECALL      <= '1;
+                                             end
+                            'b000000000001 : begin //EBREAK
+                                             EBREAK     <= '1;
+                                             end
+                            default : begin 
+                                      idu_vld <= '0;
+                                      end
+                          endcase
+                          end
                   'b001 : begin 
                           csr        <= inst_I.imm_11_0;
                           rs1        <= inst_I.rs1;
@@ -570,14 +618,14 @@ always_ff @(posedge clk)
                           rd         <= inst_I.rd;
                           CSRRCI     <= '1;
                           end
-                  default:begin
-                          ECALL      <= '1;
-                          end
-                endcase
-                end
-    'b1110011 : begin //EBREAK
-                EBREAK     <= '1;
-                end
+                  default : begin 
+                            idu_vld <= '0;
+                            end
+              endcase
+              end
+    default : begin 
+              idu_vld <= '0;
+              end
   endcase
   end
 

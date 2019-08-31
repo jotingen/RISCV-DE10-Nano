@@ -14,7 +14,7 @@ VERILOG3_SUFFIX=_3.v
 VERILOG3 := $(patsubst %,%$(VERILOG3_SUFFIX),$(TESTS))
 
 .PHONY: all
-all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3) sim
+all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3)
 
 %$(ASSEMBLY_SUFFIX) : $(SRCS)
 	riscv64-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -S -o $@ $<
@@ -23,19 +23,16 @@ all : $(ASSEMBLY) $(OUT)  $(VERILOG0) $(VERILOG1) $(VERILOG2) $(VERILOG3) sim
 	riscv64-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -o $@ riscv.s $< 
 
 %$(VERILOG0_SUFFIX) : %$(OUT_SUFFIX)
-	riscv64-unknown-elf-objcopy -O verilog --interleave=4 -b 0 $< $@
+	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65535 --interleave=4 -b 0 $< $@
 
 %$(VERILOG1_SUFFIX) : %$(OUT_SUFFIX)
-	riscv64-unknown-elf-objcopy -O verilog --interleave=4 -b 1 $< $@
+	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65535 --interleave=4 -b 1 $< $@
 
 %$(VERILOG2_SUFFIX) : %$(OUT_SUFFIX)
-	riscv64-unknown-elf-objcopy -O verilog --interleave=4 -b 2 $< $@
+	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65535 --interleave=4 -b 2 $< $@
 
 %$(VERILOG3_SUFFIX) : %$(OUT_SUFFIX)
-	riscv64-unknown-elf-objcopy -O verilog --interleave=4 -b 3 $< $@
-
-.PHONY: sim
-	$(MAKE) -f simulation/modelsim
+	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65535 --interleave=4 -b 3 $< $@
 
 .PHONY: clean
 clean: 

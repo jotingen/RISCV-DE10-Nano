@@ -10,7 +10,8 @@ module riscv (
   input  logic           bus_ack,
   output logic           bus_write,
   output logic [31:0]    bus_addr,
-  inout  logic [31:0]    bus_data
+  output logic [31:0]    bus_data_wr,
+  input  logic [31:0]    bus_data_rd
 );
 
 logic           csr_req;
@@ -42,6 +43,7 @@ logic [31:0]      idu_inst;
 logic             idu_done;
 
 logic        ifu_vld;
+logic        idu_vld;
 logic        alu_vld;
 logic        alu_access_mem;
 
@@ -107,6 +109,30 @@ logic CSRRSI;
 logic CSRRCI;
 logic EBREAK;
 
+logic           ifu_bus_req;
+logic           ifu_bus_write;
+logic [31:0]    ifu_bus_addr;
+logic [31:0]    ifu_bus_data_wr;
+logic           alu_bus_req;
+logic           alu_bus_write;
+logic [31:0]    alu_bus_addr;
+logic [31:0]    alu_bus_data_wr;
+
+always_ff @(posedge clk)
+  begin
+  bus_req     <= ifu_bus_req     | alu_bus_req     ;
+  bus_write   <= ifu_bus_write   | alu_bus_write   ;
+  bus_addr    <= ifu_bus_addr    | alu_bus_addr    ;
+  bus_data_wr <= ifu_bus_data_wr | alu_bus_data_wr ;
+  if(rst)
+    begin
+    bus_req     <= '0 ;
+    bus_write   <= '0 ;
+    bus_addr    <= '0 ;
+    bus_data_wr <= '0 ;
+    end
+  end
+
 riscv_regfile regfile (
   .clk (clk),
   .rst (rst),
@@ -151,11 +177,12 @@ riscv_ifu ifu (
   .done (ifu_done),
 
 
-  .bus_req   (bus_req),   
+  .bus_req   (ifu_bus_req),   
   .bus_ack   (bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)  
+  .bus_write (ifu_bus_write), 
+  .bus_addr  (ifu_bus_addr),  
+  .bus_data_wr (ifu_bus_data_wr),
+  .bus_data_rd  (bus_data_rd)  
 );
 
 riscv_idu idu (
@@ -318,11 +345,12 @@ riscv_alu alu (
   .csr_data_wr  (csr_data_wr),
   .csr_data_rd  (csr_data_rd),
 
-  .bus_req   (bus_req),   
+  .bus_req   (alu_bus_req),   
   .bus_ack   (bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data  (bus_data)
+  .bus_write (alu_bus_write), 
+  .bus_addr  (alu_bus_addr),  
+  .bus_data_wr (alu_bus_data_wr),
+  .bus_data_rd  (bus_data_rd)
 );
 
 endmodule

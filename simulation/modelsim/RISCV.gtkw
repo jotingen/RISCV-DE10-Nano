@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Aug 29 00:11:22 2019
+[*] Thu Aug 29 21:18:38 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Aug 29 00:10:14 2019"
-[dumpfile_size] 353643819
+[dumpfile_mtime] "Thu Aug 29 21:14:16 2019"
+[dumpfile_size] 343753499
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 324460
+[timestart] 676920
 [size] 1233 1048
 [pos] -1 -1
-*-12.532780 334000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-13.532780 696000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -108,7 +108,6 @@ tb.dut.riscv.csrfile.csr_write
 @22
 #{tb.dut.riscv.csrfile.csr_addr[31:0]} tb.dut.riscv.csrfile.csr_addr[31] tb.dut.riscv.csrfile.csr_addr[30] tb.dut.riscv.csrfile.csr_addr[29] tb.dut.riscv.csrfile.csr_addr[28] tb.dut.riscv.csrfile.csr_addr[27] tb.dut.riscv.csrfile.csr_addr[26] tb.dut.riscv.csrfile.csr_addr[25] tb.dut.riscv.csrfile.csr_addr[24] tb.dut.riscv.csrfile.csr_addr[23] tb.dut.riscv.csrfile.csr_addr[22] tb.dut.riscv.csrfile.csr_addr[21] tb.dut.riscv.csrfile.csr_addr[20] tb.dut.riscv.csrfile.csr_addr[19] tb.dut.riscv.csrfile.csr_addr[18] tb.dut.riscv.csrfile.csr_addr[17] tb.dut.riscv.csrfile.csr_addr[16] tb.dut.riscv.csrfile.csr_addr[15] tb.dut.riscv.csrfile.csr_addr[14] tb.dut.riscv.csrfile.csr_addr[13] tb.dut.riscv.csrfile.csr_addr[12] tb.dut.riscv.csrfile.csr_addr[11] tb.dut.riscv.csrfile.csr_addr[10] tb.dut.riscv.csrfile.csr_addr[9] tb.dut.riscv.csrfile.csr_addr[8] tb.dut.riscv.csrfile.csr_addr[7] tb.dut.riscv.csrfile.csr_addr[6] tb.dut.riscv.csrfile.csr_addr[5] tb.dut.riscv.csrfile.csr_addr[4] tb.dut.riscv.csrfile.csr_addr[3] tb.dut.riscv.csrfile.csr_addr[2] tb.dut.riscv.csrfile.csr_addr[1] tb.dut.riscv.csrfile.csr_addr[0]
 #{tb.dut.riscv.csrfile.csr_mask[31:0]} tb.dut.riscv.csrfile.csr_mask[31] tb.dut.riscv.csrfile.csr_mask[30] tb.dut.riscv.csrfile.csr_mask[29] tb.dut.riscv.csrfile.csr_mask[28] tb.dut.riscv.csrfile.csr_mask[27] tb.dut.riscv.csrfile.csr_mask[26] tb.dut.riscv.csrfile.csr_mask[25] tb.dut.riscv.csrfile.csr_mask[24] tb.dut.riscv.csrfile.csr_mask[23] tb.dut.riscv.csrfile.csr_mask[22] tb.dut.riscv.csrfile.csr_mask[21] tb.dut.riscv.csrfile.csr_mask[20] tb.dut.riscv.csrfile.csr_mask[19] tb.dut.riscv.csrfile.csr_mask[18] tb.dut.riscv.csrfile.csr_mask[17] tb.dut.riscv.csrfile.csr_mask[16] tb.dut.riscv.csrfile.csr_mask[15] tb.dut.riscv.csrfile.csr_mask[14] tb.dut.riscv.csrfile.csr_mask[13] tb.dut.riscv.csrfile.csr_mask[12] tb.dut.riscv.csrfile.csr_mask[11] tb.dut.riscv.csrfile.csr_mask[10] tb.dut.riscv.csrfile.csr_mask[9] tb.dut.riscv.csrfile.csr_mask[8] tb.dut.riscv.csrfile.csr_mask[7] tb.dut.riscv.csrfile.csr_mask[6] tb.dut.riscv.csrfile.csr_mask[5] tb.dut.riscv.csrfile.csr_mask[4] tb.dut.riscv.csrfile.csr_mask[3] tb.dut.riscv.csrfile.csr_mask[2] tb.dut.riscv.csrfile.csr_mask[1] tb.dut.riscv.csrfile.csr_mask[0]
-@23
 #{tb.dut.riscv.csrfile.csr_data_wr[31:0]} tb.dut.riscv.csrfile.csr_data_wr[31] tb.dut.riscv.csrfile.csr_data_wr[30] tb.dut.riscv.csrfile.csr_data_wr[29] tb.dut.riscv.csrfile.csr_data_wr[28] tb.dut.riscv.csrfile.csr_data_wr[27] tb.dut.riscv.csrfile.csr_data_wr[26] tb.dut.riscv.csrfile.csr_data_wr[25] tb.dut.riscv.csrfile.csr_data_wr[24] tb.dut.riscv.csrfile.csr_data_wr[23] tb.dut.riscv.csrfile.csr_data_wr[22] tb.dut.riscv.csrfile.csr_data_wr[21] tb.dut.riscv.csrfile.csr_data_wr[20] tb.dut.riscv.csrfile.csr_data_wr[19] tb.dut.riscv.csrfile.csr_data_wr[18] tb.dut.riscv.csrfile.csr_data_wr[17] tb.dut.riscv.csrfile.csr_data_wr[16] tb.dut.riscv.csrfile.csr_data_wr[15] tb.dut.riscv.csrfile.csr_data_wr[14] tb.dut.riscv.csrfile.csr_data_wr[13] tb.dut.riscv.csrfile.csr_data_wr[12] tb.dut.riscv.csrfile.csr_data_wr[11] tb.dut.riscv.csrfile.csr_data_wr[10] tb.dut.riscv.csrfile.csr_data_wr[9] tb.dut.riscv.csrfile.csr_data_wr[8] tb.dut.riscv.csrfile.csr_data_wr[7] tb.dut.riscv.csrfile.csr_data_wr[6] tb.dut.riscv.csrfile.csr_data_wr[5] tb.dut.riscv.csrfile.csr_data_wr[4] tb.dut.riscv.csrfile.csr_data_wr[3] tb.dut.riscv.csrfile.csr_data_wr[2] tb.dut.riscv.csrfile.csr_data_wr[1] tb.dut.riscv.csrfile.csr_data_wr[0]
 @28
 tb.dut.riscv.csrfile.csr_ack
@@ -117,6 +116,7 @@ tb.dut.riscv.csrfile.csr_data_rd[31:0]
 @200
 -
 @22
+tb.dut.riscv.csrfile.csr_C80[31:0]
 tb.dut.riscv.csrfile.csr_C00[31:0]
 @200
 -
@@ -183,6 +183,7 @@ tb.dut.riscv.idu.ifu_vld
 @22
 #{tb.dut.riscv.idu.ifu_inst[31:0]} tb.dut.riscv.idu.ifu_inst[31] tb.dut.riscv.idu.ifu_inst[30] tb.dut.riscv.idu.ifu_inst[29] tb.dut.riscv.idu.ifu_inst[28] tb.dut.riscv.idu.ifu_inst[27] tb.dut.riscv.idu.ifu_inst[26] tb.dut.riscv.idu.ifu_inst[25] tb.dut.riscv.idu.ifu_inst[24] tb.dut.riscv.idu.ifu_inst[23] tb.dut.riscv.idu.ifu_inst[22] tb.dut.riscv.idu.ifu_inst[21] tb.dut.riscv.idu.ifu_inst[20] tb.dut.riscv.idu.ifu_inst[19] tb.dut.riscv.idu.ifu_inst[18] tb.dut.riscv.idu.ifu_inst[17] tb.dut.riscv.idu.ifu_inst[16] tb.dut.riscv.idu.ifu_inst[15] tb.dut.riscv.idu.ifu_inst[14] tb.dut.riscv.idu.ifu_inst[13] tb.dut.riscv.idu.ifu_inst[12] tb.dut.riscv.idu.ifu_inst[11] tb.dut.riscv.idu.ifu_inst[10] tb.dut.riscv.idu.ifu_inst[9] tb.dut.riscv.idu.ifu_inst[8] tb.dut.riscv.idu.ifu_inst[7] tb.dut.riscv.idu.ifu_inst[6] tb.dut.riscv.idu.ifu_inst[5] tb.dut.riscv.idu.ifu_inst[4] tb.dut.riscv.idu.ifu_inst[3] tb.dut.riscv.idu.ifu_inst[2] tb.dut.riscv.idu.ifu_inst[1] tb.dut.riscv.idu.ifu_inst[0]
 tb.dut.riscv.idu.opcode[6:0]
+@25
 tb.dut.riscv.idu.rd[4:0]
 tb.dut.riscv.idu.rs1[4:0]
 tb.dut.riscv.idu.rs2[4:0]
