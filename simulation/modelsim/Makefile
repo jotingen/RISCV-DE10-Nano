@@ -27,9 +27,11 @@ build:
 %$(SV_SUFFIX): FORCE
 	vlog -sv -work work +incdir+$(dir $@) $@
 	
+.PHONY: sim
 sim:
 	vsim -c -do RISCV.do
 
+.PHONY: clean
 clean:
 	if exist rtl_work (vdel -lib rtl_work -all)
 

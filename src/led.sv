@@ -11,18 +11,14 @@ module led #(
   output logic           bus_ack,
   input  logic           bus_write,
   input  logic [31:0]    bus_addr,
-  inout  logic [31:0]    bus_data
+  input  logic [31:0]    bus_data_wr,
+  output logic [31:0]    bus_data_rd
 );
-
-logic put_data;
-logic [31:0] data;
-assign bus_data = put_data ? data : 'z;
 
 always_ff @(posedge clk)
   begin
-  put_data <= '0;
-  bus_ack  <= 'z;
-  data <= '0;
+  bus_ack  <= '0;
+  bus_data_rd <= '0;
   LED <= LED;
   if(bus_req &
      bus_addr >= ADDR_BASE &
@@ -31,15 +27,14 @@ always_ff @(posedge clk)
     bus_ack <= '1;
     if (bus_write)
       begin
-      LED[7:0] <= bus_data[7:0] ^ //TMP
-                  bus_data[15:8] ^
-                  bus_data[23:16] ^
-                  bus_data[31:24];
+      LED[7:0] <= bus_data_wr[7:0];// ^ //TMP
+                  //bus_data[15:8] ^
+                  //bus_data[23:16] ^
+                  //bus_data[31:24];
       end
     else
       begin
-      put_data <= '1;
-      data[7:0]   <= LED[7:0];
+      bus_data_rd[7:0]   <= LED[7:0];
       end
     end
 

@@ -90,23 +90,14 @@ module riscv_alu (
   input  logic             bus_ack,
   output logic             bus_write,
   output logic [31:0]      bus_addr,
-  inout  logic [31:0]      bus_data
+  output logic [31:0]      bus_data_wr,
+  input  logic [31:0]      bus_data_rd
 );
 
-logic             bus_put;
-logic             bus_req_out;
-logic             bus_write_out;
-logic [31:0]      bus_addr_out;
-logic [31:0]      bus_data_out;
 
-assign alu_access_mem = bus_put;
+assign alu_access_mem = bus_req;
 
-assign bus_req = bus_put ? bus_req_out : 'z;
-assign bus_write = bus_put ? bus_write_out : 'z;
-assign bus_addr = bus_put ? bus_addr_out : 'z;
-assign bus_data = bus_put ? bus_data_out : 'z;
-
-logic [2:0] cnt;
+logic [3:0] cnt;
 always_ff @(posedge clk)
   begin
 
@@ -123,14 +114,14 @@ always_ff @(posedge clk)
   csr_mask  <= csr_mask ;
   csr_data_wr  <= '0;
 
-  bus_put       <= '0;
-  bus_req_out   <= bus_req_out  ;
-  bus_write_out <= bus_write_out;
-  bus_addr_out  <= bus_addr_out ;
-  bus_data_out  <= bus_data_out ;
+  bus_req   <= '0;
+  bus_write <= '0;
+  bus_addr  <= '0;
+  bus_data_wr  <= '0 ;
 
   if(idu_vld || cnt != 'd0)
     begin
+    unique
     case (1'b1)
       ADD : begin
             $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "ADD", PC, rs1, x[rs1], rs2, x[rs2], rd);
@@ -396,18 +387,17 @@ always_ff @(posedge clk)
       LW : begin
            if(cnt=='d0)
              begin
-             bus_put <= '1;
-             bus_req_out   <= '1;
-             bus_write_out <= '0;
-             bus_addr_out  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
+             bus_req   <= '1;
+             bus_write <= '0;
+             bus_addr  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
              cnt <= cnt + 1;
              end
-           else if(cnt=='d2)
+           else if(bus_ack)
              begin
              $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
-             x_in[rd] <= bus_data;
+             x_in[rd] <= bus_data_rd;
              PC_wr <= '1;
              PC_in <= PC+'d4;
              cnt <= '0;
@@ -420,14 +410,13 @@ always_ff @(posedge clk)
       SW : begin
            if(cnt=='d0)
              begin
-             bus_put <= '1;
-             bus_req_out   <= '1;
-             bus_write_out <= '1;
-             bus_addr_out  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
-             bus_data_out  <= x[rs2];
+             bus_req   <= '1;
+             bus_write <= '1;
+             bus_addr  <= x[rs1] + { {20{imm[11]}}, imm[11:0]};
+             bus_data_wr  <= x[rs2];
              cnt <= cnt + 1;
              end
-           else if(cnt=='d1)
+           else if(bus_ack)
              begin
              $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, x[rs1], rs2, x[rs2], {{20{imm[11]}},imm[11:0]});
              alu_vld <= '1;
@@ -469,7 +458,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -502,7 +491,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -535,7 +524,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -562,7 +551,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -596,7 +585,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -630,7 +619,7 @@ always_ff @(posedge clk)
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
-                x_in[rd][11:0] <= csr_data_rd[11:0];
+                x_in[rd] <= csr_data_rd;
                 PC_wr <= '1;
                 PC_in <= PC+'d4;
                 cnt <= '0;
@@ -652,6 +641,10 @@ always_ff @(posedge clk)
                PC_wr <= '1;
                PC_in <= PC+'d4;
                end
+      default : begin
+                $display("%-5s PC=%08X" , "INVALID!!", PC);
+                end
+              
       endcase
     end
    

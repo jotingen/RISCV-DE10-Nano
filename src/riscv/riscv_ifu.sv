@@ -27,7 +27,8 @@ module riscv_ifu (
   input  logic             bus_ack,
   output logic             bus_write,
   output logic [31:0]      bus_addr,
-  inout  logic [31:0]      bus_data
+  output logic [31:0]      bus_data_wr,
+  input  logic [31:0]      bus_data_rd
 
 );
 
@@ -54,9 +55,10 @@ always_ff @(posedge clk)
   //PC_in <= PC;
   rdy  <= rdy;
   done <= '0;
-  bus_req <= 'z;
-  bus_write <= 'z;
-  bus_addr <= 'z;
+  bus_req <= '0;
+  bus_write <= '0;
+  bus_addr <= '0;
+  bus_data_wr <= '0;
   ifu_out.Inst <= ifu_out.Inst;
   ifu_inst <= ifu_inst;
   ifu_out.PC <= ifu_out.PC;
@@ -77,10 +79,10 @@ always_ff @(posedge clk)
             begin
             ifu_vld <= '1;
             ifu_state <= IDLE;
-					  ifu_inst <= bus_data;
+					  ifu_inst <= bus_data_rd;
             ifu_inst_PC <= PC;
             ifu_out.Vld <= '1;
-					  ifu_out.Inst <= bus_data;
+					  ifu_out.Inst <= bus_data_rd;
             ifu_out.PC <= PC;
             //PC_wr <= '1;
             //PC_in <= PC + 'd4;
