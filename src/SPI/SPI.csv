@@ -1,0 +1,18 @@
+# system info SPI on 2019.08.31.22:31:11
+system_info:
+name,value
+DEVICE,5CSEBA6U23I7
+DEVICE_FAMILY,Cyclone V
+GENERATION_ID,1567305068
+#
+#
+# Files generated for SPI on 2019.08.31.22:31:11
+files:
+filepath,kind,attributes,module,is_top
+simulation/SPI.v,VERILOG,,SPI,true
+simulation/submodules/spiphyslave.v,VERILOG,,SPIPhy,false
+#
+# Map from instance-path to kind of module
+instances:
+instancePath,module
+SPI.spislave_0,SPIPhy

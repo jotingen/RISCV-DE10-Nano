@@ -41,21 +41,31 @@ output logic           HDMI_TX_VS
 );
 
 logic clk;
-
 logic rst;
-logic start;
 
-logic        bus_req;
-logic        bus_ack;
-logic        bus_write;
-logic [31:0] bus_addr;
-logic [31:0] bus_data_wr;
-logic [31:0] bus_data_rd;
+logic        riscv_mem_bus_req;
+logic        riscv_mem_bus_ack;
+logic        riscv_mem_bus_write;
+logic [31:0] riscv_mem_bus_addr;
+logic [31:0] riscv_mem_bus_data;
 
-logic        mem_bus_ack;
-logic [31:0] mem_bus_data_rd;
-logic        led_bus_ack;
-logic [31:0] led_bus_data_rd;
+logic        mem_led_bus_req;
+logic        mem_led_bus_ack;
+logic        mem_led_bus_write;
+logic [31:0] mem_led_bus_addr;
+logic [31:0] mem_led_bus_data;
+
+logic        led_keys_bus_req;
+logic        led_keys_bus_ack;
+logic        led_keys_bus_write;
+logic [31:0] led_keys_bus_addr;
+logic [31:0] led_keys_bus_data;
+
+logic        keys_riscv_bus_req;
+logic        keys_riscv_bus_ack;
+logic        keys_riscv_bus_write;
+logic [31:0] keys_riscv_bus_addr;
+logic [31:0] keys_riscv_bus_data;
 
 logic arst;
 logic arst_1;
@@ -77,56 +87,76 @@ always @(posedge clk)
 //);
 assign clk = FPGA_CLK1_50;
 
-assign start = ~KEY[1];
-
-always_ff @(posedge clk)
-  begin
-  bus_ack     <= mem_bus_ack     | led_bus_ack    ;
-  bus_data_rd <= mem_bus_data_rd | led_bus_data_rd;
-  if(rst)
-    begin
-    bus_ack     <= '0;
-    bus_data_rd <= '0;
-    end
-  end
-
 riscv riscv (
-  .clk (clk),
-  .rst (rst),
-  .start (start),
+  .clk         (clk),
+  .rst         (rst),
 
-  .bus_req   (bus_req),   
-  .bus_ack   (bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data_rd  (bus_data_rd),
-  .bus_data_wr  (bus_data_wr)
+  .i_bus_req   (keys_riscv_bus_req),   
+  .i_bus_ack   (keys_riscv_bus_ack),   
+  .i_bus_write (keys_riscv_bus_write), 
+  .i_bus_addr  (keys_riscv_bus_addr),  
+  .i_bus_data  (keys_riscv_bus_data),
+
+  .o_bus_req   (riscv_mem_bus_req),   
+  .o_bus_ack   (riscv_mem_bus_ack),   
+  .o_bus_write (riscv_mem_bus_write), 
+  .o_bus_addr  (riscv_mem_bus_addr),  
+  .o_bus_data  (riscv_mem_bus_data)
 );
 
 mem #(.SIZE(18),.ADDR_BASE(32'h00000000)) mem (
-  .clk (clk),
-  .rst (rst),
+  .clk         (clk),
+  .rst         (rst),
 
-  .bus_req   (bus_req),   
-  .bus_ack   (mem_bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data_rd  (mem_bus_data_rd),
-  .bus_data_wr  (bus_data_wr)
+  .i_bus_req   (riscv_mem_bus_req),   
+  .i_bus_ack   (riscv_mem_bus_ack),   
+  .i_bus_write (riscv_mem_bus_write), 
+  .i_bus_addr  (riscv_mem_bus_addr),  
+  .i_bus_data  (riscv_mem_bus_data),
+
+  .o_bus_req   (mem_led_bus_req),   
+  .o_bus_ack   (mem_led_bus_ack),   
+  .o_bus_write (mem_led_bus_write), 
+  .o_bus_addr  (mem_led_bus_addr),  
+  .o_bus_data  (mem_led_bus_data)
 );
 
-led #(.SIZE(1),.ADDR_BASE(32'hC0000000)) led (
-  .clk (clk),
-  .rst (rst),
+led #(.SIZE(5),.ADDR_BASE(32'hC0000000)) led (
+  .clk         (clk),
+  .rst         (rst),
 
-  .LED (LED),
+  .LED         (LED),
 
-  .bus_req   (bus_req),   
-  .bus_ack   (led_bus_ack),   
-  .bus_write (bus_write), 
-  .bus_addr  (bus_addr),  
-  .bus_data_rd  (led_bus_data_rd),
-  .bus_data_wr  (bus_data_wr)
+  .i_bus_req   (mem_led_bus_req),   
+  .i_bus_ack   (mem_led_bus_ack),   
+  .i_bus_write (mem_led_bus_write), 
+  .i_bus_addr  (mem_led_bus_addr),  
+  .i_bus_data  (mem_led_bus_data),
+
+  .o_bus_req   (led_keys_bus_req),   
+  .o_bus_ack   (led_keys_bus_ack),   
+  .o_bus_write (led_keys_bus_write), 
+  .o_bus_addr  (led_keys_bus_addr),  
+  .o_bus_data  (led_keys_bus_data)
+);
+
+keys #(.SIZE(5),.ADDR_BASE(32'hC1000000)) keys (
+  .clk         (clk),
+  .rst         (rst),
+
+  .KEY         (KEY),
+
+  .i_bus_req   (led_keys_bus_req),   
+  .i_bus_ack   (led_keys_bus_ack),   
+  .i_bus_write (led_keys_bus_write), 
+  .i_bus_addr  (led_keys_bus_addr),  
+  .i_bus_data  (led_keys_bus_data),
+
+  .o_bus_req   (keys_riscv_bus_req),   
+  .o_bus_ack   (keys_riscv_bus_ack),   
+  .o_bus_write (keys_riscv_bus_write), 
+  .o_bus_addr  (keys_riscv_bus_addr),  
+  .o_bus_data  (keys_riscv_bus_data)
 );
 
 shield_V1 shield (
@@ -141,10 +171,10 @@ shield_V1 shield (
   //.bus_addr  (bus_addr),  
   //.bus_data  (bus_data), 
 
-  .ADC_CONVST      (ADC_CONVST),     
-  .ADC_SCK         (ADC_SCK),        
-  .ADC_SDI         (ADC_SDI),        
-  .ADC_SDO         (ADC_SDO),        
+  //.ADC_CONVST      (ADC_CONVST),     
+  //.ADC_SCK         (ADC_SCK),        
+  //.ADC_SDI         (ADC_SDI),        
+  //.ADC_SDO         (ADC_SDO),        
                                     
   .ARDUINO_IO      (ARDUINO_IO),     
   .ARDUINO_RESET_N (ARDUINO_RESET_N) 

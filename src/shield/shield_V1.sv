@@ -18,9 +18,18 @@ input  logic           ADC_SDO,
 
 //////////// ARDUINO //////////
 inout  logic [15:0]    ARDUINO_IO,
-inout  logic           ARDUINO_RESET_N
+inout  logic           ARDUINO_RESET_N,
+
+//////////// JOYSTICK //////////
+output logic           JOY_UP,    
+output logic           JOY_RIGHT, 
+output logic           JOY_SELECT,
+output logic           JOY_DOWN,  
+output logic           JOY_LEFT   
+
 );
 
+//IO
 logic SD_CS;
 logic TFT_DC;
 logic TFT_CS;
@@ -54,6 +63,45 @@ assign arst = ~ARDUINO_RESET_N;
 assign bus_ack  = 'z;
 assign bus_data = 'z;
 
+
+//Joystick
+logic [11:0] CH0;     
+logic [11:0] CH1;     
+logic [11:0] CH2;     
+logic [11:0] CH3;     
+logic [11:0] CH4;     
+logic [11:0] CH5;     
+logic [11:0] CH6;     
+logic [11:0] CH7;     
+
+ADC adc (
+  .CLOCK    (clk),    
+  .RESET    (rst),    
+  .CH0      (CH0),    
+  .CH1      (CH1),    
+  .CH2      (CH2),    
+  .CH3      (CH3),    
+  .CH4      (CH4),    
+  .CH5      (CH5),    
+  .CH6      (CH6),    
+  .CH7      (CH7),    
+  .ADC_SCLK (ADC_SCK),
+  .ADC_CS_N (ADC_CONVST),
+  .ADC_DOUT (ADC_SDO),   
+  .ADC_DIN  (ADC_SDI)    
+);
+
+always_ff @(posedge clk)
+  begin
+  JOY_UP     <= CH3[11:9] == 'b101; // UP    
+  JOY_RIGHT  <= CH3[11:9] == 'b011; // RIGHT 
+  JOY_SELECT <= CH3[11:9] == 'b010; // SELECT
+  JOY_DOWN   <= CH3[11:9] == 'b001; // DOWN  
+  JOY_LEFT   <= CH3[11:9] == 'b000; // LEFT  
+  end
+
+
+//Display
 st7735r display (
   .clk (clk),
   .rst (rst),
