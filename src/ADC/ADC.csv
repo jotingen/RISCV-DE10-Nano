@@ -1,0 +1,19 @@
+# system info ADC on 2019.08.31.22:48:52
+system_info:
+name,value
+DEVICE,5CSEBA6U23I7
+DEVICE_FAMILY,Cyclone V
+GENERATION_ID,1567306128
+#
+#
+# Files generated for ADC on 2019.08.31.22:48:52
+files:
+filepath,kind,attributes,module,is_top
+simulation/ADC.v,VERILOG,,ADC,true
+simulation/submodules/altera_up_avalon_adv_adc.v,VERILOG,,ADC_adc_mega_0,false
+simulation/submodules/ADC_adc_mega_0.v,VERILOG,,ADC_adc_mega_0,false
+#
+# Map from instance-path to kind of module
+instances:
+instancePath,module
+ADC.adc_mega_0,ADC_adc_mega_0
