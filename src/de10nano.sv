@@ -61,11 +61,17 @@ logic        led_keys_bus_write;
 logic [31:0] led_keys_bus_addr;
 logic [31:0] led_keys_bus_data;
 
-logic        keys_riscv_bus_req;
-logic        keys_riscv_bus_ack;
-logic        keys_riscv_bus_write;
-logic [31:0] keys_riscv_bus_addr;
-logic [31:0] keys_riscv_bus_data;
+logic        keys_shield_bus_req;
+logic        keys_shield_bus_ack;
+logic        keys_shield_bus_write;
+logic [31:0] keys_shield_bus_addr;
+logic [31:0] keys_shield_bus_data;
+
+logic        shield_riscv_bus_req;
+logic        shield_riscv_bus_ack;
+logic        shield_riscv_bus_write;
+logic [31:0] shield_riscv_bus_addr;
+logic [31:0] shield_riscv_bus_data;
 
 logic arst;
 logic arst_1;
@@ -91,11 +97,11 @@ riscv riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .i_bus_req   (keys_riscv_bus_req),   
-  .i_bus_ack   (keys_riscv_bus_ack),   
-  .i_bus_write (keys_riscv_bus_write), 
-  .i_bus_addr  (keys_riscv_bus_addr),  
-  .i_bus_data  (keys_riscv_bus_data),
+  .i_bus_req   (shield_riscv_bus_req),   
+  .i_bus_ack   (shield_riscv_bus_ack),   
+  .i_bus_write (shield_riscv_bus_write), 
+  .i_bus_addr  (shield_riscv_bus_addr),  
+  .i_bus_data  (shield_riscv_bus_data),
 
   .o_bus_req   (riscv_mem_bus_req),   
   .o_bus_ack   (riscv_mem_bus_ack),   
@@ -152,11 +158,11 @@ keys #(.SIZE(5),.ADDR_BASE(32'hC1000000)) keys (
   .i_bus_addr  (led_keys_bus_addr),  
   .i_bus_data  (led_keys_bus_data),
 
-  .o_bus_req   (keys_riscv_bus_req),   
-  .o_bus_ack   (keys_riscv_bus_ack),   
-  .o_bus_write (keys_riscv_bus_write), 
-  .o_bus_addr  (keys_riscv_bus_addr),  
-  .o_bus_data  (keys_riscv_bus_data)
+  .o_bus_req   (keys_shield_bus_req),   
+  .o_bus_ack   (keys_shield_bus_ack),   
+  .o_bus_write (keys_shield_bus_write), 
+  .o_bus_addr  (keys_shield_bus_addr),  
+  .o_bus_data  (keys_shield_bus_data)
 );
 
 shield_V1 shield (
@@ -165,19 +171,25 @@ shield_V1 shield (
 
   .arst (arst),
 
-  //.bus_req   (bus_req),   
-  //.bus_ack   (bus_ack),   
-  //.bus_write (bus_write), 
-  //.bus_addr  (bus_addr),  
-  //.bus_data  (bus_data), 
-
-  //.ADC_CONVST      (ADC_CONVST),     
-  //.ADC_SCK         (ADC_SCK),        
-  //.ADC_SDI         (ADC_SDI),        
-  //.ADC_SDO         (ADC_SDO),        
+  .ADC_CONVST      (ADC_CONVST),     
+  .ADC_SCK         (ADC_SCK),        
+  .ADC_SDI         (ADC_SDI),        
+  .ADC_SDO         (ADC_SDO),        
                                     
   .ARDUINO_IO      (ARDUINO_IO),     
-  .ARDUINO_RESET_N (ARDUINO_RESET_N) 
+  .ARDUINO_RESET_N (ARDUINO_RESET_N),
+
+  .i_bus_req   (keys_shield_bus_req),   
+  .i_bus_ack   (keys_shield_bus_ack),   
+  .i_bus_write (keys_shield_bus_write), 
+  .i_bus_addr  (keys_shield_bus_addr),  
+  .i_bus_data  (keys_shield_bus_data),
+
+  .o_bus_req   (shield_riscv_bus_req),   
+  .o_bus_ack   (shield_riscv_bus_ack),   
+  .o_bus_write (shield_riscv_bus_write), 
+  .o_bus_addr  (shield_riscv_bus_addr),  
+  .o_bus_data  (shield_riscv_bus_data)
 );
 
 endmodule

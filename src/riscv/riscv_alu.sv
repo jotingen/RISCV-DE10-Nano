@@ -124,7 +124,7 @@ always_ff @(posedge clk)
     unique
     case (1'b1)
       ADD : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "ADD", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "ADD", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] + x[rs2];
@@ -132,7 +132,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SLT : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLT", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLT", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             if($signed(x[rs1]) < $signed(x[rs2]))
@@ -143,7 +143,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SLTU : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLTU", PC, rs1, x[rs1], rs2, x[rs2], rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLTU", PC, rs1, x[rs1], rs2, x[rs2], rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              if(x[rs1] < x[rs2])
@@ -154,7 +154,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       AND : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "AND", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "AND", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] & x[rs2];
@@ -162,7 +162,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       OR : begin
-           $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "OR", PC, rs1, x[rs1], rs2, x[rs2], rd);
+           //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "OR", PC, rs1, x[rs1], rs2, x[rs2], rd);
            alu_vld <= '1;
            x_wr[rd] <= '1;
            x_in[rd] <= x[rs1] | x[rs2];
@@ -170,7 +170,7 @@ always_ff @(posedge clk)
            PC_in <= PC+'d4;
            end
       XOR : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "XOR", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "XOR", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] ^ x[rs2];
@@ -178,7 +178,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SLL : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLL", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLL", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] << x[rs2][4:0];
@@ -186,7 +186,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SRL : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRL", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRL", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] >> x[rs2][4:0];
@@ -194,7 +194,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SUB : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SUB", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SUB", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] - x[rs2];
@@ -202,7 +202,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       SRA : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRA", PC, rs1, x[rs1], rs2, x[rs2], rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRA", PC, rs1, x[rs1], rs2, x[rs2], rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] >>> x[rs2];
@@ -212,7 +212,7 @@ always_ff @(posedge clk)
 
 
       ADDI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ADDI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ADDI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] + {{20{imm[11]}},imm[11:0]};
@@ -220,7 +220,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       SLTI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              if($signed(x[rs1]) < $signed({{20{imm[11]}},imm[11:0]}))
@@ -231,7 +231,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       SLTIU : begin
-              $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTIU", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+              //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTIU", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
               alu_vld <= '1;
               x_wr[rd] <= '1;
               if(x[rs1] < {{20{imm[11]}},imm[11:0]})
@@ -242,7 +242,7 @@ always_ff @(posedge clk)
               PC_in <= PC+'d4;
               end
       ANDI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ANDI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ANDI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] & {{20{imm[11]}},imm[11:0]};
@@ -250,7 +250,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       ORI : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ORI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+            //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ORI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= x[rs1] | {{20{imm[11]}},imm[11:0]};
@@ -258,7 +258,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       XORI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "XORI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "XORI", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] ^ {{20{imm[11]}},imm[11:0]};
@@ -266,7 +266,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       SLLI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLLI", PC, rs1, x[rs1], {{27{'0}},imm[4:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLLI", PC, rs1, x[rs1], {{27{'0}},imm[4:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] << imm[4:0];
@@ -274,7 +274,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       SRLI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRLI", PC, rs1, x[rs1], {{27{'0}},imm[4:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRLI", PC, rs1, x[rs1], {{27{'0}},imm[4:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] >> imm[4:0];
@@ -282,7 +282,7 @@ always_ff @(posedge clk)
              PC_in <= PC+'d4;
              end
       SRAI : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRAI", PC, rs1, x[rs1], imm[4:0], rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRAI", PC, rs1, x[rs1], imm[4:0], rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= x[rs1] >>> imm;
@@ -293,7 +293,7 @@ always_ff @(posedge clk)
 
       JAL : begin
             if(imm!='0 || rd!='0)
-              $display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{imm[20]}},imm[20:0]}, rd);
+              //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{imm[20]}},imm[20:0]}, rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= PC+'d4;
@@ -301,7 +301,7 @@ always_ff @(posedge clk)
             PC_in <= PC+{{11{imm[20]}},imm[20:0]};
             end
       JALR : begin
-             $display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= PC+'d4;
@@ -311,7 +311,7 @@ always_ff @(posedge clk)
 
 
       BEQ : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BEQ", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BEQ", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
             alu_vld <= '1;
             PC_wr <= '1;
             if(x[rs1] == x[rs2])
@@ -320,7 +320,7 @@ always_ff @(posedge clk)
               PC_in <= PC+'d4;
             end
       BNE : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
             alu_vld <= '1;
             PC_wr <= '1;
             if(x[rs1] != x[rs2])
@@ -329,7 +329,7 @@ always_ff @(posedge clk)
               PC_in <= PC+'d4;
             end
       BLT : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
             alu_vld <= '1;
             PC_wr <= '1;
             if($signed(x[rs1]) < $signed(x[rs2]))
@@ -338,7 +338,7 @@ always_ff @(posedge clk)
               PC_in <= PC+'d4;
             end
       BLTU : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
              alu_vld <= '1;
              PC_wr <= '1;
              if(x[rs1] < x[rs2])
@@ -347,7 +347,7 @@ always_ff @(posedge clk)
                PC_in <= PC+'d4;
              end
       BGE : begin
-            $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
             alu_vld <= '1;
             PC_wr <= '1;
             if($signed(x[rs1]) >= $signed(x[rs2]))
@@ -356,7 +356,7 @@ always_ff @(posedge clk)
               PC_in <= PC+'d4;
             end
       BGEU : begin
-             $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
+             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, rs1, x[rs1], rs2, x[rs2], {{19{imm[12]}},imm[12:0]});
              alu_vld <= '1;
              PC_wr <= '1;
              if(x[rs1] >= x[rs2])
@@ -367,7 +367,7 @@ always_ff @(posedge clk)
 
 
       LUI : begin
-            $display("%-5s PC=%08X imm=%08X rd=(%d)", "LUI", PC, imm, rd);
+            //$display("%-5s PC=%08X imm=%08X rd=(%d)", "LUI", PC, imm, rd);
             alu_vld <= '1;
             x_wr[rd] <= '1;
             x_in[rd] <= imm;
@@ -375,7 +375,7 @@ always_ff @(posedge clk)
             PC_in <= PC+'d4;
             end
       AUIPC : begin
-              $display("%-5s PC=%08X imm=%08X rd=(%d)", "AUIPC", PC, imm, rd);
+              //$display("%-5s PC=%08X imm=%08X rd=(%d)", "AUIPC", PC, imm, rd);
               alu_vld <= '1;
               x_wr[rd] <= '1;
               x_in[rd] <= PC + imm;
@@ -394,7 +394,7 @@ always_ff @(posedge clk)
              end
            else if(bus_ack)
              begin
-             $display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
+             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, x[rs1], {{20{imm[11]}},imm[11:0]}, rd);
              alu_vld <= '1;
              x_wr[rd] <= '1;
              x_in[rd] <= bus_data_rd;
@@ -418,7 +418,7 @@ always_ff @(posedge clk)
              end
            else if(bus_ack)
              begin
-             $display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, x[rs1], rs2, x[rs2], {{20{imm[11]}},imm[11:0]});
+             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, x[rs1], rs2, x[rs2], {{20{imm[11]}},imm[11:0]});
              alu_vld <= '1;
              PC_wr <= '1;
              PC_in <= PC+'d4;
@@ -428,7 +428,7 @@ always_ff @(posedge clk)
 
 
       FENCE : begin
-              $display("%-5s PC=%08X" , "FENCE", PC);
+              //$display("%-5s PC=%08X" , "FENCE", PC);
               alu_vld <= '1;
               PC_wr <= '1;
               PC_in <= PC+'d4;
@@ -437,7 +437,7 @@ always_ff @(posedge clk)
 
 
       ECALL : begin
-              $display("%-5s PC=%08X" , "ECALL - !!TODO!!", PC);
+              //$display("%-5s PC=%08X" , "ECALL - !!TODO!!", PC);
               alu_vld <= '1;
               PC_wr <= '1;
               PC_in <= PC+'d4;
@@ -454,7 +454,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRW", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRW", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -487,7 +487,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -520,7 +520,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -547,7 +547,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRWI", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRWI", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -581,7 +581,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRSI", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRSI", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -615,7 +615,7 @@ always_ff @(posedge clk)
                 end
               else if(cnt=='d2)
                 begin
-                $display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRCI", csr, rs1, x[rs1], rd);
+                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRCI", csr, rs1, x[rs1], rd);
                 alu_vld <= '1;
                 x_wr[rd] <= '1;
                 x_in[rd] <= '0;
@@ -636,13 +636,13 @@ always_ff @(posedge clk)
               //input  logic CSRRCI,
       EBREAK : begin
                //TODO
-               $display("%-5s PC=%08X" , "EBREAK - !!TODO!!", PC);
+               //$display("%-5s PC=%08X" , "EBREAK - !!TODO!!", PC);
                alu_vld <= '1;
                PC_wr <= '1;
                PC_in <= PC+'d4;
                end
       default : begin
-                $display("%-5s PC=%08X" , "INVALID!!", PC);
+                //$display("%-5s PC=%08X" , "INVALID!!", PC);
                 end
               
       endcase
