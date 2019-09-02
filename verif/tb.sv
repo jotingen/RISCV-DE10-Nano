@@ -99,12 +99,16 @@ initial
   FPGA_CLK1_50 = 0; 
   FPGA_CLK2_50 = 0; 
   FPGA_CLK3_50 = 0; 
+  KEY = '1;
+  ADC_SDO = '0;
   reset_en = '1;
   reset_n = '1;
   #200
   reset_n = '0;
   #2000
   reset_n = '1;
+  #270000000
+  KEY[0] = '0;
 //  ARDUINO_RESET_N = 0; 
   end 
     

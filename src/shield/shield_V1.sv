@@ -4,11 +4,17 @@ input  logic           clk,
 input  logic           rst,
 output logic           arst,
 
-input  logic           bus_req,
-output logic           bus_ack,
-input  logic           bus_write,
-input  logic [31:0]    bus_addr,
-inout  logic [31:0]    bus_data,
+input  logic           i_bus_req,
+input  logic           i_bus_ack,
+input  logic           i_bus_write,
+input  logic [31:0]    i_bus_addr,
+input  logic [31:0]    i_bus_data,
+
+output logic           o_bus_req,
+output logic           o_bus_ack,
+output logic           o_bus_write,
+output logic [31:0]    o_bus_addr,
+output logic [31:0]    o_bus_data,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -18,16 +24,15 @@ input  logic           ADC_SDO,
 
 //////////// ARDUINO //////////
 inout  logic [15:0]    ARDUINO_IO,
-inout  logic           ARDUINO_RESET_N,
-
-//////////// JOYSTICK //////////
-output logic           JOY_UP,    
-output logic           JOY_RIGHT, 
-output logic           JOY_SELECT,
-output logic           JOY_DOWN,  
-output logic           JOY_LEFT   
+inout  logic           ARDUINO_RESET_N
 
 );
+
+logic        joystick_display_bus_req;
+logic        joystick_display_bus_ack;
+logic        joystick_display_bus_write;
+logic [31:0] joystick_display_bus_addr;
+logic [31:0] joystick_display_bus_data;
 
 //IO
 logic SD_CS;
@@ -60,54 +65,51 @@ assign ARDUINO_IO[14] = GND;
 assign ARDUINO_IO[15] = 'z;
 assign arst = ~ARDUINO_RESET_N;
 
-assign bus_ack  = 'z;
-assign bus_data = 'z;
-
 
 //Joystick
-logic [11:0] CH0;     
-logic [11:0] CH1;     
-logic [11:0] CH2;     
-logic [11:0] CH3;     
-logic [11:0] CH4;     
-logic [11:0] CH5;     
-logic [11:0] CH6;     
-logic [11:0] CH7;     
+joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
+  .clk         (clk),
+  .rst         (rst),
 
-ADC adc (
-  .CLOCK    (clk),    
-  .RESET    (rst),    
-  .CH0      (CH0),    
-  .CH1      (CH1),    
-  .CH2      (CH2),    
-  .CH3      (CH3),    
-  .CH4      (CH4),    
-  .CH5      (CH5),    
-  .CH6      (CH6),    
-  .CH7      (CH7),    
-  .ADC_SCLK (ADC_SCK),
-  .ADC_CS_N (ADC_CONVST),
-  .ADC_DOUT (ADC_SDO),   
-  .ADC_DIN  (ADC_SDI)    
+  .ADC_CONVST  (ADC_CONVST),     
+  .ADC_SCK     (ADC_SCK),        
+  .ADC_SDI     (ADC_SDI),        
+  .ADC_SDO     (ADC_SDO),        
+
+  .i_bus_req   (i_bus_req),   
+  .i_bus_ack   (i_bus_ack),   
+  .i_bus_write (i_bus_write), 
+  .i_bus_addr  (i_bus_addr),  
+  .i_bus_data  (i_bus_data),
+
+  .o_bus_req   (joystick_display_bus_req),   
+  .o_bus_ack   (joystick_display_bus_ack),   
+  .o_bus_write (joystick_display_bus_write), 
+  .o_bus_addr  (joystick_display_bus_addr),  
+  .o_bus_data  (joystick_display_bus_data)
 );
-
-always_ff @(posedge clk)
-  begin
-  JOY_UP     <= CH3[11:9] == 'b101; // UP    
-  JOY_RIGHT  <= CH3[11:9] == 'b011; // RIGHT 
-  JOY_SELECT <= CH3[11:9] == 'b010; // SELECT
-  JOY_DOWN   <= CH3[11:9] == 'b001; // DOWN  
-  JOY_LEFT   <= CH3[11:9] == 'b000; // LEFT  
-  end
 
 
 //Display
-st7735r display (
+st7735r #(.SIZE(5),.ADDR_BASE(32'hC2000000))  display (
   .clk (clk),
   .rst (rst),
+
   .RS_DC (TFT_DC),
   .SCK   (SCK),
   .DATA  (MOSI),
-  .CS    (TFT_CS)
+  .CS    (TFT_CS),
+
+  .i_bus_req   (joystick_display_bus_req),   
+  .i_bus_ack   (joystick_display_bus_ack),   
+  .i_bus_write (joystick_display_bus_write), 
+  .i_bus_addr  (joystick_display_bus_addr),  
+  .i_bus_data  (joystick_display_bus_data),
+
+  .o_bus_req   (o_bus_req),   
+  .o_bus_ack   (o_bus_ack),   
+  .o_bus_write (o_bus_write), 
+  .o_bus_addr  (o_bus_addr),  
+  .o_bus_data  (o_bus_data)
 );
 endmodule
