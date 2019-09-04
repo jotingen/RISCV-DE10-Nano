@@ -1,24 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Sep 02 01:53:47 2019
+[*] Tue Sep 03 23:51:38 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Mon Sep 02 01:48:25 2019"
-[dumpfile_size] 994715
+[dumpfile_mtime] "Tue Sep 03 23:36:28 2019"
+[dumpfile_size] 1426950100
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 0
-[size] 1858 1057
+[timestart] 7839890000
+[size] 1854 1046
 [pos] -1 -1
-*-16.983267 370000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-20.631916 7842530000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
 [treeopen] tb.dut.riscv.idu.
 [treeopen] tb.dut.shield.
+[treeopen] tb.dut.shield.display.
 [sst_width] 255
 [signals_width] 345
 [sst_expanded] 1
-[sst_vpaned_height] 314
+[sst_vpaned_height] 310
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -31,10 +32,58 @@ tb.dut.arst
 tb.dut.rst
 @200
 -
-@c00200
--tb.dut.bus_addr
-@1401200
--group_end
+-DISPLAY
+@28
+tb.dut.shield.display.SCK
+tb.dut.shield.display.RS_DC
+tb.dut.shield.display.CS
+tb.dut.shield.display.DATA
+@200
+-
+@28
+tb.dut.shield.display.i_bus_req
+tb.dut.shield.display.i_bus_ack
+tb.dut.shield.display.i_bus_write
+@22
+#{tb.dut.shield.display.i_bus_addr[31:0]} tb.dut.shield.display.i_bus_addr[31] tb.dut.shield.display.i_bus_addr[30] tb.dut.shield.display.i_bus_addr[29] tb.dut.shield.display.i_bus_addr[28] tb.dut.shield.display.i_bus_addr[27] tb.dut.shield.display.i_bus_addr[26] tb.dut.shield.display.i_bus_addr[25] tb.dut.shield.display.i_bus_addr[24] tb.dut.shield.display.i_bus_addr[23] tb.dut.shield.display.i_bus_addr[22] tb.dut.shield.display.i_bus_addr[21] tb.dut.shield.display.i_bus_addr[20] tb.dut.shield.display.i_bus_addr[19] tb.dut.shield.display.i_bus_addr[18] tb.dut.shield.display.i_bus_addr[17] tb.dut.shield.display.i_bus_addr[16] tb.dut.shield.display.i_bus_addr[15] tb.dut.shield.display.i_bus_addr[14] tb.dut.shield.display.i_bus_addr[13] tb.dut.shield.display.i_bus_addr[12] tb.dut.shield.display.i_bus_addr[11] tb.dut.shield.display.i_bus_addr[10] tb.dut.shield.display.i_bus_addr[9] tb.dut.shield.display.i_bus_addr[8] tb.dut.shield.display.i_bus_addr[7] tb.dut.shield.display.i_bus_addr[6] tb.dut.shield.display.i_bus_addr[5] tb.dut.shield.display.i_bus_addr[4] tb.dut.shield.display.i_bus_addr[3] tb.dut.shield.display.i_bus_addr[2] tb.dut.shield.display.i_bus_addr[1] tb.dut.shield.display.i_bus_addr[0]
+#{tb.dut.shield.display.i_bus_data[31:0]} tb.dut.shield.display.i_bus_data[31] tb.dut.shield.display.i_bus_data[30] tb.dut.shield.display.i_bus_data[29] tb.dut.shield.display.i_bus_data[28] tb.dut.shield.display.i_bus_data[27] tb.dut.shield.display.i_bus_data[26] tb.dut.shield.display.i_bus_data[25] tb.dut.shield.display.i_bus_data[24] tb.dut.shield.display.i_bus_data[23] tb.dut.shield.display.i_bus_data[22] tb.dut.shield.display.i_bus_data[21] tb.dut.shield.display.i_bus_data[20] tb.dut.shield.display.i_bus_data[19] tb.dut.shield.display.i_bus_data[18] tb.dut.shield.display.i_bus_data[17] tb.dut.shield.display.i_bus_data[16] tb.dut.shield.display.i_bus_data[15] tb.dut.shield.display.i_bus_data[14] tb.dut.shield.display.i_bus_data[13] tb.dut.shield.display.i_bus_data[12] tb.dut.shield.display.i_bus_data[11] tb.dut.shield.display.i_bus_data[10] tb.dut.shield.display.i_bus_data[9] tb.dut.shield.display.i_bus_data[8] tb.dut.shield.display.i_bus_data[7] tb.dut.shield.display.i_bus_data[6] tb.dut.shield.display.i_bus_data[5] tb.dut.shield.display.i_bus_data[4] tb.dut.shield.display.i_bus_data[3] tb.dut.shield.display.i_bus_data[2] tb.dut.shield.display.i_bus_data[1] tb.dut.shield.display.i_bus_data[0]
+@200
+-
+@28
+tb.dut.shield.display.o_bus_req
+tb.dut.shield.display.o_bus_ack
+tb.dut.shield.display.o_bus_write
+@22
+tb.dut.shield.display.o_bus_addr[31:0]
+tb.dut.shield.display.o_bus_data[31:0]
+@200
+-
+@28
+tb.dut.shield.display.req
+tb.dut.shield.display.cmd
+@22
+tb.dut.shield.display.data[7:0]
+@200
+-
+@28
+tb.dut.shield.display.SCK_empty
+tb.dut.shield.display.SCK_cmd
+@22
+tb.dut.shield.display.SCK_data[7:0]
+@200
+-
+@28
+tb.dut.shield.display.transmit.SCK_clk
+tb.dut.shield.display.transmit.rst
+tb.dut.shield.display.transmit.req
+tb.dut.shield.display.transmit.cmd
+@22
+#{tb.dut.shield.display.transmit.data[7:0]} tb.dut.shield.display.transmit.data[7] tb.dut.shield.display.transmit.data[6] tb.dut.shield.display.transmit.data[5] tb.dut.shield.display.transmit.data[4] tb.dut.shield.display.transmit.data[3] tb.dut.shield.display.transmit.data[2] tb.dut.shield.display.transmit.data[1] tb.dut.shield.display.transmit.data[0]
+tb.dut.shield.display.transmit.cooldown_cnt[20:0]
+@28
+tb.dut.shield.display.transmit.data_cnt[2:0]
+@29
+tb.dut.shield.display.transmit.rd_done
 @200
 -
 -MEM
@@ -42,8 +91,44 @@ tb.dut.rst
 tb.dut.riscv.o_bus_req
 tb.dut.riscv.o_bus_ack
 tb.dut.riscv.o_bus_write
-@22
+@c00022
 tb.dut.riscv.o_bus_addr[31:0]
+@28
+(0)tb.dut.riscv.o_bus_addr[31:0]
+(1)tb.dut.riscv.o_bus_addr[31:0]
+(2)tb.dut.riscv.o_bus_addr[31:0]
+(3)tb.dut.riscv.o_bus_addr[31:0]
+(4)tb.dut.riscv.o_bus_addr[31:0]
+(5)tb.dut.riscv.o_bus_addr[31:0]
+(6)tb.dut.riscv.o_bus_addr[31:0]
+(7)tb.dut.riscv.o_bus_addr[31:0]
+(8)tb.dut.riscv.o_bus_addr[31:0]
+(9)tb.dut.riscv.o_bus_addr[31:0]
+(10)tb.dut.riscv.o_bus_addr[31:0]
+(11)tb.dut.riscv.o_bus_addr[31:0]
+(12)tb.dut.riscv.o_bus_addr[31:0]
+(13)tb.dut.riscv.o_bus_addr[31:0]
+(14)tb.dut.riscv.o_bus_addr[31:0]
+(15)tb.dut.riscv.o_bus_addr[31:0]
+(16)tb.dut.riscv.o_bus_addr[31:0]
+(17)tb.dut.riscv.o_bus_addr[31:0]
+(18)tb.dut.riscv.o_bus_addr[31:0]
+(19)tb.dut.riscv.o_bus_addr[31:0]
+(20)tb.dut.riscv.o_bus_addr[31:0]
+(21)tb.dut.riscv.o_bus_addr[31:0]
+(22)tb.dut.riscv.o_bus_addr[31:0]
+(23)tb.dut.riscv.o_bus_addr[31:0]
+(24)tb.dut.riscv.o_bus_addr[31:0]
+(25)tb.dut.riscv.o_bus_addr[31:0]
+(26)tb.dut.riscv.o_bus_addr[31:0]
+(27)tb.dut.riscv.o_bus_addr[31:0]
+(28)tb.dut.riscv.o_bus_addr[31:0]
+(29)tb.dut.riscv.o_bus_addr[31:0]
+(30)tb.dut.riscv.o_bus_addr[31:0]
+(31)tb.dut.riscv.o_bus_addr[31:0]
+@1401200
+-group_end
+@22
 tb.dut.riscv.o_bus_data[31:0]
 @200
 -
@@ -62,9 +147,44 @@ tb.dut.shield_riscv_bus_ack
 tb.dut.riscv.i_bus_req
 tb.dut.riscv.i_bus_ack
 tb.dut.riscv.i_bus_write
-@22
+@c00022
 #{tb.dut.riscv.i_bus_addr[31:0]} tb.dut.riscv.i_bus_addr[31] tb.dut.riscv.i_bus_addr[30] tb.dut.riscv.i_bus_addr[29] tb.dut.riscv.i_bus_addr[28] tb.dut.riscv.i_bus_addr[27] tb.dut.riscv.i_bus_addr[26] tb.dut.riscv.i_bus_addr[25] tb.dut.riscv.i_bus_addr[24] tb.dut.riscv.i_bus_addr[23] tb.dut.riscv.i_bus_addr[22] tb.dut.riscv.i_bus_addr[21] tb.dut.riscv.i_bus_addr[20] tb.dut.riscv.i_bus_addr[19] tb.dut.riscv.i_bus_addr[18] tb.dut.riscv.i_bus_addr[17] tb.dut.riscv.i_bus_addr[16] tb.dut.riscv.i_bus_addr[15] tb.dut.riscv.i_bus_addr[14] tb.dut.riscv.i_bus_addr[13] tb.dut.riscv.i_bus_addr[12] tb.dut.riscv.i_bus_addr[11] tb.dut.riscv.i_bus_addr[10] tb.dut.riscv.i_bus_addr[9] tb.dut.riscv.i_bus_addr[8] tb.dut.riscv.i_bus_addr[7] tb.dut.riscv.i_bus_addr[6] tb.dut.riscv.i_bus_addr[5] tb.dut.riscv.i_bus_addr[4] tb.dut.riscv.i_bus_addr[3] tb.dut.riscv.i_bus_addr[2] tb.dut.riscv.i_bus_addr[1] tb.dut.riscv.i_bus_addr[0]
-@23
+@28
+tb.dut.riscv.i_bus_addr[31]
+tb.dut.riscv.i_bus_addr[30]
+tb.dut.riscv.i_bus_addr[29]
+tb.dut.riscv.i_bus_addr[28]
+tb.dut.riscv.i_bus_addr[27]
+tb.dut.riscv.i_bus_addr[26]
+tb.dut.riscv.i_bus_addr[25]
+tb.dut.riscv.i_bus_addr[24]
+tb.dut.riscv.i_bus_addr[23]
+tb.dut.riscv.i_bus_addr[22]
+tb.dut.riscv.i_bus_addr[21]
+tb.dut.riscv.i_bus_addr[20]
+tb.dut.riscv.i_bus_addr[19]
+tb.dut.riscv.i_bus_addr[18]
+tb.dut.riscv.i_bus_addr[17]
+tb.dut.riscv.i_bus_addr[16]
+tb.dut.riscv.i_bus_addr[15]
+tb.dut.riscv.i_bus_addr[14]
+tb.dut.riscv.i_bus_addr[13]
+tb.dut.riscv.i_bus_addr[12]
+tb.dut.riscv.i_bus_addr[11]
+tb.dut.riscv.i_bus_addr[10]
+tb.dut.riscv.i_bus_addr[9]
+tb.dut.riscv.i_bus_addr[8]
+tb.dut.riscv.i_bus_addr[7]
+tb.dut.riscv.i_bus_addr[6]
+tb.dut.riscv.i_bus_addr[5]
+tb.dut.riscv.i_bus_addr[4]
+tb.dut.riscv.i_bus_addr[3]
+tb.dut.riscv.i_bus_addr[2]
+tb.dut.riscv.i_bus_addr[1]
+tb.dut.riscv.i_bus_addr[0]
+@1401200
+-group_end
+@22
 #{tb.dut.riscv.i_bus_data[31:0]} tb.dut.riscv.i_bus_data[31] tb.dut.riscv.i_bus_data[30] tb.dut.riscv.i_bus_data[29] tb.dut.riscv.i_bus_data[28] tb.dut.riscv.i_bus_data[27] tb.dut.riscv.i_bus_data[26] tb.dut.riscv.i_bus_data[25] tb.dut.riscv.i_bus_data[24] tb.dut.riscv.i_bus_data[23] tb.dut.riscv.i_bus_data[22] tb.dut.riscv.i_bus_data[21] tb.dut.riscv.i_bus_data[20] tb.dut.riscv.i_bus_data[19] tb.dut.riscv.i_bus_data[18] tb.dut.riscv.i_bus_data[17] tb.dut.riscv.i_bus_data[16] tb.dut.riscv.i_bus_data[15] tb.dut.riscv.i_bus_data[14] tb.dut.riscv.i_bus_data[13] tb.dut.riscv.i_bus_data[12] tb.dut.riscv.i_bus_data[11] tb.dut.riscv.i_bus_data[10] tb.dut.riscv.i_bus_data[9] tb.dut.riscv.i_bus_data[8] tb.dut.riscv.i_bus_data[7] tb.dut.riscv.i_bus_data[6] tb.dut.riscv.i_bus_data[5] tb.dut.riscv.i_bus_data[4] tb.dut.riscv.i_bus_data[3] tb.dut.riscv.i_bus_data[2] tb.dut.riscv.i_bus_data[1] tb.dut.riscv.i_bus_data[0]
 @200
 -
@@ -98,13 +218,84 @@ tb.dut.riscv.csrfile.csr_ack
 tb.dut.riscv.csrfile.csr_data_rd[31:0]
 @200
 -
-@22
+@c00022
 tb.dut.riscv.csrfile.csr_C80[31:0]
+@28
+(0)tb.dut.riscv.csrfile.csr_C80[31:0]
+(1)tb.dut.riscv.csrfile.csr_C80[31:0]
+(2)tb.dut.riscv.csrfile.csr_C80[31:0]
+(3)tb.dut.riscv.csrfile.csr_C80[31:0]
+(4)tb.dut.riscv.csrfile.csr_C80[31:0]
+(5)tb.dut.riscv.csrfile.csr_C80[31:0]
+(6)tb.dut.riscv.csrfile.csr_C80[31:0]
+(7)tb.dut.riscv.csrfile.csr_C80[31:0]
+(8)tb.dut.riscv.csrfile.csr_C80[31:0]
+(9)tb.dut.riscv.csrfile.csr_C80[31:0]
+(10)tb.dut.riscv.csrfile.csr_C80[31:0]
+(11)tb.dut.riscv.csrfile.csr_C80[31:0]
+(12)tb.dut.riscv.csrfile.csr_C80[31:0]
+(13)tb.dut.riscv.csrfile.csr_C80[31:0]
+(14)tb.dut.riscv.csrfile.csr_C80[31:0]
+(15)tb.dut.riscv.csrfile.csr_C80[31:0]
+(16)tb.dut.riscv.csrfile.csr_C80[31:0]
+(17)tb.dut.riscv.csrfile.csr_C80[31:0]
+(18)tb.dut.riscv.csrfile.csr_C80[31:0]
+(19)tb.dut.riscv.csrfile.csr_C80[31:0]
+(20)tb.dut.riscv.csrfile.csr_C80[31:0]
+(21)tb.dut.riscv.csrfile.csr_C80[31:0]
+(22)tb.dut.riscv.csrfile.csr_C80[31:0]
+(23)tb.dut.riscv.csrfile.csr_C80[31:0]
+(24)tb.dut.riscv.csrfile.csr_C80[31:0]
+(25)tb.dut.riscv.csrfile.csr_C80[31:0]
+(26)tb.dut.riscv.csrfile.csr_C80[31:0]
+(27)tb.dut.riscv.csrfile.csr_C80[31:0]
+(28)tb.dut.riscv.csrfile.csr_C80[31:0]
+(29)tb.dut.riscv.csrfile.csr_C80[31:0]
+(30)tb.dut.riscv.csrfile.csr_C80[31:0]
+(31)tb.dut.riscv.csrfile.csr_C80[31:0]
+@1401200
+-group_end
+@c00024
 tb.dut.riscv.csrfile.csr_C00[31:0]
+@28
+(0)tb.dut.riscv.csrfile.csr_C00[31:0]
+(1)tb.dut.riscv.csrfile.csr_C00[31:0]
+(2)tb.dut.riscv.csrfile.csr_C00[31:0]
+(3)tb.dut.riscv.csrfile.csr_C00[31:0]
+(4)tb.dut.riscv.csrfile.csr_C00[31:0]
+(5)tb.dut.riscv.csrfile.csr_C00[31:0]
+(6)tb.dut.riscv.csrfile.csr_C00[31:0]
+(7)tb.dut.riscv.csrfile.csr_C00[31:0]
+(8)tb.dut.riscv.csrfile.csr_C00[31:0]
+(9)tb.dut.riscv.csrfile.csr_C00[31:0]
+(10)tb.dut.riscv.csrfile.csr_C00[31:0]
+(11)tb.dut.riscv.csrfile.csr_C00[31:0]
+(12)tb.dut.riscv.csrfile.csr_C00[31:0]
+(13)tb.dut.riscv.csrfile.csr_C00[31:0]
+(14)tb.dut.riscv.csrfile.csr_C00[31:0]
+(15)tb.dut.riscv.csrfile.csr_C00[31:0]
+(16)tb.dut.riscv.csrfile.csr_C00[31:0]
+(17)tb.dut.riscv.csrfile.csr_C00[31:0]
+(18)tb.dut.riscv.csrfile.csr_C00[31:0]
+(19)tb.dut.riscv.csrfile.csr_C00[31:0]
+(20)tb.dut.riscv.csrfile.csr_C00[31:0]
+(21)tb.dut.riscv.csrfile.csr_C00[31:0]
+(22)tb.dut.riscv.csrfile.csr_C00[31:0]
+(23)tb.dut.riscv.csrfile.csr_C00[31:0]
+(24)tb.dut.riscv.csrfile.csr_C00[31:0]
+(25)tb.dut.riscv.csrfile.csr_C00[31:0]
+(26)tb.dut.riscv.csrfile.csr_C00[31:0]
+(27)tb.dut.riscv.csrfile.csr_C00[31:0]
+(28)tb.dut.riscv.csrfile.csr_C00[31:0]
+(29)tb.dut.riscv.csrfile.csr_C00[31:0]
+(30)tb.dut.riscv.csrfile.csr_C00[31:0]
+(31)tb.dut.riscv.csrfile.csr_C00[31:0]
+@1401200
+-group_end
 @200
 -
 -REG
-@c00200
+@800200
 -REG
 @22
 tb.dut.riscv.regfile.x00[31:0]
@@ -139,7 +330,7 @@ tb.dut.riscv.regfile.x28[31:0]
 tb.dut.riscv.regfile.x29[31:0]
 tb.dut.riscv.regfile.x30[31:0]
 tb.dut.riscv.regfile.x31[31:0]
-@1401200
+@1000200
 -REG
 @200
 -
