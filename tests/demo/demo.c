@@ -11,7 +11,9 @@
 #define JOYSTICK_DOWN   (*((volatile unsigned int *) (0xC100010C)))
 #define JOYSTICK_LEFT   (*((volatile unsigned int *) (0xC1000110)))
 
-#define DISPLAY         (*((volatile unsigned int *) (0xC2000000)))
+#define DISPLAY_NOOP    (*((volatile unsigned int *) (0xC2000000)))
+#define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
+#define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
 
 //200Hz
 #define KEY_TIME        250000
@@ -62,6 +64,8 @@ void fibbonacci(uint32_t* a, uint32_t* b) {
 }
 
 void main(void) {
+  uint32_t inv;
+
   uint32_t but0, but1;
   uint32_t joy_sel, joy_up, joy_down, joy_left, joy_right;
 
@@ -75,10 +79,15 @@ void main(void) {
 
   uint32_t a,b,c;
 
-  a = 1;
-  b = 1;
+  //Power On Display
+  DISPLAY_CMD = 0x29; // DISPON (29h): Display On 
+  DISPLAY_CMD = 0x11; //SLPOUT (11h): Sleep Out
+
+  inv = 0;
+
   timestamp   = get_time();
   keystamp    = timestamp;
+
   but0      = 0;
   but1      = 0;
   joy_sel   = 0;
@@ -87,6 +96,9 @@ void main(void) {
   joy_left  = 0;
   joy_right = 0;
   key_pressed = 0;
+
+  a = 1;
+  b = 1;
 
   while(1) {
     //Get new timestamp
@@ -130,6 +142,15 @@ void main(void) {
 
       //Update LED
       LED = led;
+
+      //Invert Display
+      if(inv) {
+        DISPLAY_CMD = 0x20; // INVOFF (20h): Display Inversion Off 
+        inv = 0;
+      } else {     
+        DISPLAY_CMD = 0x21; // INVON (21h): Display Inversion On 
+        inv = 1;
+      }
 
       //Clear keypresses
       but0        = 0;

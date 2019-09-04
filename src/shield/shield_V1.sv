@@ -91,9 +91,10 @@ joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
 
 
 //Display
-st7735r #(.SIZE(5),.ADDR_BASE(32'hC2000000))  display (
+st7735r #(.SIZE(8),.ADDR_BASE(32'hC2000000))  display (
   .clk (clk),
   .rst (rst),
+  .arst (arst),
 
   .RS_DC (TFT_DC),
   .SCK   (SCK),
