@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Tue Sep 03 23:51:38 2019
+[*] Fri Sep 06 02:19:16 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Tue Sep 03 23:36:28 2019"
-[dumpfile_size] 1426950100
+[dumpfile_mtime] "Thu Sep 05 04:27:23 2019"
+[dumpfile_size] 4145427418
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 7839890000
-[size] 1854 1046
+[timestart] 0
+[size] 1858 1057
 [pos] -1 -1
-*-20.631916 7842530000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-33.290642 16760000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -19,7 +19,7 @@
 [sst_width] 255
 [signals_width] 345
 [sst_expanded] 1
-[sst_vpaned_height] 310
+[sst_vpaned_height] 313
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50

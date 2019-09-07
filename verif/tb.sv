@@ -1,4 +1,4 @@
-`timescale 100ps / 100ps
+`timescale 1ns / 1ns
 module tb ();
 
 //////////// CLOCK //////////
@@ -103,18 +103,18 @@ initial
   ADC_SDO = '0;
   reset_en = '1;
   reset_n = '1;
-  #200
+  #20
   reset_n = '0;
-  #2000
+  #200
   reset_n = '1;
-  #270000000
+  #27000000
   KEY[0] = '0;
 //  ARDUINO_RESET_N = 0; 
   end 
     
 always 
   begin
-  #100  
+  #10  
   FPGA_CLK1_50 =  ! FPGA_CLK1_50;
   FPGA_CLK2_50 =  ! FPGA_CLK2_50;
   FPGA_CLK3_50 =  ! FPGA_CLK3_50;
