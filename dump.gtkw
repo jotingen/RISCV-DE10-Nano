@@ -1,0 +1,72 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Sat Aug 31 03:38:36 2019
+[*]
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\DE10NanoDump.vcd"
+[dumpfile_mtime] "Sat Aug 31 03:28:45 2019"
+[dumpfile_size] 200032
+[savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\dump.gtkw"
+[timestart] 330380000000000
+[size] 1858 1057
+[pos] -1 -1
+*-43.992985 387500000000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] riscv.
+[sst_width] 197
+[signals_width] 304
+[sst_expanded] 1
+[sst_vpaned_height] 303
+@22
+#{led.LED[7:0]} led.LED[7] led.LED[6] led.LED[5] led.LED[4] led.LED[3] led.LED[2] led.LED[1] led.LED[0]
+#{riscv.csrfile.csr_C00[31:0]} riscv.csrfile.csr_C00[31] riscv.csrfile.csr_C00[30] riscv.csrfile.csr_C00[29] riscv.csrfile.csr_C00[28] riscv.csrfile.csr_C00[27] riscv.csrfile.csr_C00[26] riscv.csrfile.csr_C00[25] riscv.csrfile.csr_C00[24] riscv.csrfile.csr_C00[23] riscv.csrfile.csr_C00[22] riscv.csrfile.csr_C00[21] riscv.csrfile.csr_C00[20] riscv.csrfile.csr_C00[19] riscv.csrfile.csr_C00[18] riscv.csrfile.csr_C00[17] riscv.csrfile.csr_C00[16] riscv.csrfile.csr_C00[15] riscv.csrfile.csr_C00[14] riscv.csrfile.csr_C00[13] riscv.csrfile.csr_C00[12] riscv.csrfile.csr_C00[11] riscv.csrfile.csr_C00[10] riscv.csrfile.csr_C00[9] riscv.csrfile.csr_C00[8] riscv.csrfile.csr_C00[7] riscv.csrfile.csr_C00[6] riscv.csrfile.csr_C00[5] riscv.csrfile.csr_C00[4] riscv.csrfile.csr_C00[3] riscv.csrfile.csr_C00[2] riscv.csrfile.csr_C00[1] riscv.csrfile.csr_C00[0]
+@800023
+#{riscv.regfile.\x[1][31:0]} riscv.regfile.\x[1][31] riscv.regfile.\x[1][30] riscv.regfile.\x[1][29] riscv.regfile.\x[1][28] riscv.regfile.\x[1][27] riscv.regfile.\x[1][26] riscv.regfile.\x[1][25] riscv.regfile.\x[1][24] riscv.regfile.\x[1][23] riscv.regfile.\x[1][22] riscv.regfile.\x[1][21] riscv.regfile.\x[1][20] riscv.regfile.\x[1][19] riscv.regfile.\x[1][18] riscv.regfile.\x[1][17] riscv.regfile.\x[1][16] riscv.regfile.\x[1][15] riscv.regfile.\x[1][14] riscv.regfile.\x[1][13] riscv.regfile.\x[1][12] riscv.regfile.\x[1][11] riscv.regfile.\x[1][10] riscv.regfile.\x[1][9] riscv.regfile.\x[1][8] riscv.regfile.\x[1][7] riscv.regfile.\x[1][6] riscv.regfile.\x[1][5] riscv.regfile.\x[1][4] riscv.regfile.\x[1][3] riscv.regfile.\x[1][2] riscv.regfile.\x[1][1] riscv.regfile.\x[1][0]
+@1001201
+-group_end
+@22
+#{riscv.ifu.ifu_inst[31:0]} riscv.ifu.ifu_inst[31] riscv.ifu.ifu_inst[30] riscv.ifu.ifu_inst[29] riscv.ifu.ifu_inst[28] riscv.ifu.ifu_inst[27] riscv.ifu.ifu_inst[26] riscv.ifu.ifu_inst[25] riscv.ifu.ifu_inst[24] riscv.ifu.ifu_inst[23] riscv.ifu.ifu_inst[22] riscv.ifu.ifu_inst[21] riscv.ifu.ifu_inst[20] riscv.ifu.ifu_inst[19] riscv.ifu.ifu_inst[18] riscv.ifu.ifu_inst[17] riscv.ifu.ifu_inst[16] riscv.ifu.ifu_inst[15] riscv.ifu.ifu_inst[14] riscv.ifu.ifu_inst[13] riscv.ifu.ifu_inst[12] riscv.ifu.ifu_inst[11] riscv.ifu.ifu_inst[10] riscv.ifu.ifu_inst[9] riscv.ifu.ifu_inst[8] riscv.ifu.ifu_inst[7] riscv.ifu.ifu_inst[6] riscv.ifu.ifu_inst[5] riscv.ifu.ifu_inst[4] riscv.ifu.ifu_inst[3] riscv.ifu.ifu_inst[2] riscv.ifu.ifu_inst[1] riscv.ifu.ifu_inst[0]
+#{riscv.idu.csr[11:0]} riscv.idu.csr[11] riscv.idu.csr[10] riscv.idu.csr[9] riscv.idu.csr[8] riscv.idu.csr[7] riscv.idu.csr[6] riscv.idu.csr[5] riscv.idu.csr[4] riscv.idu.csr[3] riscv.idu.csr[2] riscv.idu.csr[1] riscv.idu.csr[0]
+#{riscv.idu.imm[31:0]} riscv.idu.imm[31] riscv.idu.imm[30] riscv.idu.imm[29] riscv.idu.imm[28] riscv.idu.imm[27] riscv.idu.imm[26] riscv.idu.imm[25] riscv.idu.imm[24] riscv.idu.imm[23] riscv.idu.imm[22] riscv.idu.imm[21] riscv.idu.imm[20] riscv.idu.imm[19] riscv.idu.imm[18] riscv.idu.imm[17] riscv.idu.imm[16] riscv.idu.imm[15] riscv.idu.imm[14] riscv.idu.imm[13] riscv.idu.imm[12] riscv.idu.imm[11] riscv.idu.imm[10] riscv.idu.imm[9] riscv.idu.imm[8] riscv.idu.imm[7] riscv.idu.imm[6] riscv.idu.imm[5] riscv.idu.imm[4] riscv.idu.imm[3] riscv.idu.imm[2] riscv.idu.imm[1] riscv.idu.imm[0]
+#{riscv.idu.rd[4:0]} riscv.idu.rd[4] riscv.idu.rd[3] riscv.idu.rd[2] riscv.idu.rd[1] riscv.idu.rd[0]
+#{riscv.idu.rs1[4:0]} riscv.idu.rs1[4] riscv.idu.rs1[3] riscv.idu.rs1[2] riscv.idu.rs1[1] riscv.idu.rs1[0]
+@28
+riscv.idu.ADD
+riscv.idu.ADDI
+riscv.idu.AND
+riscv.idu.ANDI
+riscv.idu.AUIPC
+riscv.idu.BEQ
+riscv.idu.BGE
+riscv.idu.BGEU
+riscv.idu.BLT
+riscv.idu.BLTU
+riscv.idu.BNE
+riscv.idu.CSRRC
+riscv.idu.CSRRCI
+riscv.idu.CSRRS
+riscv.idu.CSRRSI
+riscv.idu.CSRRW
+riscv.idu.CSRRWI
+riscv.idu.ECALL
+riscv.idu.FENCE
+riscv.idu.JAL
+riscv.idu.JALR
+riscv.idu.LUI
+riscv.idu.LW
+riscv.idu.OR
+riscv.idu.ORI
+riscv.idu.SLL
+riscv.idu.SLLI
+riscv.idu.SLT
+riscv.idu.SLTI
+riscv.idu.SLTIU
+riscv.idu.SLTU
+riscv.idu.SRA
+riscv.idu.SRAI
+riscv.idu.SRL
+riscv.idu.SRLI
+riscv.idu.SUB
+riscv.idu.SW
+riscv.idu.XOR
+riscv.idu.XORI
+[pattern_trace] 1
+[pattern_trace] 0

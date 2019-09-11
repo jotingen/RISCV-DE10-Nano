@@ -43,6 +43,19 @@ output logic           HDMI_TX_VS
 logic clk;
 logic rst;
 
+logic        riscv_mem_instbus_req;
+logic        riscv_mem_instbus_ack;
+logic        riscv_mem_instbus_write;
+logic [31:0] riscv_mem_instbus_addr;
+logic [31:0] riscv_mem_instbus_data;
+
+logic        mem_riscv_instbus_req;
+logic        mem_riscv_instbus_ack;
+logic        mem_riscv_instbus_write;
+logic [31:0] mem_riscv_instbus_addr;
+logic [31:0] mem_riscv_instbus_data;
+
+
 logic        riscv_mem_bus_req;
 logic        riscv_mem_bus_ack;
 logic        riscv_mem_bus_write;
@@ -97,34 +110,58 @@ riscv riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .i_bus_req   (shield_riscv_bus_req),   
-  .i_bus_ack   (shield_riscv_bus_ack),   
-  .i_bus_write (shield_riscv_bus_write), 
-  .i_bus_addr  (shield_riscv_bus_addr),  
-  .i_bus_data  (shield_riscv_bus_data),
+  .i_instbus_req   (mem_riscv_instbus_req),  
+  .i_instbus_ack   (mem_riscv_instbus_ack),  
+  .i_instbus_write (mem_riscv_instbus_write),
+  .i_instbus_addr  (mem_riscv_instbus_addr), 
+  .i_instbus_data  (mem_riscv_instbus_data), 
+                                            
+  .o_instbus_req   (riscv_mem_instbus_req),     
+  .o_instbus_ack   (riscv_mem_instbus_ack),     
+  .o_instbus_write (riscv_mem_instbus_write),   
+  .o_instbus_addr  (riscv_mem_instbus_addr),    
+  .o_instbus_data  (riscv_mem_instbus_data),    
 
-  .o_bus_req   (riscv_mem_bus_req),   
-  .o_bus_ack   (riscv_mem_bus_ack),   
-  .o_bus_write (riscv_mem_bus_write), 
-  .o_bus_addr  (riscv_mem_bus_addr),  
-  .o_bus_data  (riscv_mem_bus_data)
+  .i_membus_req   (shield_riscv_bus_req),   
+  .i_membus_ack   (shield_riscv_bus_ack),   
+  .i_membus_write (shield_riscv_bus_write), 
+  .i_membus_addr  (shield_riscv_bus_addr),  
+  .i_membus_data  (shield_riscv_bus_data),
+
+  .o_membus_req   (riscv_mem_bus_req),   
+  .o_membus_ack   (riscv_mem_bus_ack),   
+  .o_membus_write (riscv_mem_bus_write), 
+  .o_membus_addr  (riscv_mem_bus_addr),  
+  .o_membus_data  (riscv_mem_bus_data)
 );
 
-mem #(.SIZE(18),.ADDR_BASE(32'h00000000)) mem (
+mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
   .clk         (clk),
   .rst         (rst),
 
-  .i_bus_req   (riscv_mem_bus_req),   
-  .i_bus_ack   (riscv_mem_bus_ack),   
-  .i_bus_write (riscv_mem_bus_write), 
-  .i_bus_addr  (riscv_mem_bus_addr),  
-  .i_bus_data  (riscv_mem_bus_data),
+  .i_instbus_req   (riscv_mem_instbus_req),   
+  .i_instbus_ack   (riscv_mem_instbus_ack),   
+  .i_instbus_write (riscv_mem_instbus_write), 
+  .i_instbus_addr  (riscv_mem_instbus_addr),  
+  .i_instbus_data  (riscv_mem_instbus_data),
 
-  .o_bus_req   (mem_led_bus_req),   
-  .o_bus_ack   (mem_led_bus_ack),   
-  .o_bus_write (mem_led_bus_write), 
-  .o_bus_addr  (mem_led_bus_addr),  
-  .o_bus_data  (mem_led_bus_data)
+  .o_instbus_req   (mem_riscv_instbus_req),   
+  .o_instbus_ack   (mem_riscv_instbus_ack),   
+  .o_instbus_write (mem_riscv_instbus_write), 
+  .o_instbus_addr  (mem_riscv_instbus_addr),  
+  .o_instbus_data  (mem_riscv_instbus_data),
+
+  .i_membus_req   (riscv_mem_bus_req),   
+  .i_membus_ack   (riscv_mem_bus_ack),   
+  .i_membus_write (riscv_mem_bus_write), 
+  .i_membus_addr  (riscv_mem_bus_addr),  
+  .i_membus_data  (riscv_mem_bus_data),
+
+  .o_membus_req   (mem_led_bus_req),   
+  .o_membus_ack   (mem_led_bus_ack),   
+  .o_membus_write (mem_led_bus_write), 
+  .o_membus_addr  (mem_led_bus_addr),  
+  .o_membus_data  (mem_led_bus_data)
 );
 
 led #(.SIZE(5),.ADDR_BASE(32'hC0000000)) led (

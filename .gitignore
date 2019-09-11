@@ -26,3 +26,9 @@ incremental_db
 /simulation/modelsim/*.vcd
 /simulation/modelsim/rtl_work
 /simulation/modelsim/transcript
+
+*.qsys_edit
+*/*.qsys_edit
+greybox_tmp
+
+rtl_work
