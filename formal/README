@@ -1,4 +1,0 @@
-sby -f complete.sby
-python3 ../../checks/genchecks.py 
-make -C checks -j$(nproc)
-make -C checks -j$(nproc)
