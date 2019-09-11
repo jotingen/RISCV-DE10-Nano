@@ -22,7 +22,7 @@ read_verilog -sv riscv_ifu.sv
 read_verilog -sv riscv_regfile.sv
 
 --pycode-begin--
-with open("../../insns/isa_rv32i.txt") as f:
+with open("../submodules/riscv-formal/insns/isa_rv32i.txt") as f:
   for line in f:
     output("read_verilog -sv insn_%s.v" % line.strip())
 --pycode-end--
@@ -33,18 +33,18 @@ prep -nordff -top testbench
 
 [files]
 complete.sv
-../../../src/riscv/riscv.sv
-../../../src/riscv/riscv_alu.sv
-../../../src/riscv/riscv_csr.sv
-../../../src/riscv/riscv_idu.sv
-../../../src/riscv/riscv_ifu.sv
-../../../src/riscv/riscv_regfile.sv
-../../checks/rvfi_macros.vh
-../../insns/isa_rv32i.v
+../src/riscv/riscv.sv
+../src/riscv/riscv_alu.sv
+../src/riscv/riscv_csr.sv
+../src/riscv/riscv_idu.sv
+../src/riscv/riscv_ifu.sv
+../src/riscv/riscv_regfile.sv
+../submodules/riscv-formal/checks/rvfi_macros.vh
+../submodules/riscv-formal/insns/isa_rv32i.v
 
 --pycode-begin--
-with open("../../insns/isa_rv32i.txt") as f:
+with open("../submodules/riscv-formal/insns/isa_rv32i.txt") as f:
   for line in f:
-    output("../../insns/insn_%s.v" % line.strip())
+    output("../submodules/riscv-formal/insns/insn_%s.v" % line.strip())
 --pycode-end--
 
