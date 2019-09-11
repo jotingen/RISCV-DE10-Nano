@@ -1,107 +1,96 @@
-import riscv_pkg::*;
 
 module riscv_ifu (
   input  logic             clk,
   input  logic             rst,
 
-  //output logic              PC_wr,
-  //output logic [31:0]       PC_in,
-  input  logic [31:0]       PC,
-
   input  logic             alu_vld,
-  input  logic             alu_access_mem,
+  input  logic             alu_br_miss,
+  input  logic [31:0]      PC_in,
 
   output logic             ifu_vld,
- 
   output logic [31:0]      ifu_inst,
   output logic [31:0]      ifu_inst_PC,
 
-  output logic             rdy,
-  input  logic             req,
-  output logic             done,
+  output logic             o_instbus_req,
+  output logic             o_instbus_write,
+  output logic [31:0]      o_instbus_addr,
+  output logic [31:0]      o_instbus_data,
 
-
-  output riscv_pkg::ifu_s  ifu_out,
-
-  output logic             bus_req,
-  input  logic             bus_ack,
-  output logic             bus_write,
-  output logic [31:0]      bus_addr,
-  output logic [31:0]      bus_data_wr,
-  input  logic [31:0]      bus_data_rd
+  input  logic             i_instbus_ack,
+  input  logic [31:0]      i_instbus_addr,
+  input  logic [31:0]      i_instbus_data
 
 );
 
 logic init;
-typedef enum {
-  IDLE,
-  REQ,
-  DATA
-} ifu_state_s;
-ifu_state_s ifu_state;
-
+logic [31:0] PC;
+logic [31:0] PC_next;
 always_ff @(posedge clk)
   begin
-  init <= '0;
-  if(rst) 
-    init <= '1;
-  end
+  init <= init;
 
-always_ff @(posedge clk)
-  begin
-  ifu_out.Vld <= '0;
+  PC_next <= PC + 'd4;
+  if(alu_vld & alu_br_miss)
+    PC_next <= PC_in;
+  PC <= PC;
+
+  o_instbus_req <= '0;
+  o_instbus_write <= o_instbus_write;
+  o_instbus_addr  <= o_instbus_addr;
+  o_instbus_data  <= o_instbus_data;
+
   ifu_vld <= '0;
-  //PC_wr <= '0;
-  //PC_in <= PC;
-  rdy  <= rdy;
-  done <= '0;
-  bus_req <= '0;
-  bus_write <= '0;
-  bus_addr <= '0;
-  bus_data_wr <= '0;
-  ifu_out.Inst <= ifu_out.Inst;
   ifu_inst <= ifu_inst;
-  ifu_out.PC <= ifu_out.PC;
   ifu_inst_PC <= ifu_inst_PC;
-  case (ifu_state)
-    IDLE : begin
-           if(~alu_access_mem & (alu_vld | (init & ~rst)))
-             begin
-						 ifu_state <= REQ;
-             rdy <= '0;
-             bus_req <= '1;
-             bus_write <= '0;
-             bus_addr <= PC;
-             end
-           end
-    REQ : begin
-          if(bus_ack)
-            begin
-            ifu_vld <= '1;
-            ifu_state <= IDLE;
-					  ifu_inst <= bus_data_rd;
-            ifu_inst_PC <= PC;
-            ifu_out.Vld <= '1;
-					  ifu_out.Inst <= bus_data_rd;
-            ifu_out.PC <= PC;
-            //PC_wr <= '1;
-            //PC_in <= PC + 'd4;
-            end
-          end
-  endcase
+
+	//Send out recieved instruction
+  if(i_instbus_ack)
+    begin
+    ifu_vld <= '1;
+    if(alu_br_miss)
+      ifu_vld <= '0;
+	  ifu_inst <= i_instbus_data;
+    ifu_inst_PC <= i_instbus_addr;
+    end
+
+  if(alu_vld)
+    begin
+    if(i_instbus_ack | init)
+      begin
+      init <= '0;
+      o_instbus_req <= '1;
+      o_instbus_write <= '0;
+      if(alu_br_miss)
+        o_instbus_addr <= PC;
+      else
+        o_instbus_addr <= PC_in;
+      o_instbus_data <= '0;
+      PC <= PC_next;
+      end
+    end
+  else
+    begin
+    //Reset init if we get response from memory but pipe is frozen
+    if(i_instbus_ack)
+      begin
+      init <= '1;
+      end
+    end
+
   if(rst)
     begin
+    init <= '1;
+
+		PC <= '0;
+
     ifu_vld <= '0;
-    //PC_wr <= '0;
-    //PC_in <= PC;
-		ifu_state <= IDLE;
-    rdy <= '1;
     ifu_inst <= '0;
     ifu_inst_PC <= '0;
-    ifu_out.Vld <= '0;
-    ifu_out.Inst <= '0;
-    ifu_out.PC <= '0;
 
+    o_instbus_req <= '0;
+    o_instbus_write <= '0;
+    o_instbus_addr <= '0;
+    o_instbus_data <= '0;
     end
   end
 
