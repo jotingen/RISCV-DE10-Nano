@@ -18,17 +18,16 @@ VERILOG3_SUFFIX=_3.v
 VERILOG3 := $(patsubst %$(SRCS_SUFFIX),%$(VERILOG3_SUFFIX),$(SRCS))
 
 .PHONY: all
-all : clean
-	$(MAKE) $(ASSEMBLY)
+all : | clean $(ASSEMBLY)
 
 %$(ASSEMBLY_SUFFIX) :
-	riscv64-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -S -o $(patsubst %.s,%.s,$@)           $(patsubst %.s,%.c,$@)
-	riscv64-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i    -o $(patsubst %.s,%.out,$@) riscv.s $(patsubst %.s,%.c,$@)
-	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
-	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
-	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
-	riscv64-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
+	riscv32-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -S -o $(patsubst %.s,%.s,$@)           $(patsubst %.s,%.c,$@)
+	riscv32-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i    -o $(patsubst %.s,%.out,$@) riscv.s $(patsubst %.s,%.c,$@)
+	riscv32-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
+	riscv32-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
+	riscv32-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
+	riscv32-unknown-elf-objcopy -O verilog --gap-fill 0 --pad-to 65536 --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
 
 .PHONY: clean
 clean: 
-	powershell "Get-ChildItem * -Include *$(ASSEMBLY_SUFFIX) -Exclude riscv.s -Recurse | Remove-Item"
+	find . \( -name '*$(ASSEMBLY_SUFFIX)' -or -name '*$(OUT_SUFFIX)' -or -name '*$(VERILOG0_SUFFIX)' -or -name '*$(VERILOG1_SUFFIX)' -or -name '*$(VERILOG2_SUFFIX)' -or -name '*$(VERILOG3_SUFFIX)' \) -not -name 'riscv.s' | xargs -r -n 1 rm
