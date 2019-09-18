@@ -1,13 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Sep 09 01:54:11 2019
+[*] Sun Sep 15 04:59:51 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\formal\cores\riscv\complete\engine_0\trace.vcd"
-[savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\formal\cores\riscv\dump.gtkw"
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\formal\complete\engine_0\trace.vcd"
+[dumpfile_mtime] "Sun Sep 15 04:51:34 2019"
+[dumpfile_size] 326430
+[savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\formal\dump-complete.gtkw"
 [timestart] 0
 [size] 1858 1057
 [pos] -1 -1
-*-3.921819 40 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-3.010220 40 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.uut.
 [sst_width] 197
@@ -34,116 +36,30 @@ testbench.uut.ifu.ifu_vld
 @22
 testbench.uut.ifu.PC[31:0]
 @28
-testbench.uut.ifu.alu_access_mem
 testbench.uut.ifu.alu_vld
 @22
 testbench.uut.ifu.ifu_inst[31:0]
 testbench.uut.ifu.ifu_inst_PC[31:0]
-@28
-testbench.uut.ifu.instrbus_ack
-@22
-testbench.uut.ifu.instrbus_addr[31:0]
-testbench.uut.ifu.instrbus_data_rd[31:0]
-testbench.uut.ifu.instrbus_data_wr[31:0]
-@28
-testbench.uut.ifu.instrbus_req
-testbench.uut.ifu.instrbus_write
-testbench.uut.ifu.req
 @200
 -
 @28
 testbench.uut.idu.idu_vld
 @22
-testbench.uut.idu.csr[11:0]
-testbench.uut.idu.fm[3:0]
-@28
-testbench.uut.idu.funct3[2:0]
-@22
-testbench.uut.idu.funct7[6:0]
-testbench.uut.idu.inst[31:0]
-testbench.uut.idu.inst_opcode[6:0]
-testbench.uut.idu.opcode[6:0]
-testbench.uut.idu.pred[3:0]
-testbench.uut.idu.rd[4:0]
-testbench.uut.idu.rs1[4:0]
-testbench.uut.idu.rs2[4:0]
-testbench.uut.idu.shamt[4:0]
-testbench.uut.idu.succ[3:0]
-testbench.uut.alu.imm[31:0]
-testbench.uut.idu.uimm[4:0]
-@28
-testbench.uut.idu.ADD
-testbench.uut.idu.ADDI
-testbench.uut.idu.AND
-testbench.uut.idu.ANDI
-testbench.uut.idu.AUIPC
-testbench.uut.idu.BEQ
-testbench.uut.idu.BGE
-testbench.uut.idu.BGEU
-testbench.uut.idu.BLT
-testbench.uut.idu.BLTU
-testbench.uut.idu.BNE
-testbench.uut.idu.CSRRC
-testbench.uut.idu.CSRRCI
-testbench.uut.idu.CSRRS
-testbench.uut.idu.CSRRSI
-testbench.uut.idu.CSRRW
-testbench.uut.idu.CSRRWI
-testbench.uut.idu.EBREAK
-testbench.uut.idu.ECALL
-testbench.uut.idu.FENCE
-testbench.uut.idu.FENCE_I
-testbench.uut.idu.JAL
-testbench.uut.idu.JALR
-testbench.uut.idu.LB
-testbench.uut.idu.LBU
-testbench.uut.idu.LH
-testbench.uut.idu.LHU
-testbench.uut.idu.LUI
-testbench.uut.idu.LW
-testbench.uut.idu.OR
-testbench.uut.idu.ORI
-testbench.uut.idu.SB
-testbench.uut.idu.SH
-testbench.uut.idu.SLL
-testbench.uut.idu.SLLI
-testbench.uut.idu.SLT
-testbench.uut.idu.SLTI
-testbench.uut.idu.SLTIU
-testbench.uut.idu.SLTU
-testbench.uut.idu.SRA
-testbench.uut.idu.SRAI
-testbench.uut.idu.SRL
-testbench.uut.idu.SRLI
-testbench.uut.idu.SUB
-testbench.uut.idu.SW
-testbench.uut.idu.XOR
-testbench.uut.idu.XORI
-@22
-testbench.uut.alu.rs1[4:0]
-testbench.uut.alu.rs1_data[31:0]
-testbench.uut.alu.rs2[4:0]
-testbench.uut.alu.rs2_data[31:0]
+testbench.uut.idu.idu_inst[31:0]
+testbench.uut.idu.idu_inst_PC[31:0]
+testbench.uut.idu.idu_decode_opcode[6:0]
 @200
 -
 @28
 testbench.uut.alu.alu_vld
+testbench.uut.alu.alu_retired
+testbench.uut.alu.alu_freeze
 testbench.uut.alu.alu_trap
-@22
+testbench.uut.alu.alu_br_miss
+@23
 testbench.uut.alu.alu_inst[31:0]
-testbench.uut.alu.alu_rd[4:0]
-testbench.uut.alu.alu_rd_data[31:0]
-testbench.uut.alu.alu_rs1[4:0]
-testbench.uut.alu.alu_rs1_data[31:0]
-testbench.uut.alu.alu_rs2[4:0]
-testbench.uut.alu.alu_rs2_data[31:0]
-testbench.uut.alu.PC[31:0]
-@29
-testbench.uut.alu.PC_wr
 @22
-testbench.uut.alu.PC_in[31:0]
-testbench.uut.alu.PC_orig[31:0]
-testbench.uut.alu.PC_next[31:0]
+testbench.uut.alu.alu_addr[31:0]
 @200
 -
 @22

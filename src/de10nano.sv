@@ -38,10 +38,48 @@ output logic           HDMI_TX_HS,
 input  logic           HDMI_TX_INT,
 output logic           HDMI_TX_VS
 
+`ifdef RISCV_FORMAL
+  ,
+  output reg          rvfi_valid,
+  output reg   [63:0] rvfi_order,
+  output reg   [31:0] rvfi_insn,
+  output reg          rvfi_trap,
+  output reg          rvfi_halt,
+  output reg          rvfi_intr,
+  output reg   [ 1:0] rvfi_mode,
+  output reg   [ 1:0] rvfi_ixl,
+  output reg   [ 4:0] rvfi_rs1_addr,
+  output reg   [ 4:0] rvfi_rs2_addr,
+  output reg   [31:0] rvfi_rs1_rdata,
+  output reg   [31:0] rvfi_rs2_rdata,
+  output reg   [ 4:0] rvfi_rd_addr,
+  output reg   [31:0] rvfi_rd_wdata,
+  output reg   [31:0] rvfi_pc_rdata,
+  output reg   [31:0] rvfi_pc_wdata,
+  output reg   [31:0] rvfi_mem_addr,
+  output reg   [ 3:0] rvfi_mem_rmask,
+  output reg   [ 3:0] rvfi_mem_wmask,
+  output reg   [31:0] rvfi_mem_rdata,
+  output reg   [31:0] rvfi_mem_wdata,
+
+  output reg   [63:0] rvfi_csr_mcycle_rmask,
+  output reg   [63:0] rvfi_csr_mcycle_wmask,
+  output reg   [63:0] rvfi_csr_mcycle_rdata,
+  output reg   [63:0] rvfi_csr_mcycle_wdata,
+
+  output reg   [63:0] rvfi_csr_minstret_rmask,
+  output reg   [63:0] rvfi_csr_minstret_wmask,
+  output reg   [63:0] rvfi_csr_minstret_rdata,
+  output reg   [63:0] rvfi_csr_minstret_wdata,
+  output logic clk,
+  output logic rst
+`endif
 );
 
-logic clk;
-logic rst;
+`ifndef RISCV_FORMAL
+  logic clk;
+  logic rst;
+`endif
 
 logic        riscv_mem_instbus_req;
 logic        riscv_mem_instbus_ack;
@@ -61,30 +99,40 @@ logic        riscv_mem_bus_ack;
 logic        riscv_mem_bus_write;
 logic [31:0] riscv_mem_bus_addr;
 logic [31:0] riscv_mem_bus_data;
+logic  [3:0] riscv_mem_bus_data_rd_mask;
+logic  [3:0] riscv_mem_bus_data_wr_mask;
 
 logic        mem_led_bus_req;
 logic        mem_led_bus_ack;
 logic        mem_led_bus_write;
 logic [31:0] mem_led_bus_addr;
 logic [31:0] mem_led_bus_data;
+logic  [3:0] mem_led_bus_data_rd_mask;
+logic  [3:0] mem_led_bus_data_wr_mask;
 
 logic        led_keys_bus_req;
 logic        led_keys_bus_ack;
 logic        led_keys_bus_write;
 logic [31:0] led_keys_bus_addr;
 logic [31:0] led_keys_bus_data;
+logic  [3:0] led_keys_bus_data_rd_mask;
+logic  [3:0] led_keys_bus_data_wr_mask;
 
 logic        keys_shield_bus_req;
 logic        keys_shield_bus_ack;
 logic        keys_shield_bus_write;
 logic [31:0] keys_shield_bus_addr;
 logic [31:0] keys_shield_bus_data;
+logic  [3:0] keys_shield_bus_data_rd_mask;
+logic  [3:0] keys_shield_bus_data_wr_mask;
 
 logic        shield_riscv_bus_req;
 logic        shield_riscv_bus_ack;
 logic        shield_riscv_bus_write;
 logic [31:0] shield_riscv_bus_addr;
 logic [31:0] shield_riscv_bus_data;
+logic  [3:0] shield_riscv_bus_data_rd_mask;
+logic  [3:0] shield_riscv_bus_data_wr_mask;
 
 logic arst;
 logic arst_1;
@@ -127,12 +175,51 @@ riscv riscv (
   .i_membus_write (shield_riscv_bus_write), 
   .i_membus_addr  (shield_riscv_bus_addr),  
   .i_membus_data  (shield_riscv_bus_data),
+  .i_membus_data_rd_mask  (shield_riscv_bus_data_rd_mask),
+  .i_membus_data_wr_mask  (shield_riscv_bus_data_wr_mask),
 
   .o_membus_req   (riscv_mem_bus_req),   
   .o_membus_ack   (riscv_mem_bus_ack),   
   .o_membus_write (riscv_mem_bus_write), 
   .o_membus_addr  (riscv_mem_bus_addr),  
-  .o_membus_data  (riscv_mem_bus_data)
+  .o_membus_data  (riscv_mem_bus_data),
+  .o_membus_data_rd_mask  (riscv_mem_bus_data_rd_mask),
+  .o_membus_data_wr_mask  (riscv_mem_bus_data_wr_mask)
+
+`ifdef RISCV_FORMAL
+  ,
+  .rvfi_valid              (rvfi_valid             ),
+  .rvfi_order              (rvfi_order             ),
+  .rvfi_insn               (rvfi_insn              ),
+  .rvfi_trap               (rvfi_trap              ),
+  .rvfi_halt               (rvfi_halt              ),
+  .rvfi_intr               (rvfi_intr              ),
+  .rvfi_mode               (rvfi_mode              ),
+  .rvfi_ixl                (rvfi_ixl               ),
+  .rvfi_rs1_addr           (rvfi_rs1_addr          ),
+  .rvfi_rs2_addr           (rvfi_rs2_addr          ),
+  .rvfi_rs1_rdata          (rvfi_rs1_rdata         ),
+  .rvfi_rs2_rdata          (rvfi_rs2_rdata         ),
+  .rvfi_rd_addr            (rvfi_rd_addr           ),
+  .rvfi_rd_wdata           (rvfi_rd_wdata          ),
+  .rvfi_pc_rdata           (rvfi_pc_rdata          ),
+  .rvfi_pc_wdata           (rvfi_pc_wdata          ),
+  .rvfi_mem_addr           (rvfi_mem_addr          ),
+  .rvfi_mem_rmask          (rvfi_mem_rmask         ),
+  .rvfi_mem_wmask          (rvfi_mem_wmask         ),
+  .rvfi_mem_rdata          (rvfi_mem_rdata         ),
+  .rvfi_mem_wdata          (rvfi_mem_wdata         ),
+                                                              
+  .rvfi_csr_mcycle_rmask   (rvfi_csr_mcycle_rmask  ),
+  .rvfi_csr_mcycle_wmask   (rvfi_csr_mcycle_wmask  ),
+  .rvfi_csr_mcycle_rdata   (rvfi_csr_mcycle_rdata  ),
+  .rvfi_csr_mcycle_wdata   (rvfi_csr_mcycle_wdata  ),
+                                                              
+  .rvfi_csr_minstret_rmask (rvfi_csr_minstret_rmask),
+  .rvfi_csr_minstret_wmask (rvfi_csr_minstret_wmask),
+  .rvfi_csr_minstret_rdata (rvfi_csr_minstret_rdata),
+  .rvfi_csr_minstret_wdata (rvfi_csr_minstret_wdata)
+`endif
 );
 
 mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
@@ -156,12 +243,16 @@ mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
   .i_membus_write (riscv_mem_bus_write), 
   .i_membus_addr  (riscv_mem_bus_addr),  
   .i_membus_data  (riscv_mem_bus_data),
+  .i_membus_data_rd_mask  (riscv_mem_bus_data_rd_mask),
+  .i_membus_data_wr_mask  (riscv_mem_bus_data_wr_mask),
 
   .o_membus_req   (mem_led_bus_req),   
   .o_membus_ack   (mem_led_bus_ack),   
   .o_membus_write (mem_led_bus_write), 
   .o_membus_addr  (mem_led_bus_addr),  
-  .o_membus_data  (mem_led_bus_data)
+  .o_membus_data  (mem_led_bus_data),
+  .o_membus_data_rd_mask  (mem_led_bus_data_rd_mask),
+  .o_membus_data_wr_mask  (mem_led_bus_data_wr_mask)
 );
 
 led #(.SIZE(5),.ADDR_BASE(32'hC0000000)) led (
@@ -175,12 +266,16 @@ led #(.SIZE(5),.ADDR_BASE(32'hC0000000)) led (
   .i_bus_write (mem_led_bus_write), 
   .i_bus_addr  (mem_led_bus_addr),  
   .i_bus_data  (mem_led_bus_data),
+  .i_bus_data_rd_mask  (mem_led_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (mem_led_bus_data_wr_mask),
 
   .o_bus_req   (led_keys_bus_req),   
   .o_bus_ack   (led_keys_bus_ack),   
   .o_bus_write (led_keys_bus_write), 
   .o_bus_addr  (led_keys_bus_addr),  
-  .o_bus_data  (led_keys_bus_data)
+  .o_bus_data  (led_keys_bus_data),
+  .o_bus_data_rd_mask  (led_keys_bus_data_rd_mask),
+  .o_bus_data_wr_mask  (led_keys_bus_data_wr_mask)
 );
 
 keys #(.SIZE(5),.ADDR_BASE(32'hC1000000)) keys (
@@ -194,12 +289,16 @@ keys #(.SIZE(5),.ADDR_BASE(32'hC1000000)) keys (
   .i_bus_write (led_keys_bus_write), 
   .i_bus_addr  (led_keys_bus_addr),  
   .i_bus_data  (led_keys_bus_data),
+  .i_bus_data_rd_mask  (led_keys_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (led_keys_bus_data_wr_mask),
 
   .o_bus_req   (keys_shield_bus_req),   
   .o_bus_ack   (keys_shield_bus_ack),   
   .o_bus_write (keys_shield_bus_write), 
   .o_bus_addr  (keys_shield_bus_addr),  
-  .o_bus_data  (keys_shield_bus_data)
+  .o_bus_data  (keys_shield_bus_data),
+  .o_bus_data_rd_mask  (keys_shield_bus_data_rd_mask),
+  .o_bus_data_wr_mask  (keys_shield_bus_data_wr_mask)
 );
 
 shield_V1 shield (
@@ -221,12 +320,16 @@ shield_V1 shield (
   .i_bus_write (keys_shield_bus_write), 
   .i_bus_addr  (keys_shield_bus_addr),  
   .i_bus_data  (keys_shield_bus_data),
+  .i_bus_data_rd_mask  (keys_shield_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (keys_shield_bus_data_wr_mask),
 
   .o_bus_req   (shield_riscv_bus_req),   
   .o_bus_ack   (shield_riscv_bus_ack),   
   .o_bus_write (shield_riscv_bus_write), 
   .o_bus_addr  (shield_riscv_bus_addr),  
-  .o_bus_data  (shield_riscv_bus_data)
+  .o_bus_data  (shield_riscv_bus_data),
+  .o_bus_data_rd_mask  (shield_riscv_bus_data_rd_mask),
+  .o_bus_data_wr_mask  (shield_riscv_bus_data_wr_mask)
 );
 
 endmodule

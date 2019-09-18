@@ -53,12 +53,16 @@ module riscv (
   input  logic        i_membus_write,
   input  logic [31:0] i_membus_addr,
   input  logic [31:0] i_membus_data,
+  input  logic  [3:0] i_membus_data_rd_mask,
+  input  logic  [3:0] i_membus_data_wr_mask,
 
   output logic        o_membus_req,
   output logic        o_membus_ack,
   output logic        o_membus_write,
   output logic [31:0] o_membus_addr,
-  output logic [31:0] o_membus_data
+  output logic [31:0] o_membus_data,
+  output logic  [3:0] o_membus_data_rd_mask,
+  output logic  [3:0] o_membus_data_wr_mask
 );
 
 logic              csr_req;
@@ -68,10 +72,6 @@ logic [31:0]       csr_addr;
 logic [31:0]       csr_mask;
 logic [31:0]       csr_data_wr;
 logic [31:0]       csr_data_rd;
-
-logic              PC_wr;
-logic [31:0]       PC_in;
-logic [31:0]       PC;
 
 logic [31:0]       x_wr;
 logic [31:0]       x00_in;
@@ -143,88 +143,87 @@ logic             ifu_req;
 logic [31:0]      ifu_inst;
 logic [31:0]      ifu_inst_PC;
 
-logic             idu_rdy;
-logic             idu_req;
 logic [31:0]      idu_inst;
 logic             idu_done;
 
 logic             ifu_vld;
 logic             idu_vld;
+logic             idu_freeze;
 logic [31:0]      idu_inst_PC;
 logic             alu_vld;
+logic             alu_retired;
+logic             alu_freeze;
 logic             alu_br_miss;
+logic [31:0]      alu_PC_next;
+logic             alu_trap;
 
 logic [31:0]      inst;
-logic  [3:0]      fm;
-logic  [3:0]      pred;
-logic  [3:0]      succ;
-logic  [4:0]      shamt;
-logic [31:0]      imm;
-logic  [4:0]      uimm;
-logic [11:0]      csr;
-logic  [6:0]      funct7;
-logic  [2:0]      funct3;
-logic  [4:0]      rs2;
-logic  [4:0]      rs1;
-logic  [4:0]      rd;
-logic  [6:0]      opcode;
+logic  [3:0]      idu_decode_fm;
+logic  [3:0]      idu_decode_pred;
+logic  [3:0]      idu_decode_succ;
+logic  [4:0]      idu_decode_shamt;
+logic [31:0]      idu_decode_imm;
+logic  [4:0]      idu_decode_uimm;
+logic [11:0]      idu_decode_csr;
+logic  [6:0]      idu_decode_funct7;
+logic  [2:0]      idu_decode_funct3;
+logic  [4:0]      idu_decode_rs2;
+logic  [4:0]      idu_decode_rs1;
+logic  [4:0]      idu_decode_rd;
+logic  [6:0]      idu_decode_opcode;
 
-logic             LUI;
-logic             AUIPC;
-logic             JAL;
-logic             JALR;
-logic             BEQ;
-logic             BNE;
-logic             BLT;
-logic             BGE;
-logic             BLTU;
-logic             BGEU;
-logic             LB;
-logic             LH;
-logic             LW;
-logic             LBU;
-logic             LHU;
-logic             SB;
-logic             SH;
-logic             SW;
-logic             ADDI;
-logic             SLTI;
-logic             SLTIU;
-logic             XORI;
-logic             ORI;
-logic             ANDI;
-logic             SLLI;
-logic             SRLI;
-logic             SRAI;
-logic             ADD;
-logic             SUB;
-logic             SLL;
-logic             SLT;
-logic             SLTU;
-logic             XOR;
-logic             SRL;
-logic             SRA;
-logic             OR;
-logic             AND;
-logic             FENCE;
-logic             FENCE_I;
-logic             ECALL;
-logic             CSRRW;
-logic             CSRRS;
-logic             CSRRC;
-logic             CSRRWI;
-logic             CSRRSI;
-logic             CSRRCI;
-logic             EBREAK;
-logic             TRAP;
+logic             idu_decode_LUI;
+logic             idu_decode_AUIPC;
+logic             idu_decode_JAL;
+logic             idu_decode_JALR;
+logic             idu_decode_BEQ;
+logic             idu_decode_BNE;
+logic             idu_decode_BLT;
+logic             idu_decode_BGE;
+logic             idu_decode_BLTU;
+logic             idu_decode_BGEU;
+logic             idu_decode_LB;
+logic             idu_decode_LH;
+logic             idu_decode_LW;
+logic             idu_decode_LBU;
+logic             idu_decode_LHU;
+logic             idu_decode_SB;
+logic             idu_decode_SH;
+logic             idu_decode_SW;
+logic             idu_decode_ADDI;
+logic             idu_decode_SLTI;
+logic             idu_decode_SLTIU;
+logic             idu_decode_XORI;
+logic             idu_decode_ORI;
+logic             idu_decode_ANDI;
+logic             idu_decode_SLLI;
+logic             idu_decode_SRLI;
+logic             idu_decode_SRAI;
+logic             idu_decode_ADD;
+logic             idu_decode_SUB;
+logic             idu_decode_SLL;
+logic             idu_decode_SLT;
+logic             idu_decode_SLTU;
+logic             idu_decode_XOR;
+logic             idu_decode_SRL;
+logic             idu_decode_SRA;
+logic             idu_decode_OR;
+logic             idu_decode_AND;
+logic             idu_decode_FENCE;
+logic             idu_decode_FENCE_I;
+logic             idu_decode_ECALL;
+logic             idu_decode_CSRRW;
+logic             idu_decode_CSRRS;
+logic             idu_decode_CSRRC;
+logic             idu_decode_CSRRWI;
+logic             idu_decode_CSRRSI;
+logic             idu_decode_CSRRCI;
+logic             idu_decode_EBREAK;
+logic             idu_decode_TRAP;
 
 riscv_regfile regfile (
   .clk   (clk),
   .rst   (rst),
-
-  //.PC_wr (PC_wr),
-  //.PC_in (PC_in),
-  //.PC    (PC   ),
 
   .x_wr  (x_wr ),
   .x00_in         (x00_in  ),
@@ -312,8 +311,14 @@ riscv_ifu ifu (
   .rst            (rst),
 
   .alu_vld        (alu_vld),
+  .alu_retired    (alu_retired),
+  .alu_freeze     (alu_freeze),
   .alu_br_miss    (alu_br_miss),
-  .PC_in          (PC_in),
+  .alu_trap       (alu_trap),
+  .alu_PC_next    (alu_PC_next),
+
+  .idu_vld   (idu_vld),
+  .idu_freeze   (idu_freeze),
 
   .ifu_vld        (ifu_vld),
   .ifu_inst       (ifu_inst),
@@ -336,78 +341,80 @@ riscv_idu idu (
   .ifu_vld   (ifu_vld),
   .ifu_inst  (ifu_inst),
   .ifu_inst_PC    (ifu_inst_PC),
-  .idu_vld   (idu_vld),
-  .idu_inst_PC    (idu_inst_PC),
-
-  .idu_rdy   (idu_rdy),
-  .idu_req   (idu_req),
                              
   .alu_vld        (alu_vld),
+  .alu_retired    (alu_retired),
+  .alu_freeze     (alu_freeze),
   .alu_br_miss    (alu_br_miss),
+  .alu_trap       (alu_trap),
 
-  .inst           (inst    ),
-  .fm        (fm      ),
-  .pred      (pred    ),
-  .succ      (succ    ),
-  .shamt     (shamt   ),
-  .imm       (imm     ),
-  .uimm      (uimm    ),
-  .csr       (csr     ),
-  .funct7    (funct7  ),
-  .funct3    (funct3  ),
-  .rs2       (rs2     ),
-  .rs1       (rs1     ),
-  .rd        (rd      ),
-  .opcode    (opcode  ),
+  .idu_vld   (idu_vld),
+  .idu_freeze   (idu_freeze),
+  .idu_inst    (idu_inst),
+  .idu_inst_PC    (idu_inst_PC),
+
+  .idu_decode_fm        (idu_decode_fm      ),
+  .idu_decode_pred      (idu_decode_pred    ),
+  .idu_decode_succ      (idu_decode_succ    ),
+  .idu_decode_shamt     (idu_decode_shamt   ),
+  .idu_decode_imm       (idu_decode_imm     ),
+  .idu_decode_uimm      (idu_decode_uimm    ),
+  .idu_decode_csr       (idu_decode_csr     ),
+  .idu_decode_funct7    (idu_decode_funct7  ),
+  .idu_decode_funct3    (idu_decode_funct3  ),
+  .idu_decode_rs2       (idu_decode_rs2     ),
+  .idu_decode_rs1       (idu_decode_rs1     ),
+  .idu_decode_rd        (idu_decode_rd      ),
+  .idu_decode_opcode    (idu_decode_opcode  ),
                              
-  .LUI       (LUI     ),
-  .AUIPC     (AUIPC   ),
-  .JAL       (JAL     ),
-  .JALR      (JALR    ),
-  .BEQ       (BEQ     ),
-  .BNE       (BNE     ),
-  .BLT       (BLT     ),
-  .BGE       (BGE     ),
-  .BLTU      (BLTU    ),
-  .BGEU      (BGEU    ),
-  .LB        (LB      ),
-  .LH        (LH      ),
-  .LW        (LW      ),
-  .LBU       (LBU     ),
-  .LHU       (LHU     ),
-  .SB        (SB      ),
-  .SH        (SH      ),
-  .SW        (SW      ),
-  .ADDI      (ADDI    ),
-  .SLTI      (SLTI    ),
-  .SLTIU     (SLTIU   ),
-  .XORI      (XORI    ),
-  .ORI       (ORI     ),
-  .ANDI      (ANDI    ),
-  .SLLI      (SLLI    ),
-  .SRLI      (SRLI    ),
-  .SRAI      (SRAI    ),
-  .ADD       (ADD     ),
-  .SUB       (SUB     ),
-  .SLL       (SLL     ),
-  .SLT       (SLT     ),
-  .SLTU      (SLTU    ),
-  .XOR       (XOR     ),
-  .SRL       (SRL     ),
-  .SRA       (SRA     ),
-  .OR        (OR      ),
-  .AND       (AND     ),
-  .FENCE     (FENCE   ),
-  .FENCE_I   (FENCE_I ),
-  .ECALL     (ECALL   ),
-  .CSRRW     (CSRRW   ),
-  .CSRRS     (CSRRS   ),
-  .CSRRC     (CSRRC   ),
-  .CSRRWI    (CSRRWI  ),
-  .CSRRSI    (CSRRSI  ),
-  .CSRRCI    (CSRRCI  ),
-  .EBREAK    (EBREAK  ),
-  .TRAP      (TRAP    )
+  .idu_decode_LUI       (idu_decode_LUI     ),
+  .idu_decode_AUIPC     (idu_decode_AUIPC   ),
+  .idu_decode_JAL       (idu_decode_JAL     ),
+  .idu_decode_JALR      (idu_decode_JALR    ),
+  .idu_decode_BEQ       (idu_decode_BEQ     ),
+  .idu_decode_BNE       (idu_decode_BNE     ),
+  .idu_decode_BLT       (idu_decode_BLT     ),
+  .idu_decode_BGE       (idu_decode_BGE     ),
+  .idu_decode_BLTU      (idu_decode_BLTU    ),
+  .idu_decode_BGEU      (idu_decode_BGEU    ),
+  .idu_decode_LB        (idu_decode_LB      ),
+  .idu_decode_LH        (idu_decode_LH      ),
+  .idu_decode_LW        (idu_decode_LW      ),
+  .idu_decode_LBU       (idu_decode_LBU     ),
+  .idu_decode_LHU       (idu_decode_LHU     ),
+  .idu_decode_SB        (idu_decode_SB      ),
+  .idu_decode_SH        (idu_decode_SH      ),
+  .idu_decode_SW        (idu_decode_SW      ),
+  .idu_decode_ADDI      (idu_decode_ADDI    ),
+  .idu_decode_SLTI      (idu_decode_SLTI    ),
+  .idu_decode_SLTIU     (idu_decode_SLTIU   ),
+  .idu_decode_XORI      (idu_decode_XORI    ),
+  .idu_decode_ORI       (idu_decode_ORI     ),
+  .idu_decode_ANDI      (idu_decode_ANDI    ),
+  .idu_decode_SLLI      (idu_decode_SLLI    ),
+  .idu_decode_SRLI      (idu_decode_SRLI    ),
+  .idu_decode_SRAI      (idu_decode_SRAI    ),
+  .idu_decode_ADD       (idu_decode_ADD     ),
+  .idu_decode_SUB       (idu_decode_SUB     ),
+  .idu_decode_SLL       (idu_decode_SLL     ),
+  .idu_decode_SLT       (idu_decode_SLT     ),
+  .idu_decode_SLTU      (idu_decode_SLTU    ),
+  .idu_decode_XOR       (idu_decode_XOR     ),
+  .idu_decode_SRL       (idu_decode_SRL     ),
+  .idu_decode_SRA       (idu_decode_SRA     ),
+  .idu_decode_OR        (idu_decode_OR      ),
+  .idu_decode_AND       (idu_decode_AND     ),
+  .idu_decode_FENCE     (idu_decode_FENCE   ),
+  .idu_decode_FENCE_I   (idu_decode_FENCE_I ),
+  .idu_decode_ECALL     (idu_decode_ECALL   ),
+  .idu_decode_CSRRW     (idu_decode_CSRRW   ),
+  .idu_decode_CSRRS     (idu_decode_CSRRS   ),
+  .idu_decode_CSRRC     (idu_decode_CSRRC   ),
+  .idu_decode_CSRRWI    (idu_decode_CSRRWI  ),
+  .idu_decode_CSRRSI    (idu_decode_CSRRSI  ),
+  .idu_decode_CSRRCI    (idu_decode_CSRRCI  ),
+  .idu_decode_EBREAK    (idu_decode_EBREAK  ),
+  .idu_decode_TRAP      (idu_decode_TRAP    )
 );
 
 assign o_membus_ack = '0;
@@ -449,158 +456,162 @@ riscv_alu alu (
   .rvfi_csr_minstret_wdata (rvfi_csr_minstret_wdata),
 `endif
                              
-  .idu_vld        (idu_vld),
-  .alu_vld        (alu_vld),
-  .alu_br_miss    (alu_br_miss),
-                             
-  .inst           (inst    ),
-  .fm             (fm      ),
-  .pred           (pred    ),
-  .succ           (succ    ),
-  .shamt          (shamt   ),
-  .imm            (imm     ),
-  .uimm           (uimm    ),
-  .csr            (csr     ),
-  .funct7         (funct7  ),
-  .funct3         (funct3  ),
-  .rs2            (rs2     ),
-  .rs1            (rs1     ),
-  .rd             (rd      ),
-  .opcode         (opcode  ),
-                                  
-  .LUI            (LUI     ),
-  .AUIPC          (AUIPC   ),
-  .JAL            (JAL     ),
-  .JALR           (JALR    ),
-  .BEQ            (BEQ     ),
-  .BNE            (BNE     ),
-  .BLT            (BLT     ),
-  .BGE            (BGE     ),
-  .BLTU           (BLTU    ),
-  .BGEU           (BGEU    ),
-  .LB             (LB      ),
-  .LH             (LH      ),
-  .LW             (LW      ),
-  .LBU            (LBU     ),
-  .LHU            (LHU     ),
-  .SB             (SB      ),
-  .SH             (SH      ),
-  .SW             (SW      ),
-  .ADDI           (ADDI    ),
-  .SLTI           (SLTI    ),
-  .SLTIU          (SLTIU   ),
-  .XORI           (XORI    ),
-  .ORI            (ORI     ),
-  .ANDI           (ANDI    ),
-  .SLLI           (SLLI    ),
-  .SRLI           (SRLI    ),
-  .SRAI           (SRAI    ),
-  .ADD            (ADD     ),
-  .SUB            (SUB     ),
-  .SLL            (SLL     ),
-  .SLT            (SLT     ),
-  .SLTU           (SLTU    ),
-  .XOR            (XOR     ),
-  .SRL            (SRL     ),
-  .SRA            (SRA     ),
-  .OR             (OR      ),
-  .AND            (AND     ),
-  .FENCE          (FENCE   ),
-  .FENCE_I        (FENCE_I ),
-  .ECALL          (ECALL   ),
-  .CSRRW          (CSRRW   ),
-  .CSRRS          (CSRRS   ),
-  .CSRRC          (CSRRC   ),
-  .CSRRWI         (CSRRWI  ),
-  .CSRRSI         (CSRRSI  ),
-  .CSRRCI         (CSRRCI  ),
-  .EBREAK         (EBREAK  ),
-  .TRAP           (TRAP    ),
-                                  
-  .PC_wr          (PC_wr   ),
-  .PC_in          (PC_in   ),
-  //.PC             (PC      ),
-                                  
-  .x_wr           (x_wr    ),
-  .x00_in         (x00_in  ),
-  .x01_in         (x01_in  ),
-  .x02_in         (x02_in  ),
-  .x03_in         (x03_in  ),
-  .x04_in         (x04_in  ),
-  .x05_in         (x05_in  ),
-  .x06_in         (x06_in  ),
-  .x07_in         (x07_in  ),
-  .x08_in         (x08_in  ),
-  .x09_in         (x09_in  ),
-  .x10_in         (x10_in  ),
-  .x11_in         (x11_in  ),
-  .x12_in         (x12_in  ),
-  .x13_in         (x13_in  ),
-  .x14_in         (x14_in  ),
-  .x15_in         (x15_in  ),
-  .x16_in         (x16_in  ),
-  .x17_in         (x17_in  ),
-  .x18_in         (x18_in  ),
-  .x19_in         (x19_in  ),
-  .x20_in         (x20_in  ),
-  .x21_in         (x21_in  ),
-  .x22_in         (x22_in  ),
-  .x23_in         (x23_in  ),
-  .x24_in         (x24_in  ),
-  .x25_in         (x25_in  ),
-  .x26_in         (x26_in  ),
-  .x27_in         (x27_in  ),
-  .x28_in         (x28_in  ),
-  .x29_in         (x29_in  ),
-  .x30_in         (x30_in  ),
-  .x31_in         (x31_in  ),
-  .x00            (x00     ),
-  .x01            (x01     ),
-  .x02            (x02     ),
-  .x03            (x03     ),
-  .x04            (x04     ),
-  .x05            (x05     ),
-  .x06            (x06     ),
-  .x07            (x07     ),
-  .x08            (x08     ),
-  .x09            (x09     ),
-  .x10            (x10     ),
-  .x11            (x11     ),
-  .x12            (x12     ),
-  .x13            (x13     ),
-  .x14            (x14     ),
-  .x15            (x15     ),
-  .x16            (x16     ),
-  .x17            (x17     ),
-  .x18            (x18     ),
-  .x19            (x19     ),
-  .x20            (x20     ),
-  .x21            (x21     ),
-  .x22            (x22     ),
-  .x23            (x23     ),
-  .x24            (x24     ),
-  .x25            (x25     ),
-  .x26            (x26     ),
-  .x27            (x27     ),
-  .x28            (x28     ),
-  .x29            (x29     ),
-  .x30            (x30     ),
-  .x31            (x31     ),
 
-  .csr_req        (csr_req),   
-  .csr_ack        (csr_ack),   
-  .csr_write      (csr_write), 
-  .csr_addr       (csr_addr),  
-  .csr_mask       (csr_mask),  
-  .csr_data_wr    (csr_data_wr),
-  .csr_data_rd    (csr_data_rd),
+  .alu_vld          (alu_vld),
+  .alu_retired    (alu_retired),
+  .alu_freeze     (alu_freeze),
+  .alu_br_miss      (alu_br_miss),
+  .alu_trap       (alu_trap),
+  .alu_PC_next    (alu_PC_next),
+                               
+  .idu_vld          (idu_vld),
+  .idu_inst             (idu_inst    ),
+  .idu_inst_PC    (idu_inst_PC),
+  .idu_decode_fm               (idu_decode_fm      ),
+  .idu_decode_pred             (idu_decode_pred    ),
+  .idu_decode_succ             (idu_decode_succ    ),
+  .idu_decode_shamt            (idu_decode_shamt   ),
+  .idu_decode_imm              (idu_decode_imm     ),
+  .idu_decode_uimm             (idu_decode_uimm    ),
+  .idu_decode_csr              (idu_decode_csr     ),
+  .idu_decode_funct7           (idu_decode_funct7  ),
+  .idu_decode_funct3           (idu_decode_funct3  ),
+  .idu_decode_rs2              (idu_decode_rs2     ),
+  .idu_decode_rs1              (idu_decode_rs1     ),
+  .idu_decode_rd               (idu_decode_rd      ),
+  .idu_decode_opcode           (idu_decode_opcode  ),
+                                    
+  .idu_decode_LUI              (idu_decode_LUI     ),
+  .idu_decode_AUIPC            (idu_decode_AUIPC   ),
+  .idu_decode_JAL              (idu_decode_JAL     ),
+  .idu_decode_JALR             (idu_decode_JALR    ),
+  .idu_decode_BEQ              (idu_decode_BEQ     ),
+  .idu_decode_BNE              (idu_decode_BNE     ),
+  .idu_decode_BLT              (idu_decode_BLT     ),
+  .idu_decode_BGE              (idu_decode_BGE     ),
+  .idu_decode_BLTU             (idu_decode_BLTU    ),
+  .idu_decode_BGEU             (idu_decode_BGEU    ),
+  .idu_decode_LB               (idu_decode_LB      ),
+  .idu_decode_LH               (idu_decode_LH      ),
+  .idu_decode_LW               (idu_decode_LW      ),
+  .idu_decode_LBU              (idu_decode_LBU     ),
+  .idu_decode_LHU              (idu_decode_LHU     ),
+  .idu_decode_SB               (idu_decode_SB      ),
+  .idu_decode_SH               (idu_decode_SH      ),
+  .idu_decode_SW               (idu_decode_SW      ),
+  .idu_decode_ADDI             (idu_decode_ADDI    ),
+  .idu_decode_SLTI             (idu_decode_SLTI    ),
+  .idu_decode_SLTIU            (idu_decode_SLTIU   ),
+  .idu_decode_XORI             (idu_decode_XORI    ),
+  .idu_decode_ORI              (idu_decode_ORI     ),
+  .idu_decode_ANDI             (idu_decode_ANDI    ),
+  .idu_decode_SLLI             (idu_decode_SLLI    ),
+  .idu_decode_SRLI             (idu_decode_SRLI    ),
+  .idu_decode_SRAI             (idu_decode_SRAI    ),
+  .idu_decode_ADD              (idu_decode_ADD     ),
+  .idu_decode_SUB              (idu_decode_SUB     ),
+  .idu_decode_SLL              (idu_decode_SLL     ),
+  .idu_decode_SLT              (idu_decode_SLT     ),
+  .idu_decode_SLTU             (idu_decode_SLTU    ),
+  .idu_decode_XOR              (idu_decode_XOR     ),
+  .idu_decode_SRL              (idu_decode_SRL     ),
+  .idu_decode_SRA              (idu_decode_SRA     ),
+  .idu_decode_OR               (idu_decode_OR      ),
+  .idu_decode_AND              (idu_decode_AND     ),
+  .idu_decode_FENCE            (idu_decode_FENCE   ),
+  .idu_decode_FENCE_I          (idu_decode_FENCE_I ),
+  .idu_decode_ECALL            (idu_decode_ECALL   ),
+  .idu_decode_CSRRW            (idu_decode_CSRRW   ),
+  .idu_decode_CSRRS            (idu_decode_CSRRS   ),
+  .idu_decode_CSRRC            (idu_decode_CSRRC   ),
+  .idu_decode_CSRRWI           (idu_decode_CSRRWI  ),
+  .idu_decode_CSRRSI           (idu_decode_CSRRSI  ),
+  .idu_decode_CSRRCI           (idu_decode_CSRRCI  ),
+  .idu_decode_EBREAK           (idu_decode_EBREAK  ),
+  .idu_decode_TRAP             (idu_decode_TRAP    ),
+                                    
+  .x_wr             (x_wr    ),
+  .x00_in           (x00_in  ),
+  .x01_in           (x01_in  ),
+  .x02_in           (x02_in  ),
+  .x03_in           (x03_in  ),
+  .x04_in           (x04_in  ),
+  .x05_in           (x05_in  ),
+  .x06_in           (x06_in  ),
+  .x07_in           (x07_in  ),
+  .x08_in           (x08_in  ),
+  .x09_in           (x09_in  ),
+  .x10_in           (x10_in  ),
+  .x11_in           (x11_in  ),
+  .x12_in           (x12_in  ),
+  .x13_in           (x13_in  ),
+  .x14_in           (x14_in  ),
+  .x15_in           (x15_in  ),
+  .x16_in           (x16_in  ),
+  .x17_in           (x17_in  ),
+  .x18_in           (x18_in  ),
+  .x19_in           (x19_in  ),
+  .x20_in           (x20_in  ),
+  .x21_in           (x21_in  ),
+  .x22_in           (x22_in  ),
+  .x23_in           (x23_in  ),
+  .x24_in           (x24_in  ),
+  .x25_in           (x25_in  ),
+  .x26_in           (x26_in  ),
+  .x27_in           (x27_in  ),
+  .x28_in           (x28_in  ),
+  .x29_in           (x29_in  ),
+  .x30_in           (x30_in  ),
+  .x31_in           (x31_in  ),
+  .x00              (x00     ),
+  .x01              (x01     ),
+  .x02              (x02     ),
+  .x03              (x03     ),
+  .x04              (x04     ),
+  .x05              (x05     ),
+  .x06              (x06     ),
+  .x07              (x07     ),
+  .x08              (x08     ),
+  .x09              (x09     ),
+  .x10              (x10     ),
+  .x11              (x11     ),
+  .x12              (x12     ),
+  .x13              (x13     ),
+  .x14              (x14     ),
+  .x15              (x15     ),
+  .x16              (x16     ),
+  .x17              (x17     ),
+  .x18              (x18     ),
+  .x19              (x19     ),
+  .x20              (x20     ),
+  .x21              (x21     ),
+  .x22              (x22     ),
+  .x23              (x23     ),
+  .x24              (x24     ),
+  .x25              (x25     ),
+  .x26              (x26     ),
+  .x27              (x27     ),
+  .x28              (x28     ),
+  .x29              (x29     ),
+  .x30              (x30     ),
+  .x31              (x31     ),
 
-  .bus_req        (o_membus_req),   
-  .bus_ack        (i_membus_ack),   
-  .bus_write      (o_membus_write), 
-  .bus_addr       (o_membus_addr),  
-  .bus_data_wr    (o_membus_data),
-  .bus_data_rd    (i_membus_data) 
+  .csr_req          (csr_req),   
+  .csr_ack          (csr_ack),   
+  .csr_write        (csr_write), 
+  .csr_addr         (csr_addr),  
+  .csr_mask         (csr_mask),  
+  .csr_data_wr      (csr_data_wr),
+  .csr_data_rd      (csr_data_rd),
+
+  .bus_req          (o_membus_req),   
+  .bus_ack          (i_membus_ack),   
+  .bus_write        (o_membus_write), 
+  .bus_addr         (o_membus_addr),  
+  .bus_data_wr      (o_membus_data),
+  .bus_data_rd      (i_membus_data),
+  .bus_data_rd_mask (o_membus_data_rd_mask),
+  .bus_data_wr_mask (o_membus_data_wr_mask)
 );
 
 endmodule
