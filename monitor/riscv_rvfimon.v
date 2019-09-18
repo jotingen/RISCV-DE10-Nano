@@ -1,6 +1,6 @@
 // DO NOT EDIT -- auto-generated from riscv-formal/monitor/generate.py
 //
-// Command line options: -V -i rv32i -c 1 -a -p riscv_rvfimon
+// Command line options: -i rv32i -c 1 -a -p riscv_rvfimon
 
 module riscv_rvfimon (
   input clock,
@@ -126,28 +126,6 @@ module riscv_rvfimon (
   always @(posedge clock) begin
     ch0_errcode <= 0;
     if (!reset && ch0_rvfi_valid) begin
-      $display("-------- RVFI Monitor insn in channel 0: %m at time %0t --------", $time);
-      $display("rvfi_valid = %x", ch0_rvfi_valid);
-      $display("rvfi_order = %x", ch0_rvfi_order);
-      $display("rvfi_insn = %x", ch0_rvfi_insn);
-      $display("rvfi_trap = %x", ch0_rvfi_trap);
-      $display("rvfi_halt = %x", ch0_rvfi_halt);
-      $display("rvfi_intr = %x", ch0_rvfi_intr);
-      $display("rvfi_rs1_addr = %x", ch0_rvfi_rs1_addr);
-      $display("rvfi_rs2_addr = %x", ch0_rvfi_rs2_addr);
-      $display("rvfi_rs1_rdata = %x", ch0_rvfi_rs1_rdata);
-      $display("rvfi_rs2_rdata = %x", ch0_rvfi_rs2_rdata);
-      $display("rvfi_rd_addr = %x", ch0_rvfi_rd_addr);
-      $display("rvfi_rd_wdata = %x", ch0_rvfi_rd_wdata);
-      $display("rvfi_pc_rdata = %x", ch0_rvfi_pc_rdata);
-      $display("rvfi_pc_wdata = %x", ch0_rvfi_pc_wdata);
-      $display("rvfi_mem_addr = %x", ch0_rvfi_mem_addr);
-      $display("rvfi_mem_rmask = %x", ch0_rvfi_mem_rmask);
-      $display("rvfi_mem_wmask = %x", ch0_rvfi_mem_wmask);
-      $display("rvfi_mem_rdata = %x", ch0_rvfi_mem_rdata);
-      $display("rvfi_mem_wdata = %x", ch0_rvfi_mem_wdata);
-      $display("spec_valid = %x", ch0_spec_valid);
-      $display("spec_trap = %x", ch0_spec_trap);
       if (ch0_spec_valid) begin
         if (ch0_rvfi_trap != ch0_spec_trap) begin
           ch0_handle_error(101, "mismatch in trap");
@@ -2111,6 +2089,7 @@ module riscv_rvfimon_insn_add (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // ADD instruction
@@ -2161,6 +2140,7 @@ module riscv_rvfimon_insn_addi (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // ADDI instruction
@@ -2212,6 +2192,7 @@ module riscv_rvfimon_insn_and (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // AND instruction
@@ -2262,6 +2243,7 @@ module riscv_rvfimon_insn_andi (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // ANDI instruction
@@ -2310,6 +2292,7 @@ module riscv_rvfimon_insn_auipc (
   wire [4:0] insn_rd     = rvfi_insn[11:7];
   wire [6:0] insn_opcode = rvfi_insn[ 6:0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // AUIPC instruction
@@ -2771,6 +2754,7 @@ module riscv_rvfimon_insn_lb (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LB instruction
@@ -2822,6 +2806,7 @@ module riscv_rvfimon_insn_lbu (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LBU instruction
@@ -2873,6 +2858,7 @@ module riscv_rvfimon_insn_lh (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LH instruction
@@ -2924,6 +2910,7 @@ module riscv_rvfimon_insn_lhu (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LHU instruction
@@ -2973,6 +2960,7 @@ module riscv_rvfimon_insn_lui (
   wire [4:0] insn_rd     = rvfi_insn[11:7];
   wire [6:0] insn_opcode = rvfi_insn[ 6:0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LUI instruction
@@ -3022,6 +3010,7 @@ module riscv_rvfimon_insn_lw (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // LW instruction
@@ -3074,6 +3063,7 @@ module riscv_rvfimon_insn_or (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // OR instruction
@@ -3124,6 +3114,7 @@ module riscv_rvfimon_insn_ori (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // ORI instruction
@@ -3174,6 +3165,7 @@ module riscv_rvfimon_insn_sb (
   wire [2:0] insn_funct3 = rvfi_insn[14:12];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SB instruction
@@ -3224,6 +3216,7 @@ module riscv_rvfimon_insn_sh (
   wire [2:0] insn_funct3 = rvfi_insn[14:12];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SH instruction
@@ -3275,6 +3268,7 @@ module riscv_rvfimon_insn_sll (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLL instruction
@@ -3327,6 +3321,7 @@ module riscv_rvfimon_insn_slli (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLLI instruction
@@ -3378,6 +3373,7 @@ module riscv_rvfimon_insn_slt (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLT instruction
@@ -3428,6 +3424,7 @@ module riscv_rvfimon_insn_slti (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLTI instruction
@@ -3478,6 +3475,7 @@ module riscv_rvfimon_insn_sltiu (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLTIU instruction
@@ -3529,6 +3527,7 @@ module riscv_rvfimon_insn_sltu (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SLTU instruction
@@ -3580,6 +3579,7 @@ module riscv_rvfimon_insn_sra (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SRA instruction
@@ -3632,6 +3632,7 @@ module riscv_rvfimon_insn_srai (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SRAI instruction
@@ -3683,6 +3684,7 @@ module riscv_rvfimon_insn_srl (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SRL instruction
@@ -3735,6 +3737,7 @@ module riscv_rvfimon_insn_srli (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SRLI instruction
@@ -3786,6 +3789,7 @@ module riscv_rvfimon_insn_sub (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SUB instruction
@@ -3836,6 +3840,7 @@ module riscv_rvfimon_insn_sw (
   wire [2:0] insn_funct3 = rvfi_insn[14:12];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // SW instruction
@@ -3887,6 +3892,7 @@ module riscv_rvfimon_insn_xor (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // XOR instruction
@@ -3937,6 +3943,7 @@ module riscv_rvfimon_insn_xori (
   wire [4:0] insn_rd     = rvfi_insn[11: 7];
   wire [6:0] insn_opcode = rvfi_insn[ 6: 0];
 
+  wire ialign16 = 1;
   wire misa_ok = 1;
 
   // XORI instruction

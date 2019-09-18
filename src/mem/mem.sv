@@ -114,10 +114,10 @@ always_ff @(posedge clk)
 
 initial
   begin
-    $readmemh("../../tests/debug/debug_3.v", mem_array_3);
-    $readmemh("../../tests/debug/debug_2.v", mem_array_2);
-    $readmemh("../../tests/debug/debug_1.v", mem_array_1);
-    $readmemh("../../tests/debug/debug_0.v", mem_array_0);
+    $readmemh("../../tests/demo/demo_3.v", mem_array_3);
+    $readmemh("../../tests/demo/demo_2.v", mem_array_2);
+    $readmemh("../../tests/demo/demo_1.v", mem_array_1);
+    $readmemh("../../tests/demo/demo_0.v", mem_array_0);
   end
 
 endmodule
