@@ -4,7 +4,7 @@ int main(void) {
   int a,b,c;
   a = 1;
   b = 1;
-  while(a<3000) {
+  while(a<15) {
     c = b;
     b = a;
     a = b + c;

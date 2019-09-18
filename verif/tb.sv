@@ -1,4 +1,5 @@
 `timescale 1ns / 1ns
+
 module tb ();
 
 //////////// CLOCK //////////
@@ -38,6 +39,33 @@ logic  [23:0]   HDMI_TX_D;
 logic           HDMI_TX_HS;
 logic           HDMI_TX_INT;
 logic           HDMI_TX_VS;
+
+logic clk;
+logic rst;
+
+logic [0:0] rvfi_valid;
+logic [63:0] rvfi_order;
+logic [31:0] rvfi_insn;
+logic [0:0] rvfi_trap;
+logic [0:0] rvfi_halt;
+logic [0:0] rvfi_intr;
+logic [1:0] rvfi_mode;
+logic [4:0] rvfi_rs1_addr;
+logic [4:0] rvfi_rs2_addr;
+logic [31:0] rvfi_rs1_rdata;
+logic [31:0] rvfi_rs2_rdata;
+logic [4:0] rvfi_rd_addr;
+logic [31:0] rvfi_rd_wdata;
+logic [31:0] rvfi_pc_rdata;
+logic [31:0] rvfi_pc_wdata;
+logic [31:0] rvfi_mem_addr;
+logic [3:0] rvfi_mem_rmask;
+logic [3:0] rvfi_mem_wmask;
+logic [31:0] rvfi_mem_rdata;
+logic [31:0] rvfi_mem_wdata;
+logic [0:0] rvfi_mem_extamo;
+
+logic [15:0] errcode;
 
 logic reset_en;
 logic reset_n;
@@ -82,8 +110,69 @@ de10nano dut (
 .HDMI_TX_D,
 .HDMI_TX_HS,
 .HDMI_TX_INT,
-.HDMI_TX_VS
+.HDMI_TX_VS,
 
+.rvfi_valid             ,
+.rvfi_order             ,
+.rvfi_insn              ,
+.rvfi_trap              ,
+.rvfi_halt              ,
+.rvfi_intr              ,
+.rvfi_mode              ,
+//.rvfi_ixl               ,
+.rvfi_rs1_addr          ,
+.rvfi_rs2_addr          ,
+.rvfi_rs1_rdata         ,
+.rvfi_rs2_rdata         ,
+.rvfi_rd_addr           ,
+.rvfi_rd_wdata          ,
+.rvfi_pc_rdata          ,
+.rvfi_pc_wdata          ,
+.rvfi_mem_addr          ,
+.rvfi_mem_rmask         ,
+.rvfi_mem_wmask         ,
+.rvfi_mem_rdata         ,
+.rvfi_mem_wdata         ,
+                        
+//.rvfi_csr_mcycle_rmask  ,
+//.rvfi_csr_mcycle_wmask  ,
+//.rvfi_csr_mcycle_rdata  ,
+//.rvfi_csr_mcycle_wdata  ,
+//                        
+//.rvfi_csr_minstret_rmask,
+//.rvfi_csr_minstret_wmask,
+//.rvfi_csr_minstret_rdata,
+//.rvfi_csr_minstret_wdata,
+
+.clk,
+.rst
+);
+
+riscv_rvfimon monitor (
+  .clock(clk),
+  .reset(rst),
+  .rvfi_valid,
+  .rvfi_order,
+  .rvfi_insn,
+  .rvfi_trap,
+  .rvfi_halt,
+  .rvfi_intr,
+  .rvfi_mode,
+  .rvfi_rs1_addr,
+  .rvfi_rs2_addr,
+  .rvfi_rs1_rdata,
+  .rvfi_rs2_rdata,
+  .rvfi_rd_addr,
+  .rvfi_rd_wdata,
+  .rvfi_pc_rdata,
+  .rvfi_pc_wdata,
+  .rvfi_mem_addr,
+  .rvfi_mem_rmask,
+  .rvfi_mem_wmask,
+  .rvfi_mem_rdata,
+  .rvfi_mem_wdata,
+  //.rvfi_mem_extamo,
+  .errcode
 );
 
 //initial

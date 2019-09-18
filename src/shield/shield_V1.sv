@@ -9,12 +9,16 @@ input  logic           i_bus_ack,
 input  logic           i_bus_write,
 input  logic [31:0]    i_bus_addr,
 input  logic [31:0]    i_bus_data,
+input  logic  [3:0]    i_bus_data_rd_mask,
+input  logic  [3:0]    i_bus_data_wr_mask,
 
 output logic           o_bus_req,
 output logic           o_bus_ack,
 output logic           o_bus_write,
 output logic [31:0]    o_bus_addr,
 output logic [31:0]    o_bus_data,
+output logic  [3:0]    o_bus_data_rd_mask,
+output logic  [3:0]    o_bus_data_wr_mask,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -81,12 +85,16 @@ joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
   .i_bus_write (i_bus_write), 
   .i_bus_addr  (i_bus_addr),  
   .i_bus_data  (i_bus_data),
+  .i_bus_data_rd_mask  (i_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (i_bus_data_wr_mask),
 
   .o_bus_req   (joystick_display_bus_req),   
   .o_bus_ack   (joystick_display_bus_ack),   
   .o_bus_write (joystick_display_bus_write), 
   .o_bus_addr  (joystick_display_bus_addr),  
-  .o_bus_data  (joystick_display_bus_data)
+  .o_bus_data  (joystick_display_bus_data),
+  .o_bus_data_rd_mask  (joystick_display_bus_data_rd_mask) ,
+  .o_bus_data_wr_mask  (joystick_display_bus_data_wr_mask)
 );
 
 
@@ -106,11 +114,15 @@ st7735r #(.SIZE(8),.ADDR_BASE(32'hC2000000))  display (
   .i_bus_write (joystick_display_bus_write), 
   .i_bus_addr  (joystick_display_bus_addr),  
   .i_bus_data  (joystick_display_bus_data),
+  .i_bus_data_rd_mask  (joystick_display_bus_data_rd_mask) ,
+  .i_bus_data_wr_mask  (joystick_display_bus_data_wr_mask),
 
   .o_bus_req   (o_bus_req),   
   .o_bus_ack   (o_bus_ack),   
   .o_bus_write (o_bus_write), 
   .o_bus_addr  (o_bus_addr),  
-  .o_bus_data  (o_bus_data)
+  .o_bus_data  (o_bus_data),
+  .o_bus_data_rd_mask  (o_bus_data_rd_mask) ,
+  .o_bus_data_wr_mask  (o_bus_data_wr_mask)
 );
 endmodule

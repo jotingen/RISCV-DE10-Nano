@@ -38,79 +38,79 @@ module riscv_alu (
   output reg   [63:0] rvfi_csr_minstret_wdata,
 `endif
 
-
-  input  logic        idu_vld,
-  input  logic [31:0] inst,
-  input  logic  [3:0] fm,
-  input  logic  [3:0] pred,
-  input  logic  [3:0] succ,
-  input  logic  [4:0] shamt,
-  input  logic [31:0] imm,
-  input  logic  [4:0] uimm,
-  input  logic [11:0] csr,
-  input  logic  [6:0] funct7,
-  input  logic  [2:0] funct3,
-  input  logic  [4:0] rs2,
-  input  logic  [4:0] rs1,
-  input  logic  [4:0] rd,
-  input  logic  [6:0] opcode,
-
   output logic        alu_vld,
+  output logic        alu_retired,
+  output logic        alu_freeze,
   output logic [31:0] alu_inst,
   output logic        alu_br_miss,
-  output logic [31:0] alu_addr,
-  
-  input  logic LUI,
-  input  logic AUIPC,
-  input  logic JAL,
-  input  logic JALR,
-  input  logic BEQ,
-  input  logic BNE,
-  input  logic BLT,
-  input  logic BGE,
-  input  logic BLTU,
-  input  logic BGEU,
-  input  logic LB,
-  input  logic LH,
-  input  logic LW,
-  input  logic LBU,
-  input  logic LHU,
-  input  logic SB,
-  input  logic SH,
-  input  logic SW,
-  input  logic ADDI,
-  input  logic SLTI,
-  input  logic SLTIU,
-  input  logic XORI,
-  input  logic ORI,
-  input  logic ANDI,
-  input  logic SLLI,
-  input  logic SRLI,
-  input  logic SRAI,
-  input  logic ADD,
-  input  logic SUB,
-  input  logic SLL,
-  input  logic SLT,
-  input  logic SLTU,
-  input  logic XOR,
-  input  logic SRL,
-  input  logic SRA,
-  input  logic OR,
-  input  logic AND,
-  input  logic FENCE,
-  input  logic FENCE_I,
-  input  logic ECALL,
-  input  logic CSRRW,
-  input  logic CSRRS,
-  input  logic CSRRC,
-  input  logic CSRRWI,
-  input  logic CSRRSI,
-  input  logic CSRRCI,
-  input  logic EBREAK,
-  input  logic TRAP,
+  output logic        alu_trap,
+  output logic [31:0] alu_PC_next,
 
-  output logic              PC_wr,
-  output logic [31:0]       PC_in,
+  input  logic        idu_vld,
+  input  logic [31:0] idu_inst,
+  input  logic [31:0] idu_inst_PC,
+  input  logic  [3:0] idu_decode_fm,
+  input  logic  [3:0] idu_decode_pred,
+  input  logic  [3:0] idu_decode_succ,
+  input  logic  [4:0] idu_decode_shamt,
+  input  logic [31:0] idu_decode_imm,
+  input  logic  [4:0] idu_decode_uimm,
+  input  logic [11:0] idu_decode_csr,
+  input  logic  [6:0] idu_decode_funct7,
+  input  logic  [2:0] idu_decode_funct3,
+  input  logic  [4:0] idu_decode_rs2,
+  input  logic  [4:0] idu_decode_rs1,
+  input  logic  [4:0] idu_decode_rd,
+  input  logic  [6:0] idu_decode_opcode,
+
+  input  logic idu_decode_LUI,
+  input  logic idu_decode_AUIPC,
+  input  logic idu_decode_JAL,
+  input  logic idu_decode_JALR,
+  input  logic idu_decode_BEQ,
+  input  logic idu_decode_BNE,
+  input  logic idu_decode_BLT,
+  input  logic idu_decode_BGE,
+  input  logic idu_decode_BLTU,
+  input  logic idu_decode_BGEU,
+  input  logic idu_decode_LB,
+  input  logic idu_decode_LH,
+  input  logic idu_decode_LW,
+  input  logic idu_decode_LBU,
+  input  logic idu_decode_LHU,
+  input  logic idu_decode_SB,
+  input  logic idu_decode_SH,
+  input  logic idu_decode_SW,
+  input  logic idu_decode_ADDI,
+  input  logic idu_decode_SLTI,
+  input  logic idu_decode_SLTIU,
+  input  logic idu_decode_XORI,
+  input  logic idu_decode_ORI,
+  input  logic idu_decode_ANDI,
+  input  logic idu_decode_SLLI,
+  input  logic idu_decode_SRLI,
+  input  logic idu_decode_SRAI,
+  input  logic idu_decode_ADD,
+  input  logic idu_decode_SUB,
+  input  logic idu_decode_SLL,
+  input  logic idu_decode_SLT,
+  input  logic idu_decode_SLTU,
+  input  logic idu_decode_XOR,
+  input  logic idu_decode_SRL,
+  input  logic idu_decode_SRA,
+  input  logic idu_decode_OR,
+  input  logic idu_decode_AND,
+  input  logic idu_decode_FENCE,
+  input  logic idu_decode_FENCE_I,
+  input  logic idu_decode_ECALL,
+  input  logic idu_decode_CSRRW,
+  input  logic idu_decode_CSRRS,
+  input  logic idu_decode_CSRRC,
+  input  logic idu_decode_CSRRWI,
+  input  logic idu_decode_CSRRSI,
+  input  logic idu_decode_CSRRCI,
+  input  logic idu_decode_EBREAK,
+  input  logic idu_decode_TRAP,
 
   output logic [31:0]       x_wr,
   output logic [31:0]       x00_in,
@@ -196,7 +196,8 @@ module riscv_alu (
   input  logic [31:0]      bus_data_rd
 );
 
-logic [31:0] PC_orig;
+logic [31:0] alu_PC;
+logic [31:0] alu_PC_orig;
 logic [31:0] PC_next_PC_imm20;
 logic [31:0] PC_next_PC_imm12;
 logic [31:0] PC_next_rs1_imm11;
@@ -205,7 +206,6 @@ logic [31:0] rs1_data;
 logic [31:0] rs2_data;
 logic [31:0] rd_data;
 
-logic        alu_retired;
 logic  [3:0] alu_fm;
 logic  [3:0] alu_pred;
 logic  [3:0] alu_succ;
@@ -222,15 +222,65 @@ logic  [6:0] alu_opcode;
 logic [31:0] alu_rs1_data;
 logic [31:0] alu_rs2_data;
 logic [31:0] alu_rd_data;
-logic        alu_trap;
+
+logic alu_LUI;
+logic alu_AUIPC;
+logic alu_JAL;
+logic alu_JALR;
+logic alu_BEQ;
+logic alu_BNE;
+logic alu_BLT;
+logic alu_BGE;
+logic alu_BLTU;
+logic alu_BGEU;
+logic alu_LB;
+logic alu_LH;
+logic alu_LW;
+logic alu_LBU;
+logic alu_LHU;
+logic alu_SB;
+logic alu_SH;
+logic alu_SW;
+logic alu_ADDI;
+logic alu_SLTI;
+logic alu_SLTIU;
+logic alu_XORI;
+logic alu_ORI;
+logic alu_ANDI;
+logic alu_SLLI;
+logic alu_SRLI;
+logic alu_SRAI;
+logic alu_ADD;
+logic alu_SUB;
+logic alu_SLL;
+logic alu_SLT;
+logic alu_SLTU;
+logic alu_XOR;
+logic alu_SRL;
+logic alu_SRA;
+logic alu_OR;
+logic alu_AND;
+logic alu_FENCE;
+logic alu_FENCE_I;
+logic alu_ECALL;
+logic alu_CSRRW;
+logic alu_CSRRS;
+logic alu_CSRRC;
+logic alu_CSRRWI;
+logic alu_CSRRSI;
+logic alu_CSRRCI;
+logic alu_EBREAK;
+logic alu_TRAP;
 
 logic [31:0] addr;
+
+logic [31:0] mem_rdata;
 
 //Map out registers
 always_comb
   begin
   unique
-  case(rs1)
+  case(alu_rs1)
     'd00: rs1_data = x00;
     'd01: rs1_data = x01;
     'd02: rs1_data = x02;
@@ -265,7 +315,7 @@ always_comb
     'd31: rs1_data = x31;
   endcase
   unique
-  case(rs2)
+  case(alu_rs2)
     'd00: rs2_data = x00;
     'd01: rs2_data = x01;
     'd02: rs2_data = x02;
@@ -332,7 +382,7 @@ always_comb
   x30_in = '0;
   x31_in = '0;
   unique
-  case(rd)
+  case(alu_rd)
     'd00: x00_in = rd_data;
     'd01: x01_in = rd_data;
     'd02: x02_in = rd_data;
@@ -370,21 +420,33 @@ always_comb
 
 always_comb
   begin
-  PC_next_PC_imm20 = PC_in+{{11{imm[20]}},imm[20:0]};
-  PC_next_PC_imm12 = PC_in+{{19{imm[12]}},imm[12:0]};
-  PC_next_rs1_imm11 = (rs1_data+{{20{imm[11]}},imm[11:0]}) & 32'hFFFFFFFE;
+  PC_next_PC_imm20 = alu_PC+{{11{alu_imm[20]}},alu_imm[20:0]};
+  PC_next_PC_imm12 = alu_PC+{{19{alu_imm[12]}},alu_imm[12:0]};
+  PC_next_rs1_imm11 = (rs1_data+{{20{alu_imm[11]}},alu_imm[11:0]}) & 32'hFFFFFFFE;
   end
 
 logic [3:0] cnt;
 always_ff @(posedge clk)
   begin
+  //if(alu_vld & alu_trap)
+  //  $fatal();
 
-  alu_vld <= '0;
+  alu_vld <= alu_vld;
   alu_retired <= '0;
+  alu_freeze <= alu_freeze;
+  alu_br_miss <= '0;
 
-  PC_wr <= '0;
-  PC_orig <= PC_in;
-  PC_in <= PC_in;
+  //if(alu_retired)
+  //  begin
+  //  alu_vld <= '0;
+  //  alu_retired <= '0;
+  //  alu_freeze <= '0;
+  //  alu_br_miss <= '0;
+  //  end
+
+  alu_PC_orig <= alu_PC;
+  alu_PC <= alu_PC;
+  alu_PC_next <= alu_PC_next;
   x_wr  <= '0;
   rd_data <= rd_data;
 
@@ -395,910 +457,958 @@ always_ff @(posedge clk)
   csr_data_wr  <= '0;
 
   bus_req   <= '0;
-  bus_write <= '0;
-  bus_addr  <= '0;
-  bus_data_wr  <= '0 ;
-  bus_data_rd_mask <= '0;
-  bus_data_wr_mask <= '0;
+  bus_write <= bus_write;
+  bus_addr  <= bus_addr;
+  bus_data_wr  <= bus_data_wr;
+  bus_data_rd_mask <= bus_data_rd_mask;
+  bus_data_wr_mask <= bus_data_wr_mask;
 
-  alu_inst       <= inst;  
-  alu_br_miss    <= '0;
-  alu_fm         <= fm;    
-  alu_pred       <= pred;  
-  alu_succ       <= succ;  
-  alu_shamt      <= shamt; 
-  alu_imm        <= imm;   
-  alu_uimm       <= uimm;  
-  alu_csr        <= csr;   
-  alu_funct7     <= funct7;
-  alu_funct3     <= funct3;
-  alu_rs2        <= rs2;   
-  alu_rs1        <= rs1;   
-  alu_rd         <= rd;    
-  alu_opcode     <= opcode;
   alu_rs2_data   <= rs2_data;  
   alu_rs1_data   <= rs1_data;  
-  //alu_rd_data    <= rd_data;   
+  alu_rd_data    <= rd_data;   
   alu_trap       <= '0;   
 
-  if((idu_vld && ~alu_br_miss) || cnt != 'd0)
+  alu_inst    <= alu_inst;      
+  alu_fm      <= alu_fm;        
+  alu_pred    <= alu_pred;      
+  alu_succ    <= alu_succ;      
+  alu_shamt   <= alu_shamt;     
+  alu_imm     <= alu_imm;       
+  alu_uimm    <= alu_uimm;      
+  alu_csr     <= alu_csr;       
+  alu_funct7  <= alu_funct7;    
+  alu_funct3  <= alu_funct3;    
+  alu_rs2     <= alu_rs2;       
+  alu_rs1     <= alu_rs1;       
+  alu_rd      <= alu_rd;        
+  alu_opcode  <= alu_opcode;    
+                                 
+  alu_LUI     <= alu_LUI;       
+  alu_AUIPC   <= alu_AUIPC;     
+  alu_JAL     <= alu_JAL;       
+  alu_JALR    <= alu_JALR;      
+  alu_BEQ     <= alu_BEQ;       
+  alu_BNE     <= alu_BNE;       
+  alu_BLT     <= alu_BLT;       
+  alu_BGE     <= alu_BGE;       
+  alu_BLTU    <= alu_BLTU;      
+  alu_BGEU    <= alu_BGEU;      
+  alu_LB      <= alu_LB;        
+  alu_LH      <= alu_LH;        
+  alu_LW      <= alu_LW;        
+  alu_LBU     <= alu_LBU;       
+  alu_LHU     <= alu_LHU;       
+  alu_SB      <= alu_SB;        
+  alu_SH      <= alu_SH;        
+  alu_SW      <= alu_SW;        
+  alu_ADDI    <= alu_ADDI;      
+  alu_SLTI    <= alu_SLTI;      
+  alu_SLTIU   <= alu_SLTIU;     
+  alu_XORI    <= alu_XORI;      
+  alu_ORI     <= alu_ORI;       
+  alu_ANDI    <= alu_ANDI;      
+  alu_SLLI    <= alu_SLLI;      
+  alu_SRLI    <= alu_SRLI;      
+  alu_SRAI    <= alu_SRAI;      
+  alu_ADD     <= alu_ADD;       
+  alu_SUB     <= alu_SUB;       
+  alu_SLL     <= alu_SLL;       
+  alu_SLT     <= alu_SLT;       
+  alu_SLTU    <= alu_SLTU;      
+  alu_XOR     <= alu_XOR;       
+  alu_SRL     <= alu_SRL;       
+  alu_SRA     <= alu_SRA;       
+  alu_OR      <= alu_OR;        
+  alu_AND     <= alu_AND;       
+  alu_FENCE   <= alu_FENCE;     
+  alu_FENCE_I <= alu_FENCE_I;   
+  alu_ECALL   <= alu_ECALL;     
+  alu_CSRRW   <= alu_CSRRW;     
+  alu_CSRRS   <= alu_CSRRS;     
+  alu_CSRRC   <= alu_CSRRC;     
+  alu_CSRRWI  <= alu_CSRRWI;    
+  alu_CSRRSI  <= alu_CSRRSI;    
+  alu_CSRRCI  <= alu_CSRRCI;    
+  alu_EBREAK  <= alu_EBREAK;    
+  alu_TRAP    <= alu_TRAP;      
+
+  mem_rdata <= mem_rdata;
+
+  //Capture IDU when IDU is valid and ALU is not valid or is retiring without
+  //branch miss or trap
+  if((~alu_vld | (alu_vld & alu_retired & ~(alu_br_miss | alu_trap))) & idu_vld)
     begin
+    alu_retired <= '0;
+    alu_freeze <= '0;
+    alu_br_miss <= '0;
+    alu_vld     <= idu_vld;
+    alu_inst    <= idu_inst;      
+    alu_PC      <= idu_inst_PC;      
+    alu_fm      <= idu_decode_fm;        
+    alu_pred    <= idu_decode_pred;      
+    alu_succ    <= idu_decode_succ;      
+    alu_shamt   <= idu_decode_shamt;     
+    alu_imm     <= idu_decode_imm;       
+    alu_uimm    <= idu_decode_uimm;      
+    alu_csr     <= idu_decode_csr;       
+    alu_funct7  <= idu_decode_funct7;    
+    alu_funct3  <= idu_decode_funct3;    
+    alu_rs2     <= idu_decode_rs2;       
+    alu_rs1     <= idu_decode_rs1;       
+    alu_rd      <= idu_decode_rd;        
+    alu_opcode  <= idu_decode_opcode;    
+                   
+    alu_LUI     <= idu_decode_LUI;       
+    alu_AUIPC   <= idu_decode_AUIPC;     
+    alu_JAL     <= idu_decode_JAL;       
+    alu_JALR    <= idu_decode_JALR;      
+    alu_BEQ     <= idu_decode_BEQ;       
+    alu_BNE     <= idu_decode_BNE;       
+    alu_BLT     <= idu_decode_BLT;       
+    alu_BGE     <= idu_decode_BGE;       
+    alu_BLTU    <= idu_decode_BLTU;      
+    alu_BGEU    <= idu_decode_BGEU;      
+    alu_LB      <= idu_decode_LB;        
+    alu_LH      <= idu_decode_LH;        
+    alu_LW      <= idu_decode_LW;        
+    alu_LBU     <= idu_decode_LBU;       
+    alu_LHU     <= idu_decode_LHU;       
+    alu_SB      <= idu_decode_SB;        
+    alu_SH      <= idu_decode_SH;        
+    alu_SW      <= idu_decode_SW;        
+    alu_ADDI    <= idu_decode_ADDI;      
+    alu_SLTI    <= idu_decode_SLTI;      
+    alu_SLTIU   <= idu_decode_SLTIU;     
+    alu_XORI    <= idu_decode_XORI;      
+    alu_ORI     <= idu_decode_ORI;       
+    alu_ANDI    <= idu_decode_ANDI;      
+    alu_SLLI    <= idu_decode_SLLI;      
+    alu_SRLI    <= idu_decode_SRLI;      
+    alu_SRAI    <= idu_decode_SRAI;      
+    alu_ADD     <= idu_decode_ADD;       
+    alu_SUB     <= idu_decode_SUB;       
+    alu_SLL     <= idu_decode_SLL;       
+    alu_SLT     <= idu_decode_SLT;       
+    alu_SLTU    <= idu_decode_SLTU;      
+    alu_XOR     <= idu_decode_XOR;       
+    alu_SRL     <= idu_decode_SRL;       
+    alu_SRA     <= idu_decode_SRA;       
+    alu_OR      <= idu_decode_OR;        
+    alu_AND     <= idu_decode_AND;       
+    alu_FENCE   <= idu_decode_FENCE;     
+    alu_FENCE_I <= idu_decode_FENCE_I;   
+    alu_ECALL   <= idu_decode_ECALL;     
+    alu_CSRRW   <= idu_decode_CSRRW;     
+    alu_CSRRS   <= idu_decode_CSRRS;     
+    alu_CSRRC   <= idu_decode_CSRRC;     
+    alu_CSRRWI  <= idu_decode_CSRRWI;    
+    alu_CSRRSI  <= idu_decode_CSRRSI;    
+    alu_CSRRCI  <= idu_decode_CSRRCI;    
+    alu_EBREAK  <= idu_decode_EBREAK;    
+    alu_TRAP    <= idu_decode_TRAP;      
+    bus_req   <= '0;
+    bus_write <= '0;
+    bus_addr  <= '0;
+    bus_data_wr  <= '0;
+    bus_data_rd_mask <= '0;
+    bus_data_wr_mask <= '0;
+    end
+  //Else turn off if retiring
+  else if(alu_vld & alu_retired)
+    begin
+    alu_retired <= '0;
+    alu_freeze <= '0;
+    alu_br_miss <= '0;
+    alu_vld     <= '0;
+    end
+
+  if(alu_vld & ~alu_retired)
+    begin
+
+
     unique
     case (1'b1)
-      ADD : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "ADD", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data + rs2_data;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SLT : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLT", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            if($signed(rs1_data) < $signed(rs2_data))
-              rd_data <= 'd1;
-            else
-              rd_data <= 'd0;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SLTU : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLTU", PC, rs1, rs1_data, rs2, rs2_data, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             if(rs1_data < rs2_data)
-               rd_data <= 'd1;
-             else
-               rd_data <= 'd0;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      AND : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "AND", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data & rs2_data;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      OR : begin
-           //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "OR", PC, rs1, rs1_data, rs2, rs2_data, rd);
-           alu_vld <= '1;
-           alu_retired <= '1;
-           x_wr[rd] <= '1;
-           rd_data <= rs1_data | rs2_data;
-           PC_wr <= '1;
-           PC_in <= PC_in+'d4;
-           end
-      XOR : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "XOR", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data ^ rs2_data;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SLL : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLL", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data << rs2_data[4:0];
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SRL : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRL", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data >> rs2_data[4:0];
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SUB : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SUB", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data - rs2_data;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      SRA : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRA", PC, rs1, rs1_data, rs2, rs2_data, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data >>> rs2_data;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-
-
-      ADDI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ADDI", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data + {{20{imm[11]}},imm[11:0]};
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      SLTI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTI", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             if($signed(rs1_data) < $signed({{20{imm[11]}},imm[11:0]}))
-               rd_data <= 'd1;
-             else
-               rd_data <= 'd0;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      SLTIU : begin
-              //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTIU", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-              alu_vld <= '1;
-             alu_retired <= '1;
-              x_wr[rd] <= '1;
-              if(rs1_data < {{20{imm[11]}},imm[11:0]})
-                rd_data <= 'd1;
-              else
-                rd_data <= 'd0;
-              PC_wr <= '1;
-              PC_in <= PC_in+'d4;
-              end
-      ANDI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ANDI", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data & {{20{imm[11]}},imm[11:0]};
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      ORI : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ORI", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= rs1_data | {{20{imm[11]}},imm[11:0]};
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      XORI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "XORI", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data ^ {{20{imm[11]}},imm[11:0]};
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      SLLI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLLI", PC, rs1, rs1_data, {{27{'0}},imm[4:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data << imm[4:0];
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      SRLI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRLI", PC, rs1, rs1_data, {{27{'0}},imm[4:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data >> imm[4:0];
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-      SRAI : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRAI", PC, rs1, rs1_data, imm[4:0], rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= rs1_data >>> imm;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             end
-
-
-      JAL : begin
-            if(imm!='0 || rd!='0)
-              //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{imm[20]}},imm[20:0]}, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            PC_wr <= '1;
-            PC_in <= PC_next_PC_imm20;
-            if(PC_next_PC_imm20[1:0] != '0)
-              begin
-              alu_trap <= '1;
-              PC_wr <= '0;
-              end
-            else
-              begin
-              x_wr[rd] <= '1;
-              rd_data <= PC_in+'d4;
-              alu_br_miss <= '1;
-              end
-            end
-      JALR : begin
-             //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             PC_in <= PC_next_rs1_imm11;
-             if(PC_next_rs1_imm11[1:0] != '0)
-               begin
-               alu_trap <= '1;
-               PC_wr <= '0;
-               end
-             else
-               begin
-               x_wr[rd] <= '1;
-               rd_data <= PC_in+'d4;
-               alu_br_miss <= '1;
-               end
-             end
-
-
-      BEQ : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BEQ", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-            alu_vld <= '1;
-            alu_retired <= '1;
-            PC_wr <= '1;
-            if(rs1_data == rs2_data)
-              begin
-              PC_in <= PC_next_PC_imm12;
-              if(PC_next_PC_imm12[1:0] != '0)
-                begin
-                alu_trap <= '1;
-                PC_wr <= '0;
+      alu_ADD : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "ADD", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data + rs2_data;
+                alu_PC <= alu_PC+'d4;
                 end
-              alu_br_miss <= '1;
-              end
-            else                  
-              PC_in <= PC_in+'d4;
-            end
-      BNE : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-            alu_vld <= '1;
-            alu_retired <= '1;
-            PC_wr <= '1;
-            if(rs1_data != rs2_data)
-              begin
-              PC_in <= PC_next_PC_imm12;
-              if(PC_next_PC_imm12[1:0] != '0)
-                begin
-                alu_trap <= '1;
-                PC_wr <= '0;
+      alu_SLT : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLT", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                if($signed(rs1_data) < $signed(rs2_data))
+                  rd_data <= 'd1;
+                else
+                  rd_data <= 'd0;
+                alu_PC <= alu_PC+'d4;
                 end
-              alu_br_miss <= '1;
-              end
-            else                  
-              PC_in <= PC_in+'d4;
-            end
-      BLT : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-            alu_vld <= '1;
-            alu_retired <= '1;
-            PC_wr <= '1;
-            if($signed(rs1_data) < $signed(rs2_data))
-              begin
-              PC_in <= PC_next_PC_imm12;
-              if(PC_next_PC_imm12[1:0] != '0)
-                begin
-                alu_trap <= '1;
-                PC_wr <= '0;
-                end
-              alu_br_miss <= '1;
-              end
-            else                  
-              PC_in <= PC_in+'d4;
-            end
-      BLTU : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             if(rs1_data < rs2_data)
-              begin
-              PC_in <= PC_next_PC_imm12;
-              if(PC_next_PC_imm12[1:0] != '0)
-                begin
-                alu_trap <= '1;
-                PC_wr <= '0;
-                end
-              alu_br_miss <= '1;
-              end
-             else                  
-               PC_in <= PC_in+'d4;
-             end
-      BGE : begin
-            //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-            alu_vld <= '1;
-            alu_retired <= '1;
-            PC_wr <= '1;
-            if($signed(rs1_data) >= $signed(rs2_data))
-              begin
-              PC_in <= PC_next_PC_imm12;
-              if(PC_next_PC_imm12[1:0] != '0)
-                begin
-                alu_trap <= '1;
-                PC_wr <= '0;
-                end
-              alu_br_miss <= '1;
-              end
-            else                  
-              PC_in <= PC_in+'d4;
-            end
-      BGEU : begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, rs1, rs1_data, rs2, rs2_data, {{19{imm[12]}},imm[12:0]});
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             if(rs1_data >= rs2_data)
-              begin
-               PC_in <= PC_next_PC_imm12;
-               if(PC_next_PC_imm12[1:0] != '0)
-                 begin
-                 alu_trap <= '1;
-                 PC_wr <= '0;
+      alu_SLTU : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLTU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 if(rs1_data < rs2_data)
+                   rd_data <= 'd1;
+                 else
+                   rd_data <= 'd0;
+                 alu_PC <= alu_PC+'d4;
                  end
-              alu_br_miss <= '1;
-              end
-             else                  
-               PC_in <= PC_in+'d4;
-             end
-
-
-      LUI : begin
-            //$display("%-5s PC=%08X imm=%08X rd=(%d)", "LUI", PC, imm, rd);
-            alu_vld <= '1;
-            alu_retired <= '1;
-            x_wr[rd] <= '1;
-            rd_data <= imm;
-            PC_wr <= '1;
-            PC_in <= PC_in+'d4;
-            end
-      AUIPC : begin
-              //$display("%-5s PC=%08X imm=%08X rd=(%d)", "AUIPC", PC, imm, rd);
-              alu_vld <= '1;
-              alu_retired <= '1;
-              x_wr[rd] <= '1;
-              rd_data <= PC_in + imm;
-              PC_wr <= '1;
-              PC_in <= PC_in+'d4;
-              end
-
-
-      LB : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '0;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1:0])
-               'b00: bus_data_rd_mask <= 'b0001;
-               'b01: bus_data_rd_mask <= 'b0010;
-               'b10: bus_data_rd_mask <= 'b0100;
-               'b11: bus_data_rd_mask <= 'b1000;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             unique
-             case(addr[1:0])
-               'b00: rd_data <= {{24{bus_data_rd[7]}},bus_data_rd[7:0]};
-               'b01: rd_data <= {{24{bus_data_rd[15]}},bus_data_rd[15:8]};
-               'b10: rd_data <= {{24{bus_data_rd[23]}},bus_data_rd[23:16]};
-               'b11: rd_data <= {{24{bus_data_rd[31]}},bus_data_rd[31:24]};
-             endcase
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           else
-             begin
-             cnt <= cnt + 1;
-             end
-           end
-      LBU : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '0;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1:0])
-               'b00: bus_data_rd_mask <= 'b0001;
-               'b01: bus_data_rd_mask <= 'b0010;
-               'b10: bus_data_rd_mask <= 'b0100;
-               'b11: bus_data_rd_mask <= 'b1000;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             unique
-             case(addr[1:0])
-               'b00: rd_data <= {{24{'0}},bus_data_rd[7:0]};
-               'b01: rd_data <= {{24{'0}},bus_data_rd[15:8]};
-               'b10: rd_data <= {{24{'0}},bus_data_rd[23:16]};
-               'b11: rd_data <= {{24{'0}},bus_data_rd[31:24]};
-             endcase
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           else
-             begin
-             cnt <= cnt + 1;
-             end
-           end
-      LH : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '0;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1])
-               'b0: bus_data_rd_mask <= 'b0011;
-               'b1: bus_data_rd_mask <= 'b1100;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             unique
-             case(addr[1:0])
-               'b0: rd_data <= {{16{bus_data_rd[15]}},bus_data_rd[15:0]};
-               'b1: rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
-             endcase
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           else
-             begin
-             cnt <= cnt + 1;
-             end
-           end
-      LHU : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '0;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1])
-               'b0: bus_data_rd_mask <= 'b0011;
-               'b1: bus_data_rd_mask <= 'b1100;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             unique
-             case(addr[1:0])
-               'b0: rd_data <= {{16{'0}},bus_data_rd[15:0]};
-               'b1: rd_data <= {{16{'0}},bus_data_rd[31:16]};
-             endcase
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           else
-             begin
-             cnt <= cnt + 1;
-             end
-           end
-      LW : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '0;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             bus_data_rd_mask <= 'b1111;
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, rs1, rs1_data, {{20{imm[11]}},imm[11:0]}, rd);
-             alu_vld <= '1;
-             alu_retired <= '1;
-             x_wr[rd] <= '1;
-             rd_data <= bus_data_rd;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           else
-             begin
-             cnt <= cnt + 1;
-             end
-           end
-      SB : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1:0])
-               'b00: bus_data_wr  <= {{24{'0}},rs2_data[7:0]};
-               'b01: bus_data_wr  <= {{16{'0}},rs2_data[7:0],{8 {'0}}};
-               'b10: bus_data_wr  <= {{ 8{'0}},rs2_data[7:0],{16{'0}}};
-               'b11: bus_data_wr  <= {         rs2_data[7:0],{24{'0}}};
-             endcase
-             unique
-             case(addr[1:0])
-               'b00: bus_data_wr_mask <= 'b0001;
-               'b01: bus_data_wr_mask <= 'b0010;
-               'b10: bus_data_wr_mask <= 'b0100;
-               'b11: bus_data_wr_mask <= 'b1000;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, rs1_data, rs2, rs2_data, {{20{imm[11]}},imm[11:0]});
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           end
-      SH : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             unique
-             case(addr[1:0])
-               'b0: bus_data_wr  <= {{16{'0}},rs2_data[15:0]};
-               'b1: bus_data_wr  <= {         rs2_data[15:0],{16{'0}}};
-             endcase
-             unique
-             case(addr[1:0])
-               'b0: bus_data_wr_mask <= 'b0011;
-               'b1: bus_data_wr_mask <= 'b1100;
-             endcase
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, rs1_data, rs2, rs2_data, {{20{imm[11]}},imm[11:0]});
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           end
-      SW : begin
-           if(cnt=='d0)
-             begin
-             bus_req   <= '1;
-             bus_write <= '1;
-             addr  = rs1_data + { {20{imm[11]}}, imm[11:0]};
-             bus_addr  <= addr;
-             bus_data_wr  <= rs2_data;
-             bus_data_wr_mask <= 'b1111;
-             cnt <= cnt + 1;
-             end
-           else if(bus_ack)
-             begin
-             //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, rs1, rs1_data, rs2, rs2_data, {{20{imm[11]}},imm[11:0]});
-             alu_vld <= '1;
-             alu_retired <= '1;
-             PC_wr <= '1;
-             PC_in <= PC_in+'d4;
-             cnt <= '0;
-             end
-           end
-
-
-      FENCE : begin
-              //$display("%-5s PC=%08X" , "FENCE", PC);
-              //TODO
-              alu_vld <= '1;
-              PC_wr <= '1;
-              PC_in <= PC_in+'d4;
-              end
-
-
-
-      ECALL : begin
-              //$display("%-5s PC=%08X" , "ECALL - !!TODO!!", PC);
-              alu_vld <= '1;
-              alu_retired <= '1;
-              PC_wr <= '1;
-              PC_in <= PC_in+'d4;
-              end
-      CSRRW : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                csr_write <= '1;
-                csr_addr  <= csr;
-                csr_mask  <= '1;
-                csr_data_wr  <= rs1_data;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRW", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
+      alu_AND : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "AND", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
                 alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data & rs2_data;
+                alu_PC <= alu_PC+'d4;
                 end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      CSRRS : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                if(rs1 != '0)
-                  begin
-                  csr_write <= '1;
-                  end
-                else
-                  begin
-                  csr_write <= '0;
-                  end
-                csr_addr  <= csr;
-                csr_mask  <= rs1_data;
-                csr_data_wr  <= '1;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
-                alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
-                end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      CSRRC : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                if(rs1 != '0)
-                  begin
-                  csr_write <= '1;
-                  end
-                else
-                  begin
-                  csr_write <= '0;
-                  end
-                csr_addr  <= csr;
-                csr_mask  <= rs1_data;
-                csr_data_wr  <= '0;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
-                alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
-                end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      CSRRWI : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                csr_write <= '1;
-                csr_addr  <= csr;
-                csr_mask  <= '1;
-                csr_data_wr  <= '0;
-                csr_data_wr[4:0]  <= uimm;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRWI", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
-                alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
-                end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      CSRRSI : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                if(uimm != '0)
-                  begin
-                  csr_write <= '1;
-                  end
-                else
-                  begin
-                  csr_write <= '0;
-                  end
-                csr_addr  <= csr;
-                csr_mask  <= '1;
-                csr_data_wr  <= '0;
-                csr_data_wr[4:0]  <= uimm;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRSI", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
-                alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
-                end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      CSRRCI : begin
-              if(cnt=='d0)
-                begin
-                csr_req   <= '1;
-                if(uimm != '0)
-                  begin
-                  csr_write <= '1;
-                  end
-                else
-                  begin
-                  csr_write <= '0;
-                  end
-                csr_addr  <= csr;
-                csr_mask  <= '1;
-                csr_data_wr  <= '0;
-                csr_data_wr[4:0]  <= uimm;
-                cnt <= cnt + 1;
-                end
-              else if(cnt=='d2)
-                begin
-                //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRCI", csr, rs1, rs1_data, rd);
-                alu_vld <= '1;
-                alu_retired <= '1;
-                x_wr[rd] <= '1;
-                rd_data <= '0;
-                rd_data <= csr_data_rd;
-                PC_wr <= '1;
-                PC_in <= PC_in+'d4;
-                cnt <= '0;
-                end
-              else
-                begin
-                cnt <= cnt + 1;
-                end
-              end
-      EBREAK : begin
-               //TODO
-               //$display("%-5s PC=%08X" , "EBREAK - !!TODO!!", PC);
-               alu_vld <= '1;
+      alu_OR : begin
+               //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "OR", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
                alu_retired <= '1;
-               PC_wr <= '1;
-               PC_in <= PC_in+'d4;
+               x_wr[alu_rd] <= '1;
+               rd_data <= rs1_data | rs2_data;
+               alu_PC <= alu_PC+'d4;
                end
-      TRAP :   begin
-               //TODO
-               //$display("%-5s PC=%08X" , "TRAP - !!TODO!!", PC);
-               alu_vld <= '1;
-               alu_retired <= '1;
-               alu_trap <= '1;
-               PC_wr <= '0;
+      alu_XOR : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "XOR", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data ^ rs2_data;
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_SLL : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SLL", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data << rs2_data[4:0];
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_SRL : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRL", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data >> rs2_data[4:0];
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_SUB : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SUB", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data - rs2_data;
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_SRA : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X rd=(%d)", "SRA", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data >>> rs2_data;
+                alu_PC <= alu_PC+'d4;
+                end
+
+
+      alu_ADDI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ADDI", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data + {{20{alu_imm[11]}},alu_imm[11:0]};
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_SLTI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTI", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 if($signed(rs1_data) < $signed({{20{alu_imm[11]}},alu_imm[11:0]}))
+                   rd_data <= 'd1;
+                 else
+                   rd_data <= 'd0;
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_SLTIU : begin
+                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLTIU", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                  x_wr[alu_rd] <= '1;
+                  if(rs1_data < {{20{alu_imm[11]}},alu_imm[11:0]})
+                    rd_data <= 'd1;
+                  else
+                    rd_data <= 'd0;
+                  alu_PC <= alu_PC+'d4;
+                  end
+      alu_ANDI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ANDI", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data & {{20{alu_imm[11]}},alu_imm[11:0]};
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_ORI : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "ORI", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= rs1_data | {{20{alu_imm[11]}},alu_imm[11:0]};
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_XORI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "XORI", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data ^ {{20{alu_imm[11]}},alu_imm[11:0]};
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_SLLI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SLLI", PC, alu_rs1, rs1_data, {{27{'0}},alu_imm[4:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data << alu_imm[4:0];
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_SRLI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRLI", PC, alu_rs1, rs1_data, {{27{'0}},alu_imm[4:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data >> alu_imm[4:0];
+                 alu_PC <= alu_PC+'d4;
+                 end
+      alu_SRAI : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRAI", PC, alu_rs1, rs1_data, alu_imm[4:0], alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= rs1_data >>> alu_imm;
+                 alu_PC <= alu_PC+'d4;
+                 end
+
+
+      alu_JAL : begin
+                //if(alu_imm!='0 || alu_rd!='0)
+                //  $display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{alu_imm[20]}},alu_imm[20:0]}, alu_rd);
+                alu_retired <= '1;
+                alu_PC <= PC_next_PC_imm20;
+                x_wr[alu_rd] <= '1;
+                if(PC_next_PC_imm20[1:0] != '0)
+                  begin
+                  alu_trap <= '1;
+                  end
+                else
+                  begin
+                  rd_data <= alu_PC+'d4;
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm20;
+                  end
+                end
+      alu_JALR : begin
+                 //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 alu_PC <= PC_next_rs1_imm11;
+                 x_wr[alu_rd] <= '1;
+                 if(PC_next_rs1_imm11[1:0] != '0)
+                   begin
+                   alu_trap <= '1;
+                   end
+                 else
+                   begin
+                   rd_data <= alu_PC+'d4;
+                   alu_br_miss <= '1;
+                   alu_PC_next <= PC_next_rs1_imm11;
+                   end
+                 end
+
+
+      alu_BEQ : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BEQ", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                alu_retired <= '1;
+                if(rs1_data == rs2_data)
+                  begin
+                  alu_PC <= PC_next_PC_imm12;
+                  if(PC_next_PC_imm12[1:0] != '0)
+                    begin
+                    alu_trap <= '1;
+                    end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                else                  
+                  alu_PC <= alu_PC+'d4;
+                end
+      alu_BNE : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                alu_retired <= '1;
+                if(rs1_data != rs2_data)
+                  begin
+                  alu_PC <= PC_next_PC_imm12;
+                  if(PC_next_PC_imm12[1:0] != '0)
+                    begin
+                    alu_trap <= '1;
+                    end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                else                  
+                  alu_PC <= alu_PC+'d4;
+                end
+      alu_BLT : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                alu_retired <= '1;
+                if($signed(rs1_data) < $signed(rs2_data))
+                  begin
+                  alu_PC <= PC_next_PC_imm12;
+                  if(PC_next_PC_imm12[1:0] != '0)
+                    begin
+                    alu_trap <= '1;
+                    end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                else                  
+                  alu_PC <= alu_PC+'d4;
+                end
+      alu_BLTU : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                 alu_retired <= '1;
+                 if(rs1_data < rs2_data)
+                  begin
+                  alu_PC <= PC_next_PC_imm12;
+                  if(PC_next_PC_imm12[1:0] != '0)
+                    begin
+                    alu_trap <= '1;
+                    end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                 else                  
+                   alu_PC <= alu_PC+'d4;
+                 end
+      alu_BGE : begin
+                //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                alu_retired <= '1;
+                if($signed(rs1_data) >= $signed(rs2_data))
+                  begin
+                  alu_PC <= PC_next_PC_imm12;
+                  if(PC_next_PC_imm12[1:0] != '0)
+                    begin
+                    alu_trap <= '1;
+                    end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                else                  
+                  alu_PC <= alu_PC+'d4;
+                end
+      alu_BGEU : begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
+                 alu_retired <= '1;
+                 if(rs1_data >= rs2_data)
+                  begin
+                   alu_PC <= PC_next_PC_imm12;
+                   if(PC_next_PC_imm12[1:0] != '0)
+                     begin
+                     alu_trap <= '1;
+                     end
+                  alu_br_miss <= '1;
+                  alu_PC_next <= PC_next_PC_imm12;
+                  end
+                 else                  
+                   alu_PC <= alu_PC+'d4;
+                 end
+
+
+      alu_LUI : begin
+                //$display("%-5s PC=%08X imm=%08X rd=(%d)", "LUI", PC, alu_imm, alu_rd);
+                alu_retired <= '1;
+                x_wr[alu_rd] <= '1;
+                rd_data <= alu_imm;
+                alu_PC <= alu_PC+'d4;
+                end
+      alu_AUIPC : begin
+                  $display("%0t %-5s PC=%08X imm=%08X rd=(%d)", $time, "AUIPC", alu_PC, alu_imm, alu_rd);
+                  alu_retired <= '1;
+                  x_wr[alu_rd] <= '1;
+                  rd_data <= alu_PC + alu_imm;
+                  alu_PC <= alu_PC+'d4;
+                  end
+
+
+      alu_LB : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '0;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1:0])
+                   'b00: bus_data_rd_mask <= 'b0001;
+                   'b01: bus_data_rd_mask <= 'b0010;
+                   'b10: bus_data_rd_mask <= 'b0100;
+                   'b11: bus_data_rd_mask <= 'b1000;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 unique
+                 case(addr[1:0])
+                   'b00: rd_data <= {{24{bus_data_rd[7]}},bus_data_rd[7:0]};
+                   'b01: rd_data <= {{24{bus_data_rd[15]}},bus_data_rd[15:8]};
+                   'b10: rd_data <= {{24{bus_data_rd[23]}},bus_data_rd[23:16]};
+                   'b11: rd_data <= {{24{bus_data_rd[31]}},bus_data_rd[31:24]};
+                 endcase
+                 mem_rdata <= bus_data_rd;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
                end
-      default : begin
-                //$display("%-5s PC=%08X" , "INVALID!!", PC);
-                alu_vld <= '1;
+      alu_LBU : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '0;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1:0])
+                   'b00: bus_data_rd_mask <= 'b0001;
+                   'b01: bus_data_rd_mask <= 'b0010;
+                   'b10: bus_data_rd_mask <= 'b0100;
+                   'b11: bus_data_rd_mask <= 'b1000;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 unique
+                 case(addr[1:0])
+                   'b00: rd_data <= {{24{'0}},bus_data_rd[7:0]};
+                   'b01: rd_data <= {{24{'0}},bus_data_rd[15:8]};
+                   'b10: rd_data <= {{24{'0}},bus_data_rd[23:16]};
+                   'b11: rd_data <= {{24{'0}},bus_data_rd[31:24]};
+                 endcase
+                 mem_rdata <= bus_data_rd;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_LH : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '0;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1])
+                   'b0: bus_data_rd_mask <= 'b0011;
+                   'b1: bus_data_rd_mask <= 'b1100;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 unique
+                 case(addr[1:0])
+                   'b0: rd_data <= {{16{bus_data_rd[15]}},bus_data_rd[15:0]};
+                   'b1: rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
+                 endcase
+                 mem_rdata <= bus_data_rd;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_LHU : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '0;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1])
+                   'b0: bus_data_rd_mask <= 'b0011;
+                   'b1: bus_data_rd_mask <= 'b1100;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 unique
+                 case(addr[1:0])
+                   'b0: rd_data <= {{16{'0}},bus_data_rd[15:0]};
+                   'b1: rd_data <= {{16{'0}},bus_data_rd[31:16]};
+                 endcase
+                 mem_rdata <= bus_data_rd;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_LW : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '0;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 bus_data_rd_mask <= 'b1111;
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, alu_rs1, rs1_data, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
+                 alu_retired <= '1;
+                 x_wr[alu_rd] <= '1;
+                 rd_data <= bus_data_rd;
+                 mem_rdata <= bus_data_rd;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_SB : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1:0])
+                   'b00: bus_data_wr  <= {{24{'0}},rs2_data[7:0]};
+                   'b01: bus_data_wr  <= {{16{'0}},rs2_data[7:0],{8 {'0}}};
+                   'b10: bus_data_wr  <= {{ 8{'0}},rs2_data[7:0],{16{'0}}};
+                   'b11: bus_data_wr  <= {         rs2_data[7:0],{24{'0}}};
+                 endcase
+                 unique
+                 case(addr[1:0])
+                   'b00: bus_data_wr_mask <= 'b0001;
+                   'b01: bus_data_wr_mask <= 'b0010;
+                   'b10: bus_data_wr_mask <= 'b0100;
+                   'b11: bus_data_wr_mask <= 'b1000;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{20{alu_imm[11]}},alu_imm[11:0]});
+                 alu_retired <= '1;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_SH : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 unique
+                 case(addr[1:0])
+                   'b0: bus_data_wr  <= {{16{'0}},rs2_data[15:0]};
+                   'b1: bus_data_wr  <= {         rs2_data[15:0],{16{'0}}};
+                 endcase
+                 unique
+                 case(addr[1:0])
+                   'b0: bus_data_wr_mask <= 'b0011;
+                   'b1: bus_data_wr_mask <= 'b1100;
+                 endcase
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{20{alu_imm[11]}},alu_imm[11:0]});
+                 alu_retired <= '1;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+      alu_SW : begin
+               if(~alu_freeze)
+                 begin
+                 bus_req   <= '1;
+                 bus_write <= '1;
+                 addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
+                 bus_addr  <= addr;
+                 bus_data_wr  <= rs2_data;
+                 bus_data_wr_mask <= 'b1111;
+                 alu_freeze <= '1;
+                 end
+               else if(bus_ack)
+                 begin
+                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{20{alu_imm[11]}},alu_imm[11:0]});
+                 alu_retired <= '1;
+                 alu_PC <= alu_PC+'d4;
+                 alu_freeze <= '0;
+                 end
+               end
+
+
+      alu_FENCE : begin
+                  //$display("%-5s PC=%08X" , "FENCE", PC);
+                  //TODO
+                  alu_retired <= '1;
+                  alu_PC <= alu_PC+'d4;
+                  end
+
+
+
+      alu_ECALL : begin
+                  //$display("%-5s PC=%08X" , "ECALL - !!TODO!!", PC);
+                  alu_retired <= '1;
+                  alu_PC <= alu_PC+'d4;
+                  end
+      alu_CSRRW : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    csr_write <= '1;
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= '1;
+                    csr_data_wr  <= rs1_data;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRW", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_CSRRS : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    if(alu_rs1 != '0)
+                      begin
+                      csr_write <= '1;
+                      end
+                    else
+                      begin
+                      csr_write <= '0;
+                      end
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= rs1_data;
+                    csr_data_wr  <= '1;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_CSRRC : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    if(alu_rs1 != '0)
+                      begin
+                      csr_write <= '1;
+                      end
+                    else
+                      begin
+                      csr_write <= '0;
+                      end
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= rs1_data;
+                    csr_data_wr  <= '0;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRS", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_CSRRWI : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    csr_write <= '1;
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= '1;
+                    csr_data_wr  <= '0;
+                    csr_data_wr[4:0]  <= alu_uimm;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRWI", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_CSRRSI : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    if(alu_uimm != '0)
+                      begin
+                      csr_write <= '1;
+                      end
+                    else
+                      begin
+                      csr_write <= '0;
+                      end
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= '1;
+                    csr_data_wr  <= '0;
+                    csr_data_wr[4:0]  <= alu_uimm;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRSI", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_CSRRCI : begin
+                  if(cnt=='d0)
+                    begin
+                    csr_req   <= '1;
+                    if(alu_uimm != '0)
+                      begin
+                      csr_write <= '1;
+                      end
+                    else
+                      begin
+                      csr_write <= '0;
+                      end
+                    csr_addr  <= alu_csr;
+                    csr_mask  <= '1;
+                    csr_data_wr  <= '0;
+                    csr_data_wr[4:0]  <= alu_uimm;
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  else if(cnt=='d2)
+                    begin
+                    //$display("%-5s CSR=%03X rs1=(%d)%08X rd=(%d)", "CSRRCI", alu_csr, alu_rs1, rs1_data, alu_rd);
+                    alu_retired <= '1;
+                    x_wr[alu_rd] <= '1;
+                    rd_data <= '0;
+                    rd_data <= csr_data_rd;
+                    alu_PC <= alu_PC+'d4;
+                    alu_freeze <= '0;
+                    cnt <= '0;
+                    end
+                  else
+                    begin
+                    alu_freeze <= '1;
+                    cnt <= cnt + 1;
+                    end
+                  end
+      alu_EBREAK : begin
+                   //TODO
+                   //$display("%-5s PC=%08X" , "EBREAK - !!TODO!!", PC);
+                   alu_retired <= '1;
+                   alu_PC <= alu_PC+'d4;
+                   end
+      alu_TRAP :   begin
+                   //TODO
+                   $display("%0t %-5s PC=%08X : 0x%08f" , $time, "TRAP from IDU - !!TODO!!", alu_PC, alu_inst);
+                   alu_retired <= '1;
+                   alu_trap <= '1;
+                   end
+          default : begin
+                $display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID INST!!", alu_PC, alu_inst);
                 alu_retired <= '1;
                 alu_trap <= '1;
-                PC_wr <= '0;
                 end
               
       endcase
 
-    if(PC_in[1:0] != '0)
+    if(alu_PC[1:0] != '0)
       begin
+      $display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID PC!!", alu_PC, alu_inst);
       alu_trap <= '1;
-      PC_wr <= '0;
       end
-    end
-  else
-    begin
-    //Keep valid high to keep pipe flowing
-    alu_vld <= '1;
+
     end
 
-  if(rd == '0)
+  if(alu_rd == '0)
     rd_data <= '0;
 
   if(rst)
     begin
-    alu_vld <= '1;
+    alu_vld <= '0;
     alu_retired <= '0;
+    alu_freeze <= '0;
+    alu_br_miss <= '0;
     cnt <= '0;
 
-    PC_wr <= '0;
-    PC_in <= '0;
+    alu_PC_orig <= '0;
+    alu_PC <= '0;
+    alu_PC_next <= '0;
     x_wr  <= '0;
     rd_data <= '0;
 
@@ -1312,6 +1422,72 @@ always_ff @(posedge clk)
     bus_write <= '0;
     bus_addr  <= '0;
     bus_data_wr  <= '0 ;
+
+    alu_inst    <= '0;
+    alu_fm      <= '0;
+    alu_pred    <= '0;
+    alu_succ    <= '0;
+    alu_shamt   <= '0;
+    alu_imm     <= '0;
+    alu_uimm    <= '0;
+    alu_csr     <= '0;
+    alu_funct7  <= '0;
+    alu_funct3  <= '0;
+    alu_rs2     <= '0;
+    alu_rs1     <= '0;
+    alu_rd      <= '0;
+    alu_opcode  <= '0;
+              
+    alu_LUI     <= '0;
+    alu_AUIPC   <= '0;
+    alu_JAL     <= '0;
+    alu_JALR    <= '0;
+    alu_BEQ     <= '0;
+    alu_BNE     <= '0;
+    alu_BLT     <= '0;
+    alu_BGE     <= '0;
+    alu_BLTU    <= '0;
+    alu_BGEU    <= '0;
+    alu_LB      <= '0;
+    alu_LH      <= '0;
+    alu_LW      <= '0;
+    alu_LBU     <= '0;
+    alu_LHU     <= '0;
+    alu_SB      <= '0;
+    alu_SH      <= '0;
+    alu_SW      <= '0;
+    alu_ADDI    <= '0;
+    alu_SLTI    <= '0;
+    alu_SLTIU   <= '0;
+    alu_XORI    <= '0;
+    alu_ORI     <= '0;
+    alu_ANDI    <= '0;
+    alu_SLLI    <= '0;
+    alu_SRLI    <= '0;
+    alu_SRAI    <= '0;
+    alu_ADD     <= '0;
+    alu_SUB     <= '0;
+    alu_SLL     <= '0;
+    alu_SLT     <= '0;
+    alu_SLTU    <= '0;
+    alu_XOR     <= '0;
+    alu_SRL     <= '0;
+    alu_SRA     <= '0;
+    alu_OR      <= '0;
+    alu_AND     <= '0;
+    alu_FENCE   <= '0;
+    alu_FENCE_I <= '0;
+    alu_ECALL   <= '0;
+    alu_CSRRW   <= '0;
+    alu_CSRRS   <= '0;
+    alu_CSRRC   <= '0;
+    alu_CSRRWI  <= '0;
+    alu_CSRRSI  <= '0;
+    alu_CSRRCI  <= '0;
+    alu_EBREAK  <= '0;
+    alu_TRAP    <= '0;
+
+    mem_rdata <= '0;
     end
   end
 
@@ -1333,7 +1509,7 @@ always_ff @(posedge clk)
   
 always_comb
   begin
-  rvfi_valid = alu_vld & alu_retired;
+  rvfi_valid = alu_vld & alu_retired & ~alu_FENCE;
   rvfi_order = order;
   rvfi_insn = alu_inst;
   rvfi_trap = alu_trap;
@@ -1347,18 +1523,18 @@ always_comb
   rvfi_rs2_rdata = alu_rs2_data;
   rvfi_rd_addr = alu_rd;
   rvfi_rd_wdata = rd_data;
-  rvfi_pc_rdata = PC_orig;
-  rvfi_pc_wdata = PC_in;
+  rvfi_pc_rdata = alu_PC_orig;
+  rvfi_pc_wdata = alu_PC;
   rvfi_mem_addr = bus_addr;
   rvfi_mem_rmask = bus_data_rd_mask;
   rvfi_mem_wmask = bus_data_wr_mask;
-  rvfi_mem_rdata = bus_data_rd;
+  rvfi_mem_rdata = mem_rdata;
   rvfi_mem_wdata = bus_data_wr;
 
-  rvfi_csr_mcycle_rmask = '0;
-  rvfi_csr_mcycle_wmask = '0;
-  rvfi_csr_mcycle_rdata = '0;
-  rvfi_csr_mcycle_wdata = '0;
+  rvfi_csr_mcycle_rmask = csr_write ? '0 : csr_mask;
+  rvfi_csr_mcycle_wmask = csr_write ? csr_mask : '0;
+  rvfi_csr_mcycle_rdata = csr_data_rd; 
+  rvfi_csr_mcycle_wdata = csr_data_wr;
 
   rvfi_csr_minstret_rmask = '0;
   rvfi_csr_minstret_wmask = '0;

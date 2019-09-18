@@ -22,12 +22,16 @@ module mem #(
   input  logic           i_membus_write,
   input  logic [31:0]    i_membus_addr,
   input  logic [31:0]    i_membus_data,
+  input  logic  [3:0]    i_membus_data_rd_mask,
+  input  logic  [3:0]    i_membus_data_wr_mask,
 
   output logic           o_membus_req,
   output logic           o_membus_ack,
   output logic           o_membus_write,
   output logic [31:0]    o_membus_addr,
-  output logic [31:0]    o_membus_data
+  output logic [31:0]    o_membus_data,
+  output logic  [3:0]    o_membus_data_rd_mask,
+  output logic  [3:0]    o_membus_data_wr_mask
 );
 
 logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
@@ -50,13 +54,6 @@ always_ff @(posedge clk)
     begin
     o_instbus_req <= '0;    
     o_instbus_ack <= '1;
-    //if (i_instbus_write)
-    //  begin
-    //  mem_array_0[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_instbus_data[7:0];
-    //  mem_array_1[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_instbus_data[15:8];
-    //  mem_array_2[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_instbus_data[23:16];
-    //  mem_array_3[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_instbus_data[31:24];
-    //  end
     o_instbus_data[7:0]   <= mem_array_0[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
     o_instbus_data[15:8]  <= mem_array_1[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
     o_instbus_data[23:16] <= mem_array_2[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
@@ -78,6 +75,8 @@ always_ff @(posedge clk)
   o_membus_write <= i_membus_write;  
   o_membus_addr  <= i_membus_addr;   
   o_membus_data  <= i_membus_data;   
+  o_membus_data_rd_mask  <= i_membus_data_rd_mask;   
+  o_membus_data_wr_mask  <= i_membus_data_wr_mask;   
 
   if(i_membus_req &
      i_membus_addr >= ADDR_BASE &
@@ -85,11 +84,20 @@ always_ff @(posedge clk)
     begin
     o_membus_req <= '0;    
     o_membus_ack <= '1;
-    if (i_membus_write)
+    if (i_membus_write & i_membus_data_wr_mask[0])
       begin
       mem_array_0[i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_membus_data[7:0];
+      end
+    if (i_membus_write & i_membus_data_wr_mask[1])
+      begin
       mem_array_1[i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_membus_data[15:8];
+      end
+    if (i_membus_write & i_membus_data_wr_mask[2])
+      begin
       mem_array_2[i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_membus_data[23:16];
+      end
+    if (i_membus_write & i_membus_data_wr_mask[3])
+      begin
       mem_array_3[i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]] <= i_membus_data[31:24];
       end
     o_membus_data[7:0]   <= mem_array_0[i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
@@ -106,10 +114,10 @@ always_ff @(posedge clk)
 
 initial
   begin
-    $readmemh("../../tests/demo/demo_3.v", mem_array_3);
-    $readmemh("../../tests/demo/demo_2.v", mem_array_2);
-    $readmemh("../../tests/demo/demo_1.v", mem_array_1);
-    $readmemh("../../tests/demo/demo_0.v", mem_array_0);
+    $readmemh("../../tests/debug/debug_3.v", mem_array_3);
+    $readmemh("../../tests/debug/debug_2.v", mem_array_2);
+    $readmemh("../../tests/debug/debug_1.v", mem_array_1);
+    $readmemh("../../tests/debug/debug_0.v", mem_array_0);
   end
 
 endmodule

@@ -95,14 +95,18 @@ void main(void) {
   uint32_t a,b,c;
 
 
+    LED = 0x70;
 
   //Power On Display
   DISPLAY_CMD = 0x29; // DISPON (29h): Display On 
 
+    LED = 0x71;
   while(get_time() < 5000000) {}
+    LED = 0x72;
   clear_time();
-
+    LED = 0x73;
   DISPLAY_CMD = 0x11; //SLPOUT (11h): Sleep Out
+    LED = 0x74;
 
   //DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
 
@@ -110,9 +114,11 @@ void main(void) {
   inv = 0;
   color = 0;
   pass = 0;
+    LED = 0x75;
 
   timestamp   = get_time();
   keystamp    = timestamp;
+    LED = 0x76;
 
   but0      = 0;
   but1      = 0;
@@ -122,18 +128,20 @@ void main(void) {
   joy_left  = 0;
   joy_right = 0;
   key_pressed = 0;
+    LED = 0x77;
 
   a = 1;
   b = 1;
+    LED = 0x78;
 
   while(1) {
-    //LED = 0x80;
+    LED = 0x80;
     //Get new timestamp
     timestamp = get_time();
 
     //Get keypresses if the delta between the current timestamp and last keystamp is >= KEY_TIME
     if ((timestamp-keystamp) >= KEY_TIME) {
-    //LED = 0x81;
+    LED = 0x81;
       if(BUTTON_0        == 1) {key_pressed = 1; but0      = 1;} 
       if(BUTTON_1        == 1) {key_pressed = 1; but1      = 1;} 
       if(JOYSTICK_SELECT == 1) {key_pressed = 1; joy_sel   = 1;}    
@@ -143,20 +151,20 @@ void main(void) {
       if(JOYSTICK_RIGHT  == 1) {key_pressed = 1; joy_right = 1;} 
       keystamp = timestamp;
     }
-    //LED = 0x82;
+    LED = 0x82;
 
     //Step through Fibonnacci if the delta between the current timestamp and last displaystamp is >= DISPLAY_TIME 
     if(timestamp >= DISPLAY_TIME) {
-    //LED = 0x83;
+    LED = 0x83;
       fibbonacci(&a, &b);
     }
-    //LED = 0x84;
+    LED = 0x84;
                                      
     //Update LED/Display if the delta between the current timestamp and last displaystamp is >= DISPLAY_TIME  
     //Reset timer
     //Reset buttons
     if(timestamp >= DISPLAY_TIME) {
-    //LED = 0x85;
+    LED = 0x85;
       //Prep LED with 'a' value from fibonnacci
       led = a;
 
@@ -176,7 +184,7 @@ void main(void) {
       LED = led;
 
       for(int display_index = 128*160; display_index >=0; display_index--) {
-    //LED = 0x86;
+    LED = 0x86;
         if(display_index == 128*160) {
           DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
           //display_index = 0;
@@ -200,7 +208,7 @@ void main(void) {
             }
           //display_index++;
         }
-    //LED = 0x87;
+    LED = 0x87;
       }
       pass++;
         
@@ -223,12 +231,12 @@ void main(void) {
       joy_right   = 0;
       key_pressed = 0;
 
-    //LED = 0x88;
+    LED = 0x88;
       //Reset timers
       clear_time();
       timestamp = 0;
       keystamp  = 0;
-    //LED = 0x89;
+    LED = 0x89;
     }
 
   }
