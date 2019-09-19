@@ -74,6 +74,14 @@ void fibbonacci(uint32_t* a, uint32_t* b) {
   *a = *b + c;
 }
 
+void xorshift(uint32_t* lfsr) {
+  uint32_t new = *lfsr;
+  new ^= new << 13;
+  new ^= new >> 17;
+  new ^= new << 5;
+  *lfsr = new;
+}
+
 void main(void) {
   uint32_t inv;
   uint32_t color;
@@ -94,19 +102,15 @@ void main(void) {
 
   uint32_t a,b,c;
 
+  uint32_t lfsr;
 
-    LED = 0x70;
 
   //Power On Display
   DISPLAY_CMD = 0x29; // DISPON (29h): Display On 
 
-    LED = 0x71;
   while(get_time() < 5000000) {}
-    LED = 0x72;
   clear_time();
-    LED = 0x73;
   DISPLAY_CMD = 0x11; //SLPOUT (11h): Sleep Out
-    LED = 0x74;
 
   //DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
 
@@ -114,11 +118,9 @@ void main(void) {
   inv = 0;
   color = 0;
   pass = 0;
-    LED = 0x75;
 
   timestamp   = get_time();
   keystamp    = timestamp;
-    LED = 0x76;
 
   but0      = 0;
   but1      = 0;
@@ -128,20 +130,18 @@ void main(void) {
   joy_left  = 0;
   joy_right = 0;
   key_pressed = 0;
-    LED = 0x77;
 
   a = 1;
   b = 1;
-    LED = 0x78;
+
+  lfsr = 1;
 
   while(1) {
-    LED = 0x80;
     //Get new timestamp
     timestamp = get_time();
 
     //Get keypresses if the delta between the current timestamp and last keystamp is >= KEY_TIME
     if ((timestamp-keystamp) >= KEY_TIME) {
-    LED = 0x81;
       if(BUTTON_0        == 1) {key_pressed = 1; but0      = 1;} 
       if(BUTTON_1        == 1) {key_pressed = 1; but1      = 1;} 
       if(JOYSTICK_SELECT == 1) {key_pressed = 1; joy_sel   = 1;}    
@@ -151,20 +151,16 @@ void main(void) {
       if(JOYSTICK_RIGHT  == 1) {key_pressed = 1; joy_right = 1;} 
       keystamp = timestamp;
     }
-    LED = 0x82;
 
     //Step through Fibonnacci if the delta between the current timestamp and last displaystamp is >= DISPLAY_TIME 
     if(timestamp >= DISPLAY_TIME) {
-    LED = 0x83;
       fibbonacci(&a, &b);
     }
-    LED = 0x84;
                                      
     //Update LED/Display if the delta between the current timestamp and last displaystamp is >= DISPLAY_TIME  
     //Reset timer
     //Reset buttons
     if(timestamp >= DISPLAY_TIME) {
-    LED = 0x85;
       //Prep LED with 'a' value from fibonnacci
       led = a;
 
@@ -183,34 +179,47 @@ void main(void) {
       //Update LED
       LED = led;
 
-      for(int display_index = 128*160; display_index >=0; display_index--) {
-    LED = 0x86;
-        if(display_index == 128*160) {
-          DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
-          //display_index = 0;
-        } else {
-            if((pass + display_index)%4 == 0) {
-                DISPLAY_DATA = 0xFC;
-                DISPLAY_DATA = 0xFC;
-                DISPLAY_DATA = 0xFC;
-            } else if((pass + display_index)%4 == 1) {
-                DISPLAY_DATA = 0xFC;
-                DISPLAY_DATA = 0x80;
-                DISPLAY_DATA = 0x80;
-            } else if((pass + display_index)%4 == 2) {
-                DISPLAY_DATA = 0x80;
-                DISPLAY_DATA = 0xFC;
-                DISPLAY_DATA = 0x80;
-            } else if((pass + display_index)%4 == 3) {
-                DISPLAY_DATA = 0x80;
-                DISPLAY_DATA = 0x80;
-                DISPLAY_DATA = 0xFC;
-            }
-          //display_index++;
+      if(but0) {
+        for(int display_index = 128*160; display_index >=0; display_index--) {
+          if(display_index == 128*160) {
+            DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
+            //display_index = 0;
+          } else {
+              if((pass + display_index)%4 == 0) {
+                  DISPLAY_DATA = 0xFC;
+                  DISPLAY_DATA = 0xFC;
+                  DISPLAY_DATA = 0xFC;
+              } else if((pass + display_index)%4 == 1) {
+                  DISPLAY_DATA = 0xFC;
+                  DISPLAY_DATA = 0x80;
+                  DISPLAY_DATA = 0x80;
+              } else if((pass + display_index)%4 == 2) {
+                  DISPLAY_DATA = 0x80;
+                  DISPLAY_DATA = 0xFC;
+                  DISPLAY_DATA = 0x80;
+              } else if((pass + display_index)%4 == 3) {
+                  DISPLAY_DATA = 0x80;
+                  DISPLAY_DATA = 0x80;
+                  DISPLAY_DATA = 0xFC;
+              }
+            //display_index++;
+          }
         }
-    LED = 0x87;
+        pass++;
+      } else {
+        for(int display_index = 128*160; display_index >=0; display_index--) {
+          if(display_index == 128*160) {
+            DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
+            //display_index = 0;
+          } else {
+            xorshift(&lfsr);
+            DISPLAY_DATA = 0x80 | ((lfsr >> 0) & 0x7F);
+            DISPLAY_DATA = 0x80 | ((lfsr >> 7) & 0x7F);
+            DISPLAY_DATA = 0x80 | ((lfsr >> 14) & 0x7F);
+          }
+        }
       }
-      pass++;
+        
         
       ////Invert Display
       //if(inv) {
@@ -231,12 +240,10 @@ void main(void) {
       joy_right   = 0;
       key_pressed = 0;
 
-    LED = 0x88;
       //Reset timers
       clear_time();
       timestamp = 0;
       keystamp  = 0;
-    LED = 0x89;
     }
 
   }
