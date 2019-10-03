@@ -1,3 +1,7 @@
+RV_PREFIX = riscv32-unknown-elf-#Prefix for our RISC-V tools (e.g. gcc and objdump)
+CC = $(RV_PREFIX)gcc #Our compiler
+CCFLAGS =  -ffreestanding -O0 -nostartfiles -nostdlib -nodefaultlibs -Triscv32.ld -mcmodel=medany -mabi=ilp32 -march=rv32i #Flags telling GCC to compile without libraries (e.g. baremetal), to use a differen memory model so that we can put our code at 0x80000000 and to use the specified linker script.
+
 rwildcard=$(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))            
 FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 FILTER_IN  = $(foreach v,$(2),$(if $(findstring $(1),$(v)),$(v),))
@@ -18,15 +22,19 @@ VERILOG3_SUFFIX=_3.v
 VERILOG3 := $(patsubst %$(SRCS_SUFFIX),%$(VERILOG3_SUFFIX),$(SRCS))
 
 .PHONY: all
-all : | clean $(ASSEMBLY)
+all : | clean init $(ASSEMBLY)
+
+init:
+	riscv32-unknown-elf-gcc -c riscv.s -o riscv.o
 
 %$(ASSEMBLY_SUFFIX) :
-	riscv32-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i -S -o $(patsubst %.s,%.s,$@)           $(patsubst %.s,%.c,$@)
-	riscv32-unknown-elf-gcc -ffreestanding -O0 '-Wl,--gc-sections' -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,riscv32.ld -mabi=ilp32 -march=rv32i    -o $(patsubst %.s,%.out,$@) riscv.s $(patsubst %.s,%.c,$@)
-	riscv32-unknown-elf-objcopy -O verilog --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
-	riscv32-unknown-elf-objcopy -O verilog --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
-	riscv32-unknown-elf-objcopy -O verilog --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
-	riscv32-unknown-elf-objcopy -O verilog --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
+	$(CC) $(CCFLAGS) -S -o $(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@)
+	$(CC) $(CCFLAGS)    -o $(patsubst %.s,%.o,$@)    $(patsubst %.s,%.c,$@)
+	$(CC) $(CCFLAGS)    -o $(patsubst %.s,%.out,$@)  $(patsubst %.s,%.o,$@) riscv.o
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
 
 .PHONY: clean
 clean: 
