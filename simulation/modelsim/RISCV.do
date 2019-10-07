@@ -4,6 +4,6 @@ vcd on
 vcd file sim.vcd
 vcd add -r *
 
-run 150000000 ns
+run 15000000 ns
 
 exit

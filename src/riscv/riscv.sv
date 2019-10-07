@@ -1,4 +1,6 @@
-module riscv (
+module riscv #(
+  parameter M_EXT = 1
+) (
   input  logic        clk,
   input  logic        rst,
 
@@ -219,6 +221,14 @@ logic             idu_decode_CSRRWI;
 logic             idu_decode_CSRRSI;
 logic             idu_decode_CSRRCI;
 logic             idu_decode_EBREAK;
+logic             idu_decode_MUL;
+logic             idu_decode_MULH;
+logic             idu_decode_MULHSU;
+logic             idu_decode_MULHU;
+logic             idu_decode_DIV;
+logic             idu_decode_DIVU;
+logic             idu_decode_REM;
+logic             idu_decode_REMU;
 logic             idu_decode_TRAP;
 
 riscv_regfile regfile (
@@ -334,7 +344,7 @@ riscv_ifu ifu (
   .i_instbus_data  (i_instbus_data)  
 );
 
-riscv_idu idu (
+riscv_idu #(.M_EXT(M_EXT)) idu (
   .clk       (clk),
   .rst       (rst),
 
@@ -414,11 +424,19 @@ riscv_idu idu (
   .idu_decode_CSRRSI    (idu_decode_CSRRSI  ),
   .idu_decode_CSRRCI    (idu_decode_CSRRCI  ),
   .idu_decode_EBREAK    (idu_decode_EBREAK  ),
+  .idu_decode_MUL       (idu_decode_MUL     ),
+  .idu_decode_MULH      (idu_decode_MULH    ),
+  .idu_decode_MULHSU    (idu_decode_MULHSU  ),
+  .idu_decode_MULHU     (idu_decode_MULHU   ),
+  .idu_decode_DIV       (idu_decode_DIV     ),
+  .idu_decode_DIVU      (idu_decode_DIVU    ),
+  .idu_decode_REM       (idu_decode_REM     ),
+  .idu_decode_REMU      (idu_decode_REMU    ),
   .idu_decode_TRAP      (idu_decode_TRAP    )
 );
 
 assign o_membus_ack = '0;
-riscv_alu alu (
+riscv_alu #(.M_EXT(M_EXT)) alu (
   .clk            (clk     ),
   .rst            (rst     ),
 
@@ -528,6 +546,14 @@ riscv_alu alu (
   .idu_decode_CSRRSI           (idu_decode_CSRRSI  ),
   .idu_decode_CSRRCI           (idu_decode_CSRRCI  ),
   .idu_decode_EBREAK           (idu_decode_EBREAK  ),
+  .idu_decode_MUL              (idu_decode_MUL     ),
+  .idu_decode_MULH             (idu_decode_MULH    ),
+  .idu_decode_MULHSU           (idu_decode_MULHSU  ),
+  .idu_decode_MULHU            (idu_decode_MULHU   ),
+  .idu_decode_DIV              (idu_decode_DIV     ),
+  .idu_decode_DIVU             (idu_decode_DIVU    ),
+  .idu_decode_REM              (idu_decode_REM     ),
+  .idu_decode_REMU             (idu_decode_REMU    ),
   .idu_decode_TRAP             (idu_decode_TRAP    ),
                                     
   .x_wr             (x_wr    ),

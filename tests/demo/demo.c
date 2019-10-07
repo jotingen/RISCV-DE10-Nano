@@ -1,13 +1,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define read_csr(reg) ({ unsigned int __tmp;asm volatile ("csrr %0, " #reg : "=r"(__tmp));__tmp; })
-#define CSR_CYCLE     0xC00
-#define CSR_CYCLE_H   0xC80
-#define CSR_TIME      0xC01
-#define CSR_TIME_H    0xC81
-#define CSR_INSTRET   0xC02
-#define CSR_INSTRET_H 0xC82
+#include "../lib/counters.h"
+#include "../lib/display.h"
+#define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
+#define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
@@ -20,52 +17,11 @@
 #define JOYSTICK_DOWN   (*((volatile unsigned int *) (0xC100010C)))
 #define JOYSTICK_LEFT   (*((volatile unsigned int *) (0xC1000110)))
 
-#define DISPLAY_NOOP    (*((volatile unsigned int *) (0xC2000000)))
-#define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
-#define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
-
 //200Hz
 #define KEY_TIME        250000
 //60Hz
 #define DISPLAY_TIME    833333
 
-unsigned int get_csr_cycle() {
-  __asm__(
-    "csrrs a0, cycle, x0 \n"
-    "lw s0, 12(sp)\n"
-    "add sp, sp, 16\n"
-    "jr ra\n"
-  );
-  return 1;
-  //return read_csr(cycle);
-}
-unsigned int get_csr_cycleh() {
-  __asm__(
-    "csrrs a0, cycleh, x0 \n"
-    "lw s0, 12(sp)\n"
-    "add sp, sp, 16\n"
-    "jr ra\n"
-  );
-  return 1;
-  //return read_csr(cycleh);
-}
-uint64_t get_time() {
-  uint64_t time;
-  time = 0;
-  time = time | get_csr_cycleh();
-  time = time << 32;
-  time = time | get_csr_cycle();
-  return time;
-}
-
-void clear_time() {
-  __asm__(
-    "add t1, zero, zero \n"
-    "not t1, t1 \n"
-    "csrrc x0, cycleh, t1 \n"
-    "csrrc x0, cycle, t1 \n"
-  );
-}
 
 void fibbonacci(uint32_t* a, uint32_t* b) {
   uint32_t c;
@@ -105,12 +61,7 @@ void main(void) {
   uint32_t lfsr;
 
 
-  //Power On Display
-  DISPLAY_CMD = 0x29; // DISPON (29h): Display On 
-
-  while(get_time() < 5000000) {}
-  clear_time();
-  DISPLAY_CMD = 0x11; //SLPOUT (11h): Sleep Out
+  display_on();
 
   //DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
 
@@ -180,45 +131,40 @@ void main(void) {
       LED = led;
 
       if(but0) {
-        for(int display_index = 128*160; display_index >=0; display_index--) {
-          if(display_index == 128*160) {
-            DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
-            //display_index = 0;
-          } else {
-              if((pass + display_index)%4 == 0) {
-                  DISPLAY_DATA = 0xFC;
-                  DISPLAY_DATA = 0xFC;
-                  DISPLAY_DATA = 0xFC;
-              } else if((pass + display_index)%4 == 1) {
-                  DISPLAY_DATA = 0xFC;
-                  DISPLAY_DATA = 0x80;
-                  DISPLAY_DATA = 0x80;
-              } else if((pass + display_index)%4 == 2) {
-                  DISPLAY_DATA = 0x80;
-                  DISPLAY_DATA = 0xFC;
-                  DISPLAY_DATA = 0x80;
-              } else if((pass + display_index)%4 == 3) {
-                  DISPLAY_DATA = 0x80;
-                  DISPLAY_DATA = 0x80;
-                  DISPLAY_DATA = 0xFC;
-              }
+        for(int row = display_rows()-1; row >= 0; row--) {
+          for(int col = display_cols()-1; col >= 0; col--) {
+            if((pass + row*col)%4 == 0) {
+                //screen[row][col].R = 0xFC;
+                //screen[row][col].G = 0xFC;
+                //screen[row][col].B = 0xFC;
+            } else if((pass + row*col)%4 == 1) {
+                //screen[row][col].R = 0xFC;
+                //screen[row][col].G = 0x80;
+                //screen[row][col].B = 0x80;
+            } else if((pass + row*col)%4 == 2) {
+                //screen[row][col].R = 0x80;
+                //screen[row][col].G = 0xFC;
+                //screen[row][col].B = 0x80;
+            } else if((pass + row*col)%4 == 3) {
+                //screen[row][col].R = 0x80;
+                //screen[row][col].G = 0x80;
+                //screen[row][col].B = 0xFC;
+            }
             //display_index++;
           }
         }
         pass++;
       } else {
-        for(int display_index = 128*160; display_index >=0; display_index--) {
-          if(display_index == 128*160) {
-            DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
-            //display_index = 0;
-          } else {
+        for(int row = display_rows()-1; row >= 0; row--) {
+          for(int col = display_cols()-1; col >= 0; col--) {
             xorshift(&lfsr);
-            DISPLAY_DATA = 0x80 | ((lfsr >> 0) & 0x7F);
-            DISPLAY_DATA = 0x80 | ((lfsr >> 7) & 0x7F);
-            DISPLAY_DATA = 0x80 | ((lfsr >> 14) & 0x7F);
+            //screen[row][col].R = 0x80 | ((lfsr >> 0) & 0x7F);
+            //screen[row][col].G = 0x80 | ((lfsr >> 7) & 0x7F);
+            //screen[row][col].B = 0x80 | ((lfsr >> 14) & 0x7F);
           }
         }
       }
+      //display_write();
         
         
       ////Invert Display
