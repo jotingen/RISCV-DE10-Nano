@@ -20,6 +20,12 @@ read_verilog -sv riscv_csr.sv
 read_verilog -sv riscv_idu.sv
 read_verilog -sv riscv_ifu.sv
 read_verilog -sv riscv_regfile.sv
+read_verilog -sv multiplier.v
+read_verilog -sv multiplier_unsigned.v
+read_verilog -sv multiplier_signed_unsigned.v
+read_verilog -sv divider.v
+read_verilog -sv divider_unsigned.v
+read_verilog -sv 220model.v
 
 --pycode-begin--
 with open("../submodules/riscv-formal/insns/isa_rv32i.txt") as f:
@@ -39,6 +45,12 @@ complete.sv
 ../src/riscv/riscv_idu.sv
 ../src/riscv/riscv_ifu.sv
 ../src/riscv/riscv_regfile.sv
+../src/quartus/multiplier/multiplier.v
+../src/quartus/multiplier_unsigned/multiplier_unsigned.v
+../src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v
+../src/quartus/divider/divider.v
+../src/quartus/divider_unsigned/divider_unsigned.v
+/mnt/c/intelFPGA_lite/18.1/modelsim_ase/altera/verilog/src/220model.v
 ../submodules/riscv-formal/checks/rvfi_macros.vh
 ../submodules/riscv-formal/insns/isa_rv32i.v
 

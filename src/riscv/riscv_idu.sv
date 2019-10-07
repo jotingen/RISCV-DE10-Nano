@@ -1,4 +1,6 @@
-module riscv_idu (
+module riscv_idu #(
+  parameter M_EXT = 1
+) (
   input  logic        clk,
   input  logic        rst,
 
@@ -78,6 +80,14 @@ module riscv_idu (
   output logic        idu_decode_CSRRSI,
   output logic        idu_decode_CSRRCI,
   output logic        idu_decode_EBREAK,
+  output logic        idu_decode_MUL,
+  output logic        idu_decode_MULH,
+  output logic        idu_decode_MULHSU,
+  output logic        idu_decode_MULHU,
+  output logic        idu_decode_DIV,
+  output logic        idu_decode_DIVU,
+  output logic        idu_decode_REM,
+  output logic        idu_decode_REMU,
   output logic        idu_decode_TRAP
 );
 
@@ -238,6 +248,14 @@ always_ff @(posedge clk)
     idu_decode_CSRRSI  <= '0;
     idu_decode_CSRRCI  <= '0;
     idu_decode_EBREAK  <= '0;
+    idu_decode_MUL     <= '0;
+    idu_decode_MULH    <= '0;
+    idu_decode_MULHSU  <= '0;
+    idu_decode_MULHU   <= '0;
+    idu_decode_DIV     <= '0;
+    idu_decode_DIVU    <= '0;
+    idu_decode_REM     <= '0;
+    idu_decode_REMU    <= '0;
     idu_decode_TRAP    <= '0;
   
     unique
@@ -528,6 +546,21 @@ always_ff @(posedge clk)
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_ADD        <= '1;
                                           end
+                              'b0000001 : begin //MUL
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_MUL        <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
+                                          end
                               'b0100000 : begin //SUB
                                           idu_decode_funct7     <= instR_funct7;  
                                           idu_decode_rs2        <= instR_rs2;
@@ -552,6 +585,21 @@ always_ff @(posedge clk)
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_SLL        <= '1;
                                           end
+                              'b0000001 : begin //MULH
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_MULH       <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
+                                          end
                               default : begin 
                                         idu_decode_TRAP <= '1;
                                         end
@@ -567,6 +615,21 @@ always_ff @(posedge clk)
                                           idu_decode_funct3     <= instR_funct3;
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_SLT        <= '1;
+                                          end
+                              'b0000001 : begin //MULHSU
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_MULHSU     <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
                                           end
                               default : begin 
                                         idu_decode_TRAP <= '1;
@@ -584,6 +647,21 @@ always_ff @(posedge clk)
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_SLTU       <= '1;
                                           end
+                              'b0000001 : begin //MULHU
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_MULHU      <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
+                                          end
                               default : begin 
                                         idu_decode_TRAP <= '1;
                                         end
@@ -600,6 +678,21 @@ always_ff @(posedge clk)
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_XOR        <= '1;
                                           end
+                              'b0000001 : begin //DIV 
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_DIV        <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
+                                          end
                               default : begin 
                                         idu_decode_TRAP <= '1;
                                         end
@@ -615,6 +708,21 @@ always_ff @(posedge clk)
                                           idu_decode_funct3     <= instR_funct3;
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_SRL        <= '1;
+                                          end
+                              'b0000001 : begin //DIVU
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_DIVU       <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
                                           end
                               'b0100000 : begin //SRA
                                           idu_decode_funct7     <= instR_funct7;  
@@ -640,6 +748,21 @@ always_ff @(posedge clk)
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_OR         <= '1;
                                           end
+                              'b0000001 : begin //REM 
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_REM        <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
+                                          end
                               default : begin 
                                         idu_decode_TRAP <= '1;
                                         end
@@ -655,6 +778,21 @@ always_ff @(posedge clk)
                                           idu_decode_funct3     <= instR_funct3;
                                           idu_decode_rd         <= instR_rd;
                                           idu_decode_AND        <= '1;
+                                          end
+                              'b0000001 : begin //REMU
+                                          if(M_EXT)
+                                            begin
+                                            idu_decode_funct7     <= instR_funct7;  
+                                            idu_decode_rs2        <= instR_rs2;
+                                            idu_decode_rs1        <= instR_rs1;
+                                            idu_decode_funct3     <= instR_funct3;
+                                            idu_decode_rd         <= instR_rd;
+                                            idu_decode_REMU       <= '1;
+                                            end
+                                          else
+                                            begin 
+                                            idu_decode_TRAP <= '1;
+                                            end
                                           end
                               default : begin 
                                         idu_decode_TRAP <= '1;
@@ -739,6 +877,7 @@ always_ff @(posedge clk)
                               end
                 endcase
                 end
+
       default : begin 
                 idu_decode_TRAP <= '1;
                 end
@@ -811,6 +950,14 @@ always_ff @(posedge clk)
     idu_decode_CSRRSI  <= idu_decode_CSRRSI ;
     idu_decode_CSRRCI  <= idu_decode_CSRRCI ;
     idu_decode_EBREAK  <= idu_decode_EBREAK ;
+    idu_decode_MUL     <= idu_decode_MUL    ;
+    idu_decode_MULH    <= idu_decode_MULH   ;
+    idu_decode_MULHSU  <= idu_decode_MULHSU ;
+    idu_decode_MULHU   <= idu_decode_MULHU  ;
+    idu_decode_DIV     <= idu_decode_DIV    ;
+    idu_decode_DIVU    <= idu_decode_DIVU   ;
+    idu_decode_REM     <= idu_decode_REM    ;
+    idu_decode_REMU    <= idu_decode_REMU   ;
     idu_decode_TRAP    <= idu_decode_TRAP   ;
     end
 

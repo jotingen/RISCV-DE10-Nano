@@ -154,7 +154,7 @@ always @(posedge clk)
 //);
 assign clk = FPGA_CLK1_50;
 
-riscv riscv (
+riscv #(.M_EXT(1)) riscv (
   .clk         (clk),
   .rst         (rst),
 

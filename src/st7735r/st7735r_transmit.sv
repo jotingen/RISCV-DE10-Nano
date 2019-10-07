@@ -89,7 +89,7 @@ always_ff @(posedge clk)
     RS_DC    <= '0;
     DATA     <= '0;
     data_cnt <= '0;       
-    cooldown_cnt <= 'd625000; //Power on with a cooldown timer 
+    cooldown_cnt <= 'd0;//'d625000; //Power on with a cooldown timer 
     end
   end
           

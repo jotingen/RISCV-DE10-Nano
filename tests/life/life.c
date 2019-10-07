@@ -1,13 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define read_csr(reg) ({ unsigned int __tmp;asm volatile ("csrr %0, " #reg : "=r"(__tmp));__tmp; })
-#define CSR_CYCLE     0xC00
-#define CSR_CYCLE_H   0xC80
-#define CSR_TIME      0xC01
-#define CSR_TIME_H    0xC81
-#define CSR_INSTRET   0xC02
-#define CSR_INSTRET_H 0xC82
+#include "../lib/counters.h"
+#include "../lib/display.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
@@ -20,63 +15,36 @@
 #define JOYSTICK_DOWN   (*((volatile unsigned int *) (0xC100010C)))
 #define JOYSTICK_LEFT   (*((volatile unsigned int *) (0xC1000110)))
 
-#define DISPLAY_NOOP    (*((volatile unsigned int *) (0xC2000000)))
-#define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
-#define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
-#define DISPLAY_ROWS    160
-#define DISPLAY_COLS    128
-
 //200Hz
-#define KEY_TIME        250000
+#define KEY_TIME        25
 //60Hz
 //#define DISPLAY_TIME    833333
 //30Hz
-#define DISPLAY_TIME   1666666
+#define DISPLAY_TIME   166
 
-unsigned int get_csr_cycle() {
-  __asm__(
-    "csrrs a0, cycle, x0 \n"
-    "lw s0, 12(sp)\n"
-    "add sp, sp, 16\n"
-    "jr ra\n"
-  );
-  return 1;
-  //return read_csr(cycle);
-}
-unsigned int get_csr_cycleh() {
-  __asm__(
-    "csrrs a0, cycleh, x0 \n"
-    "lw s0, 12(sp)\n"
-    "add sp, sp, 16\n"
-    "jr ra\n"
-  );
-  return 1;
-  //return read_csr(cycleh);
-}
-uint64_t get_time() {
-  uint64_t time;
-  time = 0;
-  time = time | get_csr_cycleh();
-  time = time << 32;
-  time = time | get_csr_cycle();
-  return time;
+
+uint32_t xorshift(uint32_t lfsr) {
+  uint32_t bit = ((lfsr >> 5) ^ (lfsr >> 13) ^ (lfsr >> 17));
+  return (lfsr >> 1) | (bit << 31);
 }
 
-void clear_time() {
-  __asm__(
-    "add t1, zero, zero \n"
-    "not t1, t1 \n"
-    "csrrc x0, cycleh, t1 \n"
-    "csrrc x0, cycle, t1 \n"
-  );
-}
-
-void xorshift(uint32_t* lfsr) {
-  uint32_t new = *lfsr;
-  new ^= new << 13;
-  new ^= new >> 17;
-  new ^= new << 5;
-  *lfsr = new;
+void paint_framebuffer(int rows, int cols, uint8_t life[rows][cols]) {
+  display_pixel_t pixel;
+  display_write_start();
+  for(int row = display_rows()-1; row >= 0; row--) {
+    for(int col = display_cols()-1; col >= 0; col--) {
+      if(life[row][col] == 0) {
+        pixel.R = 0x00;
+        pixel.G = 0xFF;
+        pixel.B = 0xFF;
+      } else {
+        pixel.R = 0xFF;
+        pixel.G = 0x00;
+        pixel.B = 0x00;
+      }
+      display_write_pixel(pixel);
+    }
+  }
 }
 
 void main(void) {
@@ -95,41 +63,30 @@ void main(void) {
 
   uint32_t lfsr;
 
-  uint8_t life[DISPLAY_ROWS][DISPLAY_COLS];
-  uint8_t life_next[DISPLAY_ROWS][DISPLAY_COLS];
+  uint8_t life[display_rows()][display_cols()];
+  uint8_t life_next[display_rows()][display_cols()];
 
-  lfsr = 1;
+  lfsr = 0xAAAAAAAA;
 
-  //Power On Display
-  DISPLAY_CMD = 0x29; // DISPON (29h): Display On 
+      LED = 0;
 
-  //Wait to take display out of sleep
-  while(get_time() < 5000000) {}
-  clear_time();
-  DISPLAY_CMD = 0x11; // SLPOUT (11h): Sleep Out
-  //DISPLAY_CMD = 0x36; // MADCTL (36h): Memory Data Access Control  
-  //  //Set up refresh rate to match orientation of shield
-  //  MADCTL = 0;
-  //  MADCTL = MADCTL | (0 << 7); //MY
-  //  MADCTL = MADCTL | (1 << 6); //MX 
-  //  MADCTL = MADCTL | (1 << 5); //MV
-  //  MADCTL = MADCTL | (0 << 4); //ML
-  //  MADCTL = MADCTL | (0 << 3); //RGB
-  //  MADCTL = MADCTL | (1 << 2); //MH
-  //  DISPLAY_DATA = MADCTL;
+  display_on();
 
       LED = 1;
+
   //Get initial timestamps
   timestamp   = get_time();
   keystamp    = timestamp;
 
       LED = 2;
+      LED = lfsr;
   //Initialize life
-  for(int row = 0; row < DISPLAY_ROWS; row++) {
-    for(int col = 0; col < DISPLAY_COLS; col++) {
-      xorshift(&lfsr);
-      //if(lfsr%5 == 0) { //GCC having issues with modulo
-      if((lfsr >> 29) == 0) {
+  for(int row = 0; row < display_rows(); row++) {
+    for(int col = 0; col < display_cols(); col++) {
+      lfsr = xorshift(lfsr);
+      LED = lfsr;
+      if(lfsr%3 == 0) { 
+      //if((row & 0x1) & (col & 0x1)) { 
         life[row][col] = 1;
       } else {
         life[row][col] = 0;
@@ -177,24 +134,90 @@ void main(void) {
       //Update LED
       LED = led;
 
+      //Update frame buffer
       LED = 4;
-      //Screen prints top to bottom, right to left
-      DISPLAY_CMD = 0x2C; //  RAMWR (2Ch): Memory Write 
-      for(int row = DISPLAY_ROWS-1; row >= 0; row--) {
-        for(int col = DISPLAY_COLS-1; col >= 0; col--) {
-          if(life[row][col] == 0) {
-            DISPLAY_DATA = 0xFC;
-            DISPLAY_DATA = 0xFC;
-            DISPLAY_DATA = 0xFC;
-	  } else {
-            DISPLAY_DATA = 0x80;
-            DISPLAY_DATA = 0x80;
-            DISPLAY_DATA = 0x80;
-          }
-        }
-      }
+      paint_framebuffer(display_rows(),display_cols(),life);
         
       LED = 5;
+      //Reset timers
+      clear_time();
+      timestamp = 0;
+      keystamp  = 0;
+
+      LED = 6;
+      //if(but0     ) {
+        //Update life
+        for(int row = 0; row < display_rows(); row++) {
+          for(int col = 0; col < display_cols(); col++) {
+            int row_upper, row_middle, row_lower;
+            int col_left,  col_middle, col_right;
+            int neighbors = 0;
+            
+            if(row == display_rows()-1) {
+              row_upper  = 0;
+              row_middle = row;
+              row_lower  = row - 1;
+            } else if(row == 0) {
+              row_upper  = row + 1;
+              row_middle = row;
+              row_lower  = display_rows()-1;
+            } else {
+              row_upper  = row + 1;
+              row_middle = row;
+              row_lower  = row - 1;
+            }
+
+            if(col == display_cols()-1) {
+              col_left   = col - 1;
+              col_middle = col;
+              col_right  = 0;
+            } else if(col == 0) {
+              col_left   = display_cols()-1;
+              col_middle = col;
+              col_right  = col + 1;
+            } else {
+              col_left   = col - 1;
+              col_middle = col;
+              col_right  = col + 1;
+            }
+            
+            if(life[row_upper ][col_left  ]) neighbors++;
+            if(life[row_upper ][col_middle]) neighbors++;
+            if(life[row_upper ][col_right ]) neighbors++;
+            if(life[row_middle][col_left  ]) neighbors++;
+            if(life[row_middle][col_right ]) neighbors++;
+            if(life[row_lower ][col_left  ]) neighbors++;
+            if(life[row_lower ][col_middle]) neighbors++;
+            if(life[row_lower ][col_right ]) neighbors++;
+
+            if(life[row][col]) {
+              if(neighbors < 2 ) {
+                life_next[row][col] = 0;
+              } else if(neighbors > 3 ) {
+                life_next[row][col] = 0;
+              } else {
+                life_next[row][col] = 1;
+              }
+            } else {
+              if(neighbors == 3 ) {
+                life_next[row][col] = 1;
+              } else {
+                life_next[row][col] = 0;
+              }
+            }
+          }
+        }
+        LED = 7;
+        for(int row = 0; row < display_rows(); row++) {
+          for(int col = 0; col < display_cols(); col++) {
+              life[row][col] = life_next[row][col];
+          }
+        }
+      //while(BUTTON_0        == 1) {} 
+      //}
+
+      LED = 8;
+
       //Clear keypresses
       but0        = 0;
       but1        = 0;
@@ -205,82 +228,6 @@ void main(void) {
       joy_right   = 0;
       key_pressed = 0;
 
-      //Reset timers
-      clear_time();
-      timestamp = 0;
-      keystamp  = 0;
-
-      LED = 6;
-      //Update life
-      xorshift(&lfsr);
-      for(int row = 0; row < DISPLAY_ROWS; row++) {
-        for(int col = 0; col < DISPLAY_COLS; col++) {
-          int row_upper, row_middle, row_lower;
-          int col_left,  col_middle, col_right;
-          int neighbors = 0;
-          
-          if(row == DISPLAY_ROWS-1) {
-            row_upper  = 0;
-            row_middle = row;
-            row_lower  = row - 1;
-          } else if(row == 0) {
-            row_upper  = row + 1;
-            row_middle = row;
-            row_lower  = DISPLAY_ROWS-1;
-          } else {
-            row_upper  = row + 1;
-            row_middle = row;
-            row_lower  = row - 1;
-          }
-
-          if(col == DISPLAY_COLS-1) {
-            col_left   = col - 1;
-            col_middle = col;
-            col_right  = 0;
-          } else if(col == 0) {
-            col_left   = DISPLAY_COLS-1;
-            col_middle = col;
-            col_right  = col + 1;
-          } else {
-            col_left   = col - 1;
-            col_middle = col;
-            col_right  = col + 1;
-          }
-          
-          if(life[row_upper ][col_left  ]) neighbors++;
-          if(life[row_upper ][col_middle]) neighbors++;
-          if(life[row_upper ][col_right ]) neighbors++;
-          if(life[row_middle][col_left  ]) neighbors++;
-          if(life[row_middle][col_right ]) neighbors++;
-          if(life[row_lower ][col_left  ]) neighbors++;
-          if(life[row_lower ][col_middle]) neighbors++;
-          if(life[row_lower ][col_right ]) neighbors++;
-
-          if(life[row][col]) {
-            if(neighbors < 2 ) {
-	      life_next[row][col] = 0;
-            } else if(neighbors > 3 ) {
-	      life_next[row][col] = 0;
-            } else {
-	      life_next[row][col] = 1;
-            }
-          } else {
-            if(neighbors == 3 ) {
-	      life_next[row][col] = 1;
-            } else {
-	      life_next[row][col] = 0;
-            }
-          }
-        }
-      }
-      LED = 7;
-      for(int row = 0; row < DISPLAY_ROWS; row++) {
-        for(int col = 0; col < DISPLAY_COLS; col++) {
-            life[row][col] = life_next[row][col];
-        }
-      }
-
-      LED = 8;
     }
 
   }

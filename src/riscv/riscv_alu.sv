@@ -1,6 +1,8 @@
 //import riscv_pkg::*;
 
-module riscv_alu (
+module riscv_alu#(
+  parameter M_EXT = 1
+)  (
   input  logic        clk,
   input  logic        rst,
 
@@ -110,6 +112,14 @@ module riscv_alu (
   input  logic idu_decode_CSRRSI,
   input  logic idu_decode_CSRRCI,
   input  logic idu_decode_EBREAK,
+  input  logic idu_decode_MUL,
+  input  logic idu_decode_MULH,
+  input  logic idu_decode_MULHSU,
+  input  logic idu_decode_MULHU,
+  input  logic idu_decode_DIV,
+  input  logic idu_decode_DIVU,
+  input  logic idu_decode_REM,
+  input  logic idu_decode_REMU,
   input  logic idu_decode_TRAP,
 
   output logic [31:0]       x_wr,
@@ -270,11 +280,29 @@ logic alu_CSRRWI;
 logic alu_CSRRSI;
 logic alu_CSRRCI;
 logic alu_EBREAK;
+logic alu_MUL;
+logic alu_MULH;
+logic alu_MULHSU;
+logic alu_MULHU;
+logic alu_DIV;
+logic alu_DIVU;
+logic alu_REM;
+logic alu_REMU;
 logic alu_TRAP;
 
 logic [31:0] addr;
 
 logic [31:0] mem_rdata;
+
+logic [63:0] product;
+logic [63:0] product_unsigned;
+logic [64:0] product_signed_unsigned;
+
+logic [31:0] quotient;
+logic [31:0] quotient_unsigned;
+
+logic [31:0] remainder;
+logic [31:0] remainder_unsigned;
 
 //Map out registers
 always_comb
@@ -312,7 +340,7 @@ always_comb
     'd28: rs1_data = x28;
     'd29: rs1_data = x29;
     'd30: rs1_data = x30;
-    'd31: rs1_data = x31;
+    default: rs1_data = x31;
   endcase
   unique
   case(alu_rs2)
@@ -347,7 +375,7 @@ always_comb
     'd28: rs2_data = x28;
     'd29: rs2_data = x29;
     'd30: rs2_data = x30;
-    'd31: rs2_data = x31;
+    default: rs2_data = x31;
   endcase
   x00_in = '0;
   x01_in = '0;
@@ -414,7 +442,7 @@ always_comb
     'd28: x28_in = rd_data;
     'd29: x29_in = rd_data;
     'd30: x30_in = rd_data;
-    'd31: x31_in = rd_data;
+    default: x31_in = rd_data;
   endcase
   end
 
@@ -530,6 +558,14 @@ always_ff @(posedge clk)
   alu_CSRRSI  <= alu_CSRRSI;    
   alu_CSRRCI  <= alu_CSRRCI;    
   alu_EBREAK  <= alu_EBREAK;    
+  alu_MUL     <= alu_MUL;
+  alu_MULH    <= alu_MULH;
+  alu_MULHSU  <= alu_MULHSU;
+  alu_MULHU   <= alu_MULHU;
+  alu_DIV     <= alu_DIV;
+  alu_DIVU    <= alu_DIVU;
+  alu_REM     <= alu_REM;
+  alu_REMU    <= alu_REMU;
   alu_TRAP    <= alu_TRAP;      
 
   mem_rdata <= mem_rdata;
@@ -605,6 +641,14 @@ always_ff @(posedge clk)
     alu_CSRRSI  <= idu_decode_CSRRSI;    
     alu_CSRRCI  <= idu_decode_CSRRCI;    
     alu_EBREAK  <= idu_decode_EBREAK;    
+    alu_MUL     <= idu_decode_MUL;  
+    alu_MULH    <= idu_decode_MULH; 
+    alu_MULHSU  <= idu_decode_MULHSU;
+    alu_MULHU   <= idu_decode_MULHU;
+    alu_DIV     <= idu_decode_DIV;  
+    alu_DIVU    <= idu_decode_DIVU; 
+    alu_REM     <= idu_decode_REM;  
+    alu_REMU    <= idu_decode_REMU; 
     alu_TRAP    <= idu_decode_TRAP;      
     bus_req   <= '0;
     bus_write <= '0;
@@ -918,7 +962,7 @@ always_ff @(posedge clk)
                 alu_PC <= alu_PC+'d4;
                 end
       alu_AUIPC : begin
-                  $display("%0t %-5s PC=%08X imm=%08X rd=(%d)", $time, "AUIPC", alu_PC, alu_imm, alu_rd);
+                  //$display("%0t %-5s PC=%08X imm=%08X rd=(%d)", $time, "AUIPC", alu_PC, alu_imm, alu_rd);
                   alu_retired <= '1;
                   x_wr[alu_rd] <= '1;
                   rd_data <= alu_PC + alu_imm;
@@ -933,6 +977,7 @@ always_ff @(posedge clk)
                  bus_write <= '0;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1:0])
                    'b00: bus_data_rd_mask <= 'b0001;
@@ -967,6 +1012,7 @@ always_ff @(posedge clk)
                  bus_write <= '0;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1:0])
                    'b00: bus_data_rd_mask <= 'b0001;
@@ -1001,6 +1047,7 @@ always_ff @(posedge clk)
                  bus_write <= '0;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1])
                    'b0: bus_data_rd_mask <= 'b0011;
@@ -1031,6 +1078,7 @@ always_ff @(posedge clk)
                  bus_write <= '0;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1])
                    'b0: bus_data_rd_mask <= 'b0011;
@@ -1061,6 +1109,7 @@ always_ff @(posedge clk)
                  bus_write <= '0;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  bus_data_rd_mask <= 'b1111;
                  alu_freeze <= '1;
                  end
@@ -1082,6 +1131,7 @@ always_ff @(posedge clk)
                  bus_write <= '1;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1:0])
                    'b00: bus_data_wr  <= {{24{'0}},rs2_data[7:0]};
@@ -1113,6 +1163,7 @@ always_ff @(posedge clk)
                  bus_write <= '1;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  unique
                  case(addr[1:0])
                    'b0: bus_data_wr  <= {{16{'0}},rs2_data[15:0]};
@@ -1140,6 +1191,7 @@ always_ff @(posedge clk)
                  bus_write <= '1;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  bus_addr  <= addr;
+                 bus_addr[1:0] <= '0;
                  bus_data_wr  <= rs2_data;
                  bus_data_wr_mask <= 'b1111;
                  alu_freeze <= '1;
@@ -1373,14 +1425,182 @@ always_ff @(posedge clk)
                    alu_retired <= '1;
                    alu_PC <= alu_PC+'d4;
                    end
+      alu_MUL    : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= product[31:0];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_MULH   : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= product[63:32];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_MULHSU : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= product_unsigned[63:32];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_MULHU  : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= product_signed_unsigned[63:32];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_DIV    : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= quotient[31:0];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_DIVU   : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= quotient_unsigned[31:0];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_REM    : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= remainder[31:0];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
+      alu_REMU   : begin
+                   if(cnt=='d0)
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   else if(cnt=='d10)
+                     begin
+                     alu_retired <= '1;
+                     x_wr[alu_rd] <= '1;
+                     rd_data <= remainder_unsigned[31:0];
+                     alu_PC <= alu_PC+'d4;
+                     alu_freeze <= '0;
+                     cnt <= '0;
+                     end
+                   else
+                     begin
+                     alu_freeze <= '1;
+                     cnt <= cnt + 1;
+                     end
+                   end
       alu_TRAP :   begin
                    //TODO
-                   $display("%0t %-5s PC=%08X : 0x%08f" , $time, "TRAP from IDU - !!TODO!!", alu_PC, alu_inst);
+                   //$display("%0t %-5s PC=%08X : 0x%08f" , $time, "TRAP from IDU - !!TODO!!", alu_PC, alu_inst);
                    alu_retired <= '1;
                    alu_trap <= '1;
                    end
           default : begin
-                $display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID INST!!", alu_PC, alu_inst);
+                //$display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID INST!!", alu_PC, alu_inst);
                 alu_retired <= '1;
                 alu_trap <= '1;
                 end
@@ -1389,7 +1609,7 @@ always_ff @(posedge clk)
 
     if(alu_PC[1:0] != '0)
       begin
-      $display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID PC!!", alu_PC, alu_inst);
+      //$display("%0t %-5s PC=%08X : 0x%08X" , $time, "TRAP from INVALID PC!!", alu_PC, alu_inst);
       alu_trap <= '1;
       end
 
@@ -1485,11 +1705,56 @@ always_ff @(posedge clk)
     alu_CSRRSI  <= '0;
     alu_CSRRCI  <= '0;
     alu_EBREAK  <= '0;
+    alu_MUL     <= '0;
+    alu_MULH    <= '0;
+    alu_MULHSU  <= '0;
+    alu_MULHU   <= '0;
+    alu_DIV     <= '0;
+    alu_DIVU    <= '0;
+    alu_REM     <= '0;
+    alu_REMU    <= '0;
     alu_TRAP    <= '0;
 
     mem_rdata <= '0;
     end
   end
+
+multiplier multiplier (
+  .clock    (clk),
+  .dataa  (rs1_data),
+  .datab  (rs2_data),
+  .result (product)
+);
+
+multiplier_unsigned multiplier_unsigned (
+  .clock    (clk),
+  .dataa  (rs1_data),
+  .datab  (rs2_data),
+  .result (product_unsigned)
+);
+
+multiplier_signed_unsigned multiplier_signed_unsigned (
+  .clock    (clk),
+  .dataa  (rs1_data),
+  .datab  ({1'b0,rs2_data}),
+  .result (product_signed_unsigned)
+);
+
+divider divider (
+  .clock    (clk),
+  .denom    (rs2_data),
+  .numer    (rs1_data),
+  .quotient (quotient),
+  .remain   (remainder)
+);
+
+divider_unsigned divider_unsigned (
+  .clock    (clk),
+  .denom    (rs2_data),
+  .numer    (rs1_data),
+  .quotient (quotient_unsigned),
+  .remain   (remainder_unsigned)
+);
 
 //RVFI interface
 `ifdef RISCV_FORMAL

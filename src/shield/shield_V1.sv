@@ -37,6 +37,8 @@ logic        joystick_display_bus_ack;
 logic        joystick_display_bus_write;
 logic [31:0] joystick_display_bus_addr;
 logic [31:0] joystick_display_bus_data;
+logic  [3:0] joystick_display_bus_data_rd_mask;
+logic  [3:0] joystick_display_bus_data_wr_mask;
 
 //IO
 logic SD_CS;

@@ -1,14 +1,14 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Sep 16 03:45:59 2019
+[*] Sat Oct 05 03:19:15 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Mon Sep 16 03:34:42 2019"
-[dumpfile_size] 2372413
+[dumpfile_mtime] "Sat Oct 05 03:18:15 2019"
+[dumpfile_size] 13233901977
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
 [timestart] 938
 [size] 1858 1057
-[pos] -1 -1
+[pos] -139 -139
 *-8.607247 1410 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
@@ -348,6 +348,14 @@ tb.dut.riscv.idu.idu_decode_SW
 tb.dut.riscv.idu.idu_decode_TRAP
 tb.dut.riscv.idu.idu_decode_XOR
 tb.dut.riscv.idu.idu_decode_XORI
+tb.dut.riscv.idu.idu_decode_MUL
+tb.dut.riscv.idu.idu_decode_MULH
+tb.dut.riscv.idu.idu_decode_MULHSU
+tb.dut.riscv.idu.idu_decode_MULHU
+tb.dut.riscv.idu.idu_decode_DIV
+tb.dut.riscv.idu.idu_decode_DIVU
+tb.dut.riscv.idu.idu_decode_REM
+tb.dut.riscv.idu.idu_decode_REMU
 @200
 -
 -ALU
@@ -502,5 +510,13 @@ tb.dut.riscv.alu.alu_SW
 tb.dut.riscv.alu.alu_TRAP
 tb.dut.riscv.alu.alu_XOR
 tb.dut.riscv.alu.alu_XORI
+tb.dut.riscv.alu.alu_MUL
+tb.dut.riscv.alu.alu_MULH
+tb.dut.riscv.alu.alu_MULHSU
+tb.dut.riscv.alu.alu_DIV
+tb.dut.riscv.alu.alu_DIVU
+tb.dut.riscv.alu.alu_REM
+@29
+tb.dut.riscv.alu.alu_REMU
 [pattern_trace] 1
 [pattern_trace] 0
