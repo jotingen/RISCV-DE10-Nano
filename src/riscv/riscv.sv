@@ -306,6 +306,9 @@ riscv_csr csrfile (
   .clk         (clk),
   .rst         (rst),
 
+  .alu_vld          (alu_vld),
+  .alu_retired    (alu_retired),
+
   .csr_req     (csr_req),   
   .csr_ack     (csr_ack),   
   .csr_write   (csr_write), 
