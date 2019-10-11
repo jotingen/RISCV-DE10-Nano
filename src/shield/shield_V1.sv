@@ -40,6 +40,14 @@ logic [31:0] joystick_display_bus_data;
 logic  [3:0] joystick_display_bus_data_rd_mask;
 logic  [3:0] joystick_display_bus_data_wr_mask;
 
+logic        display_buffer_bus_req;
+logic        display_buffer_bus_ack;
+logic        display_buffer_bus_write;
+logic [31:0] display_buffer_bus_addr;
+logic [31:0] display_buffer_bus_data;
+logic  [3:0] display_buffer_bus_data_rd_mask;
+logic  [3:0] display_buffer_bus_data_wr_mask;
+
 //IO
 logic SD_CS;
 logic TFT_DC;
@@ -101,7 +109,7 @@ joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
 
 
 //Display
-st7735r #(.SIZE(8),.ADDR_BASE(32'hC2000000))  display (
+st7735r #(.SIZE(16),.ADDR_BASE(32'hC2000000))  display (
   .clk (clk),
   .rst (rst),
   .arst (arst),
@@ -119,12 +127,34 @@ st7735r #(.SIZE(8),.ADDR_BASE(32'hC2000000))  display (
   .i_bus_data_rd_mask  (joystick_display_bus_data_rd_mask) ,
   .i_bus_data_wr_mask  (joystick_display_bus_data_wr_mask),
 
-  .o_bus_req   (o_bus_req),   
-  .o_bus_ack   (o_bus_ack),   
-  .o_bus_write (o_bus_write), 
-  .o_bus_addr  (o_bus_addr),  
-  .o_bus_data  (o_bus_data),
-  .o_bus_data_rd_mask  (o_bus_data_rd_mask) ,
-  .o_bus_data_wr_mask  (o_bus_data_wr_mask)
+  .o_bus_req   (display_buffer_bus_req),   
+  .o_bus_ack   (display_buffer_bus_ack),   
+  .o_bus_write (display_buffer_bus_write), 
+  .o_bus_addr  (display_buffer_bus_addr),  
+  .o_bus_data  (display_buffer_bus_data),
+  .o_bus_data_rd_mask  (display_buffer_bus_data_rd_mask) ,
+  .o_bus_data_wr_mask  (display_buffer_bus_data_wr_mask)
+);
+
+//Display Buffer
+st7735r_buffer #(.SIZE(17),.ADDR_BASE(32'hC3000000))  display_buffer (
+  .clk (clk),
+  .rst (rst),
+
+  .i_membus_req   (display_buffer_bus_req),   
+  .i_membus_ack   (display_buffer_bus_ack),   
+  .i_membus_write (display_buffer_bus_write), 
+  .i_membus_addr  (display_buffer_bus_addr),  
+  .i_membus_data  (display_buffer_bus_data),
+  .i_membus_data_rd_mask  (display_buffer_bus_data_rd_mask) ,
+  .i_membus_data_wr_mask  (display_buffer_bus_data_wr_mask),
+
+  .o_membus_req   (o_bus_req),   
+  .o_membus_ack   (o_bus_ack),   
+  .o_membus_write (o_bus_write), 
+  .o_membus_addr  (o_bus_addr),  
+  .o_membus_data  (o_bus_data),
+  .o_membus_data_rd_mask  (o_bus_data_rd_mask) ,
+  .o_membus_data_wr_mask  (o_bus_data_wr_mask)
 );
 endmodule

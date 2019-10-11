@@ -17,6 +17,8 @@ extern void     display_on(void);
 extern uint32_t display_rows(void);
 extern uint32_t display_cols(void);
 extern void     display_write_start(void);
+extern void     display_write_buffer(uint8_t row, uint8_t col, display_pixel_t pixel);
+extern display_pixel_t display_read_buffer(uint8_t row, uint8_t col);
 extern void     display_write_pixel(display_pixel_t pixel);
 
 #endif
