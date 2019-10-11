@@ -1,25 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Oct 05 03:19:15 2019
+[*] Thu Oct 10 02:09:31 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Oct 05 03:18:15 2019"
-[dumpfile_size] 13233901977
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\simulation\modelsim\sim.vcd"
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 938
+[timestart] 145700
 [size] 1858 1057
 [pos] -139 -139
-*-8.607247 1410 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-14.290023 282410 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
+[treeopen] tb.dut.riscv.alu.
 [treeopen] tb.dut.riscv.idu.
 [treeopen] tb.dut.shield.
 [treeopen] tb.dut.shield.display.
+[treeopen] tb.dut.shield.display.transmit.
 [sst_width] 255
-[signals_width] 345
+[signals_width] 381
 [sst_expanded] 1
-[sst_vpaned_height] 313
+[sst_vpaned_height] 643
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -30,6 +30,12 @@ tb.dut.arst
 -
 @28
 tb.dut.rst
+@200
+-
+@24
+tb.dut.riscv.csrfile.csr_C00[31:0]
+tb.dut.riscv.csrfile.csr_C04[31:0]
+tb.dut.riscv.csrfile.csr_C08[31:0]
 @200
 -
 -DISPLAY
@@ -85,8 +91,30 @@ tb.dut.shield.display.transmit.data_cnt[2:0]
 tb.dut.shield.display.transmit.rd_done
 @200
 -
+-DISPLAY BUFFER
+@28
+tb.dut.shield.display_buffer.i_membus_req
+tb.dut.shield.display_buffer.i_membus_ack
+tb.dut.shield.display_buffer.i_membus_write
+@22
+#{tb.dut.shield.display_buffer.i_membus_addr[31:0]} tb.dut.shield.display_buffer.i_membus_addr[31] tb.dut.shield.display_buffer.i_membus_addr[30] tb.dut.shield.display_buffer.i_membus_addr[29] tb.dut.shield.display_buffer.i_membus_addr[28] tb.dut.shield.display_buffer.i_membus_addr[27] tb.dut.shield.display_buffer.i_membus_addr[26] tb.dut.shield.display_buffer.i_membus_addr[25] tb.dut.shield.display_buffer.i_membus_addr[24] tb.dut.shield.display_buffer.i_membus_addr[23] tb.dut.shield.display_buffer.i_membus_addr[22] tb.dut.shield.display_buffer.i_membus_addr[21] tb.dut.shield.display_buffer.i_membus_addr[20] tb.dut.shield.display_buffer.i_membus_addr[19] tb.dut.shield.display_buffer.i_membus_addr[18] tb.dut.shield.display_buffer.i_membus_addr[17] tb.dut.shield.display_buffer.i_membus_addr[16] tb.dut.shield.display_buffer.i_membus_addr[15] tb.dut.shield.display_buffer.i_membus_addr[14] tb.dut.shield.display_buffer.i_membus_addr[13] tb.dut.shield.display_buffer.i_membus_addr[12] tb.dut.shield.display_buffer.i_membus_addr[11] tb.dut.shield.display_buffer.i_membus_addr[10] tb.dut.shield.display_buffer.i_membus_addr[9] tb.dut.shield.display_buffer.i_membus_addr[8] tb.dut.shield.display_buffer.i_membus_addr[7] tb.dut.shield.display_buffer.i_membus_addr[6] tb.dut.shield.display_buffer.i_membus_addr[5] tb.dut.shield.display_buffer.i_membus_addr[4] tb.dut.shield.display_buffer.i_membus_addr[3] tb.dut.shield.display_buffer.i_membus_addr[2] tb.dut.shield.display_buffer.i_membus_addr[1] tb.dut.shield.display_buffer.i_membus_addr[0]
+#{tb.dut.shield.display_buffer.i_membus_data[31:0]} tb.dut.shield.display_buffer.i_membus_data[31] tb.dut.shield.display_buffer.i_membus_data[30] tb.dut.shield.display_buffer.i_membus_data[29] tb.dut.shield.display_buffer.i_membus_data[28] tb.dut.shield.display_buffer.i_membus_data[27] tb.dut.shield.display_buffer.i_membus_data[26] tb.dut.shield.display_buffer.i_membus_data[25] tb.dut.shield.display_buffer.i_membus_data[24] tb.dut.shield.display_buffer.i_membus_data[23] tb.dut.shield.display_buffer.i_membus_data[22] tb.dut.shield.display_buffer.i_membus_data[21] tb.dut.shield.display_buffer.i_membus_data[20] tb.dut.shield.display_buffer.i_membus_data[19] tb.dut.shield.display_buffer.i_membus_data[18] tb.dut.shield.display_buffer.i_membus_data[17] tb.dut.shield.display_buffer.i_membus_data[16] tb.dut.shield.display_buffer.i_membus_data[15] tb.dut.shield.display_buffer.i_membus_data[14] tb.dut.shield.display_buffer.i_membus_data[13] tb.dut.shield.display_buffer.i_membus_data[12] tb.dut.shield.display_buffer.i_membus_data[11] tb.dut.shield.display_buffer.i_membus_data[10] tb.dut.shield.display_buffer.i_membus_data[9] tb.dut.shield.display_buffer.i_membus_data[8] tb.dut.shield.display_buffer.i_membus_data[7] tb.dut.shield.display_buffer.i_membus_data[6] tb.dut.shield.display_buffer.i_membus_data[5] tb.dut.shield.display_buffer.i_membus_data[4] tb.dut.shield.display_buffer.i_membus_data[3] tb.dut.shield.display_buffer.i_membus_data[2] tb.dut.shield.display_buffer.i_membus_data[1] tb.dut.shield.display_buffer.i_membus_data[0]
+@200
+-
+@29
+tb.dut.shield.display_buffer.o_membus_req
+@28
+tb.dut.shield.display_buffer.o_membus_ack
+tb.dut.shield.display_buffer.o_membus_write
+@22
+tb.dut.shield.display_buffer.o_membus_addr[31:0]
+tb.dut.shield.display_buffer.o_membus_data[31:0]
+@200
+-
 -LED
 @22
+tb.dut.led.LED[7:0]
+@28
 tb.dut.led.LED[7:0]
 @200
 -
@@ -516,7 +544,77 @@ tb.dut.riscv.alu.alu_MULHSU
 tb.dut.riscv.alu.alu_DIV
 tb.dut.riscv.alu.alu_DIVU
 tb.dut.riscv.alu.alu_REM
-@29
 tb.dut.riscv.alu.alu_REMU
+@200
+-
+@28
+tb.dut.riscv.alu.multiplier.clock
+@22
+#{tb.dut.riscv.alu.multiplier.dataa[31:0]} tb.dut.riscv.alu.multiplier.dataa[31] tb.dut.riscv.alu.multiplier.dataa[30] tb.dut.riscv.alu.multiplier.dataa[29] tb.dut.riscv.alu.multiplier.dataa[28] tb.dut.riscv.alu.multiplier.dataa[27] tb.dut.riscv.alu.multiplier.dataa[26] tb.dut.riscv.alu.multiplier.dataa[25] tb.dut.riscv.alu.multiplier.dataa[24] tb.dut.riscv.alu.multiplier.dataa[23] tb.dut.riscv.alu.multiplier.dataa[22] tb.dut.riscv.alu.multiplier.dataa[21] tb.dut.riscv.alu.multiplier.dataa[20] tb.dut.riscv.alu.multiplier.dataa[19] tb.dut.riscv.alu.multiplier.dataa[18] tb.dut.riscv.alu.multiplier.dataa[17] tb.dut.riscv.alu.multiplier.dataa[16] tb.dut.riscv.alu.multiplier.dataa[15] tb.dut.riscv.alu.multiplier.dataa[14] tb.dut.riscv.alu.multiplier.dataa[13] tb.dut.riscv.alu.multiplier.dataa[12] tb.dut.riscv.alu.multiplier.dataa[11] tb.dut.riscv.alu.multiplier.dataa[10] tb.dut.riscv.alu.multiplier.dataa[9] tb.dut.riscv.alu.multiplier.dataa[8] tb.dut.riscv.alu.multiplier.dataa[7] tb.dut.riscv.alu.multiplier.dataa[6] tb.dut.riscv.alu.multiplier.dataa[5] tb.dut.riscv.alu.multiplier.dataa[4] tb.dut.riscv.alu.multiplier.dataa[3] tb.dut.riscv.alu.multiplier.dataa[2] tb.dut.riscv.alu.multiplier.dataa[1] tb.dut.riscv.alu.multiplier.dataa[0]
+#{tb.dut.riscv.alu.multiplier.datab[31:0]} tb.dut.riscv.alu.multiplier.datab[31] tb.dut.riscv.alu.multiplier.datab[30] tb.dut.riscv.alu.multiplier.datab[29] tb.dut.riscv.alu.multiplier.datab[28] tb.dut.riscv.alu.multiplier.datab[27] tb.dut.riscv.alu.multiplier.datab[26] tb.dut.riscv.alu.multiplier.datab[25] tb.dut.riscv.alu.multiplier.datab[24] tb.dut.riscv.alu.multiplier.datab[23] tb.dut.riscv.alu.multiplier.datab[22] tb.dut.riscv.alu.multiplier.datab[21] tb.dut.riscv.alu.multiplier.datab[20] tb.dut.riscv.alu.multiplier.datab[19] tb.dut.riscv.alu.multiplier.datab[18] tb.dut.riscv.alu.multiplier.datab[17] tb.dut.riscv.alu.multiplier.datab[16] tb.dut.riscv.alu.multiplier.datab[15] tb.dut.riscv.alu.multiplier.datab[14] tb.dut.riscv.alu.multiplier.datab[13] tb.dut.riscv.alu.multiplier.datab[12] tb.dut.riscv.alu.multiplier.datab[11] tb.dut.riscv.alu.multiplier.datab[10] tb.dut.riscv.alu.multiplier.datab[9] tb.dut.riscv.alu.multiplier.datab[8] tb.dut.riscv.alu.multiplier.datab[7] tb.dut.riscv.alu.multiplier.datab[6] tb.dut.riscv.alu.multiplier.datab[5] tb.dut.riscv.alu.multiplier.datab[4] tb.dut.riscv.alu.multiplier.datab[3] tb.dut.riscv.alu.multiplier.datab[2] tb.dut.riscv.alu.multiplier.datab[1] tb.dut.riscv.alu.multiplier.datab[0]
+#{tb.dut.riscv.alu.multiplier.result[63:0]} tb.dut.riscv.alu.multiplier.result[63] tb.dut.riscv.alu.multiplier.result[62] tb.dut.riscv.alu.multiplier.result[61] tb.dut.riscv.alu.multiplier.result[60] tb.dut.riscv.alu.multiplier.result[59] tb.dut.riscv.alu.multiplier.result[58] tb.dut.riscv.alu.multiplier.result[57] tb.dut.riscv.alu.multiplier.result[56] tb.dut.riscv.alu.multiplier.result[55] tb.dut.riscv.alu.multiplier.result[54] tb.dut.riscv.alu.multiplier.result[53] tb.dut.riscv.alu.multiplier.result[52] tb.dut.riscv.alu.multiplier.result[51] tb.dut.riscv.alu.multiplier.result[50] tb.dut.riscv.alu.multiplier.result[49] tb.dut.riscv.alu.multiplier.result[48] tb.dut.riscv.alu.multiplier.result[47] tb.dut.riscv.alu.multiplier.result[46] tb.dut.riscv.alu.multiplier.result[45] tb.dut.riscv.alu.multiplier.result[44] tb.dut.riscv.alu.multiplier.result[43] tb.dut.riscv.alu.multiplier.result[42] tb.dut.riscv.alu.multiplier.result[41] tb.dut.riscv.alu.multiplier.result[40] tb.dut.riscv.alu.multiplier.result[39] tb.dut.riscv.alu.multiplier.result[38] tb.dut.riscv.alu.multiplier.result[37] tb.dut.riscv.alu.multiplier.result[36] tb.dut.riscv.alu.multiplier.result[35] tb.dut.riscv.alu.multiplier.result[34] tb.dut.riscv.alu.multiplier.result[33] tb.dut.riscv.alu.multiplier.result[32] tb.dut.riscv.alu.multiplier.result[31] tb.dut.riscv.alu.multiplier.result[30] tb.dut.riscv.alu.multiplier.result[29] tb.dut.riscv.alu.multiplier.result[28] tb.dut.riscv.alu.multiplier.result[27] tb.dut.riscv.alu.multiplier.result[26] tb.dut.riscv.alu.multiplier.result[25] tb.dut.riscv.alu.multiplier.result[24] tb.dut.riscv.alu.multiplier.result[23] tb.dut.riscv.alu.multiplier.result[22] tb.dut.riscv.alu.multiplier.result[21] tb.dut.riscv.alu.multiplier.result[20] tb.dut.riscv.alu.multiplier.result[19] tb.dut.riscv.alu.multiplier.result[18] tb.dut.riscv.alu.multiplier.result[17] tb.dut.riscv.alu.multiplier.result[16] tb.dut.riscv.alu.multiplier.result[15] tb.dut.riscv.alu.multiplier.result[14] tb.dut.riscv.alu.multiplier.result[13] tb.dut.riscv.alu.multiplier.result[12] tb.dut.riscv.alu.multiplier.result[11] tb.dut.riscv.alu.multiplier.result[10] tb.dut.riscv.alu.multiplier.result[9] tb.dut.riscv.alu.multiplier.result[8] tb.dut.riscv.alu.multiplier.result[7] tb.dut.riscv.alu.multiplier.result[6] tb.dut.riscv.alu.multiplier.result[5] tb.dut.riscv.alu.multiplier.result[4] tb.dut.riscv.alu.multiplier.result[3] tb.dut.riscv.alu.multiplier.result[2] tb.dut.riscv.alu.multiplier.result[1] tb.dut.riscv.alu.multiplier.result[0]
+tb.dut.riscv.alu.cnt[3:0]
+@200
+-
+@420
+#{tb.dut.riscv.alu.divider.denom[31:0]} tb.dut.riscv.alu.divider.denom[31] tb.dut.riscv.alu.divider.denom[30] tb.dut.riscv.alu.divider.denom[29] tb.dut.riscv.alu.divider.denom[28] tb.dut.riscv.alu.divider.denom[27] tb.dut.riscv.alu.divider.denom[26] tb.dut.riscv.alu.divider.denom[25] tb.dut.riscv.alu.divider.denom[24] tb.dut.riscv.alu.divider.denom[23] tb.dut.riscv.alu.divider.denom[22] tb.dut.riscv.alu.divider.denom[21] tb.dut.riscv.alu.divider.denom[20] tb.dut.riscv.alu.divider.denom[19] tb.dut.riscv.alu.divider.denom[18] tb.dut.riscv.alu.divider.denom[17] tb.dut.riscv.alu.divider.denom[16] tb.dut.riscv.alu.divider.denom[15] tb.dut.riscv.alu.divider.denom[14] tb.dut.riscv.alu.divider.denom[13] tb.dut.riscv.alu.divider.denom[12] tb.dut.riscv.alu.divider.denom[11] tb.dut.riscv.alu.divider.denom[10] tb.dut.riscv.alu.divider.denom[9] tb.dut.riscv.alu.divider.denom[8] tb.dut.riscv.alu.divider.denom[7] tb.dut.riscv.alu.divider.denom[6] tb.dut.riscv.alu.divider.denom[5] tb.dut.riscv.alu.divider.denom[4] tb.dut.riscv.alu.divider.denom[3] tb.dut.riscv.alu.divider.denom[2] tb.dut.riscv.alu.divider.denom[1] tb.dut.riscv.alu.divider.denom[0]
+#{tb.dut.riscv.alu.divider.numer[31:0]} tb.dut.riscv.alu.divider.numer[31] tb.dut.riscv.alu.divider.numer[30] tb.dut.riscv.alu.divider.numer[29] tb.dut.riscv.alu.divider.numer[28] tb.dut.riscv.alu.divider.numer[27] tb.dut.riscv.alu.divider.numer[26] tb.dut.riscv.alu.divider.numer[25] tb.dut.riscv.alu.divider.numer[24] tb.dut.riscv.alu.divider.numer[23] tb.dut.riscv.alu.divider.numer[22] tb.dut.riscv.alu.divider.numer[21] tb.dut.riscv.alu.divider.numer[20] tb.dut.riscv.alu.divider.numer[19] tb.dut.riscv.alu.divider.numer[18] tb.dut.riscv.alu.divider.numer[17] tb.dut.riscv.alu.divider.numer[16] tb.dut.riscv.alu.divider.numer[15] tb.dut.riscv.alu.divider.numer[14] tb.dut.riscv.alu.divider.numer[13] tb.dut.riscv.alu.divider.numer[12] tb.dut.riscv.alu.divider.numer[11] tb.dut.riscv.alu.divider.numer[10] tb.dut.riscv.alu.divider.numer[9] tb.dut.riscv.alu.divider.numer[8] tb.dut.riscv.alu.divider.numer[7] tb.dut.riscv.alu.divider.numer[6] tb.dut.riscv.alu.divider.numer[5] tb.dut.riscv.alu.divider.numer[4] tb.dut.riscv.alu.divider.numer[3] tb.dut.riscv.alu.divider.numer[2] tb.dut.riscv.alu.divider.numer[1] tb.dut.riscv.alu.divider.numer[0]
+#{tb.dut.riscv.alu.divider.quotient[31:0]} tb.dut.riscv.alu.divider.quotient[31] tb.dut.riscv.alu.divider.quotient[30] tb.dut.riscv.alu.divider.quotient[29] tb.dut.riscv.alu.divider.quotient[28] tb.dut.riscv.alu.divider.quotient[27] tb.dut.riscv.alu.divider.quotient[26] tb.dut.riscv.alu.divider.quotient[25] tb.dut.riscv.alu.divider.quotient[24] tb.dut.riscv.alu.divider.quotient[23] tb.dut.riscv.alu.divider.quotient[22] tb.dut.riscv.alu.divider.quotient[21] tb.dut.riscv.alu.divider.quotient[20] tb.dut.riscv.alu.divider.quotient[19] tb.dut.riscv.alu.divider.quotient[18] tb.dut.riscv.alu.divider.quotient[17] tb.dut.riscv.alu.divider.quotient[16] tb.dut.riscv.alu.divider.quotient[15] tb.dut.riscv.alu.divider.quotient[14] tb.dut.riscv.alu.divider.quotient[13] tb.dut.riscv.alu.divider.quotient[12] tb.dut.riscv.alu.divider.quotient[11] tb.dut.riscv.alu.divider.quotient[10] tb.dut.riscv.alu.divider.quotient[9] tb.dut.riscv.alu.divider.quotient[8] tb.dut.riscv.alu.divider.quotient[7] tb.dut.riscv.alu.divider.quotient[6] tb.dut.riscv.alu.divider.quotient[5] tb.dut.riscv.alu.divider.quotient[4] tb.dut.riscv.alu.divider.quotient[3] tb.dut.riscv.alu.divider.quotient[2] tb.dut.riscv.alu.divider.quotient[1] tb.dut.riscv.alu.divider.quotient[0]
+#{tb.dut.riscv.alu.divider.remain[31:0]} tb.dut.riscv.alu.divider.remain[31] tb.dut.riscv.alu.divider.remain[30] tb.dut.riscv.alu.divider.remain[29] tb.dut.riscv.alu.divider.remain[28] tb.dut.riscv.alu.divider.remain[27] tb.dut.riscv.alu.divider.remain[26] tb.dut.riscv.alu.divider.remain[25] tb.dut.riscv.alu.divider.remain[24] tb.dut.riscv.alu.divider.remain[23] tb.dut.riscv.alu.divider.remain[22] tb.dut.riscv.alu.divider.remain[21] tb.dut.riscv.alu.divider.remain[20] tb.dut.riscv.alu.divider.remain[19] tb.dut.riscv.alu.divider.remain[18] tb.dut.riscv.alu.divider.remain[17] tb.dut.riscv.alu.divider.remain[16] tb.dut.riscv.alu.divider.remain[15] tb.dut.riscv.alu.divider.remain[14] tb.dut.riscv.alu.divider.remain[13] tb.dut.riscv.alu.divider.remain[12] tb.dut.riscv.alu.divider.remain[11] tb.dut.riscv.alu.divider.remain[10] tb.dut.riscv.alu.divider.remain[9] tb.dut.riscv.alu.divider.remain[8] tb.dut.riscv.alu.divider.remain[7] tb.dut.riscv.alu.divider.remain[6] tb.dut.riscv.alu.divider.remain[5] tb.dut.riscv.alu.divider.remain[4] tb.dut.riscv.alu.divider.remain[3] tb.dut.riscv.alu.divider.remain[2] tb.dut.riscv.alu.divider.remain[1] tb.dut.riscv.alu.divider.remain[0]
+@200
+-
+@24
+#{tb.dut.riscv.alu.divider_unsigned.denom[31:0]} tb.dut.riscv.alu.divider_unsigned.denom[31] tb.dut.riscv.alu.divider_unsigned.denom[30] tb.dut.riscv.alu.divider_unsigned.denom[29] tb.dut.riscv.alu.divider_unsigned.denom[28] tb.dut.riscv.alu.divider_unsigned.denom[27] tb.dut.riscv.alu.divider_unsigned.denom[26] tb.dut.riscv.alu.divider_unsigned.denom[25] tb.dut.riscv.alu.divider_unsigned.denom[24] tb.dut.riscv.alu.divider_unsigned.denom[23] tb.dut.riscv.alu.divider_unsigned.denom[22] tb.dut.riscv.alu.divider_unsigned.denom[21] tb.dut.riscv.alu.divider_unsigned.denom[20] tb.dut.riscv.alu.divider_unsigned.denom[19] tb.dut.riscv.alu.divider_unsigned.denom[18] tb.dut.riscv.alu.divider_unsigned.denom[17] tb.dut.riscv.alu.divider_unsigned.denom[16] tb.dut.riscv.alu.divider_unsigned.denom[15] tb.dut.riscv.alu.divider_unsigned.denom[14] tb.dut.riscv.alu.divider_unsigned.denom[13] tb.dut.riscv.alu.divider_unsigned.denom[12] tb.dut.riscv.alu.divider_unsigned.denom[11] tb.dut.riscv.alu.divider_unsigned.denom[10] tb.dut.riscv.alu.divider_unsigned.denom[9] tb.dut.riscv.alu.divider_unsigned.denom[8] tb.dut.riscv.alu.divider_unsigned.denom[7] tb.dut.riscv.alu.divider_unsigned.denom[6] tb.dut.riscv.alu.divider_unsigned.denom[5] tb.dut.riscv.alu.divider_unsigned.denom[4] tb.dut.riscv.alu.divider_unsigned.denom[3] tb.dut.riscv.alu.divider_unsigned.denom[2] tb.dut.riscv.alu.divider_unsigned.denom[1] tb.dut.riscv.alu.divider_unsigned.denom[0]
+#{tb.dut.riscv.alu.divider_unsigned.numer[31:0]} tb.dut.riscv.alu.divider_unsigned.numer[31] tb.dut.riscv.alu.divider_unsigned.numer[30] tb.dut.riscv.alu.divider_unsigned.numer[29] tb.dut.riscv.alu.divider_unsigned.numer[28] tb.dut.riscv.alu.divider_unsigned.numer[27] tb.dut.riscv.alu.divider_unsigned.numer[26] tb.dut.riscv.alu.divider_unsigned.numer[25] tb.dut.riscv.alu.divider_unsigned.numer[24] tb.dut.riscv.alu.divider_unsigned.numer[23] tb.dut.riscv.alu.divider_unsigned.numer[22] tb.dut.riscv.alu.divider_unsigned.numer[21] tb.dut.riscv.alu.divider_unsigned.numer[20] tb.dut.riscv.alu.divider_unsigned.numer[19] tb.dut.riscv.alu.divider_unsigned.numer[18] tb.dut.riscv.alu.divider_unsigned.numer[17] tb.dut.riscv.alu.divider_unsigned.numer[16] tb.dut.riscv.alu.divider_unsigned.numer[15] tb.dut.riscv.alu.divider_unsigned.numer[14] tb.dut.riscv.alu.divider_unsigned.numer[13] tb.dut.riscv.alu.divider_unsigned.numer[12] tb.dut.riscv.alu.divider_unsigned.numer[11] tb.dut.riscv.alu.divider_unsigned.numer[10] tb.dut.riscv.alu.divider_unsigned.numer[9] tb.dut.riscv.alu.divider_unsigned.numer[8] tb.dut.riscv.alu.divider_unsigned.numer[7] tb.dut.riscv.alu.divider_unsigned.numer[6] tb.dut.riscv.alu.divider_unsigned.numer[5] tb.dut.riscv.alu.divider_unsigned.numer[4] tb.dut.riscv.alu.divider_unsigned.numer[3] tb.dut.riscv.alu.divider_unsigned.numer[2] tb.dut.riscv.alu.divider_unsigned.numer[1] tb.dut.riscv.alu.divider_unsigned.numer[0]
+#{tb.dut.riscv.alu.divider_unsigned.quotient[31:0]} tb.dut.riscv.alu.divider_unsigned.quotient[31] tb.dut.riscv.alu.divider_unsigned.quotient[30] tb.dut.riscv.alu.divider_unsigned.quotient[29] tb.dut.riscv.alu.divider_unsigned.quotient[28] tb.dut.riscv.alu.divider_unsigned.quotient[27] tb.dut.riscv.alu.divider_unsigned.quotient[26] tb.dut.riscv.alu.divider_unsigned.quotient[25] tb.dut.riscv.alu.divider_unsigned.quotient[24] tb.dut.riscv.alu.divider_unsigned.quotient[23] tb.dut.riscv.alu.divider_unsigned.quotient[22] tb.dut.riscv.alu.divider_unsigned.quotient[21] tb.dut.riscv.alu.divider_unsigned.quotient[20] tb.dut.riscv.alu.divider_unsigned.quotient[19] tb.dut.riscv.alu.divider_unsigned.quotient[18] tb.dut.riscv.alu.divider_unsigned.quotient[17] tb.dut.riscv.alu.divider_unsigned.quotient[16] tb.dut.riscv.alu.divider_unsigned.quotient[15] tb.dut.riscv.alu.divider_unsigned.quotient[14] tb.dut.riscv.alu.divider_unsigned.quotient[13] tb.dut.riscv.alu.divider_unsigned.quotient[12] tb.dut.riscv.alu.divider_unsigned.quotient[11] tb.dut.riscv.alu.divider_unsigned.quotient[10] tb.dut.riscv.alu.divider_unsigned.quotient[9] tb.dut.riscv.alu.divider_unsigned.quotient[8] tb.dut.riscv.alu.divider_unsigned.quotient[7] tb.dut.riscv.alu.divider_unsigned.quotient[6] tb.dut.riscv.alu.divider_unsigned.quotient[5] tb.dut.riscv.alu.divider_unsigned.quotient[4] tb.dut.riscv.alu.divider_unsigned.quotient[3] tb.dut.riscv.alu.divider_unsigned.quotient[2] tb.dut.riscv.alu.divider_unsigned.quotient[1] tb.dut.riscv.alu.divider_unsigned.quotient[0]
+#{tb.dut.riscv.alu.divider_unsigned.remain[31:0]} tb.dut.riscv.alu.divider_unsigned.remain[31] tb.dut.riscv.alu.divider_unsigned.remain[30] tb.dut.riscv.alu.divider_unsigned.remain[29] tb.dut.riscv.alu.divider_unsigned.remain[28] tb.dut.riscv.alu.divider_unsigned.remain[27] tb.dut.riscv.alu.divider_unsigned.remain[26] tb.dut.riscv.alu.divider_unsigned.remain[25] tb.dut.riscv.alu.divider_unsigned.remain[24] tb.dut.riscv.alu.divider_unsigned.remain[23] tb.dut.riscv.alu.divider_unsigned.remain[22] tb.dut.riscv.alu.divider_unsigned.remain[21] tb.dut.riscv.alu.divider_unsigned.remain[20] tb.dut.riscv.alu.divider_unsigned.remain[19] tb.dut.riscv.alu.divider_unsigned.remain[18] tb.dut.riscv.alu.divider_unsigned.remain[17] tb.dut.riscv.alu.divider_unsigned.remain[16] tb.dut.riscv.alu.divider_unsigned.remain[15] tb.dut.riscv.alu.divider_unsigned.remain[14] tb.dut.riscv.alu.divider_unsigned.remain[13] tb.dut.riscv.alu.divider_unsigned.remain[12] tb.dut.riscv.alu.divider_unsigned.remain[11] tb.dut.riscv.alu.divider_unsigned.remain[10] tb.dut.riscv.alu.divider_unsigned.remain[9] tb.dut.riscv.alu.divider_unsigned.remain[8] tb.dut.riscv.alu.divider_unsigned.remain[7] tb.dut.riscv.alu.divider_unsigned.remain[6] tb.dut.riscv.alu.divider_unsigned.remain[5] tb.dut.riscv.alu.divider_unsigned.remain[4] tb.dut.riscv.alu.divider_unsigned.remain[3] tb.dut.riscv.alu.divider_unsigned.remain[2] tb.dut.riscv.alu.divider_unsigned.remain[1] tb.dut.riscv.alu.divider_unsigned.remain[0]
+@200
+-
+@28
+tb.dut.riscv.alu.alu_freeze
+tb.dut.riscv.alu.bus_req
+tb.dut.riscv.alu.bus_ack
+@c00022
+tb.dut.riscv.alu.bus_addr[31:0]
+@28
+(0)tb.dut.riscv.alu.bus_addr[31:0]
+(1)tb.dut.riscv.alu.bus_addr[31:0]
+(2)tb.dut.riscv.alu.bus_addr[31:0]
+(3)tb.dut.riscv.alu.bus_addr[31:0]
+(4)tb.dut.riscv.alu.bus_addr[31:0]
+(5)tb.dut.riscv.alu.bus_addr[31:0]
+(6)tb.dut.riscv.alu.bus_addr[31:0]
+(7)tb.dut.riscv.alu.bus_addr[31:0]
+(8)tb.dut.riscv.alu.bus_addr[31:0]
+(9)tb.dut.riscv.alu.bus_addr[31:0]
+(10)tb.dut.riscv.alu.bus_addr[31:0]
+(11)tb.dut.riscv.alu.bus_addr[31:0]
+(12)tb.dut.riscv.alu.bus_addr[31:0]
+(13)tb.dut.riscv.alu.bus_addr[31:0]
+(14)tb.dut.riscv.alu.bus_addr[31:0]
+(15)tb.dut.riscv.alu.bus_addr[31:0]
+(16)tb.dut.riscv.alu.bus_addr[31:0]
+(17)tb.dut.riscv.alu.bus_addr[31:0]
+(18)tb.dut.riscv.alu.bus_addr[31:0]
+(19)tb.dut.riscv.alu.bus_addr[31:0]
+(20)tb.dut.riscv.alu.bus_addr[31:0]
+(21)tb.dut.riscv.alu.bus_addr[31:0]
+(22)tb.dut.riscv.alu.bus_addr[31:0]
+(23)tb.dut.riscv.alu.bus_addr[31:0]
+(24)tb.dut.riscv.alu.bus_addr[31:0]
+(25)tb.dut.riscv.alu.bus_addr[31:0]
+(26)tb.dut.riscv.alu.bus_addr[31:0]
+(27)tb.dut.riscv.alu.bus_addr[31:0]
+(28)tb.dut.riscv.alu.bus_addr[31:0]
+(29)tb.dut.riscv.alu.bus_addr[31:0]
+@1401200
+-group_end
+@28
+(30)tb.dut.riscv.alu.bus_addr[31:0]
+(31)tb.dut.riscv.alu.bus_addr[31:0]
+tb.dut.riscv.alu.bus_write
+@22
+tb.dut.riscv.alu.bus_data_wr_mask[3:0]
+tb.dut.riscv.alu.bus_data_wr[31:0]
 [pattern_trace] 1
 [pattern_trace] 0
