@@ -8,7 +8,7 @@ output logic SCK
 
 //Clock boundary
 logic clk_pulse;
-logic [2:0] clk_pulse_cnt;
+logic [1:0] clk_pulse_cnt;
 always_ff @(posedge clk)
   begin
   if(rst)
@@ -33,7 +33,7 @@ always_ff @(posedge clk)
 assign SCK_clk = clk_pulse;
 
 //Clock signal
-logic [2:0] sck_cnt;
+logic [1:0] sck_cnt;
 always_ff @(posedge clk)
   begin
   if(rst)
@@ -51,7 +51,7 @@ always_ff @(posedge clk)
                   sck_cnt <= sck_cnt;
                 SCK <= '0;
                 end
-      'd4,'d5,'d6,'d7:  
+      'd2,'d3:  
                 begin
                 sck_cnt <= sck_cnt + 1;
                 SCK <= '1;
