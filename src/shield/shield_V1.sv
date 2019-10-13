@@ -4,21 +4,35 @@ input  logic           clk,
 input  logic           rst,
 output logic           arst,
 
-input  logic           i_bus_req,
-input  logic           i_bus_ack,
-input  logic           i_bus_write,
-input  logic [31:0]    i_bus_addr,
-input  logic [31:0]    i_bus_data,
-input  logic  [3:0]    i_bus_data_rd_mask,
-input  logic  [3:0]    i_bus_data_wr_mask,
+  input  logic           mmc_joystick_bus_req,
+  input  logic           mmc_joystick_bus_write,
+  input  logic [31:0]    mmc_joystick_bus_addr,
+  input  logic [31:0]    mmc_joystick_bus_data,
+  input  logic  [3:0]    mmc_joystick_bus_data_rd_mask,
+  input  logic  [3:0]    mmc_joystick_bus_data_wr_mask,
 
-output logic           o_bus_req,
-output logic           o_bus_ack,
-output logic           o_bus_write,
-output logic [31:0]    o_bus_addr,
-output logic [31:0]    o_bus_data,
-output logic  [3:0]    o_bus_data_rd_mask,
-output logic  [3:0]    o_bus_data_wr_mask,
+  output logic           joystick_mmc_bus_ack,
+  output logic [31:0]    joystick_mmc_bus_data,
+
+  input  logic           mmc_display_bus_req,
+  input  logic           mmc_display_bus_write,
+  input  logic [31:0]    mmc_display_bus_addr,
+  input  logic [31:0]    mmc_display_bus_data,
+  input  logic  [3:0]    mmc_display_bus_data_rd_mask,
+  input  logic  [3:0]    mmc_display_bus_data_wr_mask,
+
+  output logic           display_mmc_bus_ack,
+  output logic [31:0]    display_mmc_bus_data,
+
+  input  logic           mmc_dispbuff_bus_req,
+  input  logic           mmc_dispbuff_bus_write,
+  input  logic [31:0]    mmc_dispbuff_bus_addr,
+  input  logic [31:0]    mmc_dispbuff_bus_data,
+  input  logic  [3:0]    mmc_dispbuff_bus_data_rd_mask,
+  input  logic  [3:0]    mmc_dispbuff_bus_data_wr_mask,
+
+  output logic           dispbuff_mmc_bus_ack,
+  output logic [31:0]    dispbuff_mmc_bus_data,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -81,7 +95,7 @@ assign arst = ~ARDUINO_RESET_N;
 
 
 //Joystick
-joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
+joystick #(.SIZE(5),.ADDR_BASE(32'h00000000)) joystick (
   .clk         (clk),
   .rst         (rst),
 
@@ -90,26 +104,20 @@ joystick #(.SIZE(5),.ADDR_BASE(32'hC1000100)) joystick (
   .ADC_SDI     (ADC_SDI),        
   .ADC_SDO     (ADC_SDO),        
 
-  .i_bus_req   (i_bus_req),   
-  .i_bus_ack   (i_bus_ack),   
-  .i_bus_write (i_bus_write), 
-  .i_bus_addr  (i_bus_addr),  
-  .i_bus_data  (i_bus_data),
-  .i_bus_data_rd_mask  (i_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (i_bus_data_wr_mask),
+  .i_bus_req           (mmc_joystick_bus_req),   
+  .i_bus_write         (mmc_joystick_bus_write), 
+  .i_bus_addr          (mmc_joystick_bus_addr),  
+  .i_bus_data          (mmc_joystick_bus_data),
+  .i_bus_data_rd_mask  (mmc_joystick_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (mmc_joystick_bus_data_wr_mask),
 
-  .o_bus_req   (joystick_display_bus_req),   
-  .o_bus_ack   (joystick_display_bus_ack),   
-  .o_bus_write (joystick_display_bus_write), 
-  .o_bus_addr  (joystick_display_bus_addr),  
-  .o_bus_data  (joystick_display_bus_data),
-  .o_bus_data_rd_mask  (joystick_display_bus_data_rd_mask) ,
-  .o_bus_data_wr_mask  (joystick_display_bus_data_wr_mask)
+  .o_bus_ack           (joystick_mmc_bus_ack),   
+  .o_bus_data          (joystick_mmc_bus_data)
 );
 
 
 //Display
-st7735r #(.SIZE(16),.ADDR_BASE(32'hC2000000))  display (
+st7735r #(.SIZE(16),.ADDR_BASE(32'h00000000))  display (
   .clk (clk),
   .rst (rst),
   .arst (arst),
@@ -119,42 +127,30 @@ st7735r #(.SIZE(16),.ADDR_BASE(32'hC2000000))  display (
   .DATA  (MOSI),
   .CS    (TFT_CS),
 
-  .i_bus_req   (joystick_display_bus_req),   
-  .i_bus_ack   (joystick_display_bus_ack),   
-  .i_bus_write (joystick_display_bus_write), 
-  .i_bus_addr  (joystick_display_bus_addr),  
-  .i_bus_data  (joystick_display_bus_data),
-  .i_bus_data_rd_mask  (joystick_display_bus_data_rd_mask) ,
-  .i_bus_data_wr_mask  (joystick_display_bus_data_wr_mask),
+  .i_bus_req           (mmc_display_bus_req),   
+  .i_bus_write         (mmc_display_bus_write), 
+  .i_bus_addr          (mmc_display_bus_addr),  
+  .i_bus_data          (mmc_display_bus_data),
+  .i_bus_data_rd_mask  (mmc_display_bus_data_rd_mask) ,
+  .i_bus_data_wr_mask  (mmc_display_bus_data_wr_mask),
 
-  .o_bus_req   (display_buffer_bus_req),   
-  .o_bus_ack   (display_buffer_bus_ack),   
-  .o_bus_write (display_buffer_bus_write), 
-  .o_bus_addr  (display_buffer_bus_addr),  
-  .o_bus_data  (display_buffer_bus_data),
-  .o_bus_data_rd_mask  (display_buffer_bus_data_rd_mask) ,
-  .o_bus_data_wr_mask  (display_buffer_bus_data_wr_mask)
+  .o_bus_ack           (display_mmc_bus_ack),   
+  .o_bus_data          (display_mmc_bus_data)
 );
 
 //Display Buffer
-st7735r_buffer #(.SIZE(17),.ADDR_BASE(32'hC3000000))  display_buffer (
+st7735r_buffer #(.SIZE(17),.ADDR_BASE(32'h00000000))  display_buffer (
   .clk (clk),
   .rst (rst),
 
-  .i_membus_req   (display_buffer_bus_req),   
-  .i_membus_ack   (display_buffer_bus_ack),   
-  .i_membus_write (display_buffer_bus_write), 
-  .i_membus_addr  (display_buffer_bus_addr),  
-  .i_membus_data  (display_buffer_bus_data),
-  .i_membus_data_rd_mask  (display_buffer_bus_data_rd_mask) ,
-  .i_membus_data_wr_mask  (display_buffer_bus_data_wr_mask),
+  .i_membus_req           (mmc_dispbuff_bus_req),   
+  .i_membus_write         (mmc_dispbuff_bus_write), 
+  .i_membus_addr          (mmc_dispbuff_bus_addr),  
+  .i_membus_data          (mmc_dispbuff_bus_data),
+  .i_membus_data_rd_mask  (mmc_dispbuff_bus_data_rd_mask) ,
+  .i_membus_data_wr_mask  (mmc_dispbuff_bus_data_wr_mask),
 
-  .o_membus_req   (o_bus_req),   
-  .o_membus_ack   (o_bus_ack),   
-  .o_membus_write (o_bus_write), 
-  .o_membus_addr  (o_bus_addr),  
-  .o_membus_data  (o_bus_data),
-  .o_membus_data_rd_mask  (o_bus_data_rd_mask) ,
-  .o_membus_data_wr_mask  (o_bus_data_wr_mask)
+  .o_membus_ack           (dispbuff_mmc_bus_ack),   
+  .o_membus_data          (dispbuff_mmc_bus_data)
 );
 endmodule

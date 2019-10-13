@@ -6,15 +6,9 @@ module mem #(
   input  logic           rst,
 
   input  logic           i_instbus_req,
-  input  logic           i_instbus_ack,
-  input  logic           i_instbus_write,
   input  logic [31:0]    i_instbus_addr,
-  input  logic [31:0]    i_instbus_data,
 
-  output logic           o_instbus_req,
   output logic           o_instbus_ack,
-  output logic           o_instbus_write,
-  output logic [31:0]    o_instbus_addr,
   output logic [31:0]    o_instbus_data,
 
   input  logic           i_membus_req,
@@ -42,17 +36,13 @@ logic [7:0] mem_array_0 [2**(SIZE-2)-1:0];
 //Instruction bus
 always_ff @(posedge clk)
   begin
-  o_instbus_req   <= i_instbus_req;    
-  o_instbus_ack   <= i_instbus_ack;    
-  o_instbus_write <= i_instbus_write;  
-  o_instbus_addr  <= i_instbus_addr;   
-  o_instbus_data  <= i_instbus_data;   
+  o_instbus_ack   <= '0;    
+  o_instbus_data  <= '0;   
 
   if(i_instbus_req &
      i_instbus_addr >= ADDR_BASE &
      i_instbus_addr <= ADDR_BASE + 2**SIZE - 1)
     begin
-    o_instbus_req <= '0;    
     o_instbus_ack <= '1;
     o_instbus_data[7:0]   <= mem_array_0[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
     o_instbus_data[15:8]  <= mem_array_1[i_instbus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2]];
@@ -70,19 +60,13 @@ always_ff @(posedge clk)
 //Memory bus
 always_ff @(posedge clk)
   begin
-  o_membus_req   <= i_membus_req;    
-  o_membus_ack   <= i_membus_ack;    
-  o_membus_write <= i_membus_write;  
-  o_membus_addr  <= i_membus_addr;   
-  o_membus_data  <= i_membus_data;   
-  o_membus_data_rd_mask  <= i_membus_data_rd_mask;   
-  o_membus_data_wr_mask  <= i_membus_data_wr_mask;   
+  o_membus_ack   <= '0;   
+  o_membus_data  <= '0;   
 
   if(i_membus_req &
      i_membus_addr >= ADDR_BASE &
      i_membus_addr <= ADDR_BASE + 2**SIZE - 1)
     begin
-    o_membus_req <= '0;    
     o_membus_ack <= '1;
     if (i_membus_write & i_membus_data_wr_mask[0])
       begin

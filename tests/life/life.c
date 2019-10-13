@@ -23,16 +23,15 @@
 #define DISPLAY_TIME   166
 
 
-uint32_t xorshift(uint32_t lfsr) {
-  uint32_t bit = ((lfsr >> 5) ^ (lfsr >> 13) ^ (lfsr >> 17));
-  return (lfsr >> 1) | (bit << 31);
+void xorshift(uint32_t * lfsr) {
+  uint32_t bit = ((*lfsr >> 5) ^ (*lfsr >> 13) ^ (*lfsr >> 17));
+  *lfsr =  (*lfsr >> 1) | (bit << 31);
+  return;
 }
 
-void paint_framebuffer(int rows, int cols, uint8_t life[rows][cols]) {
+void paint_pixel(int row, int col, uint8_t * cell) {
   display_pixel_t pixel;
-  for(int row = display_rows()-1; row >= 0; row--) {
-    for(int col = display_cols()-1; col >= 0; col--) {
-      if(life[row][col] == 0) {
+      if(*cell == 0) {
         pixel.R = 0xFF;
         pixel.G = 0xFF;
         pixel.B = 0xFF;
@@ -41,13 +40,31 @@ void paint_framebuffer(int rows, int cols, uint8_t life[rows][cols]) {
         pixel.G = 0x00;
         pixel.B = 0x00;
       }
-      display_write_buffer(row,col,pixel);
-    }
-  }
+      display_write_buffer_pixel(row,col,&pixel);
+}
+
+void display_framebuffer(){//int rows, int cols, uint8_t life[rows][cols]) {
+  //display_pixel_t pixel;
+  //for(int row = display_rows()-1; row >= 0; row--) {
+  //  for(int col = display_cols()-1; col >= 0; col--) {
+  //    if(life[row][col] == 0) {
+  //      pixel.R = 0xFF;
+  //      pixel.G = 0xFF;
+  //      pixel.B = 0xFF;
+  //    } else {
+  //      pixel.R = 0x00;
+  //      pixel.G = 0x00;
+  //      pixel.B = 0x00;
+  //    }
+  //    display_write_buffer_pixel(row,col,pixel);
+  //  }
+  //}
   display_write_start();
+  display_pixel_t pixel;
   for(int row = display_rows()-1; row >= 0; row--) {
     for(int col = display_cols()-1; col >= 0; col--) {
-      display_write_pixel(display_read_buffer(row,col));
+      display_read_buffer_pixel(row,col,&pixel);
+      display_write_pixel(&pixel);
     }
   }
 }
@@ -80,15 +97,15 @@ void main(void) {
         test_pixel.G = 0x3F;
         test_pixel.B = 0x3F;
       LED = 2;
-      display_write_buffer(0,0,test_pixel);
+      display_write_buffer_pixel(0,0,&test_pixel);
         test_pixel.R = 0x3F;
         test_pixel.G = 0x00;
         test_pixel.B = 0x00;
-      display_write_buffer(display_rows()-1,display_cols()-1,test_pixel);
+      display_write_buffer_pixel(display_rows()-1,display_cols()-1,&test_pixel);
       LED = 3;
-      test_pixel = display_read_buffer(0,0);
+      display_read_buffer_pixel(0,0,&test_pixel);
       LED = 4;
-      test_pixel = display_read_buffer(display_rows()-1,display_cols()-1);
+      display_read_buffer_pixel(display_rows()-1,display_cols()-1,&test_pixel);
       LED = 5;
 
   display_on();
@@ -101,15 +118,17 @@ void main(void) {
 
       LED = 7;
       //LED = lfsr;
-  //Initialize life
+  //Initialize life and frame buffer
   for(int row = 0; row < display_rows(); row++) {
     for(int col = 0; col < display_cols(); col++) {
-      lfsr = xorshift(lfsr);
+      xorshift(&lfsr);
+      //LED = lfsr;
       if(lfsr%3 == 0) { 
         life[row][col] = 1;
       } else {
         life[row][col] = 0;
       }
+      paint_pixel(row,col,&life[row][col]);
     }
   }
       LED = 8;
@@ -153,9 +172,9 @@ void main(void) {
       ////Update LED
       //LED = led;
 
-      //Update frame buffer
+      //Displayframe buffer
       LED = 9;
-      paint_framebuffer(display_rows(),display_cols(),life);
+      display_framebuffer(display_rows(),display_cols(),life);
         
       LED = 10;
       //Reset timers
@@ -224,9 +243,13 @@ void main(void) {
                 life_next[row][col] = 0;
               }
             }
+            if(life[row][col] != life_next[row][col]) {
+              paint_pixel(row,col,&life_next[row][col]);
+            }
           }
         }
         LED = 12;
+        //Promote life_next to life
         for(int row = 0; row < display_rows(); row++) {
           for(int col = 0; col < display_cols(); col++) {
               life[row][col] = life_next[row][col];

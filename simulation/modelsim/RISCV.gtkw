@@ -1,13 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Oct 10 02:09:31 2019
+[*] Sat Oct 12 10:31:13 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\simulation\modelsim\sim.vcd"
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
+[dumpfile_mtime] "Sat Oct 12 10:26:54 2019"
+[dumpfile_size] 3880822244
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 145700
-[size] 1858 1057
-[pos] -139 -139
-*-14.290023 282410 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 14940710
+[size] 1854 1046
+[pos] -1 -1
+*-13.294964 14994330 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -19,7 +21,7 @@
 [sst_width] 255
 [signals_width] 381
 [sst_expanded] 1
-[sst_vpaned_height] 643
+[sst_vpaned_height] 528
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -32,10 +34,80 @@ tb.dut.arst
 tb.dut.rst
 @200
 -
+@29
+tb.dut.led.LED[7:0]
 @24
 tb.dut.riscv.csrfile.csr_C00[31:0]
 tb.dut.riscv.csrfile.csr_C04[31:0]
 tb.dut.riscv.csrfile.csr_C08[31:0]
+@200
+-
+-MMC INST
+@28
+tb.dut.riscv_mmc_instbus_req
+@22
+tb.dut.riscv_mmc_instbus_addr[31:0]
+@200
+-
+@28
+tb.dut.mmc_mem_instbus_req
+@200
+-
+@28
+tb.dut.mem_mmc_instbus_ack
+@200
+-
+@28
+tb.dut.mmc_riscv_instbus_ack
+@22
+tb.dut.mmc_riscv_instbus_data[31:0]
+@200
+-
+-MMC DATA
+@28
+tb.dut.riscv_mmc_bus_req
+tb.dut.riscv_mmc_bus_write
+@22
+tb.dut.riscv_mmc_bus_addr[31:0]
+tb.dut.riscv_mmc_bus_data[31:0]
+tb.dut.riscv_mmc_bus_data_wr_mask[3:0]
+tb.dut.riscv_mmc_bus_data_rd_mask[3:0]
+@200
+-
+@28
+tb.dut.mmc_mem_bus_req
+tb.dut.mmc_mem_bus_write
+@22
+tb.dut.mmc_mem_bus_addr[31:0]
+tb.dut.mmc_mem_bus_data[31:0]
+tb.dut.mmc_mem_bus_data_wr_mask[3:0]
+tb.dut.mmc_mem_bus_data_rd_mask[3:0]
+@28
+tb.dut.mem_mmc_bus_ack
+@22
+tb.dut.mem_mmc_bus_data[31:0]
+@200
+-
+@28
+tb.dut.mmc_dispbuff_bus_req
+tb.dut.mmc_dispbuff_bus_write
+@22
+tb.dut.mmc_dispbuff_bus_addr[31:0]
+tb.dut.mmc_dispbuff_bus_data[31:0]
+tb.dut.mmc_dispbuff_bus_data_wr_mask[3:0]
+tb.dut.mmc_dispbuff_bus_data_rd_mask[3:0]
+@28
+tb.dut.shield.display_buffer.i_membus_req
+tb.dut.shield.display_buffer.o_membus_ack
+tb.dut.dispbuff_mmc_bus_ack
+@22
+tb.dut.dispbuff_mmc_bus_data[31:0]
+@200
+-
+@28
+tb.dut.mmc_riscv_bus_ack
+@22
+tb.dut.mmc_riscv_bus_data[31:0]
 @200
 -
 -DISPLAY
@@ -94,20 +166,15 @@ tb.dut.shield.display.transmit.rd_done
 -DISPLAY BUFFER
 @28
 tb.dut.shield.display_buffer.i_membus_req
-tb.dut.shield.display_buffer.i_membus_ack
 tb.dut.shield.display_buffer.i_membus_write
 @22
 #{tb.dut.shield.display_buffer.i_membus_addr[31:0]} tb.dut.shield.display_buffer.i_membus_addr[31] tb.dut.shield.display_buffer.i_membus_addr[30] tb.dut.shield.display_buffer.i_membus_addr[29] tb.dut.shield.display_buffer.i_membus_addr[28] tb.dut.shield.display_buffer.i_membus_addr[27] tb.dut.shield.display_buffer.i_membus_addr[26] tb.dut.shield.display_buffer.i_membus_addr[25] tb.dut.shield.display_buffer.i_membus_addr[24] tb.dut.shield.display_buffer.i_membus_addr[23] tb.dut.shield.display_buffer.i_membus_addr[22] tb.dut.shield.display_buffer.i_membus_addr[21] tb.dut.shield.display_buffer.i_membus_addr[20] tb.dut.shield.display_buffer.i_membus_addr[19] tb.dut.shield.display_buffer.i_membus_addr[18] tb.dut.shield.display_buffer.i_membus_addr[17] tb.dut.shield.display_buffer.i_membus_addr[16] tb.dut.shield.display_buffer.i_membus_addr[15] tb.dut.shield.display_buffer.i_membus_addr[14] tb.dut.shield.display_buffer.i_membus_addr[13] tb.dut.shield.display_buffer.i_membus_addr[12] tb.dut.shield.display_buffer.i_membus_addr[11] tb.dut.shield.display_buffer.i_membus_addr[10] tb.dut.shield.display_buffer.i_membus_addr[9] tb.dut.shield.display_buffer.i_membus_addr[8] tb.dut.shield.display_buffer.i_membus_addr[7] tb.dut.shield.display_buffer.i_membus_addr[6] tb.dut.shield.display_buffer.i_membus_addr[5] tb.dut.shield.display_buffer.i_membus_addr[4] tb.dut.shield.display_buffer.i_membus_addr[3] tb.dut.shield.display_buffer.i_membus_addr[2] tb.dut.shield.display_buffer.i_membus_addr[1] tb.dut.shield.display_buffer.i_membus_addr[0]
 #{tb.dut.shield.display_buffer.i_membus_data[31:0]} tb.dut.shield.display_buffer.i_membus_data[31] tb.dut.shield.display_buffer.i_membus_data[30] tb.dut.shield.display_buffer.i_membus_data[29] tb.dut.shield.display_buffer.i_membus_data[28] tb.dut.shield.display_buffer.i_membus_data[27] tb.dut.shield.display_buffer.i_membus_data[26] tb.dut.shield.display_buffer.i_membus_data[25] tb.dut.shield.display_buffer.i_membus_data[24] tb.dut.shield.display_buffer.i_membus_data[23] tb.dut.shield.display_buffer.i_membus_data[22] tb.dut.shield.display_buffer.i_membus_data[21] tb.dut.shield.display_buffer.i_membus_data[20] tb.dut.shield.display_buffer.i_membus_data[19] tb.dut.shield.display_buffer.i_membus_data[18] tb.dut.shield.display_buffer.i_membus_data[17] tb.dut.shield.display_buffer.i_membus_data[16] tb.dut.shield.display_buffer.i_membus_data[15] tb.dut.shield.display_buffer.i_membus_data[14] tb.dut.shield.display_buffer.i_membus_data[13] tb.dut.shield.display_buffer.i_membus_data[12] tb.dut.shield.display_buffer.i_membus_data[11] tb.dut.shield.display_buffer.i_membus_data[10] tb.dut.shield.display_buffer.i_membus_data[9] tb.dut.shield.display_buffer.i_membus_data[8] tb.dut.shield.display_buffer.i_membus_data[7] tb.dut.shield.display_buffer.i_membus_data[6] tb.dut.shield.display_buffer.i_membus_data[5] tb.dut.shield.display_buffer.i_membus_data[4] tb.dut.shield.display_buffer.i_membus_data[3] tb.dut.shield.display_buffer.i_membus_data[2] tb.dut.shield.display_buffer.i_membus_data[1] tb.dut.shield.display_buffer.i_membus_data[0]
 @200
 -
-@29
-tb.dut.shield.display_buffer.o_membus_req
 @28
 tb.dut.shield.display_buffer.o_membus_ack
-tb.dut.shield.display_buffer.o_membus_write
 @22
-tb.dut.shield.display_buffer.o_membus_addr[31:0]
 tb.dut.shield.display_buffer.o_membus_data[31:0]
 @200
 -
@@ -158,24 +225,14 @@ tb.dut.mem.i_instbus_addr[1]
 tb.dut.mem.i_instbus_addr[0]
 @1401200
 -group_end
-@22
-#{tb.dut.mem.i_instbus_data[31:0]} tb.dut.mem.i_instbus_data[31] tb.dut.mem.i_instbus_data[30] tb.dut.mem.i_instbus_data[29] tb.dut.mem.i_instbus_data[28] tb.dut.mem.i_instbus_data[27] tb.dut.mem.i_instbus_data[26] tb.dut.mem.i_instbus_data[25] tb.dut.mem.i_instbus_data[24] tb.dut.mem.i_instbus_data[23] tb.dut.mem.i_instbus_data[22] tb.dut.mem.i_instbus_data[21] tb.dut.mem.i_instbus_data[20] tb.dut.mem.i_instbus_data[19] tb.dut.mem.i_instbus_data[18] tb.dut.mem.i_instbus_data[17] tb.dut.mem.i_instbus_data[16] tb.dut.mem.i_instbus_data[15] tb.dut.mem.i_instbus_data[14] tb.dut.mem.i_instbus_data[13] tb.dut.mem.i_instbus_data[12] tb.dut.mem.i_instbus_data[11] tb.dut.mem.i_instbus_data[10] tb.dut.mem.i_instbus_data[9] tb.dut.mem.i_instbus_data[8] tb.dut.mem.i_instbus_data[7] tb.dut.mem.i_instbus_data[6] tb.dut.mem.i_instbus_data[5] tb.dut.mem.i_instbus_data[4] tb.dut.mem.i_instbus_data[3] tb.dut.mem.i_instbus_data[2] tb.dut.mem.i_instbus_data[1] tb.dut.mem.i_instbus_data[0]
 @28
 tb.dut.mem.o_instbus_ack
 @22
-tb.dut.mem.o_instbus_addr[31:0]
 tb.dut.mem.o_instbus_data[31:0]
 @200
 -
 @28
-tb.dut.riscv_mem_bus_ack
-tb.dut.mem_led_bus_ack
-tb.dut.led_keys_bus_ack
-tb.dut.keys_shield_bus_ack
-tb.dut.shield.i_bus_ack
 tb.dut.shield.joystick_display_bus_ack
-tb.dut.shield.o_bus_ack
-tb.dut.shield_riscv_bus_ack
 @200
 -
 @28
@@ -290,6 +347,7 @@ tb.dut.riscv.ifu.i_instbus_ack
 @28
 tb.dut.riscv.ifu.ifu_vld
 @22
+tb.dut.riscv.ifu.instbus_addr[31:0]
 tb.dut.riscv.ifu.ifu_inst_PC[31:0]
 tb.dut.riscv.ifu.ifu_inst[31:0]
 @28

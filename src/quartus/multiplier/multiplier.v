@@ -61,7 +61,7 @@ module multiplier (
 				.sum (1'b0));
 	defparam
 		lpm_mult_component.lpm_hint = "DEDICATED_MULTIPLIER_CIRCUITRY=YES,MAXIMIZE_SPEED=9",
-		lpm_mult_component.lpm_pipeline = 10,
+		lpm_mult_component.lpm_pipeline = 2,
 		lpm_mult_component.lpm_representation = "SIGNED",
 		lpm_mult_component.lpm_type = "LPM_MULT",
 		lpm_mult_component.lpm_widtha = 32,
