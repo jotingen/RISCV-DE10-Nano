@@ -66,7 +66,7 @@ module divider_unsigned (
 		LPM_DIVIDE_component.lpm_drepresentation = "UNSIGNED",
 		LPM_DIVIDE_component.lpm_hint = "MAXIMIZE_SPEED=10,LPM_REMAINDERPOSITIVE=TRUE",
 		LPM_DIVIDE_component.lpm_nrepresentation = "UNSIGNED",
-		LPM_DIVIDE_component.lpm_pipeline = 10,
+		LPM_DIVIDE_component.lpm_pipeline = 7,
 		LPM_DIVIDE_component.lpm_type = "LPM_DIVIDE",
 		LPM_DIVIDE_component.lpm_widthd = 32,
 		LPM_DIVIDE_component.lpm_widthn = 32;

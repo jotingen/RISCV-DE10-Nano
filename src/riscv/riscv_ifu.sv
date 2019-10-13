@@ -64,7 +64,7 @@ always_ff @(posedge clk)
   if(i_instbus_ack & accessing)
     begin
     ifu_inst    <= i_instbus_data;
-    ifu_inst_PC <= i_instbus_addr;
+    ifu_inst_PC <= instbus_addr;
     end
   PC      <= PC;
 
@@ -110,7 +110,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -119,7 +119,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '1;
                      PC              <= PC;
                      illegal         <= '0;
@@ -166,7 +166,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -175,7 +175,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '1;
                      PC              <= PC;
                      illegal         <= '0;
@@ -222,7 +222,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -231,7 +231,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '1;
                      PC              <= PC;
                      illegal         <= '0;
@@ -264,7 +264,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC+4;
                      illegal         <= '0;
@@ -275,7 +275,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -286,7 +286,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -333,7 +333,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -342,7 +342,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '1;
                      PC              <= PC;
                      illegal         <= '1;
@@ -353,7 +353,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -362,7 +362,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '1;
@@ -371,7 +371,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -380,7 +380,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '1;
@@ -389,7 +389,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -398,7 +398,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '1;
@@ -409,7 +409,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= 0;
+                     //instbus_addr  <= 0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -418,7 +418,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '1;
@@ -465,7 +465,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req     <= '0;
-                     instbus_addr    <= '0;
+                     //instbus_addr    <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -474,7 +474,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req     <= '1;
-                     instbus_addr    <= '0;
+                     //instbus_addr    <= '0;
                      ifu_vld         <= '1;
                      PC              <= PC;
                      illegal         <= '1;
@@ -525,7 +525,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC+4;
                      illegal         <= '0;
@@ -534,7 +534,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC+4;
                      illegal         <= '1;
@@ -545,7 +545,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -554,7 +554,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '1;
@@ -565,7 +565,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -574,7 +574,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '1;
@@ -585,7 +585,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -603,7 +603,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -621,7 +621,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -630,7 +630,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -641,7 +641,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;    
                      loaded          <= '0;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '0;    
                      PC              <= PC;    
                      illegal         <= '0;    
@@ -659,7 +659,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;    
                      loaded          <= '0;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '0;    
                      PC              <= PC;    
                      illegal         <= '0;    
@@ -677,7 +677,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;    
                      loaded          <= '0;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '0;    
                      PC              <= PC;    
                      illegal         <= '0;    
@@ -686,7 +686,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;    
                      loaded          <= '1;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '1;    
                      PC              <= PC;    
                      illegal         <= '0;    
@@ -697,7 +697,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;    
                      loaded          <= '0;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '0;    
                      PC              <= PC;    
                      illegal         <= '0;    
@@ -706,7 +706,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;    
                      loaded          <= '1;    
                      instbus_req   <= '0;    
-                     instbus_addr  <= '0;    
+                     //instbus_addr  <= '0;    
                      ifu_vld         <= '0;    
                      PC              <= PC;  
                      illegal         <= '0;    
@@ -717,7 +717,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;   
                      loaded          <= '0;   
                      instbus_req   <= '0;   
-                     instbus_addr  <= '0;   
+                     //instbus_addr  <= '0;   
                      ifu_vld         <= '0;   
                      PC              <= PC;   
                      illegal         <= '0;   
@@ -735,7 +735,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;   
                      loaded          <= '0;   
                      instbus_req   <= '0;   
-                     instbus_addr  <= '0;   
+                     //instbus_addr  <= '0;   
                      ifu_vld         <= '0;   
                      PC              <= PC;   
                      illegal         <= '0;   
@@ -753,7 +753,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;   
                      loaded          <= '0;   
                      instbus_req   <= '0;   
-                     instbus_addr  <= '0;   
+                     //instbus_addr  <= '0;   
                      ifu_vld         <= '0;   
                      PC              <= PC;   
                      illegal         <= '0;   
@@ -762,7 +762,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;   
                      loaded          <= '1;   
                      instbus_req   <= '0;   
-                     instbus_addr  <= '0;   
+                     //instbus_addr  <= '0;   
                      ifu_vld         <= '0;   
                      PC              <= PC;   
                      illegal         <= '0;   
@@ -813,7 +813,7 @@ always_ff @(posedge clk)
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -822,7 +822,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '1;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '0;
@@ -833,7 +833,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -842,7 +842,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -853,7 +853,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -862,7 +862,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= alu_PC_next;
                      illegal         <= '0;
@@ -872,7 +872,7 @@ always_ff @(posedge clk)
                      accessing       <= '0;
                      loaded          <= '0;
                      instbus_req   <= '0;
-                     instbus_addr  <= '0;
+                     //instbus_addr  <= '0;
                      ifu_vld         <= '0;
                      PC              <= PC;
                      illegal         <= '1;

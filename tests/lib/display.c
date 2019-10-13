@@ -47,24 +47,23 @@ extern void     display_write_start(void) {
   return;
 }
 
-extern void     display_write_buffer(uint8_t row, uint8_t col, display_pixel_t pixel) {
-  display_buffer[row*DISPLAY_COLS+col] = 0 | (pixel.R << 16) | (pixel.G << 8) | (pixel.B << 0);
+extern void     display_write_buffer_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel) {
+  display_buffer[row*DISPLAY_COLS+col] = 0 | (pixel->R << 16) | (pixel->G << 8) | (pixel->B << 0);
   return;
 }
 
-extern display_pixel_t display_read_buffer(uint8_t row, uint8_t col) {
-  display_pixel_t pixel;
+extern void     display_read_buffer_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel) {
   uint32_t buff;
   buff = display_buffer[row*DISPLAY_COLS+col];
-  pixel.R = (buff >> 16) & 0x000000FF;
-  pixel.G = (buff >> 8)  & 0x000000FF;
-  pixel.B = (buff >> 0)  & 0x000000FF;
-  return pixel;
+  pixel->R = (buff >> 16) & 0x000000FF;
+  pixel->G = (buff >> 8)  & 0x000000FF;
+  pixel->B = (buff >> 0)  & 0x000000FF;
+  return;
 }
 
-extern void     display_write_pixel(display_pixel_t pixel) {
-  DISPLAY_DATA = 0x80 | pixel.R;
-  DISPLAY_DATA = 0x80 | pixel.G;
-  DISPLAY_DATA = 0x80 | pixel.B;
+extern void     display_write_pixel(display_pixel_t * pixel) {
+  DISPLAY_DATA = 0x80 | pixel->R;
+  DISPLAY_DATA = 0x80 | pixel->G;
+  DISPLAY_DATA = 0x80 | pixel->B;
   return;
 }

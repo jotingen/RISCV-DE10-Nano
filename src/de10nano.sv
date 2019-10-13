@@ -81,58 +81,87 @@ output logic           HDMI_TX_VS
   logic rst;
 `endif
 
-logic        riscv_mem_instbus_req;
-logic        riscv_mem_instbus_ack;
-logic        riscv_mem_instbus_write;
-logic [31:0] riscv_mem_instbus_addr;
-logic [31:0] riscv_mem_instbus_data;
+logic           riscv_mmc_instbus_req;
+logic [31:0]    riscv_mmc_instbus_addr;
 
-logic        mem_riscv_instbus_req;
-logic        mem_riscv_instbus_ack;
-logic        mem_riscv_instbus_write;
-logic [31:0] mem_riscv_instbus_addr;
-logic [31:0] mem_riscv_instbus_data;
+logic           mmc_riscv_instbus_ack;
+logic [31:0]    mmc_riscv_instbus_data;
 
+logic           mmc_mem_instbus_req;
+logic [31:0]    mmc_mem_instbus_addr;
 
-logic        riscv_mem_bus_req;
-logic        riscv_mem_bus_ack;
-logic        riscv_mem_bus_write;
-logic [31:0] riscv_mem_bus_addr;
-logic [31:0] riscv_mem_bus_data;
-logic  [3:0] riscv_mem_bus_data_rd_mask;
-logic  [3:0] riscv_mem_bus_data_wr_mask;
+logic           mem_mmc_instbus_ack;
+logic [31:0]    mem_mmc_instbus_data;
 
-logic        mem_led_bus_req;
-logic        mem_led_bus_ack;
-logic        mem_led_bus_write;
-logic [31:0] mem_led_bus_addr;
-logic [31:0] mem_led_bus_data;
-logic  [3:0] mem_led_bus_data_rd_mask;
-logic  [3:0] mem_led_bus_data_wr_mask;
+logic           riscv_mmc_bus_req;
+logic           riscv_mmc_bus_write;
+logic [31:0]    riscv_mmc_bus_addr;
+logic [31:0]    riscv_mmc_bus_data;
+logic  [3:0]    riscv_mmc_bus_data_rd_mask;
+logic  [3:0]    riscv_mmc_bus_data_wr_mask;
 
-logic        led_keys_bus_req;
-logic        led_keys_bus_ack;
-logic        led_keys_bus_write;
-logic [31:0] led_keys_bus_addr;
-logic [31:0] led_keys_bus_data;
-logic  [3:0] led_keys_bus_data_rd_mask;
-logic  [3:0] led_keys_bus_data_wr_mask;
+logic           mmc_riscv_bus_ack;
+logic [31:0]    mmc_riscv_bus_data;
 
-logic        keys_shield_bus_req;
-logic        keys_shield_bus_ack;
-logic        keys_shield_bus_write;
-logic [31:0] keys_shield_bus_addr;
-logic [31:0] keys_shield_bus_data;
-logic  [3:0] keys_shield_bus_data_rd_mask;
-logic  [3:0] keys_shield_bus_data_wr_mask;
+logic           mmc_mem_bus_req;
+logic           mmc_mem_bus_write;
+logic [31:0]    mmc_mem_bus_addr;
+logic [31:0]    mmc_mem_bus_data;
+logic  [3:0]    mmc_mem_bus_data_rd_mask;
+logic  [3:0]    mmc_mem_bus_data_wr_mask;
 
-logic        shield_riscv_bus_req;
-logic        shield_riscv_bus_ack;
-logic        shield_riscv_bus_write;
-logic [31:0] shield_riscv_bus_addr;
-logic [31:0] shield_riscv_bus_data;
-logic  [3:0] shield_riscv_bus_data_rd_mask;
-logic  [3:0] shield_riscv_bus_data_wr_mask;
+logic           mem_mmc_bus_ack;
+logic [31:0]    mem_mmc_bus_data;
+
+logic           mmc_led_bus_req;
+logic           mmc_led_bus_write;
+logic [31:0]    mmc_led_bus_addr;
+logic [31:0]    mmc_led_bus_data;
+logic  [3:0]    mmc_led_bus_data_rd_mask;
+logic  [3:0]    mmc_led_bus_data_wr_mask;
+
+logic           led_mmc_bus_ack;
+logic [31:0]    led_mmc_bus_data;
+
+logic           mmc_keys_bus_req;
+logic           mmc_keys_bus_write;
+logic [31:0]    mmc_keys_bus_addr;
+logic [31:0]    mmc_keys_bus_data;
+logic  [3:0]    mmc_keys_bus_data_rd_mask;
+logic  [3:0]    mmc_keys_bus_data_wr_mask;
+
+logic           keys_mmc_bus_ack;
+logic [31:0]    keys_mmc_bus_data;
+
+logic           mmc_joystick_bus_req;
+logic           mmc_joystick_bus_write;
+logic [31:0]    mmc_joystick_bus_addr;
+logic [31:0]    mmc_joystick_bus_data;
+logic  [3:0]    mmc_joystick_bus_data_rd_mask;
+logic  [3:0]    mmc_joystick_bus_data_wr_mask;
+
+logic           joystick_mmc_bus_ack;
+logic [31:0]    joystick_mmc_bus_data;
+
+logic           mmc_display_bus_req;
+logic           mmc_display_bus_write;
+logic [31:0]    mmc_display_bus_addr;
+logic [31:0]    mmc_display_bus_data;
+logic  [3:0]    mmc_display_bus_data_rd_mask;
+logic  [3:0]    mmc_display_bus_data_wr_mask;
+
+logic           display_mmc_bus_ack;
+logic [31:0]    display_mmc_bus_data;
+
+logic           mmc_dispbuff_bus_req;
+logic           mmc_dispbuff_bus_write;
+logic [31:0]    mmc_dispbuff_bus_addr;
+logic [31:0]    mmc_dispbuff_bus_data;
+logic  [3:0]    mmc_dispbuff_bus_data_rd_mask;
+logic  [3:0]    mmc_dispbuff_bus_data_wr_mask;
+
+logic           dispbuff_mmc_bus_ack;
+logic [31:0]    dispbuff_mmc_bus_data;
 
 logic arst;
 logic arst_1;
@@ -158,33 +187,23 @@ riscv #(.M_EXT(1)) riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .i_instbus_req   (mem_riscv_instbus_req),  
-  .i_instbus_ack   (mem_riscv_instbus_ack),  
-  .i_instbus_write (mem_riscv_instbus_write),
-  .i_instbus_addr  (mem_riscv_instbus_addr), 
-  .i_instbus_data  (mem_riscv_instbus_data), 
+  .i_instbus_ack   (mmc_riscv_instbus_ack),  
+  .i_instbus_data  (mmc_riscv_instbus_data), 
                                             
-  .o_instbus_req   (riscv_mem_instbus_req),     
-  .o_instbus_ack   (riscv_mem_instbus_ack),     
-  .o_instbus_write (riscv_mem_instbus_write),   
-  .o_instbus_addr  (riscv_mem_instbus_addr),    
-  .o_instbus_data  (riscv_mem_instbus_data),    
+  .o_instbus_req   (riscv_mmc_instbus_req),     
+  .o_instbus_write (riscv_mmc_instbus_write),   
+  .o_instbus_addr  (riscv_mmc_instbus_addr),    
+  .o_instbus_data  (riscv_mmc_instbus_data),    
 
-  .i_membus_req   (shield_riscv_bus_req),   
-  .i_membus_ack   (shield_riscv_bus_ack),   
-  .i_membus_write (shield_riscv_bus_write), 
-  .i_membus_addr  (shield_riscv_bus_addr),  
-  .i_membus_data  (shield_riscv_bus_data),
-  .i_membus_data_rd_mask  (shield_riscv_bus_data_rd_mask),
-  .i_membus_data_wr_mask  (shield_riscv_bus_data_wr_mask),
+  .i_membus_ack   (mmc_riscv_bus_ack),   
+  .i_membus_data  (mmc_riscv_bus_data),
 
-  .o_membus_req   (riscv_mem_bus_req),   
-  .o_membus_ack   (riscv_mem_bus_ack),   
-  .o_membus_write (riscv_mem_bus_write), 
-  .o_membus_addr  (riscv_mem_bus_addr),  
-  .o_membus_data  (riscv_mem_bus_data),
-  .o_membus_data_rd_mask  (riscv_mem_bus_data_rd_mask),
-  .o_membus_data_wr_mask  (riscv_mem_bus_data_wr_mask)
+  .o_membus_req   (riscv_mmc_bus_req),   
+  .o_membus_write (riscv_mmc_bus_write), 
+  .o_membus_addr  (riscv_mmc_bus_addr),  
+  .o_membus_data  (riscv_mmc_bus_data),
+  .o_membus_data_rd_mask  (riscv_mmc_bus_data_rd_mask),
+  .o_membus_data_wr_mask  (riscv_mmc_bus_data_wr_mask)
 
 `ifdef RISCV_FORMAL
   ,
@@ -222,83 +241,209 @@ riscv #(.M_EXT(1)) riscv (
 `endif
 );
 
+mmc mmc_inst (
+  .clk         (clk),
+  .rst         (rst),
+  
+  .riscv_mmc_bus_req             (riscv_mmc_instbus_req            ),    
+  .riscv_mmc_bus_write           ('0                               ),  
+  .riscv_mmc_bus_addr            (riscv_mmc_instbus_addr           ),   
+  .riscv_mmc_bus_data            (riscv_mmc_instbus_data           ),   
+  .riscv_mmc_bus_data_rd_mask    ('0                               ), 
+  .riscv_mmc_bus_data_wr_mask    ('0                               ), 
+        
+  .mmc_riscv_bus_ack             (mmc_riscv_instbus_ack            ),
+  .mmc_riscv_bus_data            (mmc_riscv_instbus_data           ),
+                                                                 
+  .mmc_mem_bus_req               (mmc_mem_instbus_req              ),
+  .mmc_mem_bus_write             (mmc_mem_instbus_write            ),
+  .mmc_mem_bus_addr              (mmc_mem_instbus_addr             ),
+  .mmc_mem_bus_data              (mmc_mem_instbus_data             ),
+  .mmc_mem_bus_data_rd_mask      (mmc_mem_instbus_data_rd_mask     ),
+  .mmc_mem_bus_data_wr_mask      (mmc_mem_instbus_data_wr_mask     ),
+                                                                 
+  .mem_mmc_bus_ack               (mem_mmc_instbus_ack              ),
+  .mem_mmc_bus_data              (mem_mmc_instbus_data             ),
+                                                                 
+  .mmc_led_bus_req               (                             ),
+  .mmc_led_bus_write             (                             ),
+  .mmc_led_bus_addr              (                             ),
+  .mmc_led_bus_data              (                             ),
+  .mmc_led_bus_data_rd_mask      (                             ),
+  .mmc_led_bus_data_wr_mask      (                             ),
+                                                                 
+  .led_mmc_bus_ack               ('0                           ),
+  .led_mmc_bus_data              ('0                           ),
+                                                                 
+  .mmc_keys_bus_req              (                             ),
+  .mmc_keys_bus_write            (                             ),
+  .mmc_keys_bus_addr             (                             ),
+  .mmc_keys_bus_data             (                             ),
+  .mmc_keys_bus_data_rd_mask     (                             ),
+  .mmc_keys_bus_data_wr_mask     (                             ),
+                                                                 
+  .keys_mmc_bus_ack              ('0                           ),
+  .keys_mmc_bus_data             ('0                           ),
+                                                                 
+  .mmc_joystick_bus_req          (                             ),
+  .mmc_joystick_bus_write        (                             ),
+  .mmc_joystick_bus_addr         (                             ),
+  .mmc_joystick_bus_data         (                             ),
+  .mmc_joystick_bus_data_rd_mask (                             ),
+  .mmc_joystick_bus_data_wr_mask (                             ),
+                                                                 
+  .joystick_mmc_bus_ack          ('0                           ),
+  .joystick_mmc_bus_data         ('0                           ),
+                                                                 
+  .mmc_display_bus_req           (                             ),
+  .mmc_display_bus_write         (                             ),
+  .mmc_display_bus_addr          (                             ),
+  .mmc_display_bus_data          (                             ),
+  .mmc_display_bus_data_rd_mask  (                             ),
+  .mmc_display_bus_data_wr_mask  (                             ),
+                                                                 
+  .display_mmc_bus_ack           ('0                           ),
+  .display_mmc_bus_data          ('0                           ),
+                                                                 
+  .mmc_dispbuff_bus_req          (                             ),
+  .mmc_dispbuff_bus_write        (                             ),
+  .mmc_dispbuff_bus_addr         (                             ),
+  .mmc_dispbuff_bus_data         (                             ),
+  .mmc_dispbuff_bus_data_rd_mask (                             ),
+  .mmc_dispbuff_bus_data_wr_mask (                             ),
+                                                                 
+  .dispbuff_mmc_bus_ack          ('0                           ),
+  .dispbuff_mmc_bus_data         ('0                           )
+);
+
+mmc mmc_data (
+  .clk         (clk),
+  .rst         (rst),
+  
+  .riscv_mmc_bus_req             (riscv_mmc_bus_req            ),    
+  .riscv_mmc_bus_write           (riscv_mmc_bus_write          ),  
+  .riscv_mmc_bus_addr            (riscv_mmc_bus_addr           ),   
+  .riscv_mmc_bus_data            (riscv_mmc_bus_data           ),   
+  .riscv_mmc_bus_data_rd_mask    (riscv_mmc_bus_data_rd_mask   ), 
+  .riscv_mmc_bus_data_wr_mask    (riscv_mmc_bus_data_wr_mask   ), 
+        
+  .mmc_riscv_bus_ack             (mmc_riscv_bus_ack            ),
+  .mmc_riscv_bus_data            (mmc_riscv_bus_data           ),
+                                                                 
+  .mmc_mem_bus_req               (mmc_mem_bus_req              ),
+  .mmc_mem_bus_write             (mmc_mem_bus_write            ),
+  .mmc_mem_bus_addr              (mmc_mem_bus_addr             ),
+  .mmc_mem_bus_data              (mmc_mem_bus_data             ),
+  .mmc_mem_bus_data_rd_mask      (mmc_mem_bus_data_rd_mask     ),
+  .mmc_mem_bus_data_wr_mask      (mmc_mem_bus_data_wr_mask     ),
+                                                                 
+  .mem_mmc_bus_ack               (mem_mmc_bus_ack              ),
+  .mem_mmc_bus_data              (mem_mmc_bus_data             ),
+                                                                 
+  .mmc_led_bus_req               (mmc_led_bus_req              ),
+  .mmc_led_bus_write             (mmc_led_bus_write            ),
+  .mmc_led_bus_addr              (mmc_led_bus_addr             ),
+  .mmc_led_bus_data              (mmc_led_bus_data             ),
+  .mmc_led_bus_data_rd_mask      (mmc_led_bus_data_rd_mask     ),
+  .mmc_led_bus_data_wr_mask      (mmc_led_bus_data_wr_mask     ),
+                                                                 
+  .led_mmc_bus_ack               (led_mmc_bus_ack              ),
+  .led_mmc_bus_data              (led_mmc_bus_data             ),
+                                                                 
+  .mmc_keys_bus_req              (mmc_keys_bus_req             ),
+  .mmc_keys_bus_write            (mmc_keys_bus_write           ),
+  .mmc_keys_bus_addr             (mmc_keys_bus_addr            ),
+  .mmc_keys_bus_data             (mmc_keys_bus_data            ),
+  .mmc_keys_bus_data_rd_mask     (mmc_keys_bus_data_rd_mask    ),
+  .mmc_keys_bus_data_wr_mask     (mmc_keys_bus_data_wr_mask    ),
+                                                                 
+  .keys_mmc_bus_ack              (keys_mmc_bus_ack             ),
+  .keys_mmc_bus_data             (keys_mmc_bus_data            ),
+                                                                 
+  .mmc_joystick_bus_req          (mmc_joystick_bus_req         ),
+  .mmc_joystick_bus_write        (mmc_joystick_bus_write       ),
+  .mmc_joystick_bus_addr         (mmc_joystick_bus_addr        ),
+  .mmc_joystick_bus_data         (mmc_joystick_bus_data        ),
+  .mmc_joystick_bus_data_rd_mask (mmc_joystick_bus_data_rd_mask),
+  .mmc_joystick_bus_data_wr_mask (mmc_joystick_bus_data_wr_mask),
+                                                                 
+  .joystick_mmc_bus_ack          (joystick_mmc_bus_ack         ),
+  .joystick_mmc_bus_data         (joystick_mmc_bus_data        ),
+                                                                 
+  .mmc_display_bus_req           (mmc_display_bus_req          ),
+  .mmc_display_bus_write         (mmc_display_bus_write        ),
+  .mmc_display_bus_addr          (mmc_display_bus_addr         ),
+  .mmc_display_bus_data          (mmc_display_bus_data         ),
+  .mmc_display_bus_data_rd_mask  (mmc_display_bus_data_rd_mask ),
+  .mmc_display_bus_data_wr_mask  (mmc_display_bus_data_wr_mask ),
+                                                                 
+  .display_mmc_bus_ack           (display_mmc_bus_ack          ),
+  .display_mmc_bus_data          (display_mmc_bus_data         ),
+                                                                 
+  .mmc_dispbuff_bus_req          (mmc_dispbuff_bus_req         ),
+  .mmc_dispbuff_bus_write        (mmc_dispbuff_bus_write       ),
+  .mmc_dispbuff_bus_addr         (mmc_dispbuff_bus_addr        ),
+  .mmc_dispbuff_bus_data         (mmc_dispbuff_bus_data        ),
+  .mmc_dispbuff_bus_data_rd_mask (mmc_dispbuff_bus_data_rd_mask),
+  .mmc_dispbuff_bus_data_wr_mask (mmc_dispbuff_bus_data_wr_mask),
+                                                                 
+  .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
+  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        )
+);
+
 mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
   .clk         (clk),
   .rst         (rst),
 
-  .i_instbus_req   (riscv_mem_instbus_req),   
-  .i_instbus_ack   (riscv_mem_instbus_ack),   
-  .i_instbus_write (riscv_mem_instbus_write), 
-  .i_instbus_addr  (riscv_mem_instbus_addr),  
-  .i_instbus_data  (riscv_mem_instbus_data),
+  .i_instbus_req          (mmc_mem_instbus_req),   
+  .i_instbus_addr         (mmc_mem_instbus_addr),  
 
-  .o_instbus_req   (mem_riscv_instbus_req),   
-  .o_instbus_ack   (mem_riscv_instbus_ack),   
-  .o_instbus_write (mem_riscv_instbus_write), 
-  .o_instbus_addr  (mem_riscv_instbus_addr),  
-  .o_instbus_data  (mem_riscv_instbus_data),
+  .o_instbus_ack          (mem_mmc_instbus_ack),   
+  .o_instbus_data         (mem_mmc_instbus_data),
 
-  .i_membus_req   (riscv_mem_bus_req),   
-  .i_membus_ack   (riscv_mem_bus_ack),   
-  .i_membus_write (riscv_mem_bus_write), 
-  .i_membus_addr  (riscv_mem_bus_addr),  
-  .i_membus_data  (riscv_mem_bus_data),
-  .i_membus_data_rd_mask  (riscv_mem_bus_data_rd_mask),
-  .i_membus_data_wr_mask  (riscv_mem_bus_data_wr_mask),
+  .i_membus_req           (mmc_mem_bus_req),   
+  .i_membus_write         (mmc_mem_bus_write), 
+  .i_membus_addr          (mmc_mem_bus_addr),  
+  .i_membus_data          (mmc_mem_bus_data),
+  .i_membus_data_rd_mask  (mmc_mem_bus_data_rd_mask),
+  .i_membus_data_wr_mask  (mmc_mem_bus_data_wr_mask),
 
-  .o_membus_req   (mem_led_bus_req),   
-  .o_membus_ack   (mem_led_bus_ack),   
-  .o_membus_write (mem_led_bus_write), 
-  .o_membus_addr  (mem_led_bus_addr),  
-  .o_membus_data  (mem_led_bus_data),
-  .o_membus_data_rd_mask  (mem_led_bus_data_rd_mask),
-  .o_membus_data_wr_mask  (mem_led_bus_data_wr_mask)
+  .o_membus_ack           (mem_mmc_bus_ack),   
+  .o_membus_data          (mem_mmc_bus_data)
 );
 
-led #(.SIZE(5),.ADDR_BASE(32'hC0000000)) led (
+led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
   .clk         (clk),
   .rst         (rst),
 
   .LED         (LED),
 
-  .i_bus_req   (mem_led_bus_req),   
-  .i_bus_ack   (mem_led_bus_ack),   
-  .i_bus_write (mem_led_bus_write), 
-  .i_bus_addr  (mem_led_bus_addr),  
-  .i_bus_data  (mem_led_bus_data),
-  .i_bus_data_rd_mask  (mem_led_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (mem_led_bus_data_wr_mask),
+  .i_bus_req           (mmc_led_bus_req),   
+  .i_bus_write         (mmc_led_bus_write), 
+  .i_bus_addr          (mmc_led_bus_addr),  
+  .i_bus_data          (mmc_led_bus_data),
+  .i_bus_data_rd_mask  (mmc_led_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (mmc_led_bus_data_wr_mask),
 
-  .o_bus_req   (led_keys_bus_req),   
-  .o_bus_ack   (led_keys_bus_ack),   
-  .o_bus_write (led_keys_bus_write), 
-  .o_bus_addr  (led_keys_bus_addr),  
-  .o_bus_data  (led_keys_bus_data),
-  .o_bus_data_rd_mask  (led_keys_bus_data_rd_mask),
-  .o_bus_data_wr_mask  (led_keys_bus_data_wr_mask)
+  .o_bus_ack           (led_mmc_bus_ack),   
+  .o_bus_data          (led_mmc_bus_data)
 );
 
-keys #(.SIZE(5),.ADDR_BASE(32'hC1000000)) keys (
+keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
   .clk         (clk),
   .rst         (rst),
 
   .KEY         (KEY),
 
-  .i_bus_req   (led_keys_bus_req),   
-  .i_bus_ack   (led_keys_bus_ack),   
-  .i_bus_write (led_keys_bus_write), 
-  .i_bus_addr  (led_keys_bus_addr),  
-  .i_bus_data  (led_keys_bus_data),
-  .i_bus_data_rd_mask  (led_keys_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (led_keys_bus_data_wr_mask),
+  .i_bus_req           (mmc_keys_bus_req),   
+  .i_bus_write         (mmc_keys_bus_write), 
+  .i_bus_addr          (mmc_keys_bus_addr),  
+  .i_bus_data          (mmc_keys_bus_data),
+  .i_bus_data_rd_mask  (mmc_keys_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (mmc_keys_bus_data_wr_mask),
 
-  .o_bus_req   (keys_shield_bus_req),   
-  .o_bus_ack   (keys_shield_bus_ack),   
-  .o_bus_write (keys_shield_bus_write), 
-  .o_bus_addr  (keys_shield_bus_addr),  
-  .o_bus_data  (keys_shield_bus_data),
-  .o_bus_data_rd_mask  (keys_shield_bus_data_rd_mask),
-  .o_bus_data_wr_mask  (keys_shield_bus_data_wr_mask)
+  .o_bus_ack           (keys_mmc_bus_ack),   
+  .o_bus_data          (keys_mmc_bus_data)
 );
 
 shield_V1 shield (
@@ -315,21 +460,35 @@ shield_V1 shield (
   .ARDUINO_IO      (ARDUINO_IO),     
   .ARDUINO_RESET_N (ARDUINO_RESET_N),
 
-  .i_bus_req   (keys_shield_bus_req),   
-  .i_bus_ack   (keys_shield_bus_ack),   
-  .i_bus_write (keys_shield_bus_write), 
-  .i_bus_addr  (keys_shield_bus_addr),  
-  .i_bus_data  (keys_shield_bus_data),
-  .i_bus_data_rd_mask  (keys_shield_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (keys_shield_bus_data_wr_mask),
-
-  .o_bus_req   (shield_riscv_bus_req),   
-  .o_bus_ack   (shield_riscv_bus_ack),   
-  .o_bus_write (shield_riscv_bus_write), 
-  .o_bus_addr  (shield_riscv_bus_addr),  
-  .o_bus_data  (shield_riscv_bus_data),
-  .o_bus_data_rd_mask  (shield_riscv_bus_data_rd_mask),
-  .o_bus_data_wr_mask  (shield_riscv_bus_data_wr_mask)
+  .mmc_joystick_bus_req          (mmc_joystick_bus_req         ),
+  .mmc_joystick_bus_write        (mmc_joystick_bus_write       ),
+  .mmc_joystick_bus_addr         (mmc_joystick_bus_addr        ),
+  .mmc_joystick_bus_data         (mmc_joystick_bus_data        ),
+  .mmc_joystick_bus_data_rd_mask (mmc_joystick_bus_data_rd_mask),
+  .mmc_joystick_bus_data_wr_mask (mmc_joystick_bus_data_wr_mask),
+                                                                 
+  .joystick_mmc_bus_ack          (joystick_mmc_bus_ack         ),
+  .joystick_mmc_bus_data         (joystick_mmc_bus_data        ),
+                                                                 
+  .mmc_display_bus_req           (mmc_display_bus_req          ),
+  .mmc_display_bus_write         (mmc_display_bus_write        ),
+  .mmc_display_bus_addr          (mmc_display_bus_addr         ),
+  .mmc_display_bus_data          (mmc_display_bus_data         ),
+  .mmc_display_bus_data_rd_mask  (mmc_display_bus_data_rd_mask ),
+  .mmc_display_bus_data_wr_mask  (mmc_display_bus_data_wr_mask ),
+                                                                 
+  .display_mmc_bus_ack           (display_mmc_bus_ack          ),
+  .display_mmc_bus_data          (display_mmc_bus_data         ),
+                                                                 
+  .mmc_dispbuff_bus_req          (mmc_dispbuff_bus_req         ),
+  .mmc_dispbuff_bus_write        (mmc_dispbuff_bus_write       ),
+  .mmc_dispbuff_bus_addr         (mmc_dispbuff_bus_addr        ),
+  .mmc_dispbuff_bus_data         (mmc_dispbuff_bus_data        ),
+  .mmc_dispbuff_bus_data_rd_mask (mmc_dispbuff_bus_data_rd_mask),
+  .mmc_dispbuff_bus_data_wr_mask (mmc_dispbuff_bus_data_wr_mask),
+                                                                 
+  .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
+  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        )
 );
 
 endmodule

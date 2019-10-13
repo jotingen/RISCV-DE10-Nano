@@ -221,6 +221,7 @@ set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
 set_global_assignment -name SEARCH_PATH src/quartus/ram_1r1w_64kbx32b
 set_global_assignment -name SEARCH_PATH src/quartus/pll
 set_global_assignment -name SEARCH_PATH src/riscv
+set_global_assignment -name SEARCH_PATH src/mmc
 set_global_assignment -name SEARCH_PATH src/mem
 set_global_assignment -name SEARCH_PATH src/shield
 set_global_assignment -name SEARCH_PATH src/st7735r
@@ -260,5 +261,6 @@ set_global_assignment -name QIP_FILE src/quartus/divider/divider.qip
 set_global_assignment -name QIP_FILE src/quartus/divider_unsigned/divider_unsigned.qip
 set_global_assignment -name QIP_FILE src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.qip
 set_global_assignment -name QIP_FILE src/quartus/display_buffer/display_buffer.qip
+
 set_global_assignment -name SLD_FILE db/DE10Nano_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
