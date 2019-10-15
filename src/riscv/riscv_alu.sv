@@ -816,7 +816,7 @@ always_ff @(posedge clk)
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "SRAI", PC, alu_rs1, rs1_data, alu_imm[4:0], alu_rd);
                  alu_retired <= '1;
                  x_wr[alu_rd] <= '1;
-                 rd_data <= rs1_data >>> alu_shamt;
+                 rd_data <= $signed(rs1_data) >>> alu_shamt;
                  alu_PC <= alu_PC+'d4;
                  end
 
