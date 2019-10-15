@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "../lib/counters.h"
+#include "../lib/csr.h"
 
 #define FINAL_ANSWER (*((volatile unsigned int *) (0x00010000)))
 #define LED (*((volatile unsigned int *) (0xC0000000)))
@@ -16,7 +16,7 @@ int main(void) {
     b = a;
     a = b + c;
     while(get_time()<50000000) {}
-    clear_time();
+    reset_time();
   }
   FINAL_ANSWER = a;
   LED = a;

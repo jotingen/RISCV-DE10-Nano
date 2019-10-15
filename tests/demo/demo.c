@@ -1,8 +1,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "../lib/counters.h"
+#include "../lib/csr.h"
 #include "../lib/display.h"
+#include "../lib/rand.h"
+
 #define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
 #define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
 
@@ -30,14 +32,6 @@ void fibbonacci(uint32_t* a, uint32_t* b) {
   *a = *b + c;
 }
 
-void xorshift(uint32_t* lfsr) {
-  uint32_t new = *lfsr;
-  new ^= new << 13;
-  new ^= new >> 17;
-  new ^= new << 5;
-  *lfsr = new;
-}
-
 void main(void) {
   uint32_t inv;
   uint32_t color;
@@ -58,7 +52,6 @@ void main(void) {
 
   uint32_t a,b,c;
 
-  uint32_t lfsr;
 
 
   display_on();
@@ -85,7 +78,6 @@ void main(void) {
   a = 1;
   b = 1;
 
-  lfsr = 1;
 
   while(1) {
     //Get new timestamp
@@ -157,7 +149,7 @@ void main(void) {
       } else {
         for(int row = display_rows()-1; row >= 0; row--) {
           for(int col = display_cols()-1; col >= 0; col--) {
-            xorshift(&lfsr);
+            rand();
             //screen[row][col].R = 0x80 | ((lfsr >> 0) & 0x7F);
             //screen[row][col].G = 0x80 | ((lfsr >> 7) & 0x7F);
             //screen[row][col].B = 0x80 | ((lfsr >> 14) & 0x7F);
@@ -187,7 +179,7 @@ void main(void) {
       key_pressed = 0;
 
       //Reset timers
-      clear_time();
+      reset_time();
       timestamp = 0;
       keystamp  = 0;
     }

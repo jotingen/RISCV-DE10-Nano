@@ -1,8 +1,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "../lib/counters.h"
+#include "../lib/csr.h"
 #include "../lib/display.h"
+#include "../lib/rand.h"
+#include "../lib/font8x8/font8x8_basic.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
@@ -23,55 +25,27 @@
 #define DISPLAY_TIME   166
 
 
-void xorshift(uint32_t * lfsr) {
-  uint32_t bit = ((*lfsr >> 5) ^ (*lfsr >> 13) ^ (*lfsr >> 17));
-  *lfsr =  (*lfsr >> 1) | (bit << 31);
-  return;
-}
-
 void paint_pixel(int row, int col, uint8_t * cell) {
   display_pixel_t pixel;
       if(*cell == 0) {
-        pixel.R = 0xFF;
-        pixel.G = 0xFF;
-        pixel.B = 0xFF;
+        if(col<100) {
+          pixel.R = 0x3F;
+          pixel.G = 0x3F;
+          pixel.B = 0x3F;
+        } else {
+          pixel.R = 0xFC;
+          pixel.G = 0xFC;
+          pixel.B = 0xFC;
+        }
       } else {
         pixel.R = 0x00;
         pixel.G = 0x00;
         pixel.B = 0x00;
       }
-      display_write_buffer_pixel(row,col,&pixel);
-}
-
-void display_framebuffer(){//int rows, int cols, uint8_t life[rows][cols]) {
-  //display_pixel_t pixel;
-  //for(int row = display_rows()-1; row >= 0; row--) {
-  //  for(int col = display_cols()-1; col >= 0; col--) {
-  //    if(life[row][col] == 0) {
-  //      pixel.R = 0xFF;
-  //      pixel.G = 0xFF;
-  //      pixel.B = 0xFF;
-  //    } else {
-  //      pixel.R = 0x00;
-  //      pixel.G = 0x00;
-  //      pixel.B = 0x00;
-  //    }
-  //    display_write_buffer_pixel(row,col,pixel);
-  //  }
-  //}
-  display_write_start();
-  display_pixel_t pixel;
-  for(int row = display_rows()-1; row >= 0; row--) {
-    for(int col = display_cols()-1; col >= 0; col--) {
-      display_read_buffer_pixel(row,col,&pixel);
-      display_write_pixel(&pixel);
-    }
-  }
+      dispbuff_write_pixel(row,col,&pixel);
 }
 
 void main(void) {
-  uint32_t  MADCTL;
-
   uint32_t but0, but1;
   uint32_t joy_sel, joy_up, joy_down, joy_left, joy_right;
 
@@ -83,32 +57,47 @@ void main(void) {
 
   uint32_t led;
 
-  uint32_t lfsr;
-
   uint8_t life[display_rows()][display_cols()];
   uint8_t life_next[display_rows()][display_cols()];
 
-  display_pixel_t test_pixel;
+  display_pixel_t pixel;
 
-  lfsr = 0xAAAAAAAA;
+  char buff[21];
 
       LED = 0;
-        test_pixel.R = 0x00;
-        test_pixel.G = 0x3F;
-        test_pixel.B = 0x3F;
+        pixel.R = 0x00;
+        pixel.G = 0x3F;
+        pixel.B = 0x3F;
+      LED = 1;
+      dispbuff_write_pixel(0,0,&pixel);
+        pixel.R = 0x3F;
+        pixel.G = 0x00;
+        pixel.B = 0x00;
+      dispbuff_write_pixel(display_rows()-1,display_cols()-1,&pixel);
       LED = 2;
-      display_write_buffer_pixel(0,0,&test_pixel);
-        test_pixel.R = 0x3F;
-        test_pixel.G = 0x00;
-        test_pixel.B = 0x00;
-      display_write_buffer_pixel(display_rows()-1,display_cols()-1,&test_pixel);
+      dispbuff_read_pixel(0,0,&pixel);
       LED = 3;
-      display_read_buffer_pixel(0,0,&test_pixel);
+      dispbuff_read_pixel(display_rows()-1,display_cols()-1,&pixel);
       LED = 4;
-      display_read_buffer_pixel(display_rows()-1,display_cols()-1,&test_pixel);
+        for (int8_t x=0; x < 8; x++) {
+          for (int8_t y=7; y >= 0; y--) {
+              uint8_t set = font8x8_basic['J'][x] & (1 << y);
+              display_pixel_t pixel;
+              if(set) {
+                pixel.R = 0xFF;
+                pixel.G = 0x00;
+                pixel.B = 0x00;
+                dispbuff_write_pixel(x,y,&pixel);
+                dispbuff_write_pixel(168/2-4+x,120/2-4-y,&pixel);
+              }
+          }
+        }
+
+rand_init();
+  display_on();
       LED = 5;
 
-  display_on();
+      //sprintf(buff, "Cycle %5d", get_time());
 
       LED = 6;
 
@@ -117,13 +106,10 @@ void main(void) {
   //keystamp    = timestamp;
 
       LED = 7;
-      //LED = lfsr;
   //Initialize life and frame buffer
   for(int row = 0; row < display_rows(); row++) {
     for(int col = 0; col < display_cols(); col++) {
-      xorshift(&lfsr);
-      //LED = lfsr;
-      if(lfsr%3 == 0) { 
+      if(rand()%3 == 0) { 
         life[row][col] = 1;
       } else {
         life[row][col] = 0;
@@ -174,7 +160,7 @@ void main(void) {
 
       //Displayframe buffer
       LED = 9;
-      display_framebuffer(display_rows(),display_cols(),life);
+      display_write();
         
       LED = 10;
       //Reset timers
@@ -248,7 +234,24 @@ void main(void) {
             }
           }
         }
-        LED = 12;
+        //Draw random letter
+        //x=50
+        //y=30
+        for (uint8_t x=0; x < 8; x++) {
+          for (uint8_t y=0; y < 8; y++) {
+          //for (int8_t y=7; y >= 0; y--) {
+              uint8_t set = font8x8_basic['J'][x] & (1 << y);
+              display_pixel_t pixel;
+              if(set) {
+                pixel.R = 0xFF;
+                pixel.G = 0x00;
+                pixel.B = 0x00;
+                dispbuff_write_pixel(7-x,y,&pixel);
+                dispbuff_write_pixel(168/2-4+7-x,120/2-4+y,&pixel);
+              }
+          }
+        }
+        LED = 13;
         //Promote life_next to life
         for(int row = 0; row < display_rows(); row++) {
           for(int col = 0; col < display_cols(); col++) {
@@ -258,7 +261,7 @@ void main(void) {
       //while(BUTTON_0        == 1) {} 
       //}
 
-      LED = 13;
+      LED = 14;
 
       //Clear keypresses
       but0        = 0;
