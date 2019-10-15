@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Oct 12 10:31:13 2019
+[*] Sun Oct 13 01:33:35 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Oct 12 10:26:54 2019"
-[dumpfile_size] 3880822244
+[dumpfile_mtime] "Sat Oct 12 12:42:49 2019"
+[dumpfile_size] 3929301869
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 14940710
+[timestart] 14980932
 [size] 1854 1046
 [pos] -1 -1
-*-13.294964 14994330 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.294964 14981870 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -34,7 +34,7 @@ tb.dut.arst
 tb.dut.rst
 @200
 -
-@29
+@28
 tb.dut.led.LED[7:0]
 @24
 tb.dut.riscv.csrfile.csr_C00[31:0]
@@ -325,7 +325,9 @@ tb.dut.riscv.ifu.alu_retired
 tb.dut.riscv.ifu.alu_freeze
 tb.dut.riscv.ifu.alu_trap
 tb.dut.riscv.ifu.alu_br_miss
+@29
 tb.dut.riscv.ifu.idu_vld
+@28
 tb.dut.riscv.ifu.idu_freeze
 tb.dut.riscv.ifu.i_instbus_ack
 @1001200
