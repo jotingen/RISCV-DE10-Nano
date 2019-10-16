@@ -98,10 +98,10 @@ always_ff @(posedge clk)
 
 initial
   begin
-    $readmemh("../../tests/life/life_3.v", mem_array_3);
-    $readmemh("../../tests/life/life_2.v", mem_array_2);
-    $readmemh("../../tests/life/life_1.v", mem_array_1);
-    $readmemh("../../tests/life/life_0.v", mem_array_0);
+    $readmemh("../../programs/life/life_3.v", mem_array_3);
+    $readmemh("../../programs/life/life_2.v", mem_array_2);
+    $readmemh("../../programs/life/life_1.v", mem_array_1);
+    $readmemh("../../programs/life/life_0.v", mem_array_0);
   end
 
 endmodule

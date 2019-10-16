@@ -28,15 +28,9 @@
 void paint_pixel(int row, int col, uint8_t * cell) {
   display_pixel_t pixel;
       if(*cell == 0) {
-        if(col<100) {
-          pixel.R = 0x3F;
-          pixel.G = 0x3F;
-          pixel.B = 0x3F;
-        } else {
           pixel.R = 0xFC;
           pixel.G = 0xFC;
           pixel.B = 0xFC;
-        }
       } else {
         pixel.R = 0x00;
         pixel.G = 0x00;
@@ -55,6 +49,7 @@ void main(void) {
   //uint64_t keystamp;
   //uint64_t displaystamp;
 
+  uint32_t counter;
   uint32_t led;
 
   uint8_t life[display_rows()][display_cols()];
@@ -93,6 +88,7 @@ void main(void) {
           }
         }
 
+counter = 0;
 rand_init();
   display_on();
       LED = 5;
@@ -229,9 +225,9 @@ rand_init();
                 life_next[row][col] = 0;
               }
             }
-            if(life[row][col] != life_next[row][col]) {
+            //if(life[row][col] != life_next[row][col]) {
               paint_pixel(row,col,&life_next[row][col]);
-            }
+            //}
           }
         }
         //Draw random letter
@@ -240,7 +236,7 @@ rand_init();
         for (uint8_t x=0; x < 8; x++) {
           for (uint8_t y=0; y < 8; y++) {
           //for (int8_t y=7; y >= 0; y--) {
-              uint8_t set = font8x8_basic['J'][x] & (1 << y);
+              uint8_t set = font8x8_basic[0x30 + counter%10][x] & (1 << y);
               display_pixel_t pixel;
               if(set) {
                 pixel.R = 0xFF;
@@ -275,6 +271,7 @@ rand_init();
 
     //}
 
+    counter++;
   }
 }
 
