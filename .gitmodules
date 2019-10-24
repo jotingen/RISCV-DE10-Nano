@@ -1,6 +1,6 @@
 [submodule "submodules/riscv-formal"]
 	path = submodules/riscv-formal
 	url = https://github.com/SymbioticEDA/riscv-formal.git
-[submodule "submodules/font8x8"]
-	path = submodules/font8x8
+[submodule "programs/lib/font8x8"]
+	path = programs/lib/font8x8
 	url = https://github.com/dhepper/font8x8.git
