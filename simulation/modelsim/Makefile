@@ -2,6 +2,8 @@ rwildcard=$(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2) $(filter $(subst 
 FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 FILTER_IN  = $(foreach v,$(2),$(if $(findstring $(1),$(v)),$(v),))
 
+OUT := ../../output/modelsim
+
 V_FILES  := $(call FILTER_OUT,_inst, $(call FILTER_OUT,_bb, $(call rwildcard, ../../monitor/ ../../src/ ../../verif/, *.v)))
 SV_PKG   := $(call FILTER_IN,_pkg, $(call FILTER_OUT,_inst, $(call FILTER_OUT,_bb, $(call rwildcard, ../../monitor/ ../../src/ ../../verif/, *.sv))))
 SV_FILES := $(call FILTER_OUT,_pkg, $(call FILTER_OUT,_inst, $(call FILTER_OUT,_bb, $(call rwildcard, ../../monitor/ ../../src/ ../../verif/, *.sv))))
@@ -17,8 +19,9 @@ all: clean build sim
 
 .PHONY: build
 build: 
-	vlib.exe rtl_work
-	vmap.exe work rtl_work
+	mkdir -p $(OUT)
+	vlib.exe $(OUT)
+	vmap.exe work $(OUT)
 	$(MAKE) $(V_FILES) $(SV_PKG) $(SV_FILES)
 
 %$(V_SUFFIX): FORCE
@@ -33,6 +36,6 @@ sim:
 
 .PHONY: clean
 clean:
-	if [ -f rtl_work ]; then vdel.exe -lib rtl_work -all; fi
+	if [ -f $(OUT) ]; then vdel.exe -lib $(OUT) -all; fi
 
 FORCE:

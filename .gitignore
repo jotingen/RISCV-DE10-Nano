@@ -1,5 +1,6 @@
 *.sw?
 
+output
 
 db
 incremental_db

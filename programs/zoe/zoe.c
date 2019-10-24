@@ -3,7 +3,7 @@
 
 #include "../lib/csr.h"
 #include "../lib/display.h"
-#include "../lib/font8x8/font8x8_basic.h"
+#include "../lib/font8x8_basic.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
