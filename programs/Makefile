@@ -31,19 +31,22 @@ VERILOG3 := $(patsubst %$(C_SUFFIX),%$(VERILOG3_SUFFIX),$(SRCS))
 all : | clean init $(LIB_OBJ) $(ASSEMBLY)
 
 init:
-	riscv32-unknown-elf-gcc -c riscv.s -o riscv.o
+	mkdir -p ../output/programs
+	riscv32-unknown-elf-gcc -c riscv.s -o ../output/programs/riscv.o
 
 %$(OBJ_SUFFIX) :
-	$(CC) $(CCFLAGS) -S -o $(patsubst %.o,%.s,$@) -c $(patsubst %.o,%.c,$@)
-	$(CC) $(CCFLAGS)    -o $@                     -c $(patsubst %.o,%.c,$@)
+	mkdir -p ../output/programs/$(dir $@)
+	$(CC) $(CCFLAGS) -S -o ../output/programs/$(patsubst %.o,%.s,$@) -c $(patsubst %.o,%.c,$@)
+	$(CC) $(CCFLAGS)    -o ../output/programs/$@                     -c $(patsubst %.o,%.c,$@)
 
 %$(ASSEMBLY_SUFFIX) :
-	$(CC) $(CCFLAGS) -S -o $(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@) 
-	$(CC) $(CCFLAGS)    -o $(patsubst %.s,%.out,$@)  $(patsubst %.s,%.c,$@) $(LIB_OBJ) riscv.o
-	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
-	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
-	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
-	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
+	mkdir -p ../output/programs/$(dir $@)
+	$(CC) $(CCFLAGS) -S -o ../output/programs/$(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@) 
+	$(CC) $(CCFLAGS)    -o ../output/programs/$(patsubst %.s,%.out,$@)  $(patsubst %.s,%.c,$@) $(addprefix ../output/programs/,$(LIB_OBJ)) ../output/programs/riscv.o
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_0.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_1.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_2.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_3.v,$@)
 
 #%$(ASSEMBLY_SUFFIX) :
 #	$(CC) $(CCFLAGS) -S -o $(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@)
@@ -56,4 +59,4 @@ init:
 
 .PHONY: clean
 clean: 
-	find . \( -name '*$(ASSEMBLY_SUFFIX)' -or -name '*$(OBJ_SUFFIX)' -or -name '*$(OUT_SUFFIX)' -or -name '*$(VERILOG0_SUFFIX)' -or -name '*$(VERILOG1_SUFFIX)' -or -name '*$(VERILOG2_SUFFIX)' -or -name '*$(VERILOG3_SUFFIX)' \) -not -name 'riscv.s' | xargs -r -n 1 rm
+	find ../output/programs \( -name '*$(ASSEMBLY_SUFFIX)' -or -name '*$(OBJ_SUFFIX)' -or -name '*$(OUT_SUFFIX)' -or -name '*$(VERILOG0_SUFFIX)' -or -name '*$(VERILOG1_SUFFIX)' -or -name '*$(VERILOG2_SUFFIX)' -or -name '*$(VERILOG3_SUFFIX)' \) -not -name 'riscv.s' | xargs -r -n 1 rm
