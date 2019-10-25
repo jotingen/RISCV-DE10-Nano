@@ -82,13 +82,19 @@ output logic           HDMI_TX_VS
 `endif
 
 logic           riscv_mmc_instbus_req;
+logic           riscv_mmc_instbus_write;
 logic [31:0]    riscv_mmc_instbus_addr;
+logic [31:0]    riscv_mmc_instbus_data;
 
 logic           mmc_riscv_instbus_ack;
 logic [31:0]    mmc_riscv_instbus_data;
 
 logic           mmc_mem_instbus_req;
+logic           mmc_mem_instbus_write;
 logic [31:0]    mmc_mem_instbus_addr;
+logic [31:0]    mmc_mem_instbus_data;
+logic  [3:0]    mmc_mem_instbus_data_rd_mask;
+logic  [3:0]    mmc_mem_instbus_data_wr_mask;
 
 logic           mem_mmc_instbus_ack;
 logic [31:0]    mem_mmc_instbus_data;
@@ -182,6 +188,13 @@ always @(posedge clk)
 //  .locked ()
 //);
 assign clk = FPGA_CLK1_50;
+
+
+//HDMI TMP
+assign HDMI_TX_CLK = '0;
+assign HDMI_TX_DE  = '0;
+assign HDMI_TX_D   = '0;
+assign HDMI_TX_HS  = '0;
 
 riscv #(.M_EXT(1)) riscv (
   .clk         (clk),

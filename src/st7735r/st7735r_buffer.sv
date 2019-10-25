@@ -132,7 +132,7 @@ display_buffer display_buffer_R (
   .data ( i_membus_data[23:16] ),
   .rdaddress ( buffer_addr ),
   .wraddress ( buffer_addr ),
-  .wren ( buffer_B_wren ),
+  .wren ( buffer_R_wren ),
   .q ( buffer_R_out )
   );
 
@@ -141,7 +141,7 @@ display_buffer display_buffer_G (
   .data ( i_membus_data[15:8] ),
   .rdaddress ( buffer_addr ),
   .wraddress ( buffer_addr ),
-  .wren ( buffer_B_wren ),
+  .wren ( buffer_G_wren ),
   .q ( buffer_G_out )
   );
 

@@ -19,13 +19,8 @@ module mem #(
   input  logic  [3:0]    i_membus_data_rd_mask,
   input  logic  [3:0]    i_membus_data_wr_mask,
 
-  output logic           o_membus_req,
   output logic           o_membus_ack,
-  output logic           o_membus_write,
-  output logic [31:0]    o_membus_addr,
-  output logic [31:0]    o_membus_data,
-  output logic  [3:0]    o_membus_data_rd_mask,
-  output logic  [3:0]    o_membus_data_wr_mask
+  output logic [31:0]    o_membus_data
 );
 
 logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
