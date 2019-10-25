@@ -17,7 +17,7 @@ module riscv_csr (
 logic [31:0] csr_C00;
 logic [31:0] csr_C80;
 
-logic [15:0] time_counter;
+logic [31:0] time_counter;
 logic [31:0] csr_C04;
 logic [31:0] csr_C84;
 

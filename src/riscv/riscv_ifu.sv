@@ -32,8 +32,10 @@ module riscv_ifu (
 
 //Invalid state  TODO halt?
 logic illegal;
+
 //Instruction requested
 logic accessing;
+
 //Instruction has been loaded, waiting to send
 logic loaded;
 
@@ -282,7 +284,7 @@ always_ff @(posedge clk)
                      end
 
 
-    'b00_11100_xx_x: begin
+    'b00_1111x_xx_x: begin
                      accessing       <= '1;
                      loaded          <= '0;
                      instbus_req   <= '1;

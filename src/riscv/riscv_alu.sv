@@ -1062,7 +1062,7 @@ always_ff @(posedge clk)
                  x_wr[alu_rd] <= '1;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  unique
-                 case(addr[1:0])
+                 case(addr[1])
                    'b0: rd_data <= {{16{bus_data_rd[15]}},bus_data_rd[15:0]};
                    'b1: rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
                  endcase
@@ -1093,7 +1093,7 @@ always_ff @(posedge clk)
                  x_wr[alu_rd] <= '1;
                  addr  = rs1_data + { {20{alu_imm[11]}}, alu_imm[11:0]};
                  unique
-                 case(addr[1:0])
+                 case(addr[1])
                    'b0: rd_data <= {{16{'0}},bus_data_rd[15:0]};
                    'b1: rd_data <= {{16{'0}},bus_data_rd[31:16]};
                  endcase
@@ -1165,12 +1165,12 @@ always_ff @(posedge clk)
                  bus_addr  <= addr;
                  bus_addr[1:0] <= '0;
                  unique
-                 case(addr[1:0])
+                 case(addr[1])
                    'b0: bus_data_wr  <= {{16{'0}},rs2_data[15:0]};
                    'b1: bus_data_wr  <= {         rs2_data[15:0],{16{'0}}};
                  endcase
                  unique
-                 case(addr[1:0])
+                 case(addr[1])
                    'b0: bus_data_wr_mask <= 'b0011;
                    'b1: bus_data_wr_mask <= 'b1100;
                  endcase
