@@ -148,6 +148,14 @@ de10nano dut (
 .rst
 );
 
+spi_sd_model sd (
+  .rstn  (ARDUINO_RESET_N),
+  .ncs   (ARDUINO_IO[4]),
+  .sclk  (ARDUINO_IO[13]),
+  .mosi  (ARDUINO_IO[11]),
+  .miso  (ARDUINO_IO[12])
+);
+
 riscv_rvfimon monitor (
   .clock(clk),
   .reset(rst),
