@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Oct 13 01:33:35 2019
+[*] Sat Oct 26 02:00:47 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Oct 12 12:42:49 2019"
-[dumpfile_size] 3929301869
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
+[dumpfile_mtime] "Sat Oct 26 01:48:22 2019"
+[dumpfile_size] 4214539103
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 14980932
+[timestart] 0
 [size] 1854 1046
 [pos] -1 -1
-*-8.294964 14981870 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-9.294964 850 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -18,6 +18,7 @@
 [treeopen] tb.dut.shield.
 [treeopen] tb.dut.shield.display.
 [treeopen] tb.dut.shield.display.transmit.
+[treeopen] tb.sd.
 [sst_width] 255
 [signals_width] 381
 [sst_expanded] 1
@@ -40,6 +41,29 @@ tb.dut.led.LED[7:0]
 tb.dut.riscv.csrfile.csr_C00[31:0]
 tb.dut.riscv.csrfile.csr_C04[31:0]
 tb.dut.riscv.csrfile.csr_C08[31:0]
+@28
+tb.ARDUINO_RESET_N
+@c00023
+tb.ARDUINO_IO[15:0]
+@28
+(0)tb.ARDUINO_IO[15:0]
+(1)tb.ARDUINO_IO[15:0]
+(2)tb.ARDUINO_IO[15:0]
+(3)tb.ARDUINO_IO[15:0]
+(4)tb.ARDUINO_IO[15:0]
+(5)tb.ARDUINO_IO[15:0]
+(6)tb.ARDUINO_IO[15:0]
+(7)tb.ARDUINO_IO[15:0]
+(8)tb.ARDUINO_IO[15:0]
+(9)tb.ARDUINO_IO[15:0]
+(10)tb.ARDUINO_IO[15:0]
+(11)tb.ARDUINO_IO[15:0]
+(12)tb.ARDUINO_IO[15:0]
+(13)tb.ARDUINO_IO[15:0]
+(14)tb.ARDUINO_IO[15:0]
+(15)tb.ARDUINO_IO[15:0]
+@1401201
+-group_end
 @200
 -
 -MMC INST
@@ -108,6 +132,15 @@ tb.dut.dispbuff_mmc_bus_data[31:0]
 tb.dut.mmc_riscv_bus_ack
 @22
 tb.dut.mmc_riscv_bus_data[31:0]
+@200
+-
+-SD CARD
+@28
+tb.sd.rstn
+tb.sd.ncs
+tb.sd.sclk
+tb.sd.mosi
+tb.sd.miso
 @200
 -
 -DISPLAY
@@ -246,7 +279,6 @@ tb.dut.mem.i_membus_write
 @28
 tb.dut.mem.o_membus_ack
 @22
-tb.dut.mem.o_membus_addr[31:0]
 tb.dut.mem.o_membus_data[31:0]
 @200
 -
@@ -325,9 +357,7 @@ tb.dut.riscv.ifu.alu_retired
 tb.dut.riscv.ifu.alu_freeze
 tb.dut.riscv.ifu.alu_trap
 tb.dut.riscv.ifu.alu_br_miss
-@29
 tb.dut.riscv.ifu.idu_vld
-@28
 tb.dut.riscv.ifu.idu_freeze
 tb.dut.riscv.ifu.i_instbus_ack
 @1001200
