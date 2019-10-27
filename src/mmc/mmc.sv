@@ -71,7 +71,17 @@ module mmc (
   output logic  [3:0]    mmc_dispbuff_bus_data_wr_mask,
 
   input  logic           dispbuff_mmc_bus_ack,
-  input  logic [31:0]    dispbuff_mmc_bus_data
+  input  logic [31:0]    dispbuff_mmc_bus_data,
+
+  output logic           mmc_sdcard_bus_req,
+  output logic           mmc_sdcard_bus_write,
+  output logic [31:0]    mmc_sdcard_bus_addr,
+  output logic [31:0]    mmc_sdcard_bus_data,
+  output logic  [3:0]    mmc_sdcard_bus_data_rd_mask,
+  output logic  [3:0]    mmc_sdcard_bus_data_wr_mask,
+
+  input  logic           sdcard_mmc_bus_ack,
+  input  logic [31:0]    sdcard_mmc_bus_data
         
 );
 
@@ -90,6 +100,8 @@ logic [31:0]    DISPLAY_ADDR_HI  = 'hC200_FFFF;
 logic [31:0]    DISPLAY_ADDR_LO  = 'hC200_0000;
 logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_FFFF;
 logic [31:0]    DISPBUFF_ADDR_LO = 'hC300_0000;
+logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
+logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 
 //CPU to subsystems
 always_comb
@@ -100,6 +112,7 @@ always_comb
   mmc_joystick_bus_req = '0;
   mmc_display_bus_req  = '0;
   mmc_dispbuff_bus_req = '0;
+  mmc_sdcard_bus_req   = '0;
 
   //Generate regs based on memory map
   if(riscv_mmc_bus_addr >= MEM_ADDR_LO &
@@ -138,6 +151,12 @@ always_comb
     mmc_dispbuff_bus_req = riscv_mmc_bus_req;
     end
 
+  if(riscv_mmc_bus_addr >= SDCARD_ADDR_LO &
+     riscv_mmc_bus_addr <= SDCARD_ADDR_HI)
+    begin
+    mmc_sdcard_bus_req = riscv_mmc_bus_req;
+    end
+
 
   mmc_mem_bus_write             = riscv_mmc_bus_write;
   mmc_mem_bus_addr              = riscv_mmc_bus_addr - MEM_ADDR_LO;
@@ -174,6 +193,12 @@ always_comb
   mmc_dispbuff_bus_data         = riscv_mmc_bus_data;
   mmc_dispbuff_bus_data_rd_mask = riscv_mmc_bus_data_rd_mask;
   mmc_dispbuff_bus_data_wr_mask = riscv_mmc_bus_data_wr_mask;
+
+  mmc_sdcard_bus_write          = riscv_mmc_bus_write;
+  mmc_sdcard_bus_addr           = riscv_mmc_bus_addr - DISPBUFF_ADDR_LO;
+  mmc_sdcard_bus_data           = riscv_mmc_bus_data;
+  mmc_sdcard_bus_data_rd_mask   = riscv_mmc_bus_data_rd_mask;
+  mmc_sdcard_bus_data_wr_mask   = riscv_mmc_bus_data_wr_mask;
   end
 
 //Subsystems to CPU
