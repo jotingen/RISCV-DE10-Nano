@@ -23,8 +23,14 @@ logic           ADC_SDI;
 logic           ADC_SDO;
 
 //////////// ARDUINO //////////
-logic  [15:0]   ARDUINO_IO;
-logic            ARDUINO_RESET_N;
+logic           SD_CS; 
+logic           TFT_DC;
+logic           TFT_CS;
+logic           MOSI;  
+logic           MISO;  
+logic           SCK;   
+logic           GND;   
+logic           ARDUINO_RESET_N;
 
 //////////// HDMI //////////
 logic           HDMI_I2C_SCL;
@@ -95,7 +101,13 @@ de10nano dut (
 .ADC_SDO,
 
 //////////// ARDUINO //////////
-.ARDUINO_IO,
+.SD_CS, 
+.TFT_DC,
+.TFT_CS,
+.MOSI,  
+.MISO,  
+.SCK,   
+.GND,   
 .ARDUINO_RESET_N,
 
 //////////// HDMI //////////
@@ -150,10 +162,10 @@ de10nano dut (
 
 spi_sd_model sd (
   .rstn  (ARDUINO_RESET_N),
-  .ncs   (ARDUINO_IO[4]),
-  .sclk  (ARDUINO_IO[13]),
-  .mosi  (ARDUINO_IO[11]),
-  .miso  (ARDUINO_IO[12])
+  .ncs   (SD_CS),
+  .sclk  (TFT_DC),
+  .mosi  (MOSI),
+  .miso  (MISO)
 );
 
 riscv_rvfimon monitor (

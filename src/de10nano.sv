@@ -21,7 +21,15 @@ output logic           ADC_SDI,
 input  logic           ADC_SDO,
 
 //////////// ARDUINO //////////
-inout  logic  [15:0]   ARDUINO_IO,
+//inout  logic  [15:0]   ARDUINO_IO,
+output  SD_CS, 
+output  TFT_DC,
+output  TFT_CS,
+output  MOSI,  
+input   MISO,  
+output  SCK,   
+output  GND,   
+
 inout  logic           ARDUINO_RESET_N,
 
 //////////// HDMI //////////
@@ -169,10 +177,30 @@ logic  [3:0]    mmc_dispbuff_bus_data_wr_mask;
 logic           dispbuff_mmc_bus_ack;
 logic [31:0]    dispbuff_mmc_bus_data;
 
+logic           mmc_sdcard_bus_req;
+logic           mmc_sdcard_bus_write;
+logic [31:0]    mmc_sdcard_bus_addr;
+logic [31:0]    mmc_sdcard_bus_data;
+logic  [3:0]    mmc_sdcard_bus_data_rd_mask;
+logic  [3:0]    mmc_sdcard_bus_data_wr_mask;
+
+logic           sdcard_mmc_bus_ack;
+logic [31:0]    sdcard_mmc_bus_data;
+
 logic arst;
 logic arst_1;
 logic arst_2;
 logic arst_3;
+
+logic  [15:0]   ARDUINO_IO;
+
+assign  SD_CS  = ARDUINO_IO[4];
+assign  TFT_DC = ARDUINO_IO[8];
+assign  TFT_CS = ARDUINO_IO[10];
+assign  MOSI   = ARDUINO_IO[11];
+assign  ARDUINO_IO[12] = MISO ;
+assign  SCK    = ARDUINO_IO[13];
+assign  GND    = ARDUINO_IO[14];
 
 always @(posedge clk)
   begin
@@ -401,7 +429,17 @@ mmc mmc_data (
   .mmc_dispbuff_bus_data_wr_mask (mmc_dispbuff_bus_data_wr_mask),
                                                                  
   .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
-  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        )
+  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        ),
+                                                                 
+  .mmc_sdcard_bus_req            (mmc_sdcard_bus_req         ),
+  .mmc_sdcard_bus_write          (mmc_sdcard_bus_write       ),
+  .mmc_sdcard_bus_addr           (mmc_sdcard_bus_addr        ),
+  .mmc_sdcard_bus_data           (mmc_sdcard_bus_data        ),
+  .mmc_sdcard_bus_data_rd_mask   (mmc_sdcard_bus_data_rd_mask),
+  .mmc_sdcard_bus_data_wr_mask   (mmc_sdcard_bus_data_wr_mask),
+                                                                   
+  .sdcard_mmc_bus_ack            (sdcard_mmc_bus_ack         ),
+  .sdcard_mmc_bus_data           (sdcard_mmc_bus_data        )
 );
 
 mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
@@ -501,7 +539,17 @@ shield_V1 shield (
   .mmc_dispbuff_bus_data_wr_mask (mmc_dispbuff_bus_data_wr_mask),
                                                                  
   .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
-  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        )
+  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        ),
+                                                                 
+  .mmc_sdcard_bus_req          (mmc_sdcard_bus_req         ),
+  .mmc_sdcard_bus_write        (mmc_sdcard_bus_write       ),
+  .mmc_sdcard_bus_addr         (mmc_sdcard_bus_addr        ),
+  .mmc_sdcard_bus_data         (mmc_sdcard_bus_data        ),
+  .mmc_sdcard_bus_data_rd_mask (mmc_sdcard_bus_data_rd_mask),
+  .mmc_sdcard_bus_data_wr_mask (mmc_sdcard_bus_data_wr_mask),
+                                                                 
+  .sdcard_mmc_bus_ack          (sdcard_mmc_bus_ack         ),
+  .sdcard_mmc_bus_data         (sdcard_mmc_bus_data        )
 );
 
 endmodule

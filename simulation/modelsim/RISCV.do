@@ -4,6 +4,6 @@ vcd on
 vcd file ../../output/modelsim/sim.vcd
 vcd add -r *
 
-run 15000000 ns
+run 150000 ns
 
 exit

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Oct 26 02:00:47 2019
+[*] Sun Oct 27 18:58:28 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Oct 26 01:48:22 2019"
-[dumpfile_size] 4214539103
+[dumpfile_mtime] "Sun Oct 27 18:52:05 2019"
+[dumpfile_size] 13067325
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
 [timestart] 0
 [size] 1854 1046
 [pos] -1 -1
-*-9.294964 850 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.651116 3890 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -42,28 +42,25 @@ tb.dut.riscv.csrfile.csr_C00[31:0]
 tb.dut.riscv.csrfile.csr_C04[31:0]
 tb.dut.riscv.csrfile.csr_C08[31:0]
 @28
+tb.dut.SCK
+tb.dut.SD_CS
+tb.dut.TFT_CS
+tb.dut.TFT_DC
+tb.dut.MOSI
+tb.dut.MISO
 tb.ARDUINO_RESET_N
-@c00023
-tb.ARDUINO_IO[15:0]
-@28
-(0)tb.ARDUINO_IO[15:0]
-(1)tb.ARDUINO_IO[15:0]
-(2)tb.ARDUINO_IO[15:0]
-(3)tb.ARDUINO_IO[15:0]
-(4)tb.ARDUINO_IO[15:0]
-(5)tb.ARDUINO_IO[15:0]
-(6)tb.ARDUINO_IO[15:0]
-(7)tb.ARDUINO_IO[15:0]
-(8)tb.ARDUINO_IO[15:0]
-(9)tb.ARDUINO_IO[15:0]
-(10)tb.ARDUINO_IO[15:0]
-(11)tb.ARDUINO_IO[15:0]
-(12)tb.ARDUINO_IO[15:0]
-(13)tb.ARDUINO_IO[15:0]
-(14)tb.ARDUINO_IO[15:0]
-(15)tb.ARDUINO_IO[15:0]
-@1401201
+@c00200
+-tb.ARDUINO_IO
+@1401200
 -group_end
+@22
+#{tb.dut.shield.ARDUINO_IO[15:0]} tb.dut.shield.ARDUINO_IO[15] tb.dut.shield.ARDUINO_IO[14] tb.dut.shield.ARDUINO_IO[13] tb.dut.shield.ARDUINO_IO[12] tb.dut.shield.ARDUINO_IO[11] tb.dut.shield.ARDUINO_IO[10] tb.dut.shield.ARDUINO_IO[9] tb.dut.shield.ARDUINO_IO[8] tb.dut.shield.ARDUINO_IO[7] tb.dut.shield.ARDUINO_IO[6] tb.dut.shield.ARDUINO_IO[5] tb.dut.shield.ARDUINO_IO[4] tb.dut.shield.ARDUINO_IO[3] tb.dut.shield.ARDUINO_IO[2] tb.dut.shield.ARDUINO_IO[1] tb.dut.shield.ARDUINO_IO[0]
+@28
+tb.dut.shield.SD_CS
+tb.dut.shield.TFT_CS
+tb.dut.shield.TFT_DC
+tb.dut.shield.MOSI
+tb.dut.shield.MISO
 @200
 -
 -MMC INST
@@ -143,11 +140,35 @@ tb.sd.mosi
 tb.sd.miso
 @200
 -
+@28
+tb.dut.shield.sdcard.SCK
+tb.dut.shield.sdcard.CS
+tb.dut.shield.sdcard.RS_DC
+tb.dut.shield.sdcard.DATA
+@200
+-
+@28
+tb.dut.shield.sdcard.i_bus_req
+tb.dut.shield.sdcard.i_bus_write
+@22
+#{tb.dut.shield.sdcard.i_bus_addr[31:0]} tb.dut.shield.sdcard.i_bus_addr[31] tb.dut.shield.sdcard.i_bus_addr[30] tb.dut.shield.sdcard.i_bus_addr[29] tb.dut.shield.sdcard.i_bus_addr[28] tb.dut.shield.sdcard.i_bus_addr[27] tb.dut.shield.sdcard.i_bus_addr[26] tb.dut.shield.sdcard.i_bus_addr[25] tb.dut.shield.sdcard.i_bus_addr[24] tb.dut.shield.sdcard.i_bus_addr[23] tb.dut.shield.sdcard.i_bus_addr[22] tb.dut.shield.sdcard.i_bus_addr[21] tb.dut.shield.sdcard.i_bus_addr[20] tb.dut.shield.sdcard.i_bus_addr[19] tb.dut.shield.sdcard.i_bus_addr[18] tb.dut.shield.sdcard.i_bus_addr[17] tb.dut.shield.sdcard.i_bus_addr[16] tb.dut.shield.sdcard.i_bus_addr[15] tb.dut.shield.sdcard.i_bus_addr[14] tb.dut.shield.sdcard.i_bus_addr[13] tb.dut.shield.sdcard.i_bus_addr[12] tb.dut.shield.sdcard.i_bus_addr[11] tb.dut.shield.sdcard.i_bus_addr[10] tb.dut.shield.sdcard.i_bus_addr[9] tb.dut.shield.sdcard.i_bus_addr[8] tb.dut.shield.sdcard.i_bus_addr[7] tb.dut.shield.sdcard.i_bus_addr[6] tb.dut.shield.sdcard.i_bus_addr[5] tb.dut.shield.sdcard.i_bus_addr[4] tb.dut.shield.sdcard.i_bus_addr[3] tb.dut.shield.sdcard.i_bus_addr[2] tb.dut.shield.sdcard.i_bus_addr[1] tb.dut.shield.sdcard.i_bus_addr[0]
+#{tb.dut.shield.sdcard.i_bus_data[31:0]} tb.dut.shield.sdcard.i_bus_data[31] tb.dut.shield.sdcard.i_bus_data[30] tb.dut.shield.sdcard.i_bus_data[29] tb.dut.shield.sdcard.i_bus_data[28] tb.dut.shield.sdcard.i_bus_data[27] tb.dut.shield.sdcard.i_bus_data[26] tb.dut.shield.sdcard.i_bus_data[25] tb.dut.shield.sdcard.i_bus_data[24] tb.dut.shield.sdcard.i_bus_data[23] tb.dut.shield.sdcard.i_bus_data[22] tb.dut.shield.sdcard.i_bus_data[21] tb.dut.shield.sdcard.i_bus_data[20] tb.dut.shield.sdcard.i_bus_data[19] tb.dut.shield.sdcard.i_bus_data[18] tb.dut.shield.sdcard.i_bus_data[17] tb.dut.shield.sdcard.i_bus_data[16] tb.dut.shield.sdcard.i_bus_data[15] tb.dut.shield.sdcard.i_bus_data[14] tb.dut.shield.sdcard.i_bus_data[13] tb.dut.shield.sdcard.i_bus_data[12] tb.dut.shield.sdcard.i_bus_data[11] tb.dut.shield.sdcard.i_bus_data[10] tb.dut.shield.sdcard.i_bus_data[9] tb.dut.shield.sdcard.i_bus_data[8] tb.dut.shield.sdcard.i_bus_data[7] tb.dut.shield.sdcard.i_bus_data[6] tb.dut.shield.sdcard.i_bus_data[5] tb.dut.shield.sdcard.i_bus_data[4] tb.dut.shield.sdcard.i_bus_data[3] tb.dut.shield.sdcard.i_bus_data[2] tb.dut.shield.sdcard.i_bus_data[1] tb.dut.shield.sdcard.i_bus_data[0]
+#{tb.dut.shield.sdcard.i_bus_data_rd_mask[3:0]} tb.dut.shield.sdcard.i_bus_data_rd_mask[3] tb.dut.shield.sdcard.i_bus_data_rd_mask[2] tb.dut.shield.sdcard.i_bus_data_rd_mask[1] tb.dut.shield.sdcard.i_bus_data_rd_mask[0]
+#{tb.dut.shield.sdcard.i_bus_data_wr_mask[3:0]} tb.dut.shield.sdcard.i_bus_data_wr_mask[3] tb.dut.shield.sdcard.i_bus_data_wr_mask[2] tb.dut.shield.sdcard.i_bus_data_wr_mask[1] tb.dut.shield.sdcard.i_bus_data_wr_mask[0]
+@200
+-
+@22
+tb.dut.shield.sdcard.o_bus_ack[31:0]
+tb.dut.shield.sdcard.o_bus_data[31:0]
+@200
+-
 -DISPLAY
 @28
 tb.dut.shield.display.SCK
-tb.dut.shield.display.RS_DC
+@29
 tb.dut.shield.display.CS
+@28
+tb.dut.shield.display.RS_DC
 tb.dut.shield.display.DATA
 @200
 -
@@ -264,9 +285,6 @@ tb.dut.mem.o_instbus_ack
 tb.dut.mem.o_instbus_data[31:0]
 @200
 -
-@28
-tb.dut.shield.joystick_display_bus_ack
-@200
 -
 @28
 tb.dut.mem.i_membus_req
