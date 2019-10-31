@@ -7,6 +7,9 @@ input  logic rst,
 input  logic arst,
 
 //////////// SPI //////////
+output logic SPIReq,
+input  logic SPIAck,
+output logic SPIDone,
 output logic SCK,
 output logic RS_DC,
 output logic DATA,
@@ -42,7 +45,6 @@ logic [7:0] SCK_data;
 logic       req;
 logic       cmd;
 logic [7:0] data;
-logic       rd_done;
 logic       rdy;
 
 always_ff @(posedge clk)
@@ -97,7 +99,7 @@ fifo	fifo (
 	.aclr    ( rst ),
 	.data    ( {cmd,data} ),
 	.rdclk   ( clk ),
-	.rdreq   ( rd_done ),
+	.rdreq   ( SPIDone ),
 	.wrclk   ( clk ),
 	.wrreq   ( req ),
 	.q       ( {SCK_cmd,SCK_data} ),
@@ -122,6 +124,8 @@ st7735r_transmit transmit (
   .clk       (clk),      
   .rst       (rst),      
                        
+  .SPIReq    (SPIReq),
+  .SPIAck    (SPIAck),
   .RS_DC     (RS_DC),    
   .DATA      (DATA),     
   .CS        (CS),       
@@ -130,7 +134,7 @@ st7735r_transmit transmit (
   .cmd       (SCK_cmd),      
   .data      (SCK_data),     
                        
-  .rd_done   ( rd_done ),
+  .SPIDone   (SPIDone),
   .rdy       (rdy)       
 );
 

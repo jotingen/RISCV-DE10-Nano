@@ -3,6 +3,8 @@ input  logic SCK_clk,
 input  logic clk,
 input  logic rst,
 
+output logic SPIReq,
+input  logic SPIAck,
 output logic RS_DC,
 output logic DATA,
 output logic CS,
@@ -11,10 +13,11 @@ input  logic       req,
 input  logic       cmd,
 input  logic [7:0] data,
 
-output logic     rd_done,
+output logic     SPIDone,
 output logic     rdy
 );
 
+logic        ack_recieved;
 logic [20:0] cooldown_cnt;
 logic  [2:0] data_cnt;
 always_ff @(posedge clk)
@@ -22,11 +25,18 @@ always_ff @(posedge clk)
 
   integer unsigned data_ndx;
 
-  rd_done <= '0;
-  rdy      <= '1;
+  ack_recieved <= ack_recieved;
+  SPIDone  <= '0;
+  rdy      <= '0;
+  SPIReq   <= SPIReq;
   CS       <= CS   ;
   RS_DC    <= RS_DC;
   DATA     <= DATA ;
+
+  if(SPIAck) 
+    begin
+    ack_recieved <= '1;
+    end
 
   data_cnt <= data_cnt;
   cooldown_cnt <= cooldown_cnt;
@@ -52,19 +62,19 @@ always_ff @(posedge clk)
   begin
     case (data_cnt)
       '0:       begin
-                if(cooldown_cnt != 0)
+                if(ack_recieved)
                   begin
-                  CS    <= '1;
-        	  rdy   <= '0;
-                  cooldown_cnt <= cooldown_cnt - 1;
-                  end
-                else if(req)
-                  begin
+                  ack_recieved <= '0;
+                  SPIReq <= '0;
                   CS    <= '0;
                   RS_DC <= ~cmd;
                   DATA  <= data[data_ndx];
                   data_cnt <= data_cnt + 1;
-                  //cooldown_cnt <= 'd625000;
+                  end
+                else if(req)
+                  begin
+                  CS <= '1;
+                  SPIReq <= '1;
                   end
                 else
                   begin
@@ -72,9 +82,9 @@ always_ff @(posedge clk)
                   end
                 end
       'd7:      begin
-		rd_done <= '1;
+		SPIDone <= '1;
                 DATA  <= data[data_ndx];
-                data_cnt <= data_cnt + 1;
+                data_cnt <= '0;
                 end
       default:  begin
                 DATA  <= data[data_ndx];
@@ -85,6 +95,8 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
+    ack_recieved <= '0;
+    SPIReq   <= '0;
     CS       <= '1;
     RS_DC    <= '0;
     DATA     <= '0;

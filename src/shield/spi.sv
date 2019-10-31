@@ -2,6 +2,10 @@ module spi (
 input  logic clk,
 input  logic rst,
 
+output logic SPIReq,
+input  logic SPIAck,
+output logic SPIDone,
+
 output logic SCK,
 output logic CS,
 output logic RS_DC,
@@ -11,13 +15,12 @@ input  logic       req,
 input  logic       cmd,
 input  logic [7:0] data,
 
-output logic     rd_done,
 output logic     rdy
 );
 
 parameter PERIOD_20ns = 125;
 
-
+logic        ack_recieved;
 logic [15:0] sck_cnt;
 logic  [2:0] data_cnt;
 
@@ -26,11 +29,18 @@ always_ff @(posedge clk)
 
   integer unsigned data_ndx;
 
-  rd_done <= '0;
+  ack_recieved <= ack_recieved;
+  SPIDone  <= '0;
   rdy      <= '1;
+  SPIReq   <= SPIReq;
   CS       <= CS   ;
   RS_DC    <= RS_DC;
   DATA     <= DATA ;
+
+  if(SPIAck) 
+    begin
+    ack_recieved <= '1;
+    end
 
   data_cnt <= data_cnt;
 
@@ -55,12 +65,19 @@ always_ff @(posedge clk)
   begin
     case (data_cnt)
       '0:       begin
-                if(req)
+                if(ack_recieved)
                   begin
+                  ack_recieved <= '0;
+                  SPIReq <= '0;
                   CS    <= '0;
                   RS_DC <= ~cmd;
                   DATA  <= data[data_ndx];
                   data_cnt <= data_cnt + 1;
+                  end
+                else if(req)
+                  begin
+                  CS <= '1;
+                  SPIReq <= '1;
                   end
                 else
                   begin
@@ -68,19 +85,21 @@ always_ff @(posedge clk)
                   end
                 end
       'd7:      begin
-		rd_done <= '1;
+		            SPIDone <= '1;
                 DATA  <= data[data_ndx];
-                data_cnt <= data_cnt + 1;
+                data_cnt <= '0;
                 end
       default:  begin
                 DATA  <= data[data_ndx];
                 data_cnt <= data_cnt + 1;
                 end
-    endcase
+	  endcase
   end
 
   if(rst)
     begin
+    ack_recieved <= '0;
+    SPIReq   <= '0;
     CS       <= '1;
     RS_DC    <= '0;
     DATA     <= '0;
