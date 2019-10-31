@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Oct 27 18:58:28 2019
+[*] Thu Oct 31 00:42:42 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Sun Oct 27 18:52:05 2019"
-[dumpfile_size] 13067325
+[dumpfile_mtime] "Thu Oct 31 00:40:41 2019"
+[dumpfile_size] 13161713
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
 [timestart] 0
 [size] 1854 1046
 [pos] -1 -1
-*-10.651116 3890 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-12.651116 7870 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -18,6 +18,7 @@
 [treeopen] tb.dut.shield.
 [treeopen] tb.dut.shield.display.
 [treeopen] tb.dut.shield.display.transmit.
+[treeopen] tb.dut.shield.sdcard.
 [treeopen] tb.sd.
 [sst_width] 255
 [signals_width] 381
@@ -126,9 +127,52 @@ tb.dut.dispbuff_mmc_bus_data[31:0]
 @200
 -
 @28
+tb.dut.mmc_data.mmc_sdcard_bus_req
+tb.dut.mmc_data.mmc_sdcard_bus_write
+@22
+tb.dut.mmc_data.mmc_sdcard_bus_addr[31:0]
+tb.dut.mmc_data.mmc_sdcard_bus_data[31:0]
+tb.dut.mmc_data.mmc_sdcard_bus_data_wr_mask[3:0]
+tb.dut.mmc_data.mmc_sdcard_bus_data_rd_mask[3:0]
+@28
+tb.dut.mmc_data.sdcard_mmc_bus_ack
+@22
+#{tb.dut.mmc_data.sdcard_mmc_bus_data[31:0]} tb.dut.mmc_data.sdcard_mmc_bus_data[31] tb.dut.mmc_data.sdcard_mmc_bus_data[30] tb.dut.mmc_data.sdcard_mmc_bus_data[29] tb.dut.mmc_data.sdcard_mmc_bus_data[28] tb.dut.mmc_data.sdcard_mmc_bus_data[27] tb.dut.mmc_data.sdcard_mmc_bus_data[26] tb.dut.mmc_data.sdcard_mmc_bus_data[25] tb.dut.mmc_data.sdcard_mmc_bus_data[24] tb.dut.mmc_data.sdcard_mmc_bus_data[23] tb.dut.mmc_data.sdcard_mmc_bus_data[22] tb.dut.mmc_data.sdcard_mmc_bus_data[21] tb.dut.mmc_data.sdcard_mmc_bus_data[20] tb.dut.mmc_data.sdcard_mmc_bus_data[19] tb.dut.mmc_data.sdcard_mmc_bus_data[18] tb.dut.mmc_data.sdcard_mmc_bus_data[17] tb.dut.mmc_data.sdcard_mmc_bus_data[16] tb.dut.mmc_data.sdcard_mmc_bus_data[15] tb.dut.mmc_data.sdcard_mmc_bus_data[14] tb.dut.mmc_data.sdcard_mmc_bus_data[13] tb.dut.mmc_data.sdcard_mmc_bus_data[12] tb.dut.mmc_data.sdcard_mmc_bus_data[11] tb.dut.mmc_data.sdcard_mmc_bus_data[10] tb.dut.mmc_data.sdcard_mmc_bus_data[9] tb.dut.mmc_data.sdcard_mmc_bus_data[8] tb.dut.mmc_data.sdcard_mmc_bus_data[7] tb.dut.mmc_data.sdcard_mmc_bus_data[6] tb.dut.mmc_data.sdcard_mmc_bus_data[5] tb.dut.mmc_data.sdcard_mmc_bus_data[4] tb.dut.mmc_data.sdcard_mmc_bus_data[3] tb.dut.mmc_data.sdcard_mmc_bus_data[2] tb.dut.mmc_data.sdcard_mmc_bus_data[1] tb.dut.mmc_data.sdcard_mmc_bus_data[0]
+@200
+-
+@28
 tb.dut.mmc_riscv_bus_ack
 @22
 tb.dut.mmc_riscv_bus_data[31:0]
+@200
+-
+-SPI ARB
+@28
+tb.dut.shield.spi_arb.SCK
+tb.dut.shield.spi_arb.DISPLAY_CS
+tb.dut.shield.spi_arb.SDCARD_CS
+tb.dut.shield.spi_arb.RS_DC
+tb.dut.shield.spi_arb.DATA
+@200
+-
+@28
+tb.dut.shield.spi_arb.display_SPIReq
+tb.dut.shield.spi_arb.display_SPIAck
+tb.dut.shield.spi_arb.display_SPIDone
+tb.dut.shield.spi_arb.display_current
+@200
+-
+@28
+tb.dut.shield.spi_arb.sdcard_current
+tb.dut.shield.spi_arb.sdcard_SPIReq
+tb.dut.shield.spi_arb.sdcard_SPIAck
+tb.dut.shield.spi_arb.sdcard_SPIDone
+@200
+-
+@28
+tb.dut.shield.spi_arb.clk_stgd
+tb.dut.shield.spi_arb.cycles_settled[2:0]
+tb.dut.shield.spi_arb.clk_settled
 @200
 -
 -SD CARD
@@ -162,12 +206,30 @@ tb.dut.shield.sdcard.o_bus_ack[31:0]
 tb.dut.shield.sdcard.o_bus_data[31:0]
 @200
 -
+@28
+tb.dut.shield.sdcard.req
+tb.dut.shield.sdcard.cmd
+@22
+tb.dut.shield.sdcard.data[7:0]
+@200
+-
+@22
+tb.dut.shield.sdcard.spi.sck_cnt[15:0]
+@28
+tb.dut.shield.sdcard.spi.ack_recieved
+tb.dut.shield.sdcard.SPIReq
+tb.dut.shield.sdcard.SPIAck
+tb.dut.shield.sdcard.SPIDone
+@200
+-
+@29
+tb.dut.shield.sdcard.spi.data_cnt[2:0]
+@200
+-
 -DISPLAY
 @28
 tb.dut.shield.display.SCK
-@29
 tb.dut.shield.display.CS
-@28
 tb.dut.shield.display.RS_DC
 tb.dut.shield.display.DATA
 @200
@@ -198,6 +260,18 @@ tb.dut.shield.display.data[7:0]
 @200
 -
 @28
+tb.dut.shield.display.transmit.SPIReq
+tb.dut.shield.display.transmit.SPIAck
+tb.dut.shield.display.transmit.SPIDone
+@200
+-
+@28
+tb.dut.shield.display.transmit.SCK_clk
+tb.dut.shield.display.transmit.ack_recieved
+tb.dut.shield.display.transmit.data_cnt[2:0]
+@200
+-
+@28
 tb.dut.shield.display.SCK_empty
 tb.dut.shield.display.SCK_cmd
 @22
@@ -214,7 +288,6 @@ tb.dut.shield.display.transmit.cmd
 tb.dut.shield.display.transmit.cooldown_cnt[20:0]
 @28
 tb.dut.shield.display.transmit.data_cnt[2:0]
-tb.dut.shield.display.transmit.rd_done
 @200
 -
 -DISPLAY BUFFER

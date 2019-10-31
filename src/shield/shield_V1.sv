@@ -86,6 +86,18 @@ assign ARDUINO_IO[14] = GND;
 assign ARDUINO_IO[15] = 'z;
 assign arst = ~ARDUINO_RESET_N;
 
+logic display_SPIReq;
+logic display_SPIDone;
+logic display_SCK;
+logic display_CS;
+logic display_RS_DC;
+logic display_DATA;
+
+logic sdcard_SPIReq;
+logic sdcard_SCK;
+logic sdcard_CS;
+logic sdcard_RS_DC;
+logic sdcard_DATA;
 
 //Joystick
 joystick #(.SIZE(5),.ADDR_BASE(32'h00000000)) joystick (
@@ -115,10 +127,13 @@ st7735r #(.SIZE(16),.ADDR_BASE(32'h00000000))  display (
   .rst (rst),
   .arst (arst),
 
-  .RS_DC (TFT_DC),
-  .SCK   (SCK),
-  .DATA  (MOSI),
-  .CS    (TFT_CS),
+  .SPIReq  (display_SPIReq),
+  .SPIAck  (display_SPIAck),
+  .SPIDone (display_SPIDone),
+  .SCK     (display_SCK),
+  .CS      (display_CS),
+  .RS_DC   (display_RS_DC),
+  .DATA    (display_MOSI),
 
   .i_bus_req           (mmc_display_bus_req),   
   .i_bus_write         (mmc_display_bus_write), 
@@ -153,10 +168,13 @@ sdcard sdcard (
   .rst (rst),
   .arst (arst),
 
-  //.RS_DC (TFT_DC),
-  //.SCK   (SCK),
-  //.DATA  (MOSI),
-  //.CS    (TFT_CS),
+  .SPIReq  (sdcard_SPIReq),
+  .SPIAck  (sdcard_SPIAck),
+  .SPIDone (sdcard_SPIDone),
+  .SCK   (sdcard_SCK),
+  .CS    (sdcard_CS),
+  .RS_DC (sdcard_RS_DC),
+  .DATA  (sdcard_MOSI),
 
   .i_bus_req           (mmc_sdcard_bus_req),   
   .i_bus_write         (mmc_sdcard_bus_write), 
@@ -167,6 +185,35 @@ sdcard sdcard (
 
   .o_bus_ack           (sdcard_mmc_bus_ack),   
   .o_bus_data          (sdcard_mmc_bus_data)
+);
+
+spi_arb spi_arb (
+  .clk             (clk           ),
+  .rst             (rst           ),
+
+  .SCK             (SCK           ),
+  .DISPLAY_CS      (TFT_CS        ),
+  .SDCARD_CS       (SD_CS         ),
+  .RS_DC           (TFT_DC        ),
+  .DATA            (MOSI          ),
+
+  .display_SPIReq  (display_SPIReq),
+  .display_SPIDone (display_SPIDone),
+  .display_SCK     (display_SCK   ),
+  .display_CS      (display_CS    ),
+  .display_RS_DC   (display_RS_DC ),
+  .display_DATA    (display_MOSI  ),
+
+  .display_SPIAck  (display_SPIAck),
+
+  .sdcard_SPIReq   (sdcard_SPIReq ),
+  .sdcard_SPIDone  (sdcard_SPIDone),
+  .sdcard_SCK      (sdcard_SCK    ),
+  .sdcard_CS       (sdcard_CS     ),
+  .sdcard_RS_DC    (sdcard_RS_DC  ),
+  .sdcard_DATA     (sdcard_MOSI   ),
+
+  .sdcard_SPIAck   (sdcard_SPIAck )
 );
 
 endmodule
