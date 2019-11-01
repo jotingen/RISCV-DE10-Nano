@@ -51,39 +51,46 @@ output logic           ADC_SDI,
 input  logic           ADC_SDO,
 
 //////////// ARDUINO //////////
-inout  logic [15:0]    ARDUINO_IO,
+//inout  logic [15:0]    ARDUINO_IO,
+output logic  SD_CS, 
+output logic  TFT_DC,
+output logic  TFT_CS,
+output logic  MOSI,  
+input  logic  MISO,  
+output logic  SCK,   
+output logic  GND,   
 inout  logic           ARDUINO_RESET_N
 
 );
 
 //IO
-logic SD_CS;
-logic TFT_DC;
-logic TFT_CS;
-logic MOSI;
-logic MISO;
-logic SCK;
-logic GND;
+//logic SD_CS;
+//logic TFT_DC;
+//logic TFT_CS;
+//logic MOSI;
+//logic MISO;
+//logic SCK;
+//logic GND;
 
 assign SD_CS = '0;
 assign GND = '0;
 
-assign ARDUINO_IO[0] = 'z;
-assign ARDUINO_IO[1] = 'z;
-assign ARDUINO_IO[2] = 'z;
-assign ARDUINO_IO[3] = 'z;
-assign ARDUINO_IO[4] = SD_CS;
-assign ARDUINO_IO[5] = 'z;
-assign ARDUINO_IO[6] = 'z;
-assign ARDUINO_IO[7] = 'z;
-assign ARDUINO_IO[8] = TFT_DC;
-assign ARDUINO_IO[9] = 'z;
-assign ARDUINO_IO[10] = TFT_CS;
-assign ARDUINO_IO[11] = MOSI;
-assign MISO = ARDUINO_IO[12];
-assign ARDUINO_IO[13] = SCK;
-assign ARDUINO_IO[14] = GND;
-assign ARDUINO_IO[15] = 'z;
+//assign ARDUINO_IO[0] = 'z;
+//assign ARDUINO_IO[1] = 'z;
+//assign ARDUINO_IO[2] = 'z;
+//assign ARDUINO_IO[3] = 'z;
+//assign ARDUINO_IO[4] = SD_CS;
+//assign ARDUINO_IO[5] = 'z;
+//assign ARDUINO_IO[6] = 'z;
+//assign ARDUINO_IO[7] = 'z;
+//assign ARDUINO_IO[8] = TFT_DC;
+//assign ARDUINO_IO[9] = 'z;
+//assign ARDUINO_IO[10] = TFT_CS;
+//assign ARDUINO_IO[11] = MOSI;
+//assign MISO = ARDUINO_IO[12];
+//assign ARDUINO_IO[13] = SCK;
+//assign ARDUINO_IO[14] = GND;
+//assign ARDUINO_IO[15] = 'z;
 assign arst = ~ARDUINO_RESET_N;
 
 logic display_SPIReq;

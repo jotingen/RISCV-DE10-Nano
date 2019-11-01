@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Oct 31 00:42:42 2019
+[*] Fri Nov 01 03:01:57 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Oct 31 00:40:41 2019"
-[dumpfile_size] 13161713
+[dumpfile_mtime] "Fri Nov 01 03:00:36 2019"
+[dumpfile_size] 258050244
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 0
-[size] 1854 1046
+[timestart] 1020400
+[size] 1858 1057
 [pos] -1 -1
-*-12.651116 7870 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-14.973036 1117290 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -19,11 +19,12 @@
 [treeopen] tb.dut.shield.display.
 [treeopen] tb.dut.shield.display.transmit.
 [treeopen] tb.dut.shield.sdcard.
+[treeopen] tb.dut.shield.sdcard.spi.
 [treeopen] tb.sd.
 [sst_width] 255
 [signals_width] 381
 [sst_expanded] 1
-[sst_vpaned_height] 528
+[sst_vpaned_height] 535
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -40,8 +41,20 @@ tb.dut.rst
 tb.dut.led.LED[7:0]
 @24
 tb.dut.riscv.csrfile.csr_C00[31:0]
-tb.dut.riscv.csrfile.csr_C04[31:0]
-tb.dut.riscv.csrfile.csr_C08[31:0]
+@22
+tb.dut.riscv.csrfile.csr_C80[31:0]
+tb.dut.riscv.csrfile.csr_C01[31:0]
+tb.dut.riscv.csrfile.csr_C81[31:0]
+tb.dut.riscv.csrfile.csr_C02[31:0]
+tb.dut.riscv.csrfile.csr_C82[31:0]
+@28
+tb.dut.riscv.csrfile.csr_req
+@22
+#{tb.dut.riscv.csrfile.csr_addr[31:0]} tb.dut.riscv.csrfile.csr_addr[31] tb.dut.riscv.csrfile.csr_addr[30] tb.dut.riscv.csrfile.csr_addr[29] tb.dut.riscv.csrfile.csr_addr[28] tb.dut.riscv.csrfile.csr_addr[27] tb.dut.riscv.csrfile.csr_addr[26] tb.dut.riscv.csrfile.csr_addr[25] tb.dut.riscv.csrfile.csr_addr[24] tb.dut.riscv.csrfile.csr_addr[23] tb.dut.riscv.csrfile.csr_addr[22] tb.dut.riscv.csrfile.csr_addr[21] tb.dut.riscv.csrfile.csr_addr[20] tb.dut.riscv.csrfile.csr_addr[19] tb.dut.riscv.csrfile.csr_addr[18] tb.dut.riscv.csrfile.csr_addr[17] tb.dut.riscv.csrfile.csr_addr[16] tb.dut.riscv.csrfile.csr_addr[15] tb.dut.riscv.csrfile.csr_addr[14] tb.dut.riscv.csrfile.csr_addr[13] tb.dut.riscv.csrfile.csr_addr[12] tb.dut.riscv.csrfile.csr_addr[11] tb.dut.riscv.csrfile.csr_addr[10] tb.dut.riscv.csrfile.csr_addr[9] tb.dut.riscv.csrfile.csr_addr[8] tb.dut.riscv.csrfile.csr_addr[7] tb.dut.riscv.csrfile.csr_addr[6] tb.dut.riscv.csrfile.csr_addr[5] tb.dut.riscv.csrfile.csr_addr[4] tb.dut.riscv.csrfile.csr_addr[3] tb.dut.riscv.csrfile.csr_addr[2] tb.dut.riscv.csrfile.csr_addr[1] tb.dut.riscv.csrfile.csr_addr[0]
+@23
+tb.dut.riscv.csrfile.csr_data_rd[31:0]
+@200
+-
 @28
 tb.dut.SCK
 tb.dut.SD_CS
@@ -54,8 +67,6 @@ tb.ARDUINO_RESET_N
 -tb.ARDUINO_IO
 @1401200
 -group_end
-@22
-#{tb.dut.shield.ARDUINO_IO[15:0]} tb.dut.shield.ARDUINO_IO[15] tb.dut.shield.ARDUINO_IO[14] tb.dut.shield.ARDUINO_IO[13] tb.dut.shield.ARDUINO_IO[12] tb.dut.shield.ARDUINO_IO[11] tb.dut.shield.ARDUINO_IO[10] tb.dut.shield.ARDUINO_IO[9] tb.dut.shield.ARDUINO_IO[8] tb.dut.shield.ARDUINO_IO[7] tb.dut.shield.ARDUINO_IO[6] tb.dut.shield.ARDUINO_IO[5] tb.dut.shield.ARDUINO_IO[4] tb.dut.shield.ARDUINO_IO[3] tb.dut.shield.ARDUINO_IO[2] tb.dut.shield.ARDUINO_IO[1] tb.dut.shield.ARDUINO_IO[0]
 @28
 tb.dut.shield.SD_CS
 tb.dut.shield.TFT_CS
@@ -216,13 +227,15 @@ tb.dut.shield.sdcard.data[7:0]
 @22
 tb.dut.shield.sdcard.spi.sck_cnt[15:0]
 @28
+tb.dut.shield.sdcard.spi.SPIAck
 tb.dut.shield.sdcard.spi.ack_recieved
+tb.dut.shield.sdcard.spi.clk
 tb.dut.shield.sdcard.SPIReq
 tb.dut.shield.sdcard.SPIAck
 tb.dut.shield.sdcard.SPIDone
 @200
 -
-@29
+@28
 tb.dut.shield.sdcard.spi.data_cnt[2:0]
 @200
 -
@@ -797,5 +810,37 @@ tb.dut.riscv.alu.bus_write
 @22
 tb.dut.riscv.alu.bus_data_wr_mask[3:0]
 tb.dut.riscv.alu.bus_data_wr[31:0]
+@200
+-
+-SDCARD Model
+@28
+tb.dut.SCK
+@200
+-
+@28
+tb.sd.rstn
+tb.sd.sclk
+tb.sd.ncs
+tb.sd.mosi
+tb.sd.miso
+@200
+-
+@c00022
+tb.sd.st[3:0]
+@28
+(0)tb.sd.st[3:0]
+(1)tb.sd.st[3:0]
+(2)tb.sd.st[3:0]
+(3)tb.sd.st[3:0]
+@1401200
+-group_end
+@820
+tb.sd.ascii_command_state[511:0]
+@28
+tb.sd.app_cmd
+@22
+tb.sd.sck_cnt[7:0]
+tb.sd.serial_in[45:0]
+tb.sd.cmd_in[45:0]
 [pattern_trace] 1
 [pattern_trace] 0

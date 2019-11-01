@@ -317,7 +317,7 @@ always @(*) begin
 	PowerOn:
 		begin
 		   if (sck_cnt < 73) begin
-		      @(posedge sclk) sck_cnt = sck_cnt + 1;
+		      @(posedge sclk) sck_cnt <= sck_cnt + 1;
 		   end
                    if (sck_cnt == 73) st <= IDLE; else st <= PowerOn;
 		end
@@ -604,7 +604,7 @@ initial
       crc16_in = 16'h0;
       crc7_in = 7'h0;
       token = 8'h0;
-      st <= PowerOff;
+      st = PowerOff;
       miso = 1'b1;
       init_done = 0;
       ist = 0;

@@ -49,7 +49,6 @@ void main(void) {
   //uint64_t keystamp;
   //uint64_t displaystamp;
 
-  uint32_t counter;
   uint32_t led;
 
   uint8_t life[display_rows()][display_cols()];
@@ -59,7 +58,8 @@ void main(void) {
 
   char buff[21];
 
-  counter = 0;
+  LED = 0;
+  while(get_time() < 1) {} //Wait for SDCARD to warm up
   rand_init();
   display_on();
 
