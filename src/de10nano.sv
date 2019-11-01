@@ -192,15 +192,15 @@ logic arst_1;
 logic arst_2;
 logic arst_3;
 
-logic  [15:0]   ARDUINO_IO;
-
-assign  SD_CS  = ARDUINO_IO[4];
-assign  TFT_DC = ARDUINO_IO[8];
-assign  TFT_CS = ARDUINO_IO[10];
-assign  MOSI   = ARDUINO_IO[11];
-assign  ARDUINO_IO[12] = MISO ;
-assign  SCK    = ARDUINO_IO[13];
-assign  GND    = ARDUINO_IO[14];
+//logic  [15:0]   ARDUINO_IO;
+//
+//assign  SD_CS  = ARDUINO_IO[4];
+//assign  TFT_DC = ARDUINO_IO[8];
+//assign  TFT_CS = ARDUINO_IO[10];
+//assign  MOSI   = ARDUINO_IO[11];
+//assign  ARDUINO_IO[12] = MISO ;
+//assign  SCK    = ARDUINO_IO[13];
+//assign  GND    = ARDUINO_IO[14];
 
 always @(posedge clk)
   begin
@@ -508,7 +508,14 @@ shield_V1 shield (
   .ADC_SDI         (ADC_SDI),        
   .ADC_SDO         (ADC_SDO),        
                                     
-  .ARDUINO_IO      (ARDUINO_IO),     
+  //.ARDUINO_IO      (ARDUINO_IO),     
+  .SD_CS           (SD_CS     ),
+  .TFT_DC          (TFT_DC    ),
+  .TFT_CS          (TFT_CS    ),
+  .MOSI            (MOSI      ),
+  .MISO            (MISO      ),
+  .SCK             (SCK       ),
+  .GND             (GND       ),
   .ARDUINO_RESET_N (ARDUINO_RESET_N),
 
   .mmc_joystick_bus_req          (mmc_joystick_bus_req         ),

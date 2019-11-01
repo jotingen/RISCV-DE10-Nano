@@ -163,7 +163,7 @@ de10nano dut (
 spi_sd_model sd (
   .rstn  (ARDUINO_RESET_N),
   .ncs   (SD_CS),
-  .sclk  (TFT_DC),
+  .sclk  (SCK),
   .mosi  (MOSI),
   .miso  (MISO)
 );

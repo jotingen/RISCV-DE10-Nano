@@ -16,8 +16,14 @@ void sdcard_on(void) {
 
 void sdcard_cmd(uint64_t cmd) {
 
+  uint64_t cmd_reversed = 0;
+  for(uint8_t i=0;i<48;i++) {
+     cmd_reversed |= ((cmd>>i) & 1)<<(47-i);
+  }
+  cmd_reversed = cmd_reversed >> 16;
+
   for(uint8_t i = 0; i < 6; i++) {
-    SDCARD_CMD = (cmd >> (i*8)) & 0xFF;
+    SDCARD_CMD = (cmd_reversed >> (i*8)) & 0xFF;
   }
 
   return;
