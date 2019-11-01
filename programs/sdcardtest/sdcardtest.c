@@ -60,11 +60,17 @@ void main(void) {
 
   LED = 0;
   while(get_time() < 1) {} //Wait for SDCARD to warm up
+
+  LED = 1;
   rand_init();
+
+  LED = 2;
   display_on();
 
+  LED = 3;
   sdcard_on();
 
+  LED = 4;
   while(1);
 }
 
