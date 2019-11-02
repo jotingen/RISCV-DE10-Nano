@@ -38,28 +38,18 @@ module riscv #(
   output reg   [63:0] rvfi_csr_minstret_wdata,
 `endif
 
-  input  logic        i_instbus_req,
   input  logic        i_instbus_ack,
-  input  logic        i_instbus_write,
-  input  logic [31:0] i_instbus_addr,
   input  logic [31:0] i_instbus_data,
 
   output logic        o_instbus_req,
-  output logic        o_instbus_ack,
   output logic        o_instbus_write,
   output logic [31:0] o_instbus_addr,
   output logic [31:0] o_instbus_data,
 
-  input  logic        i_membus_req,
   input  logic        i_membus_ack,
-  input  logic        i_membus_write,
-  input  logic [31:0] i_membus_addr,
   input  logic [31:0] i_membus_data,
-  input  logic  [3:0] i_membus_data_rd_mask,
-  input  logic  [3:0] i_membus_data_wr_mask,
 
   output logic        o_membus_req,
-  output logic        o_membus_ack,
   output logic        o_membus_write,
   output logic [31:0] o_membus_addr,
   output logic [31:0] o_membus_data,
@@ -343,7 +333,6 @@ riscv_ifu ifu (
   .o_instbus_data  (o_instbus_data),
 
   .i_instbus_ack   (i_instbus_ack),   
-  .i_instbus_addr  (i_instbus_addr),  
   .i_instbus_data  (i_instbus_data)  
 );
 

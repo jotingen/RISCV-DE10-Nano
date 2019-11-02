@@ -72,7 +72,7 @@ inout  logic           ARDUINO_RESET_N
 //logic SCK;
 //logic GND;
 
-assign SD_CS = '0;
+//assign SD_CS = '0;
 assign GND = '0;
 
 //assign ARDUINO_IO[0] = 'z;

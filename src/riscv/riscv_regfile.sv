@@ -2,10 +2,6 @@ module riscv_regfile (
   input  logic              clk,
   input  logic              rst,
 
-  input  logic              PC_wr,
-  input  logic [31:0]       PC_in,
-  output logic [31:0]       PC,
-
   input  logic [31:0]       x_wr,
   input  logic [31:0]       x00_in,
   input  logic [31:0]       x01_in,
@@ -76,7 +72,6 @@ module riscv_regfile (
 always_ff @(posedge clk)
   begin
 
-  PC <= PC;
   x00 <= x00;
   x01 <= x01;
   x02 <= x02;
@@ -109,11 +104,6 @@ always_ff @(posedge clk)
   x29 <= x29;
   x30 <= x30;
   x31 <= x31;
-
-  if(PC_wr)
-    begin
-    PC <= PC_in;
-    end
 
   if(x_wr[00]) x00 <= '0;
   if(x_wr[01]) x01 <= x01_in;
@@ -150,7 +140,6 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
-    PC <= '0;
     x00 <= '0;
     x01 <= '0;
     x02 <= '0;

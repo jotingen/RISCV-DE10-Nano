@@ -56,6 +56,7 @@ logic [0:0] rvfi_trap;
 logic [0:0] rvfi_halt;
 logic [0:0] rvfi_intr;
 logic [1:0] rvfi_mode;
+logic [1:0] rvfi_ixl;
 logic [4:0] rvfi_rs1_addr;
 logic [4:0] rvfi_rs2_addr;
 logic [31:0] rvfi_rs1_rdata;
@@ -70,6 +71,14 @@ logic [3:0] rvfi_mem_wmask;
 logic [31:0] rvfi_mem_rdata;
 logic [31:0] rvfi_mem_wdata;
 logic [0:0] rvfi_mem_extamo;
+logic [63:0] rvfi_csr_mcycle_rmask;
+logic [63:0] rvfi_csr_mcycle_wmask;
+logic [63:0] rvfi_csr_mcycle_rdata;
+logic [63:0] rvfi_csr_mcycle_wdata;
+logic [63:0] rvfi_csr_minstret_rmask;
+logic [63:0] rvfi_csr_minstret_wmask;
+logic [63:0] rvfi_csr_minstret_rdata;
+logic [63:0] rvfi_csr_minstret_wdata;
 
 logic [15:0] errcode;
 
@@ -131,7 +140,7 @@ de10nano dut (
 .rvfi_halt              ,
 .rvfi_intr              ,
 .rvfi_mode              ,
-//.rvfi_ixl               ,
+.rvfi_ixl               ,
 .rvfi_rs1_addr          ,
 .rvfi_rs2_addr          ,
 .rvfi_rs1_rdata         ,
@@ -146,15 +155,15 @@ de10nano dut (
 .rvfi_mem_rdata         ,
 .rvfi_mem_wdata         ,
                         
-//.rvfi_csr_mcycle_rmask  ,
-//.rvfi_csr_mcycle_wmask  ,
-//.rvfi_csr_mcycle_rdata  ,
-//.rvfi_csr_mcycle_wdata  ,
-//                        
-//.rvfi_csr_minstret_rmask,
-//.rvfi_csr_minstret_wmask,
-//.rvfi_csr_minstret_rdata,
-//.rvfi_csr_minstret_wdata,
+.rvfi_csr_mcycle_rmask  ,
+.rvfi_csr_mcycle_wmask  ,
+.rvfi_csr_mcycle_rdata  ,
+.rvfi_csr_mcycle_wdata  ,
+                        
+.rvfi_csr_minstret_rmask,
+.rvfi_csr_minstret_wmask,
+.rvfi_csr_minstret_rdata,
+.rvfi_csr_minstret_wdata,
 
 .clk,
 .rst
@@ -191,7 +200,7 @@ riscv_rvfimon monitor (
   .rvfi_mem_wmask,
   .rvfi_mem_rdata,
   .rvfi_mem_wdata,
-  //.rvfi_mem_extamo,
+  .rvfi_mem_extamo,
   .errcode
 );
 

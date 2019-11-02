@@ -43,7 +43,6 @@ module riscv_alu#(
   output logic        alu_vld,
   output logic        alu_retired,
   output logic        alu_freeze,
-  output logic [31:0] alu_inst,
   output logic        alu_br_miss,
   output logic        alu_trap,
   output logic [31:0] alu_PC_next,
@@ -216,6 +215,7 @@ logic [31:0] rs1_data;
 logic [31:0] rs2_data;
 logic [31:0] rd_data;
 
+logic [31:0] alu_inst;
 logic  [3:0] alu_fm;
 logic  [3:0] alu_pred;
 logic  [3:0] alu_succ;
