@@ -354,7 +354,17 @@ mmc mmc_inst (
   .mmc_dispbuff_bus_data_wr_mask (                             ),
                                                                  
   .dispbuff_mmc_bus_ack          ('0                           ),
-  .dispbuff_mmc_bus_data         ('0                           )
+  .dispbuff_mmc_bus_data         ('0                           ),
+
+  .mmc_sdcard_bus_req            (                             ),
+  .mmc_sdcard_bus_write          (                             ),
+  .mmc_sdcard_bus_addr           (                             ),
+  .mmc_sdcard_bus_data           (                             ),
+  .mmc_sdcard_bus_data_rd_mask   (                             ),
+  .mmc_sdcard_bus_data_wr_mask   (                             ),
+                                                                   
+  .sdcard_mmc_bus_ack            ('0                           ),
+  .sdcard_mmc_bus_data           ('0                           )
 );
 
 mmc mmc_data (

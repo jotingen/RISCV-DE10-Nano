@@ -10,8 +10,6 @@ module riscv_ifu (
   input  logic             alu_trap,
   input  logic [31:0]      alu_PC_next,
 
-  input  logic [31:0]      PC_in,
-
   input  logic             idu_vld,
   input  logic             idu_freeze,
 
@@ -25,7 +23,6 @@ module riscv_ifu (
   output logic [31:0]      o_instbus_data,
 
   input  logic             i_instbus_ack,
-  input  logic [31:0]      i_instbus_addr,
   input  logic [31:0]      i_instbus_data
 
 );

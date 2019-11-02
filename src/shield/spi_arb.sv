@@ -172,6 +172,9 @@ always_comb
 											  state_granted <= '1;
 												end
 		                  end
+    default :         begin
+		                  state_idle <= '1;
+											end
   endcase
 
 

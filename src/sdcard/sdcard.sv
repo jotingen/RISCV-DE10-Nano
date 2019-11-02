@@ -23,7 +23,7 @@ input  logic [31:0]    i_bus_data,
 input  logic  [3:0]    i_bus_data_rd_mask,
 input  logic  [3:0]    i_bus_data_wr_mask,
 
-output logic [31:0]    o_bus_ack,
+output logic           o_bus_ack,
 output logic [31:0]    o_bus_data
 );
 

@@ -12,7 +12,6 @@ module mem #(
   output logic [31:0]    o_instbus_data,
 
   input  logic           i_membus_req,
-  input  logic           i_membus_ack,
   input  logic           i_membus_write,
   input  logic [31:0]    i_membus_addr,
   input  logic [31:0]    i_membus_data,
