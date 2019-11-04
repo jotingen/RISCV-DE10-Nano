@@ -195,7 +195,7 @@ always_comb
   mmc_dispbuff_bus_data_wr_mask = riscv_mmc_bus_data_wr_mask;
 
   mmc_sdcard_bus_write          = riscv_mmc_bus_write;
-  mmc_sdcard_bus_addr           = riscv_mmc_bus_addr - DISPBUFF_ADDR_LO;
+  mmc_sdcard_bus_addr           = riscv_mmc_bus_addr - SDCARD_ADDR_LO;
   mmc_sdcard_bus_data           = riscv_mmc_bus_data;
   mmc_sdcard_bus_data_rd_mask   = riscv_mmc_bus_data_rd_mask;
   mmc_sdcard_bus_data_wr_mask   = riscv_mmc_bus_data_wr_mask;

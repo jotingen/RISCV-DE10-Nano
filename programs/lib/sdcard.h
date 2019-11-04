@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 extern void     sdcard_on(void);
-extern void     sdcard_cmd(uint64_t cmd);
+extern uint64_t sdcard_cmd(uint64_t cmd);
 
 #endif
 

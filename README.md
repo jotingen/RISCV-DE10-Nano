@@ -22,3 +22,16 @@ Add FrameBuffer .12
 Replace Mem Ring with MMC .22
 Change framebuffer writes to only write changed pixels .23
 Reduce multiply cycles from 10 to 2, and divide cycles from 10 to 7 .24
+
+SDCard RegMap
+'hC400_0000 - NoOp
+'hC400_0004 - Cmd Send
+'hC400_0008 - Cmd [31:0]
+'hC400_000C - Cmd [47:32]
+'hC400_0010 - Cmd Rsp Arrived
+'hC400_0014 - Cmd Rsp [31:0]
+'hC400_0018 - Cmd Rsp [47:32]
+'hC400_001C - Data In
+'hC400_0020 - Data Out
+
+
