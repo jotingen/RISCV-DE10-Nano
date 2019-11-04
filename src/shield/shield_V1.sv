@@ -181,7 +181,8 @@ sdcard sdcard (
   .SCK   (sdcard_SCK),
   .CS    (sdcard_CS),
   .RS_DC (sdcard_RS_DC),
-  .DATA  (sdcard_MOSI),
+  .MOSI  (sdcard_MOSI),
+  .MISO  (MISO),
 
   .i_bus_req           (mmc_sdcard_bus_req),   
   .i_bus_write         (mmc_sdcard_bus_write), 

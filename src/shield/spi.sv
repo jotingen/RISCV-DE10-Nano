@@ -11,9 +11,11 @@ output logic CS,
 output logic RS_DC,
 output logic DATA,
 
-input  logic       req,
-input  logic       cmd,
-input  logic [7:0] data,
+output logic         ack,
+input  logic         req,
+input  logic         cmd,
+input  logic [512:0] data,
+input  logic   [6:0] bytes,
 
 output logic     rdy
 );
@@ -22,7 +24,7 @@ parameter PERIOD_20ns = 125;
 
 logic        ack_recieved;
 logic [15:0] sck_cnt;
-logic  [2:0] data_cnt;
+logic  [6:0] data_cnt;
 
 always_ff @(posedge clk)
   begin
@@ -36,6 +38,7 @@ always_ff @(posedge clk)
   CS       <= CS   ;
   RS_DC    <= RS_DC;
   DATA     <= DATA ;
+	ack      <= '0;
 
   if(SPIAck) 
     begin
@@ -44,22 +47,23 @@ always_ff @(posedge clk)
 
   data_cnt <= data_cnt;
 
-  if(data_cnt == 3'b000)
-    data_ndx = 7;
-  if(data_cnt == 3'b001)
-    data_ndx = 6;
-  if(data_cnt == 3'b010)
-    data_ndx = 5;
-  if(data_cnt == 3'b011)
-    data_ndx = 4;
-  if(data_cnt == 3'b100)
-    data_ndx = 3;
-  if(data_cnt == 3'b101)
-    data_ndx = 2;
-  if(data_cnt == 3'b110)
-    data_ndx = 1;
-  if(data_cnt == 3'b111)
-    data_ndx = 0;
+  data_ndx = bytes*8-data_cnt - 1;
+  //if(data_cnt == 3'b000)
+  //  data_ndx = 7;
+  //if(data_cnt == 3'b001)
+  //  data_ndx = 6;
+  //if(data_cnt == 3'b010)
+  //  data_ndx = 5;
+  //if(data_cnt == 3'b011)
+  //  data_ndx = 4;
+  //if(data_cnt == 3'b100)
+  //  data_ndx = 3;
+  //if(data_cnt == 3'b101)
+  //  data_ndx = 2;
+  //if(data_cnt == 3'b110)
+  //  data_ndx = 1;
+  //if(data_cnt == 3'b111)
+  //  data_ndx = 0;
 
   if(sck_cnt==0)
   begin
@@ -84,11 +88,12 @@ always_ff @(posedge clk)
                   CS <= '1;
                   end
                 end
-      'd7:      begin
-		            SPIDone <= '1;
-                DATA  <= data[data_ndx];
-                data_cnt <= '0;
-                end
+      bytes*8-1 : begin
+		              SPIDone <= '1;
+		              ack     <= '1;
+                  DATA  <= data[data_ndx];
+                  data_cnt <= '0;
+                  end
       default:  begin
                 DATA  <= data[data_ndx];
                 data_cnt <= data_cnt + 1;
@@ -104,6 +109,7 @@ always_ff @(posedge clk)
     RS_DC    <= '0;
     DATA     <= '0;
     data_cnt <= '0;       
+		ack      <= '0;
     end
   end
           
