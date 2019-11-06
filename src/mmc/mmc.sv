@@ -73,6 +73,16 @@ module mmc (
   input  logic           dispbuff_mmc_bus_ack,
   input  logic [31:0]    dispbuff_mmc_bus_data,
 
+  output logic           mmc_consolebuff_bus_req,
+  output logic           mmc_consolebuff_bus_write,
+  output logic [31:0]    mmc_consolebuff_bus_addr,
+  output logic [31:0]    mmc_consolebuff_bus_data,
+  output logic  [3:0]    mmc_consolebuff_bus_data_rd_mask,
+  output logic  [3:0]    mmc_consolebuff_bus_data_wr_mask,
+
+  input  logic           consolebuff_mmc_bus_ack,
+  input  logic [31:0]    consolebuff_mmc_bus_data,
+
   output logic           mmc_sdcard_bus_req,
   output logic           mmc_sdcard_bus_write,
   output logic [31:0]    mmc_sdcard_bus_addr,
@@ -98,8 +108,10 @@ logic [31:0]    JOYSTICK_ADDR_HI = 'hC101_FFFF;
 logic [31:0]    JOYSTICK_ADDR_LO = 'hC101_0000;
 logic [31:0]    DISPLAY_ADDR_HI  = 'hC200_FFFF;
 logic [31:0]    DISPLAY_ADDR_LO  = 'hC200_0000;
-logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_FFFF;
+logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_3FFC;
 logic [31:0]    DISPBUFF_ADDR_LO = 'hC300_0000;
+logic [31:0]    CONSOLEBUFF_ADDR_HI = 'hC301_44FC;
+logic [31:0]    CONSOLEBUFF_ADDR_LO = 'hC301_4000;
 logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 
@@ -112,6 +124,7 @@ always_comb
   mmc_joystick_bus_req = '0;
   mmc_display_bus_req  = '0;
   mmc_dispbuff_bus_req = '0;
+  mmc_consolebuff_bus_req = '0;
   mmc_sdcard_bus_req   = '0;
 
   //Generate regs based on memory map
@@ -149,6 +162,12 @@ always_comb
      riscv_mmc_bus_addr <= DISPBUFF_ADDR_HI)
     begin
     mmc_dispbuff_bus_req = riscv_mmc_bus_req;
+    end
+
+  if(riscv_mmc_bus_addr >= CONSOLEBUFF_ADDR_LO &
+     riscv_mmc_bus_addr <= CONSOLEBUFF_ADDR_HI)
+    begin
+    mmc_consolebuff_bus_req = riscv_mmc_bus_req;
     end
 
   if(riscv_mmc_bus_addr >= SDCARD_ADDR_LO &
@@ -193,6 +212,12 @@ always_comb
   mmc_dispbuff_bus_data         = riscv_mmc_bus_data;
   mmc_dispbuff_bus_data_rd_mask = riscv_mmc_bus_data_rd_mask;
   mmc_dispbuff_bus_data_wr_mask = riscv_mmc_bus_data_wr_mask;
+
+  mmc_consolebuff_bus_write        = riscv_mmc_bus_write;
+  mmc_consolebuff_bus_addr         = riscv_mmc_bus_addr - CONSOLEBUFF_ADDR_LO;
+  mmc_consolebuff_bus_data         = riscv_mmc_bus_data;
+  mmc_consolebuff_bus_data_rd_mask = riscv_mmc_bus_data_rd_mask;
+  mmc_consolebuff_bus_data_wr_mask = riscv_mmc_bus_data_wr_mask;
 
   mmc_sdcard_bus_write          = riscv_mmc_bus_write;
   mmc_sdcard_bus_addr           = riscv_mmc_bus_addr - SDCARD_ADDR_LO;
@@ -243,6 +268,12 @@ always_comb
     mmc_riscv_bus_data = dispbuff_mmc_bus_data;
     end
 
+  if(consolebuff_mmc_bus_ack)
+    begin
+    mmc_riscv_bus_ack  = consolebuff_mmc_bus_ack;
+    mmc_riscv_bus_data = consolebuff_mmc_bus_data;
+    end
+
   if(null_ack)
     begin
     mmc_riscv_bus_ack  = null_ack;
@@ -262,7 +293,8 @@ always_ff @(posedge clk)
      ~mmc_keys_bus_req &
      ~mmc_joystick_bus_req &
      ~mmc_display_bus_req &
-     ~mmc_dispbuff_bus_req)
+     ~mmc_dispbuff_bus_req &
+     ~mmc_consolebuff_bus_req)
     begin
     null_ack <= '1;
     end

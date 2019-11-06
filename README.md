@@ -23,6 +23,27 @@ Replace Mem Ring with MMC .22
 Change framebuffer writes to only write changed pixels .23
 Reduce multiply cycles from 10 to 2, and divide cycles from 10 to 7 .24
 
+Display RegMap
+'hC200_0000 - NoOp
+'hC200_0004 - Cmd
+'hC200_0008 - Data
+'hC200_0100 - Text Clear
+'hC200_0104 - Text Cursor
+'hC200_0108 - Text Put
+'hC200_010C - Text Put At
+
+DispBuff RegMap
+'hC300_0000 - Framebuffer (0,0)
+'hC300_0004 - Framebuffer (1,0)
+...
+'hC301_3FF8 - Framebuffer (158,127)
+'hC301_3FFC - Framebuffer (159,127)
+'hC301_4000 - Textbuffer  (0,0)
+'hC301_4004 - Textbuffer  (1,0)
+..
+'hC301_44F8 - Textbuffer  (18,15)
+'hC301_44FC - Textbuffer  (19,15)
+
 SDCard RegMap
 'hC400_0000 - NoOp
 'hC400_0004 - Cmd Send

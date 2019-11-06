@@ -24,6 +24,16 @@ output logic           arst,
   output logic           display_mmc_bus_ack,
   output logic [31:0]    display_mmc_bus_data,
 
+  input  logic           mmc_consolebuff_bus_req,
+  input  logic           mmc_consolebuff_bus_write,
+  input  logic [31:0]    mmc_consolebuff_bus_addr,
+  input  logic [31:0]    mmc_consolebuff_bus_data,
+  input  logic  [3:0]    mmc_consolebuff_bus_data_rd_mask,
+  input  logic  [3:0]    mmc_consolebuff_bus_data_wr_mask,
+
+  output logic           consolebuff_mmc_bus_ack,
+  output logic [31:0]    consolebuff_mmc_bus_data,
+
   input  logic           mmc_dispbuff_bus_req,
   input  logic           mmc_dispbuff_bus_write,
   input  logic [31:0]    mmc_dispbuff_bus_addr,
@@ -154,7 +164,7 @@ st7735r #(.SIZE(16),.ADDR_BASE(32'h00000000))  display (
 );
 
 //Display Buffer
-st7735r_buffer #(.SIZE(17),.ADDR_BASE(32'h00000000))  display_buffer (
+st7735r_buffer display_buffer (
   .clk (clk),
   .rst (rst),
 
@@ -167,6 +177,22 @@ st7735r_buffer #(.SIZE(17),.ADDR_BASE(32'h00000000))  display_buffer (
 
   .o_membus_ack           (dispbuff_mmc_bus_ack),   
   .o_membus_data          (dispbuff_mmc_bus_data)
+);
+
+//Console Buffer
+console_buffer console_buffer (
+  .clk (clk),
+  .rst (rst),
+
+  .i_membus_req           (mmc_consolebuff_bus_req),   
+  .i_membus_write         (mmc_consolebuff_bus_write), 
+  .i_membus_addr          (mmc_consolebuff_bus_addr),  
+  .i_membus_data          (mmc_consolebuff_bus_data),
+  .i_membus_data_rd_mask  (mmc_consolebuff_bus_data_rd_mask) ,
+  .i_membus_data_wr_mask  (mmc_consolebuff_bus_data_wr_mask),
+
+  .o_membus_ack           (consolebuff_mmc_bus_ack),   
+  .o_membus_data          (consolebuff_mmc_bus_data)
 );
 
 //SD Card

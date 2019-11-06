@@ -13,11 +13,18 @@
 #define DISPLAY_ROWS    128
 #define DISPLAY_COLS    160
 
+#define CONSOLE_ROWS    16
+#define CONSOLE_COLS    20
+
 #define DISPLAY_CMD_DISPON   0x29
 #define DISPLAY_CMD_SLEEPOUT 0x11
 #define DISPLAY_CMD_RAMWR    0x2C
+#define LED             (*((volatile unsigned int *) (0xC0000000)))
 
 static volatile uint32_t * const display_buffer = (volatile uint32_t *) 0xC3000000;
+static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3014000;
+
+console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
 
@@ -82,3 +89,58 @@ void display_on(void) {
   }
   return;
 }
+
+struct console_index_t console_curser(void) {
+  return curser_index;
+}
+
+void console_curser_set(struct console_index_t index) {
+  if(index.X > CONSOLE_COLS) {
+    index.X = CONSOLE_COLS-1;
+  }
+  if(index.Y > CONSOLE_ROWS) {
+    index.Y = CONSOLE_ROWS-1;
+  }
+  curser_index = index;
+  return;
+}
+
+void console_clear() {
+  curser_index.X = 0;
+  curser_index.Y = 0;
+  for(int y = 0; y < CONSOLE_ROWS; y++) {
+    for(int x = 0; x < CONSOLE_COLS; x++) {
+      LED = 0xFF;
+      LED = x;
+      LED = y;
+      console_buffer[y*CONSOLE_COLS+x] = 0;
+    }
+  }
+  return;
+}
+  
+void console_put_char(char c) {
+  //If curser is at bottom right, shift everything up by one row
+  if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
+    for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+      for(int x = 0; x < CONSOLE_COLS; x++) {
+        console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+      }
+    }
+    curser_index.Y = curser_index.Y - 1;
+  }
+    
+  //Put character at console
+  console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
+
+  //Advance curser
+  if(curser_index.X == CONSOLE_COLS-1) {
+    curser_index.X = 0;
+    curser_index.Y = curser_index.Y + 1;
+  } else {
+    curser_index.X = curser_index.X + 1;
+  }
+    
+  return;
+}
+  

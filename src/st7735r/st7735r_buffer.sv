@@ -1,7 +1,4 @@
-module st7735r_buffer #(
-  parameter integer      SIZE = 4,
-  parameter logic [31:0] ADDR_BASE = 32'h00000000
-) (
+module st7735r_buffer (
   input  logic           clk,
   input  logic           rst,
 
@@ -16,18 +13,12 @@ module st7735r_buffer #(
   output logic [31:0]    o_membus_data
 );
 
-logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_2 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_1 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_0 [2**(SIZE-2)-1:0];
-
 logic         buffer_R_wren;
 logic [7:0]   buffer_R_out;
 logic         buffer_G_wren;
 logic [7:0]   buffer_G_out;
 logic         buffer_B_wren;
 logic [7:0]   buffer_B_out;
-logic [14:0]  buffer_addr;
 
 logic           membus_req;
 logic           membus_ack;
@@ -40,16 +31,14 @@ logic  [3:0]    membus_data_wr_mask;
 logic         idle;
 logic         accessing;
 
+
 always_comb
   begin
   buffer_R_wren = '0;
   buffer_G_wren = '0;
   buffer_B_wren = '0;
-  buffer_addr   = i_membus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2];
 
-  if(i_membus_req &
-     i_membus_addr >= ADDR_BASE &
-     i_membus_addr <= ADDR_BASE + 2**SIZE - 1)
+  if(i_membus_req)
     begin
     if (i_membus_write & i_membus_data_wr_mask[0])
       begin
@@ -81,9 +70,7 @@ always_ff @(posedge clk)
 
   case(1'b1) 
   idle :      begin
-              if(i_membus_req &
-                 i_membus_addr >= ADDR_BASE &
-                 i_membus_addr <= ADDR_BASE + 2**SIZE - 1)
+              if(i_membus_req)
                 begin
                 accessing <= '1;
                 //membus_req           <= i_membus_req;    
@@ -130,8 +117,8 @@ always_ff @(posedge clk)
 display_buffer display_buffer_R (
   .clock ( clk ),
   .data ( i_membus_data[23:16] ),
-  .rdaddress ( buffer_addr ),
-  .wraddress ( buffer_addr ),
+  .rdaddress ( i_membus_addr ),
+  .wraddress ( i_membus_addr ),
   .wren ( buffer_R_wren ),
   .q ( buffer_R_out )
   );
@@ -139,8 +126,8 @@ display_buffer display_buffer_R (
 display_buffer display_buffer_G (
   .clock ( clk ),
   .data ( i_membus_data[15:8] ),
-  .rdaddress ( buffer_addr ),
-  .wraddress ( buffer_addr ),
+  .rdaddress ( i_membus_addr ),
+  .wraddress ( i_membus_addr ),
   .wren ( buffer_G_wren ),
   .q ( buffer_G_out )
   );
@@ -148,8 +135,8 @@ display_buffer display_buffer_G (
 display_buffer display_buffer_B (
   .clock ( clk ),
   .data ( i_membus_data[7:0] ),
-  .rdaddress ( buffer_addr ),
-  .wraddress ( buffer_addr ),
+  .rdaddress ( i_membus_addr ),
+  .wraddress ( i_membus_addr ),
   .wren ( buffer_B_wren ),
   .q ( buffer_B_out )
   );

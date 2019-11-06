@@ -177,6 +177,16 @@ logic  [3:0]    mmc_dispbuff_bus_data_wr_mask;
 logic           dispbuff_mmc_bus_ack;
 logic [31:0]    dispbuff_mmc_bus_data;
 
+logic           mmc_consolebuff_bus_req;
+logic           mmc_consolebuff_bus_write;
+logic [31:0]    mmc_consolebuff_bus_addr;
+logic [31:0]    mmc_consolebuff_bus_data;
+logic  [3:0]    mmc_consolebuff_bus_data_rd_mask;
+logic  [3:0]    mmc_consolebuff_bus_data_wr_mask;
+
+logic           consolebuff_mmc_bus_ack;
+logic [31:0]    consolebuff_mmc_bus_data;
+
 logic           mmc_sdcard_bus_req;
 logic           mmc_sdcard_bus_write;
 logic [31:0]    mmc_sdcard_bus_addr;
@@ -356,6 +366,16 @@ mmc mmc_inst (
   .dispbuff_mmc_bus_ack          ('0                           ),
   .dispbuff_mmc_bus_data         ('0                           ),
 
+  .mmc_consolebuff_bus_req          (                             ),
+  .mmc_consolebuff_bus_write        (                             ),
+  .mmc_consolebuff_bus_addr         (                             ),
+  .mmc_consolebuff_bus_data         (                             ),
+  .mmc_consolebuff_bus_data_rd_mask (                             ),
+  .mmc_consolebuff_bus_data_wr_mask (                             ),
+                                                                 
+  .consolebuff_mmc_bus_ack          ('0                           ),
+  .consolebuff_mmc_bus_data         ('0                           ),
+
   .mmc_sdcard_bus_req            (                             ),
   .mmc_sdcard_bus_write          (                             ),
   .mmc_sdcard_bus_addr           (                             ),
@@ -440,6 +460,16 @@ mmc mmc_data (
                                                                  
   .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
   .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        ),
+                                                                 
+  .mmc_consolebuff_bus_req          (mmc_consolebuff_bus_req         ),
+  .mmc_consolebuff_bus_write        (mmc_consolebuff_bus_write       ),
+  .mmc_consolebuff_bus_addr         (mmc_consolebuff_bus_addr        ),
+  .mmc_consolebuff_bus_data         (mmc_consolebuff_bus_data        ),
+  .mmc_consolebuff_bus_data_rd_mask (mmc_consolebuff_bus_data_rd_mask),
+  .mmc_consolebuff_bus_data_wr_mask (mmc_consolebuff_bus_data_wr_mask),
+                                                                 
+  .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
+  .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
                                                                  
   .mmc_sdcard_bus_req            (mmc_sdcard_bus_req         ),
   .mmc_sdcard_bus_write          (mmc_sdcard_bus_write       ),
@@ -557,6 +587,16 @@ shield_V1 shield (
                                                                  
   .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
   .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        ),
+                                                                 
+  .mmc_consolebuff_bus_req          (mmc_consolebuff_bus_req         ),
+  .mmc_consolebuff_bus_write        (mmc_consolebuff_bus_write       ),
+  .mmc_consolebuff_bus_addr         (mmc_consolebuff_bus_addr        ),
+  .mmc_consolebuff_bus_data         (mmc_consolebuff_bus_data        ),
+  .mmc_consolebuff_bus_data_rd_mask (mmc_consolebuff_bus_data_rd_mask),
+  .mmc_consolebuff_bus_data_wr_mask (mmc_consolebuff_bus_data_wr_mask),
+                                                                 
+  .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
+  .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
                                                                  
   .mmc_sdcard_bus_req          (mmc_sdcard_bus_req         ),
   .mmc_sdcard_bus_write        (mmc_sdcard_bus_write       ),
