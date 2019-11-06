@@ -42,6 +42,7 @@ void paint_pixel(int row, int col, uint8_t * cell) {
 void main(void) {
   uint32_t but0, but1;
   uint32_t joy_sel, joy_up, joy_down, joy_left, joy_right;
+static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3014000;
 
   uint32_t key_pressed;
 
@@ -59,18 +60,31 @@ void main(void) {
   char buff[21];
 
   LED = 0;
+  console_clear();
+  LED = 1;
+  LED = console_curser().X;
+  console_put_char('T');
+  LED = console_curser().X;
+  console_put_char('E');
+  LED = console_curser().X;
+  console_put_char('S');
+  LED = console_curser().X;
+  console_put_char('T');
+  LED = console_curser().X;
+  LED = 2;
+  LED = console_buffer[0];
+  LED = console_buffer[1];
+  LED = console_buffer[2];
+  LED = console_buffer[3];
+  LED = 3;
   while(get_time() < 1) {} //Wait for SDCARD to warm up
 
-  LED = 1;
   rand_init();
 
-  LED = 2;
   display_on();
 
-  LED = 3;
   sdcard_on();
 
-  LED = 4;
   while(1);
 }
 
