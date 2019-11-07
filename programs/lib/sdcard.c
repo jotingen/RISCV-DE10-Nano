@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "sdcard.h"
+#include "display.h"
 
 #define SDCARD_NOOP        (*((volatile uint32_t *) (0xC4000000)))
 #define SDCARD_CMD_SEND    (*((volatile uint32_t *) (0xC4000004)))
@@ -14,8 +15,38 @@
 
 void sdcard_on(void) {
 
-  sdcard_cmd(0x400000000095);
-  sdcard_cmd(0x48000001AA87);
+  uint64_t cmd;
+  uint64_t rsp;
+  char * cmd_string;
+  char * rsp_string;
+
+  cmd = 0x400000000095;
+  cmd_string = uint64_to_hex(cmd);
+  console_put_char('\n');
+  for(int i = 0; i < 12; i++) {
+    console_put_char(cmd_string[11-i]);
+  }
+  rsp = sdcard_cmd(cmd);
+  rsp_string = uint64_to_hex(rsp);
+  console_put_char('\n');
+  console_put_char('-');
+  for(int i = 0; i < 12; i++) {
+    console_put_char(rsp_string[11-i]);
+  }
+
+  cmd = 0x48000001AA87;
+  cmd_string = uint64_to_hex(cmd);
+  console_put_char('\n');
+  for(int i = 0; i < 12; i++) {
+    console_put_char(cmd_string[11-i]);
+  }
+  rsp = sdcard_cmd(cmd);
+  rsp_string = uint64_to_hex(rsp);
+  console_put_char('\n');
+  console_put_char('-');
+  for(int i = 0; i < 12; i++) {
+    console_put_char(rsp_string[11-i]);
+  }
 
   return;
 }
@@ -43,7 +74,7 @@ uint64_t sdcard_cmd(uint64_t cmd) {
   SDCARD_CMD_HI   = (cmd >> 32) & 0xFFFF;
   SDCARD_CMD_SEND = 1;
 
-  while(!SDCARD_RSP_ARRIVED) {};
+  while(SDCARD_RSP_ARRIVED == 0) {};
   
   rsp = SDCARD_RSP_HI;
   rsp = rsp << 32;

@@ -274,6 +274,12 @@ always_comb
     mmc_riscv_bus_data = consolebuff_mmc_bus_data;
     end
 
+  if(sdcard_mmc_bus_ack)
+    begin
+    mmc_riscv_bus_ack  = sdcard_mmc_bus_ack;
+    mmc_riscv_bus_data = sdcard_mmc_bus_data;
+    end
+
   if(null_ack)
     begin
     mmc_riscv_bus_ack  = null_ack;
@@ -294,7 +300,8 @@ always_ff @(posedge clk)
      ~mmc_joystick_bus_req &
      ~mmc_display_bus_req &
      ~mmc_dispbuff_bus_req &
-     ~mmc_consolebuff_bus_req)
+     ~mmc_consolebuff_bus_req &
+     ~mmc_sdcard_bus_req)
     begin
     null_ack <= '1;
     end

@@ -92,46 +92,85 @@ always_ff @(posedge clk)
   state_idle : begin
                if(i_bus_req)
                  begin
-                 if(i_bus_write)
-                   begin
-                   unique
-                   case (i_bus_addr[31:2])
-                     //NoOp
-                     'h0000:  begin
-                              o_bus_ack             <= '1;
-                              state_idle <= '1;
-                              end
-                     //Cmd Send
-                     'h0001:  begin 
+                 unique
+                 case (i_bus_addr[31:2])
+                   //NoOp
+                   'h0000:  begin
+                            o_bus_ack             <= '1;
+                            state_idle <= '1;
+                            end
+                   //Cmd Send
+                   'h0001:  begin 
+                            if(i_bus_write)
+                              begin
+                              rspArrived            <= '0;
+                              rsp                   <= '0;
                               SPIReq                <= '1;
                               state_spi_req         <= '1;
                               end
-                     //Cmd Lo
-                     'h0002:  begin 
-                              cmd[31:24]            <= i_bus_data_wr_mask ? i_bus_data[31:24] : cmd[31:24];
-                              cmd[23:16]            <= i_bus_data_wr_mask ? i_bus_data[23:16] : cmd[23:16];
-                              cmd[15:8]             <= i_bus_data_wr_mask ? i_bus_data[15:8]  : cmd[15:8] ;
-                              cmd[7:0]              <= i_bus_data_wr_mask ? i_bus_data[7:0]   : cmd[7:0]  ;
-                              o_bus_ack             <= '1;
-                              state_idle <= '1;
-                              end
-                     //Cmd Hi
-                     'h0003:  begin 
+                            end
+                   //Cmd Lo
+                   'h0002:  begin 
+                           if(i_bus_write)
+                             begin
+                             cmd[31:24]            <= i_bus_data_wr_mask ? i_bus_data[31:24] : cmd[31:24];
+                             cmd[23:16]            <= i_bus_data_wr_mask ? i_bus_data[23:16] : cmd[23:16];
+                             cmd[15:8]             <= i_bus_data_wr_mask ? i_bus_data[15:8]  : cmd[15:8] ;
+                             cmd[7:0]              <= i_bus_data_wr_mask ? i_bus_data[7:0]   : cmd[7:0]  ;
+                             end
+                            o_bus_ack             <= '1;
+                            o_bus_data[31:24]     <= i_bus_data_rd_mask ? cmd[31:24] : '0;
+                            o_bus_data[23:16]     <= i_bus_data_rd_mask ? cmd[23:16] : '0;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? cmd[15:8]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? cmd[7:0]   : '0;
+                            state_idle <= '1;
+                            end
+                   //Cmd Hi
+                   'h0003:  begin 
+                            if(i_bus_write)
+                              begin
                               cmd[47:40]            <= i_bus_data_wr_mask ? i_bus_data[15:8]  : cmd[47:40] ;
                               cmd[39:32]            <= i_bus_data_wr_mask ? i_bus_data[7:0]   : cmd[39:32] ;
-                              o_bus_ack             <= '1;
-                              state_idle <= '1;
                               end
-                     default: begin
-                              o_bus_ack      <= '1;
-                              o_bus_data[31:24]     <= i_bus_data_wr_mask ? i_bus_data[31:24] : '0;
-                              o_bus_data[23:16]     <= i_bus_data_wr_mask ? i_bus_data[23:16] : '0;
-                              o_bus_data[15:8]      <= i_bus_data_wr_mask ? i_bus_data[15:8]  : '0;
-                              o_bus_data[7:0]       <= i_bus_data_wr_mask ? i_bus_data[7:0]   : '0;
-                              state_idle <= '1;
-                              end
-                   endcase
-                   end
+                            o_bus_ack             <= '1;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? cmd[47:40]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? cmd[39:32]  : '0;
+                            state_idle <= '1;
+                            end
+                   //Rsp  Arrived
+                   'h0004:  begin 
+                            o_bus_ack             <= '1;
+                            o_bus_data[31:24]     <= i_bus_data_rd_mask ? rspArrived[31:24] : '0;
+                            o_bus_data[23:16]     <= i_bus_data_rd_mask ? rspArrived[23:16] : '0;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? rspArrived[15:8]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? rspArrived[7:0]   : '0;
+                            state_idle <= '1;
+                            end
+                   //Rsp Lo
+                   'h0005:  begin 
+                            o_bus_ack             <= '1;
+                            o_bus_data[31:24]     <= i_bus_data_rd_mask ? rsp[31:24] : '0;
+                            o_bus_data[23:16]     <= i_bus_data_rd_mask ? rsp[23:16] : '0;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? rsp[15:8]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? rsp[7:0]   : '0;
+                            state_idle <= '1;
+                            end
+                   //Rsp Hi
+                   'h0006:  begin 
+                            o_bus_ack             <= '1;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? rsp[47:40]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? rsp[39:32]  : '0;
+                            state_idle <= '1;
+                            end
+                   default: begin
+                            o_bus_ack      <= '1;
+                            o_bus_data[31:24]     <= i_bus_data_rd_mask ? i_bus_data[31:24] : '0;
+                            o_bus_data[23:16]     <= i_bus_data_rd_mask ? i_bus_data[23:16] : '0;
+                            o_bus_data[15:8]      <= i_bus_data_rd_mask ? i_bus_data[15:8]  : '0;
+                            o_bus_data[7:0]       <= i_bus_data_rd_mask ? i_bus_data[7:0]   : '0;
+                            state_idle <= '1;
+                            end
+                 endcase
                  end
                else
                  begin
@@ -174,7 +213,6 @@ always_ff @(posedge clk)
                         if(~MISO)
                           begin
                           bits <= 'd1;
-                          rsp <= '1;
                           rsp[0] <= '0;
                           state_rsp_recieved <= '1;
                           end
@@ -194,6 +232,7 @@ always_ff @(posedge clk)
                         rsp <= {rsp[46:0],MISO};
                         if(bits == 'd7)
                           begin
+                          SPIDone    <= '1;
                           rspArrived <= '1;  
                           state_idle <= '1;
                           o_bus_ack  <= '1;
