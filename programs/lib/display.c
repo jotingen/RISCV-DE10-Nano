@@ -120,27 +120,67 @@ void console_clear() {
 }
   
 void console_put_char(char c) {
-  //If curser is at bottom right, shift everything up by one row
-  if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
-    for(int y = 0; y < CONSOLE_ROWS-1; y++) {
-      for(int x = 0; x < CONSOLE_COLS; x++) {
-        console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+  if(c == '\n') {
+    //If curser is at bottom, shift everything up by one row
+    if(curser_index.Y == CONSOLE_ROWS-1) {
+      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+        for(int x = 0; x < CONSOLE_COLS; x++) {
+          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+        }
       }
+      curser_index.Y = curser_index.Y - 1;
     }
-    curser_index.Y = curser_index.Y - 1;
-  }
-    
-  //Put character at console
-  console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
-
-  //Advance curser
-  if(curser_index.X == CONSOLE_COLS-1) {
-    curser_index.X = 0;
-    curser_index.Y = curser_index.Y + 1;
+      
+      curser_index.X = 0;
+      curser_index.Y = curser_index.Y + 1;
   } else {
-    curser_index.X = curser_index.X + 1;
+    //If curser is at bottom right, shift everything up by one row
+    if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
+      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+        for(int x = 0; x < CONSOLE_COLS; x++) {
+          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+        }
+      }
+      curser_index.Y = curser_index.Y - 1;
+    }
+      
+    //Put character at console
+    console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
+  
+    //Advance curser
+    if(curser_index.X == CONSOLE_COLS-1) {
+      curser_index.X = 0;
+      curser_index.Y = curser_index.Y + 1;
+    } else {
+      curser_index.X = curser_index.X + 1;
+    }
   }
     
   return;
 }
   
+char * uint32_to_hex(uint32_t number) {
+  static char s[8];
+  for(int d = 0; d < 8; d++) {
+    uint8_t hex = (number >> (d*4)) & 0xF;
+    if(hex < 10) {
+      s[d] = hex+48;
+    } else {
+      s[d] = hex+55;
+    }
+  }
+  return s;
+}
+  
+char * uint64_to_hex(uint64_t number) {
+  static char s[16];
+  for(int d = 0; d < 16; d++) {
+    uint8_t hex = (number >> (d*4)) & 0xF;
+    if(hex < 10) {
+      s[d] = hex+48;
+    } else {
+      s[d] = hex+55;
+    }
+  }
+  return s;
+}

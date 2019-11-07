@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Wed Nov 06 03:55:38 2019
+[*] Thu Nov 07 02:09:04 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Wed Nov 06 03:47:53 2019"
-[dumpfile_size] 323524911
+[dumpfile_mtime] "Thu Nov 07 02:00:39 2019"
+[dumpfile_size] 256268127
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 0
+[timestart] 1183000
 [size] 1854 1046
 [pos] -1 -1
-*-15.973036 108230 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-14.973036 1282470 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -229,6 +229,12 @@ tb.dut.shield.sdcard.o_bus_ack
 tb.dut.shield.sdcard.o_bus_data[31:0]
 @200
 -
+@28
+tb.dut.shield.sdcard_mmc_bus_ack
+@22
+tb.dut.shield.sdcard_mmc_bus_data[31:0]
+@200
+-
 @22
 tb.dut.shield.sdcard.cmd[47:0]
 tb.dut.shield.sdcard.rspArrived[31:0]
@@ -372,14 +378,14 @@ tb.dut.shield.console_buffer.o_membus_data[31:0]
 tb.dut.shield.console_buffer.dbg_console_00[159:0]
 tb.dut.shield.console_buffer.dbg_console_01[159:0]
 tb.dut.shield.console_buffer.dbg_console_02[159:0]
+@8a1
 tb.dut.shield.console_buffer.dbg_console_03[159:0]
+@8a0
 tb.dut.shield.console_buffer.dbg_console_04[159:0]
 tb.dut.shield.console_buffer.dbg_console_05[159:0]
 tb.dut.shield.console_buffer.dbg_console_06[159:0]
 tb.dut.shield.console_buffer.dbg_console_07[159:0]
-@8a1
 tb.dut.shield.console_buffer.dbg_console_08[159:0]
-@8a0
 tb.dut.shield.console_buffer.dbg_console_09[159:0]
 tb.dut.shield.console_buffer.dbg_console_10[159:0]
 tb.dut.shield.console_buffer.dbg_console_11[159:0]
