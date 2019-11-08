@@ -25,10 +25,10 @@ build:
 	$(MAKE) $(V_FILES) $(SV_PKG) $(SV_FILES)
 
 %$(V_SUFFIX): FORCE
-	@vlog.exe -vlog01compat -work work +define+RISCV_FORMAL +incdir+$(dir $@) $@ 
+	@vlog.exe -vlog01compat -work work +define+RISCV_FORMAL +define+DEBUG +incdir+$(dir $@) $@ 
 
 %$(SV_SUFFIX): FORCE
-	vlog.exe -sv -work work +define+RISCV_FORMAL +incdir+$(dir $@) $@
+	vlog.exe -sv -work work +define+RISCV_FORMAL +define+DEBUG +incdir+$(dir $@) $@
 	
 .PHONY: sim
 sim:

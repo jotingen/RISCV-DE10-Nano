@@ -42,7 +42,7 @@ logic state_idle;
 logic state_requested;
 logic state_granted;
 
-always_comb
+always_ff @(posedge clk)
   begin
 
   display_current <= display_current;
