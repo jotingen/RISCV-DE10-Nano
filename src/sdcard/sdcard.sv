@@ -30,18 +30,17 @@ output logic [31:0]    o_bus_data
 
 parameter PERIOD_20ns = 125;
 
+parameter R1_BITS  = 1*8;
+parameter R1B_BITS = 1*8;
+parameter R2_BITS  = 2*8;
+parameter R3_BITS  = 5*8;
+parameter R7_BITS  = 5*8;
+
 logic [15:0] sck_cnt;
 logic        sck_put;
 
 logic  [8:0] bits;
-
-logic [7:0] data;
-logic       rdy;
-
-logic [47:0] command;
-logic  [2:0] command_cnt;
-logic        command_rdy;
-logic        command_rd_done;
+logic  [8:0] rsp_bits;
 
 logic [47:0] cmd;
 logic [31:0] rspArrived;
@@ -59,6 +58,89 @@ logic state_data_pending;
 logic state_data_recieving;
 logic state_data_recieved;
 
+always_comb
+  begin
+  case(cmd[45:40])
+    'b000000 : begin //GO_IDLE_STATE
+               rsp_bits = R1_BITS;
+               end
+    'b000001 : begin //SEND_OP_COND
+               rsp_bits = R1_BITS;
+               end
+    'b000110 : begin //SWITCH_FUNC
+               rsp_bits = R1_BITS;
+               end
+    'b001000 : begin //SEND_IF_COND
+               rsp_bits = R7_BITS;
+               end
+    'b001001 : begin //SEND_CSD
+               rsp_bits = R1_BITS;
+               end
+    'b001010 : begin //SEND_CID
+               rsp_bits = R1_BITS;
+               end
+    'b001100 : begin //STOP_TRANSMISSION
+               rsp_bits = R1B_BITS;
+               end
+    'b001101 : begin //SEND_STATUS
+               rsp_bits = R2_BITS;
+               end
+    'b010000 : begin //SET_BLOCKLEN
+               rsp_bits = R1_BITS;
+               end
+    'b010001 : begin //READ_SINGLE_BLOCK
+               rsp_bits = R1_BITS;
+               end
+    'b010010 : begin //READ_MULTIPLE_BLOCK
+               rsp_bits = R1_BITS;
+               end
+    'b011000 : begin //WRITE_BLOCK
+               rsp_bits = R1_BITS;
+               end
+    'b011001 : begin //WRITE_MULTIPLE_BLOCK
+               rsp_bits = R1_BITS;
+               end
+    'b011011 : begin //PROGRAM_CSD
+               rsp_bits = R1_BITS;
+               end
+    'b011100 : begin //SET_WRITE_PROT
+               rsp_bits = R1B_BITS;
+               end
+    'b011101 : begin //CLR_WRITE_PROT
+               rsp_bits = R1B_BITS;
+               end
+    'b011110 : begin //SEND_WRITE_PROT
+               rsp_bits = R1_BITS;
+               end
+    'b100000 : begin //ERASE_WR_BLK_START_ADDR
+               rsp_bits = R1_BITS;
+               end
+    'b100001 : begin //ERASE_WR_BLK_END_ADDR
+               rsp_bits = R1_BITS;
+               end
+    'b100110 : begin //ERASE
+               rsp_bits = R1B_BITS;
+               end
+    'b101010 : begin //LOCK_UNLOCK
+               rsp_bits = R1_BITS;
+               end
+    'b110111 : begin //APP_CMD
+               rsp_bits = R1_BITS;
+               end
+    'b111000 : begin //GEN_CMD
+               rsp_bits = R1_BITS;
+               end
+    'b111010 : begin //READ_OCR
+               rsp_bits = R3_BITS;
+               end
+    'b111011 : begin //CRC_ON_OFF
+               rsp_bits = R1_BITS;
+               end
+    default  : begin
+               rsp_bits = R1_BITS;
+               end
+  endcase
+  end
 
 always_ff @(posedge clk)
   begin
@@ -81,8 +163,6 @@ always_ff @(posedge clk)
   dataIn      <= dataIn;      
   dataArrived <= dataArrived; 
   dataOut     <= dataOut;     
-
-  data <= data;
 
   o_bus_ack   <= '0;
   o_bus_data  <= '0;   
@@ -230,7 +310,7 @@ always_ff @(posedge clk)
                       if(sck_put)
                         begin
                         rsp <= {rsp[46:0],MISO};
-                        if(bits == 'd7)
+                        if(bits == rsp_bits-1)
                           begin
                           SPIDone    <= '1;
                           rspArrived <= '1;  
@@ -276,29 +356,6 @@ always_ff @(posedge clk)
     dataOut     <= '0;
     end
   end
-
-//assign SCK_ack = '1;
-//spi spi (
-//  .clk     (clk    ),
-//  .rst     (rst    ),
-//        
-//  .SPIReq  (SPIReq ),
-//  .SPIAck  (SPIAck ),
-//  .SPIDone (SPIDone),
-//
-//  .SCK     (SCK    ),
-//  .CS      (CS     ),
-//  .RS_DC   (RS_DC  ),
-//  .DATA    (DATA   ),
-//        
-//  .ack     (SCK_ack),      
-//  .req     (SCK_req),      
-//  .cmd     (SCK_cmd),      
-//  .data    (SCK_data),     
-//  .bytes   (SCK_bytes),      
-//        
-//  .rdy     (rdy    )
-//);
 
 //Clock signal
 always_ff @(posedge clk)

@@ -28,9 +28,10 @@ Display RegMap
 'hC200_0004 - Cmd
 'hC200_0008 - Data
 'hC200_0100 - Text Clear
-'hC200_0104 - Text Cursor
-'hC200_0108 - Text Put
-'hC200_010C - Text Put At
+'hC200_0104 - Text Cursor [23:16]-X [15:8]-Y
+'hC200_0108 - Text Put                       [7:0]-Char
+'hC200_010C - Text Put At [23:16]-X [15:8]-Y [7:0]-Char
+'hC200_0110 - Text Color  [21:16]-R [13:8]-G [5:0]-B 
 
 DispBuff RegMap
 'hC300_0000 - Framebuffer (0,0)
