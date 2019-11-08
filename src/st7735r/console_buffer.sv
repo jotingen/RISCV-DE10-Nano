@@ -18,6 +18,7 @@ logic [7:0] mem_array_2 [319:0];
 logic [7:0] mem_array_1 [319:0];
 logic [7:0] mem_array_0 [319:0];
 
+`ifdef RISCV_FORMAL
 logic [19:0][7:0] dbg_console_00;
 logic [19:0][7:0] dbg_console_01;
 logic [19:0][7:0] dbg_console_02;
@@ -56,6 +57,7 @@ always_comb
     dbg_console_15[x] = { << {mem_array_0[15*20 + x]}};
     end
   end
+`endif
 
 always_ff @(posedge clk)
   begin
