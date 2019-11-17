@@ -139,6 +139,10 @@ void console_put_char(char c) {
           console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
         }
       }
+      //Clear last line
+      for(int x = 0; x < CONSOLE_COLS; x++) {
+        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
+      }
       curser_index.Y = curser_index.Y - 1;
     }
       
@@ -169,29 +173,56 @@ void console_put_char(char c) {
     
   return;
 }
+
+void console_putc(char c) {
+  console_put_char(c);
+  return;
+}
+
+void console_puts(char *s) {
+  while (*s > 0) console_putc(*s++);
+  return;
+}
+
+void console_puthex8(uint8_t val)
+{
+	// extract upper and lower nibbles from input value
+	uint8_t upperNibble = (val & 0xF0) >> 4;
+	uint8_t lowerNibble = val & 0x0F;
+
+	// convert nibble to its ASCII hex equivalent
+	upperNibble += upperNibble > 9 ? 'A' - 10 : '0';
+	lowerNibble += lowerNibble > 9 ? 'A' - 10 : '0';
+
+	// print the characters
+	console_putc(upperNibble);
+	console_putc(lowerNibble);
+}
   
 char * uint32_to_hex(uint32_t number) {
-  static char s[8];
+  static char s[9];
   for(int d = 0; d < 8; d++) {
-    uint8_t hex = (number >> (d*4)) & 0xF;
+    uint8_t hex = (number >> ((8-1-d)*4)) & 0xF;
     if(hex < 10) {
       s[d] = hex+48;
     } else {
       s[d] = hex+55;
     }
   }
+  s[8] = '\0';
   return s;
 }
   
 char * uint64_to_hex(uint64_t number) {
-  static char s[16];
+  static char s[17];
   for(int d = 0; d < 16; d++) {
-    uint8_t hex = (number >> (d*4)) & 0xF;
+    uint8_t hex = (number >> ((16-1-d)*4)) & 0xF;
     if(hex < 10) {
       s[d] = hex+48;
     } else {
       s[d] = hex+55;
     }
   }
+  s[16] = '\0';
   return s;
 }

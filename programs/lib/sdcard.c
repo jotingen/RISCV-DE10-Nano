@@ -1,6 +1,7 @@
 //CRC generation code improted from: https://github.com/hazelnusse/crc7/blob/master/crc7.cc
 #include <stdio.h>
 
+#include "csr.h"
 #include "sdcard.h"
 #include "display.h"
 
@@ -63,25 +64,136 @@ uint64_t genSDCardMsg(uint8_t op, uint32_t args) {
 }
 
 void printSDMsg(uint64_t message) {
-  char * message_string;
-  message_string = uint64_to_hex(message);
-  for(int i = 0; i < 12; i++) {
-    console_put_char(message_string[11-i]);
+  char *s;
+  s = uint64_to_hex(message);
+  for(int i; i < 6*2; i++) {
+    console_putc(s[i+16-6*2]);
   }
 }
 
 void printSDResult(uint64_t result, unsigned int bytes) {
-  char * result_string;
-  result_string = uint64_to_hex(result);
-  for(int i = 0; i < bytes; i++) {
-    console_put_char(result_string[bytes-1-i]);
+  char *s;
+  s = uint64_to_hex(result);
+  for(int i; i < bytes*2; i++) {
+    console_putc(s[i+16-bytes*2]);
   }
+}
+
+#define PARAM_ERROR(X)      X & 0b01000000
+#define ADDR_ERROR(X)       X & 0b00100000
+#define ERASE_SEQ_ERROR(X)  X & 0b00010000
+#define CRC_ERROR(X)        X & 0b00001000
+#define ILLEGAL_CMD(X)      X & 0b00000100
+#define ERASE_RESET(X)      X & 0b00000010
+#define IN_IDLE(X)          X & 0b00000001
+
+void SD_printR1(uint8_t res)
+{
+    if(res & 0b10000000)
+        { console_puts("  Error: MSB = 1\n"); return; }
+    if(res == 0)
+        { console_puts("  Card Ready\n"); return; }
+    if(PARAM_ERROR(res))
+        console_puts("  Parameter Error\n");
+    if(ADDR_ERROR(res))
+        console_puts("  Address Error\n");
+    if(ERASE_SEQ_ERROR(res))
+        console_puts("  Erase Sequence Error\n");
+    if(CRC_ERROR(res))
+        console_puts("  CRC Error\n");
+    if(ILLEGAL_CMD(res))
+        console_puts("  Illegal Command\n");
+    if(ERASE_RESET(res))
+        console_puts("  Erase Reset Error\n");
+    if(IN_IDLE(res))
+        console_puts("  In Idle State\n");
+}
+
+#define POWER_UP_STATUS(X)  X & 0x40
+#define CCS_VAL(X)          X & 0x40
+#define VDD_2728(X)         X & 0b10000000
+#define VDD_2829(X)         X & 0b00000001
+#define VDD_2930(X)         X & 0b00000010
+#define VDD_3031(X)         X & 0b00000100
+#define VDD_3132(X)         X & 0b00001000
+#define VDD_3233(X)         X & 0b00010000
+#define VDD_3334(X)         X & 0b00100000
+#define VDD_3435(X)         X & 0b01000000
+#define VDD_3536(X)         X & 0b10000000
+
+void SD_printR3(uint8_t *res)
+{
+    SD_printR1(res[0]);
+
+    if(res[0] > 1) return;
+
+    console_puts("  Card Power Up Status: ");
+    if(POWER_UP_STATUS(res[1]))
+    {
+        console_puts("READY\n");
+        console_puts("  CCS Status: ");
+        if(CCS_VAL(res[1])){ console_puts("1\n"); }
+        else console_puts("0\n");
+    }
+    else
+    {
+        console_puts("BUSY\n");
+    }
+
+    console_puts("  VDD Window: ");
+    if(VDD_2728(res[3])) console_puts("2.7-2.8, ");
+    if(VDD_2829(res[2])) console_puts("2.8-2.9, ");
+    if(VDD_2930(res[2])) console_puts("2.9-3.0, ");
+    if(VDD_3031(res[2])) console_puts("3.0-3.1, ");
+    if(VDD_3132(res[2])) console_puts("3.1-3.2, ");
+    if(VDD_3233(res[2])) console_puts("3.2-3.3, ");
+    if(VDD_3334(res[2])) console_puts("3.3-3.4, ");
+    if(VDD_3435(res[2])) console_puts("3.4-3.5, ");
+    if(VDD_3536(res[2])) console_puts("3.5-3.6");
+    console_puts("\n");
+}
+
+#define CMD_VER(X)          ((X >> 4) & 0xF0)
+#define VOL_ACC(X)          (X & 0x1F)
+
+#define VOLTAGE_ACC_27_33   0b00000001
+#define VOLTAGE_ACC_LOW     0b00000010
+#define VOLTAGE_ACC_RES1    0b00000100
+#define VOLTAGE_ACC_RES2    0b00001000
+
+void SD_printR7(uint8_t *res)
+{
+    SD_printR1(res[0]);
+
+    if(res[0] > 1) return;
+
+    console_puts("  Command Version: ");
+    console_puthex8(CMD_VER(res[1]));
+    console_puts("\n");
+
+    console_puts("  Voltage Accepted: ");
+    if(VOL_ACC(res[3]) == VOLTAGE_ACC_27_33)
+        console_puts("2.7-3.6V\n");
+    else if(VOL_ACC(res[3]) == VOLTAGE_ACC_LOW)
+        console_puts("LOW VOLTAGE\n");
+    else if(VOL_ACC(res[3]) == VOLTAGE_ACC_RES1)
+        console_puts("RESERVED\n");
+    else if(VOL_ACC(res[3]) == VOLTAGE_ACC_RES2)
+        console_puts("RESERVED\n");
+    else
+        console_puts("NOT DEFINED\n");
+
+    console_puts("  Echo: ");
+    console_puthex8(res[4]);
+    console_puts("\n");
 }
 
 void sdcard_on(void) {
 
   uint64_t message;
   uint64_t rsp;
+  uint8_t  rsp_arr[5];
+  uint32_t cnt = 0;
 
   generateCRCTable();
 
@@ -91,52 +203,84 @@ void sdcard_on(void) {
   message = genSDCardMsg(0x00,0x00000000);
 
   printSDMsg(message);
-  console_put_char('\n');
+  console_putc('\n');
+  //display_write();
 
-  rsp = sdcard_cmd(message);
+  rsp = sdcard_cmd(message,1);
+  sdcard_rsp(rsp_arr, 1, rsp);
 
-  console_put_char('-');
-  printSDResult(rsp,12);
-  console_put_char('\n');
+  console_puts("  ");
+  printSDResult(rsp,1);
+  console_putc('\n');
+  //display_write();
 
-  display_write();
+  SD_printR1(rsp_arr[0]);
+
+  //display_write();
 
 
   //CMD8
 
-//  cmd = 0x48000001AA87; //CMD8
   message = genSDCardMsg(0x08,0x000001AA);
 
   printSDMsg(message);
-  console_put_char('\n');
+  console_putc('\n');
 
-  rsp = sdcard_cmd(message);
+  rsp = sdcard_cmd(message,5);
+  sdcard_rsp(rsp_arr, 5, rsp);
 
-  console_put_char('-');
-  printSDResult(rsp,12);
-  console_put_char('\n');
+  console_puts("  ");
+  printSDResult(rsp,6);
+  console_putc('\n');
 
-  display_write();
+  SD_printR7(rsp_arr);
+
+  //display_write();
 
 
-  //cmd = 0x48000001AA87; //ACMD41
-  //cmd_string = uint64_to_hex(cmd);
-  //console_put_char('\n');
-  //for(int i = 0; i < 12; i++) {
-  //  console_put_char(cmd_string[11-i]);
-  //}
-  //rsp = sdcard_cmd(cmd);
-  //rsp_string = uint64_to_hex(rsp);
-  //console_put_char('\n');
-  //console_put_char('-');
-  //for(int i = 0; i < 12; i++) {
-  //  console_put_char(rsp_string[11-i]);
-  //}
+  //CMD58
+
+  message = genSDCardMsg(0x3A,0x00000000);
+
+  printSDMsg(message);
+  console_putc('\n');
+
+  do {
+    uint64_t timestamp;
+
+    rsp = sdcard_cmd(message,5);
+    sdcard_rsp(rsp_arr, 5, rsp);
+
+    console_puts("  ");
+    printSDResult(rsp,6);
+    console_putc('\n');
+
+    SD_printR3(rsp_arr);
+    console_puts(uint32_to_hex(cnt));
+    console_putc('\n');
+    display_write();
+
+    timestamp = get_time();
+    while(get_time()-timestamp < 10);
+    cnt++;
+
+  } while (rsp_arr[0] != 0);
+
+  console_puts("Ready...");
+  display_write;
 
   return;
 }
 
-uint64_t sdcard_cmd(uint64_t cmd) {
+void sdcard_rsp(uint8_t * arr, unsigned int bytes, uint64_t rsp) {
+    for(int i = 0; i < bytes; i++) {
+      arr[i] = (rsp >> ((bytes-1-i)*8)) & 0xFF;
+    }
+    return;
+}
+
+
+uint64_t sdcard_cmd(uint64_t cmd, unsigned int bytes) {
 
   uint64_t rsp = 0;
   // uint64_t cmd_reversed = 0;
@@ -157,6 +301,7 @@ uint64_t sdcard_cmd(uint64_t cmd) {
 
   SDCARD_CMD_LO   = cmd & 0xFFFFFFFF;
   SDCARD_CMD_HI   = (cmd >> 32) & 0xFFFF;
+  SDCARD_CMD_HI   = SDCARD_CMD_HI | (bytes <<24);
   SDCARD_CMD_SEND = 1;
 
   while(SDCARD_RSP_ARRIVED == 0) {};
