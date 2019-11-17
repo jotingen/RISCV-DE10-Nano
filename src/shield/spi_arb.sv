@@ -35,7 +35,7 @@ logic arb_bit;
 
 logic clk_stgd;
 logic clk_pulse;
-logic [2:0] cycles_settled;
+logic [6:0] cycles_settled;
 logic clk_settled;
 
 logic state_idle;
@@ -65,25 +65,25 @@ always_ff @(posedge clk)
 	unique
 	case(1'b1)
 	  display_current : begin
-                      SCK        = display_SCK;   
-                      DISPLAY_CS = display_CS;    
-                      SDCARD_CS  = '1;
-                      RS_DC      = display_RS_DC; 
-                      DATA       = display_DATA;  
+                      SCK        <= display_SCK;   
+                      DISPLAY_CS <= display_CS;    
+                      SDCARD_CS  <= '1;
+                      RS_DC      <= display_RS_DC; 
+                      DATA       <= display_DATA;  
 		                  end
 	  sdcard_current  : begin
-                      SCK        = sdcard_SCK;   
-                      DISPLAY_CS = '1;
-                      SDCARD_CS  = sdcard_CS;    
-                      RS_DC      = sdcard_RS_DC; 
-                      DATA       = sdcard_DATA;  
+                      SCK        <= sdcard_SCK;   
+                      DISPLAY_CS <= '1;
+                      SDCARD_CS  <= sdcard_CS;    
+                      RS_DC      <= sdcard_RS_DC; 
+                      DATA       <= sdcard_DATA;  
 		                  end
 	  default         : begin
-                      SCK        = '0;
-                      DISPLAY_CS = '1;
-                      SDCARD_CS  = '1;
-                      RS_DC      = '0;
-                      DATA       = '0;
+                      SCK        <= '0;
+                      DISPLAY_CS <= '1;
+                      SDCARD_CS  <= '1;
+                      RS_DC      <= '0;
+                      DATA       <= '0;
 		                  end
 	endcase
 
@@ -184,7 +184,7 @@ always_ff @(posedge clk)
 			cycles_settled  <= cycles_settled + 1;
     end
 
-  if(cycles_settled >= 'd3)
+  if(cycles_settled >= 'd100)
 		begin
 		clk_settled <= '1;
 		end
@@ -192,10 +192,10 @@ always_ff @(posedge clk)
   //Reset
   if(rst)
 		begin
-		display_current   <= '0;
+		display_current   <= '1;
     display_SPIAck    <= '0;
 
-		sdcard_current    <= '1;
+		sdcard_current    <= '0;
     sdcard_SPIAck     <= '0;
 
 		arb_bit <= '0;

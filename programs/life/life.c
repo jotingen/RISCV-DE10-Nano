@@ -4,7 +4,6 @@
 #include "../lib/csr.h"
 #include "../lib/display.h"
 #include "../lib/rand.h"
-#include "../lib/font8x8_basic.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
@@ -52,8 +51,8 @@ void main(void) {
   uint32_t counter;
   uint32_t led;
 
-  uint8_t life[display_rows()][display_cols()];
-  uint8_t life_next[display_rows()][display_cols()];
+  uint8_t life[display_height()][display_width()];
+  uint8_t life_next[display_height()][display_width()];
 
   display_pixel_t pixel;
 
@@ -68,15 +67,16 @@ void main(void) {
         pixel.R = 0x3F;
         pixel.G = 0x00;
         pixel.B = 0x00;
-      dispbuff_write_pixel(display_rows()-1,display_cols()-1,&pixel);
+      dispbuff_write_pixel(display_height()-1,display_width()-1,&pixel);
       LED = 2;
       dispbuff_read_pixel(0,0,&pixel);
       LED = 3;
-      dispbuff_read_pixel(display_rows()-1,display_cols()-1,&pixel);
+      dispbuff_read_pixel(display_height()-1,display_width()-1,&pixel);
       LED = 4;
         for (int8_t x=0; x < 8; x++) {
           for (int8_t y=7; y >= 0; y--) {
-              uint8_t set = font8x8_basic['J'][x] & (1 << y);
+              //uint8_t set = font8x8_basic['J'][x] & (1 << y);
+              uint8_t set = 0;
               display_pixel_t pixel;
               if(set) {
                 pixel.R = 0xFF;
@@ -103,8 +103,8 @@ rand_init();
 
       LED = 7;
   //Initialize life and frame buffer
-  for(int row = 0; row < display_rows(); row++) {
-    for(int col = 0; col < display_cols(); col++) {
+  for(int row = 0; row < display_height(); row++) {
+    for(int col = 0; col < display_width(); col++) {
       if(rand()%3 == 0) { 
         life[row][col] = 1;
       } else {
@@ -167,32 +167,32 @@ rand_init();
       LED = 11;
       //if(but0     ) {
         //Update life
-        for(int row = 0; row < display_rows(); row++) {
-          for(int col = 0; col < display_cols(); col++) {
+        for(int row = 0; row < display_height(); row++) {
+          for(int col = 0; col < display_width(); col++) {
             int row_upper, row_middle, row_lower;
             int col_left,  col_middle, col_right;
             int neighbors = 0;
             
-            if(row == display_rows()-1) {
+            if(row == display_height()-1) {
               row_upper  = 0;
               row_middle = row;
               row_lower  = row - 1;
             } else if(row == 0) {
               row_upper  = row + 1;
               row_middle = row;
-              row_lower  = display_rows()-1;
+              row_lower  = display_height()-1;
             } else {
               row_upper  = row + 1;
               row_middle = row;
               row_lower  = row - 1;
             }
 
-            if(col == display_cols()-1) {
+            if(col == display_width()-1) {
               col_left   = col - 1;
               col_middle = col;
               col_right  = 0;
             } else if(col == 0) {
-              col_left   = display_cols()-1;
+              col_left   = display_width()-1;
               col_middle = col;
               col_right  = col + 1;
             } else {
@@ -236,7 +236,8 @@ rand_init();
         for (uint8_t x=0; x < 8; x++) {
           for (uint8_t y=0; y < 8; y++) {
           //for (int8_t y=7; y >= 0; y--) {
-              uint8_t set = font8x8_basic[0x30 + counter%10][x] & (1 << y);
+              //uint8_t set = font8x8_basic[0x30 + counter%10][x] & (1 << y);
+              uint8_t set = 0;
               display_pixel_t pixel;
               if(set) {
                 pixel.R = 0xFF;
@@ -249,8 +250,8 @@ rand_init();
         }
         LED = 13;
         //Promote life_next to life
-        for(int row = 0; row < display_rows(); row++) {
-          for(int col = 0; col < display_cols(); col++) {
+        for(int row = 0; row < display_height(); row++) {
+          for(int col = 0; col < display_width(); col++) {
               life[row][col] = life_next[row][col];
           }
         }

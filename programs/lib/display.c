@@ -1,17 +1,19 @@
 #include <stdio.h>
 
-#include "display.h"
 #include "csr.h"
+#include "display.h"
+
+#include "font8x8_basic.h"
 
 #define DISPLAY_NOOP    (*((volatile uint32_t *) (0xC2000000)))
 #define DISPLAY_CMD     (*((volatile uint32_t *) (0xC2000004)))
 #define DISPLAY_DATA    (*((volatile uint32_t *) (0xC2000008)))
 #define DISPLAY_BUFF    (*((volatile uint32_t *) (0xC3000000)))  
 
-#define DISPLAY_POWERON_DELAY 5000000
+#define DISPLAY_POWERON_DELAY 120
 
-#define DISPLAY_ROWS    128
-#define DISPLAY_COLS    160
+#define DISPLAY_HEIGHT    128
+#define DISPLAY_WIDTH    160
 
 #define CONSOLE_ROWS    16
 #define CONSOLE_COLS    20
@@ -28,36 +30,34 @@ console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
 
-  //while(get_time() < DISPLAY_POWERON_DELAY) {}
-  //clear_time();
-  DISPLAY_CMD = DISPLAY_CMD_DISPON;
 
-  //Wait to take display out of sleep
-  //while(get_time() < DISPLAY_POWERON_DELAY) {}
-  //clear_time();
+  //timestamp = get_time();
+  while(get_time() < 1) {}
+
+  DISPLAY_CMD = DISPLAY_CMD_DISPON;
   DISPLAY_CMD = DISPLAY_CMD_SLEEPOUT; // SLPOUT (11h): Sleep Out
 
   return;
 }
 
-       uint32_t display_rows(void) {
-  return DISPLAY_ROWS;
+       uint32_t display_height(void) {
+  return DISPLAY_HEIGHT;
 }
 
-       uint32_t display_cols(void) {
-  return DISPLAY_COLS;
+       uint32_t display_width(void) {
+  return DISPLAY_WIDTH;
 }
 
-       void     dispbuff_write_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel) {
-  col = DISPLAY_COLS-1-col;
-  row = DISPLAY_ROWS-1-row;
-  display_buffer[col*DISPLAY_ROWS+row] = 0 | (pixel->R << 16) | (pixel->G << 8) | (pixel->B << 0);
+       void     dispbuff_write_pixel(uint8_t y, uint8_t x, display_pixel_t * pixel) {
+  x = DISPLAY_WIDTH-1-x;
+  y = DISPLAY_HEIGHT-1-y;
+  display_buffer[x*DISPLAY_HEIGHT+y] = 0 | (pixel->R << 16) | (pixel->G << 8) | (pixel->B << 0);
   return;
 }
 
-       void     dispbuff_read_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel) {
+       void     dispbuff_read_pixel(uint8_t y, uint8_t x, display_pixel_t * pixel) {
   uint32_t buff;
-  buff = display_buffer[row*DISPLAY_COLS+col];
+  buff = display_buffer[y*DISPLAY_WIDTH+x];
   pixel->R = (buff >> 16) & 0x000000FF;
   pixel->G = (buff >> 8)  & 0x000000FF;
   pixel->B = (buff >> 0)  & 0x000000FF;
@@ -81,9 +81,20 @@ void display_on(void) {
        void display_write(void) {
   display_write_start();
   display_pixel_t pixel;
-  for(int row = DISPLAY_ROWS-1; row >= 0; row--) {
-    for(int col = DISPLAY_COLS-1; col >= 0; col--) {
-      dispbuff_read_pixel(row,col,&pixel);
+  for(int x = DISPLAY_WIDTH-1; x >= 0; x--) {
+    for(int y = DISPLAY_HEIGHT-1; y >= 0; y--) {
+      int consoleX = x/8;
+      int consoleY = y/8;
+      int charX = x%8;
+      int charY = y%8;
+      uint8_t char_set = font8x8_basic[console_buffer[consoleY*CONSOLE_COLS+(DISPLAY_WIDTH/8-1-consoleX)]][charY] & (1 << (7-charX));
+      if(char_set) {
+        pixel.R = 0x3F;
+        pixel.G = 0x3F;
+        pixel.B = 0x3F;
+      } else {
+        dispbuff_read_pixel(y,x,&pixel);
+      }
       display_write_pixel(&pixel);
     }
   }

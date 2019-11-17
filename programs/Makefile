@@ -28,16 +28,15 @@ VERILOG2 := $(patsubst %$(C_SUFFIX),%$(VERILOG2_SUFFIX),$(SRCS))
 VERILOG3 := $(patsubst %$(C_SUFFIX),%$(VERILOG3_SUFFIX),$(SRCS))
 
 .PHONY: all
-all : | clean init $(LIB_OBJ) $(ASSEMBLY)
+all : | clean init $(LIBS) $(ASSEMBLY) 
 
 init:
+	echo $(SRCS)
 	mkdir -p ../output/programs
 	riscv32-unknown-elf-gcc -c riscv.s -o ../output/programs/riscv.o
-
-%$(OBJ_SUFFIX) :
-	mkdir -p ../output/programs/$(dir $@)
-	$(CC) $(CCFLAGS) -S -o ../output/programs/$(patsubst %.o,%.s,$@) -c $(patsubst %.o,%.c,$@)
-	$(CC) $(CCFLAGS)    -o ../output/programs/$@                     -c $(patsubst %.o,%.c,$@)
+	mkdir -p ../output/programs/lib
+	$(foreach lib,$(LIBS), $(CC) $(CCFLAGS) -S -o ../output/programs/$(patsubst %.c,%.s,$(lib)) -c $(lib);)
+	$(foreach lib,$(LIBS), $(CC) $(CCFLAGS)    -o ../output/programs/$(patsubst %.c,%.o,$(lib)) -c $(lib);)
 
 %$(ASSEMBLY_SUFFIX) :
 	mkdir -p ../output/programs/$(dir $@)
@@ -47,15 +46,6 @@ init:
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_1.v,$@)
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_2.v,$@)
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 ../output/programs/$(patsubst %.s,%.out,$@) ../output/programs/$(patsubst %.s,%_3.v,$@)
-
-#%$(ASSEMBLY_SUFFIX) :
-#	$(CC) $(CCFLAGS) -S -o $(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@)
-#	$(CC) $(CCFLAGS)    -o $(patsubst %.s,%.o,$@)    $(patsubst %.s,%.c,$@)
-#	$(CC) $(CCFLAGS)    -o $(patsubst %.s,%.out,$@)  $(patsubst %.s,%.o,$@) riscv.o
-#	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_0.v,$@)
-#	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_1.v,$@)
-#	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_2.v,$@)
-#	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 $(patsubst %.s,%.out,$@) $(patsubst %.s,%_3.v,$@)
 
 .PHONY: clean
 clean: 
