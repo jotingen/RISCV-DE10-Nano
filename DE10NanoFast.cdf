@@ -6,7 +6,7 @@ JedecChain;
 	P ActionCode(Ign)
 		Device PartName(SOCVHPS) MfrSpec(OpMask(0));
 	P ActionCode(Cfg)
-		Device PartName(5CSEBA6U23) Path("D:/Users/James/NextCloud/Quartus/RISCV-DE10-Nano/") File("DE10Nano.sof") MfrSpec(OpMask(1));
+		Device PartName(5CSEBA6U23) Path("D:/Users/James/NextCloud/Quartus/RISCV-DE10-Nano/output/quartus/") File("DE10Nano.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

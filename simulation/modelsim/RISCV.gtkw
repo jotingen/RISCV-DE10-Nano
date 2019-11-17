@@ -1,15 +1,13 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Nov 07 02:09:04 2019
+[*] Mon Nov 11 00:55:41 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Nov 07 02:00:39 2019"
-[dumpfile_size] 256268127
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\output\modelsim\sim.vcd"
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 1183000
-[size] 1854 1046
-[pos] -1 -1
-*-14.973036 1282470 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 13995
+[size] 911 1048
+[pos] 911 -27
+*-8.710001 14350 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -20,10 +18,10 @@
 [treeopen] tb.dut.shield.display.transmit.
 [treeopen] tb.dut.shield.sdcard.
 [treeopen] tb.sd.
-[sst_width] 255
-[signals_width] 381
+[sst_width] 197
+[signals_width] 326
 [sst_expanded] 1
-[sst_vpaned_height] 528
+[sst_vpaned_height] 522
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -56,7 +54,9 @@ tb.dut.riscv.csrfile.csr_data_rd[31:0]
 @28
 tb.dut.SCK
 tb.dut.SD_CS
+@29
 tb.dut.TFT_CS
+@28
 tb.dut.TFT_DC
 tb.dut.MOSI
 tb.dut.MISO
@@ -264,18 +264,7 @@ tb.dut.shield.sdcard.MOSI
 tb.dut.shield.sdcard.MISO
 @200
 -
-@22
-tb.dut.shield.sdcard.data[7:0]
-@200
 -
-@28
-tb.dut.shield.sdcard.command_rd_done
-tb.dut.shield.sdcard.command_cnt[2:0]
-@22
-tb.dut.shield.sdcard.command[47:0]
-@28
-tb.dut.shield.sdcard.command_rdy
-@200
 -
 @28
 tb.dut.shield.sdcard.SPIReq
@@ -378,9 +367,7 @@ tb.dut.shield.console_buffer.o_membus_data[31:0]
 tb.dut.shield.console_buffer.dbg_console_00[159:0]
 tb.dut.shield.console_buffer.dbg_console_01[159:0]
 tb.dut.shield.console_buffer.dbg_console_02[159:0]
-@8a1
 tb.dut.shield.console_buffer.dbg_console_03[159:0]
-@8a0
 tb.dut.shield.console_buffer.dbg_console_04[159:0]
 tb.dut.shield.console_buffer.dbg_console_05[159:0]
 tb.dut.shield.console_buffer.dbg_console_06[159:0]

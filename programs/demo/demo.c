@@ -123,8 +123,8 @@ void main(void) {
       LED = led;
 
       if(but0) {
-        for(int row = display_rows()-1; row >= 0; row--) {
-          for(int col = display_cols()-1; col >= 0; col--) {
+        for(int row = display_height()-1; row >= 0; row--) {
+          for(int col = display_width()-1; col >= 0; col--) {
             if((pass + row*col)%4 == 0) {
                 //screen[row][col].R = 0xFC;
                 //screen[row][col].G = 0xFC;
@@ -147,8 +147,8 @@ void main(void) {
         }
         pass++;
       } else {
-        for(int row = display_rows()-1; row >= 0; row--) {
-          for(int col = display_cols()-1; col >= 0; col--) {
+        for(int row = display_height()-1; row >= 0; row--) {
+          for(int col = display_width()-1; col >= 0; col--) {
             rand();
             //screen[row][col].R = 0x80 | ((lfsr >> 0) & 0x7F);
             //screen[row][col].G = 0x80 | ((lfsr >> 7) & 0x7F);

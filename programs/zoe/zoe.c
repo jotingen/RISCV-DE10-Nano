@@ -3,7 +3,7 @@
 
 #include "../lib/csr.h"
 #include "../lib/display.h"
-#include "../lib/font8x8_basic.h"
+//#include "../lib/font8x8_basic.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
@@ -20,8 +20,8 @@
 void display_framebuffer(){//int rows, int cols, uint8_t life[rows][cols]) {
   display_write_start();
   display_pixel_t pixel;
-  for(int row = display_rows()-1; row >= 0; row--) {
-    for(int col = display_cols()-1; col >= 0; col--) {
+  for(int row = display_height()-1; row >= 0; row--) {
+    for(int col = display_width()-1; col >= 0; col--) {
       dispbuff_read_pixel(row,col,&pixel);
       display_write_pixel(&pixel);
     }
@@ -30,8 +30,8 @@ void display_framebuffer(){//int rows, int cols, uint8_t life[rows][cols]) {
 
 void main(void) {
 
-  uint8_t rows = display_rows();
-  uint8_t cols = display_cols();
+  uint8_t rows = display_height();
+  uint8_t cols = display_width();
 
   LED=0;
   display_on();

@@ -153,6 +153,8 @@ always_ff @(posedge clk)
   state_data_recieving <= '0;
   state_data_recieved  <= '0;
 
+  SPIDone  <= '0;
+  SPIReq   <= SPIReq;
   CS    <= CS;
   RS_DC <= RS_DC;
   MOSI  <= MOSI; 
@@ -262,6 +264,7 @@ always_ff @(posedge clk)
                         begin
                         bits              <= 'd48;
                         state_cmd_sending <= '1;
+                        SPIReq                <= '0;
                         end
                       else
                         begin
@@ -269,6 +272,7 @@ always_ff @(posedge clk)
                         end
                       end
   state_cmd_sending : begin
+                      CS <= '0;
                       if(sck_put)
                         begin
                         if(bits == 'd0)
@@ -312,6 +316,7 @@ always_ff @(posedge clk)
                         rsp <= {rsp[46:0],MISO};
                         if(bits == rsp_bits-1)
                           begin
+                          CS <= '1;
                           SPIDone    <= '1;
                           rspArrived <= '1;  
                           state_idle <= '1;
@@ -344,7 +349,8 @@ always_ff @(posedge clk)
     state_data_recieving <= '0;
     state_data_recieved  <= '0;
 
-    CS    <= '0;
+    SPIReq   <= '0;
+    CS    <= '1;
     RS_DC <= '0;
     MOSI  <= '1;
 

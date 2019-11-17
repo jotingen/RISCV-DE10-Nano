@@ -52,9 +52,6 @@ static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC30140
 
   uint32_t led;
 
-  uint8_t life[display_rows()][display_cols()];
-  uint8_t life_next[display_rows()][display_cols()];
-
   display_pixel_t pixel;
 
   char buff[21];
@@ -79,11 +76,21 @@ static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC30140
   LED = 3;
   while(get_time() < 1) {} //Wait for SDCARD to warm up
 
+  LED = 4;
   rand_init();
 
+  LED = 5;
   display_on();
+  LED = 6;
+
+  display_write();
+  LED = 5;
 
   sdcard_on();
+  LED = 7;
+
+  display_write();
+  LED = 8;
 
   while(1);
 }

@@ -202,16 +202,6 @@ logic arst_1;
 logic arst_2;
 logic arst_3;
 
-//logic  [15:0]   ARDUINO_IO;
-//
-//assign  SD_CS  = ARDUINO_IO[4];
-//assign  TFT_DC = ARDUINO_IO[8];
-//assign  TFT_CS = ARDUINO_IO[10];
-//assign  MOSI   = ARDUINO_IO[11];
-//assign  ARDUINO_IO[12] = MISO ;
-//assign  SCK    = ARDUINO_IO[13];
-//assign  GND    = ARDUINO_IO[14];
-
 always @(posedge clk)
   begin
   arst_1 <= arst;

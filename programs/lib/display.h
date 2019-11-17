@@ -17,11 +17,11 @@ struct console_index_t {
 typedef struct console_index_t console_index_t;
 
 extern void     display_on(void);
-extern uint32_t display_rows(void);
-extern uint32_t display_cols(void);
+extern uint32_t display_height(void);
+extern uint32_t display_width(void);
 
-extern void     dispbuff_write_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel);
-extern void     dispbuff_read_pixel(uint8_t row, uint8_t col, display_pixel_t * pixel);
+extern void     dispbuff_write_pixel(uint8_t x, uint8_t y, display_pixel_t * pixel);
+extern void     dispbuff_read_pixel(uint8_t x, uint8_t y, display_pixel_t * pixel);
 
        void     display_write_start(void);
        void     display_write_pixel(display_pixel_t * pixel);
