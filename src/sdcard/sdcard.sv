@@ -42,7 +42,7 @@ logic        sck_put;
 logic  [8:0] bits;
 logic  [8:0] rsp_bits;
 
-logic [47:0] cmd;
+logic [63:0] cmd;
 logic [31:0] rspArrived;
 logic [47:0] rsp;
 logic [31:0] dataIn;
@@ -60,86 +60,7 @@ logic state_data_recieved;
 
 always_comb
   begin
-  case(cmd[45:40])
-    'b000000 : begin //GO_IDLE_STATE
-               rsp_bits = R1_BITS;
-               end
-    'b000001 : begin //SEND_OP_COND
-               rsp_bits = R1_BITS;
-               end
-    'b000110 : begin //SWITCH_FUNC
-               rsp_bits = R1_BITS;
-               end
-    'b001000 : begin //SEND_IF_COND
-               rsp_bits = R7_BITS;
-               end
-    'b001001 : begin //SEND_CSD
-               rsp_bits = R1_BITS;
-               end
-    'b001010 : begin //SEND_CID
-               rsp_bits = R1_BITS;
-               end
-    'b001100 : begin //STOP_TRANSMISSION
-               rsp_bits = R1B_BITS;
-               end
-    'b001101 : begin //SEND_STATUS
-               rsp_bits = R2_BITS;
-               end
-    'b010000 : begin //SET_BLOCKLEN
-               rsp_bits = R1_BITS;
-               end
-    'b010001 : begin //READ_SINGLE_BLOCK
-               rsp_bits = R1_BITS;
-               end
-    'b010010 : begin //READ_MULTIPLE_BLOCK
-               rsp_bits = R1_BITS;
-               end
-    'b011000 : begin //WRITE_BLOCK
-               rsp_bits = R1_BITS;
-               end
-    'b011001 : begin //WRITE_MULTIPLE_BLOCK
-               rsp_bits = R1_BITS;
-               end
-    'b011011 : begin //PROGRAM_CSD
-               rsp_bits = R1_BITS;
-               end
-    'b011100 : begin //SET_WRITE_PROT
-               rsp_bits = R1B_BITS;
-               end
-    'b011101 : begin //CLR_WRITE_PROT
-               rsp_bits = R1B_BITS;
-               end
-    'b011110 : begin //SEND_WRITE_PROT
-               rsp_bits = R1_BITS;
-               end
-    'b100000 : begin //ERASE_WR_BLK_START_ADDR
-               rsp_bits = R1_BITS;
-               end
-    'b100001 : begin //ERASE_WR_BLK_END_ADDR
-               rsp_bits = R1_BITS;
-               end
-    'b100110 : begin //ERASE
-               rsp_bits = R1B_BITS;
-               end
-    'b101010 : begin //LOCK_UNLOCK
-               rsp_bits = R1_BITS;
-               end
-    'b110111 : begin //APP_CMD
-               rsp_bits = R1_BITS;
-               end
-    'b111000 : begin //GEN_CMD
-               rsp_bits = R1_BITS;
-               end
-    'b111010 : begin //READ_OCR
-               rsp_bits = R3_BITS;
-               end
-    'b111011 : begin //CRC_ON_OFF
-               rsp_bits = R1_BITS;
-               end
-    default  : begin
-               rsp_bits = R1_BITS;
-               end
-  endcase
+  rsp_bits = cmd[62:56]*8;
   end
 
 always_ff @(posedge clk)
@@ -211,6 +132,7 @@ always_ff @(posedge clk)
                    'h0003:  begin 
                             if(i_bus_write)
                               begin
+                              cmd[63:56]            <= i_bus_data_wr_mask ? i_bus_data[31:24] : cmd[63:56] ;
                               cmd[47:40]            <= i_bus_data_wr_mask ? i_bus_data[15:8]  : cmd[47:40] ;
                               cmd[39:32]            <= i_bus_data_wr_mask ? i_bus_data[7:0]   : cmd[39:32] ;
                               end

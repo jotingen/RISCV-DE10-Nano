@@ -34,6 +34,10 @@ void console_curser_set(struct console_index_t index);
 void console_clear();
 void console_put_char(char c);
 
+void console_putc(char c);
+void console_puts(char *s);
+void console_puthex8(uint8_t val);
+
 char * uint32_to_hex(uint32_t number);
 char * uint64_to_hex(uint64_t number);
 

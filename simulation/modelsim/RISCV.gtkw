@@ -1,13 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Nov 11 00:55:41 2019
+[*] Sun Nov 17 15:31:51 2019
 [*]
-[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\output\modelsim\sim.vcd"
+[dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
+[dumpfile_mtime] "Sun Nov 17 15:31:45 2019"
+[dumpfile_size] 628467444
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 13995
-[size] 911 1048
-[pos] 911 -27
-*-8.710001 14350 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 0
+[size] 1858 1057
+[pos] -217 -9
+*-18.835083 1884730 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -21,7 +23,7 @@
 [sst_width] 197
 [signals_width] 326
 [sst_expanded] 1
-[sst_vpaned_height] 522
+[sst_vpaned_height] 527
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -192,7 +194,6 @@ tb.dut.shield.spi_arb.sdcard_SPIDone
 -
 @28
 tb.dut.shield.spi_arb.clk_stgd
-tb.dut.shield.spi_arb.cycles_settled[2:0]
 tb.dut.shield.spi_arb.clk_settled
 @200
 -
