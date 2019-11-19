@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Nov 17 15:31:51 2019
+[*] Mon Nov 18 04:44:56 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Sun Nov 17 15:31:45 2019"
-[dumpfile_size] 628467444
+[dumpfile_mtime] "Mon Nov 18 04:40:51 2019"
+[dumpfile_size] 616741029
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 0
+[timestart] 2032024
 [size] 1858 1057
-[pos] -217 -9
-*-18.835083 1884730 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -1 -1
+*-7.572048 2032550 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.
@@ -21,7 +21,7 @@
 [treeopen] tb.dut.shield.sdcard.
 [treeopen] tb.sd.
 [sst_width] 197
-[signals_width] 326
+[signals_width] 505
 [sst_expanded] 1
 [sst_vpaned_height] 527
 @28
@@ -56,9 +56,7 @@ tb.dut.riscv.csrfile.csr_data_rd[31:0]
 @28
 tb.dut.SCK
 tb.dut.SD_CS
-@29
 tb.dut.TFT_CS
-@28
 tb.dut.TFT_DC
 tb.dut.MOSI
 tb.dut.MISO
@@ -237,7 +235,6 @@ tb.dut.shield.sdcard_mmc_bus_data[31:0]
 @200
 -
 @22
-tb.dut.shield.sdcard.cmd[47:0]
 tb.dut.shield.sdcard.rspArrived[31:0]
 tb.dut.shield.sdcard.rsp[47:0]
 tb.dut.shield.sdcard.dataIn[31:0]
@@ -258,13 +255,19 @@ tb.dut.shield.sdcard.state_data_recieved
 -
 @28
 tb.dut.shield.sdcard.sck_put
-@24
-tb.dut.shield.sdcard.bits[8:0]
-@28
 tb.dut.shield.sdcard.MOSI
 tb.dut.shield.sdcard.MISO
 @200
 -
+@22
+tb.dut.shield.sdcard.cmd[63:0]
+@200
+-
+@22
+tb.dut.shield.sdcard.data_bits[12:0]
+tb.dut.shield.sdcard.rsp_bits[8:0]
+tb.dut.shield.sdcard.bits[12:0]
+@200
 -
 -
 @28
