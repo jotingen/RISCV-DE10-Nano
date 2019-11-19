@@ -156,6 +156,10 @@ void console_put_char(char c) {
           console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
         }
       }
+      //Clear last line
+      for(int x = 0; x < CONSOLE_COLS; x++) {
+        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
+      }
       curser_index.Y = curser_index.Y - 1;
     }
       
@@ -197,6 +201,20 @@ void console_puthex8(uint8_t val)
 	// print the characters
 	console_putc(upperNibble);
 	console_putc(lowerNibble);
+}
+  
+char * uint8_to_hex(uint8_t number) {
+  static char s[3];
+  for(int d = 0; d < 2; d++) {
+    uint8_t hex = (number >> ((2-1-d)*4)) & 0xF;
+    if(hex < 10) {
+      s[d] = hex+48;
+    } else {
+      s[d] = hex+55;
+    }
+  }
+  s[3] = '\0';
+  return s;
 }
   
 char * uint32_to_hex(uint32_t number) {

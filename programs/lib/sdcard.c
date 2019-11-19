@@ -12,8 +12,8 @@
 #define SDCARD_RSP_ARRIVED (*((volatile uint32_t *) (0xC4000010)))
 #define SDCARD_RSP_LO      (*((volatile uint32_t *) (0xC4000014)))
 #define SDCARD_RSP_HI      (*((volatile uint32_t *) (0xC4000018)))
-#define SDCARD_DATA_IN     (*((volatile uint32_t *) (0xC400001C)))
-#define SDCARD_DATA_OUT    (*((volatile uint32_t *) (0xC4000020)))
+#define SDCARD_DATA_OUT    (*((volatile uint32_t *) (0xC400001C)))
+#define SDCARD_DATA_IN     (*((volatile uint32_t *) (0xC4000020)))
 
 uint8_t CRCTable[256];
 
@@ -200,13 +200,13 @@ void sdcard_on(void) {
 
   //CMD0
 
-  message = genSDCardMsg(0x00,0x00000000);
+  message = genSDCardMsg(0,0x00000000);
 
   printSDMsg(message);
   console_putc('\n');
   //display_write();
 
-  rsp = sdcard_cmd(message,1);
+  rsp = sdcard_cmd(message,1,0);
   sdcard_rsp(rsp_arr, 1, rsp);
 
   console_puts("  ");
@@ -221,16 +221,16 @@ void sdcard_on(void) {
 
   //CMD8
 
-  message = genSDCardMsg(0x08,0x000001AA);
+  message = genSDCardMsg(8,0x000001AA);
 
   printSDMsg(message);
   console_putc('\n');
 
-  rsp = sdcard_cmd(message,5);
+  rsp = sdcard_cmd(message,5,0);
   sdcard_rsp(rsp_arr, 5, rsp);
 
   console_puts("  ");
-  printSDResult(rsp,6);
+  printSDResult(rsp,5);
   console_putc('\n');
 
   SD_printR7(rsp_arr);
@@ -240,25 +240,61 @@ void sdcard_on(void) {
 
   //CMD58
 
-  message = genSDCardMsg(0x3A,0x00000000);
+  message = genSDCardMsg(58,0x00000000);
 
   printSDMsg(message);
   console_putc('\n');
 
+  rsp = sdcard_cmd(message,5,0);
+  sdcard_rsp(rsp_arr, 5, rsp);
+
+  console_puts("  ");
+  printSDResult(rsp,5);
+  console_putc('\n');
+
+  SD_printR3(rsp_arr);
+
+  //display_write();
+
+
+  //CMD ACDM41
   do {
     uint64_t timestamp;
 
-    rsp = sdcard_cmd(message,5);
-    sdcard_rsp(rsp_arr, 5, rsp);
+    message = genSDCardMsg(55,0x00000000);
+  
+    printSDMsg(message);
+    console_putc('\n');
+
+    rsp = sdcard_cmd(message,1,0);
+    sdcard_rsp(rsp_arr, 1, rsp);
 
     console_puts("  ");
-    printSDResult(rsp,6);
+    printSDResult(rsp,1);
     console_putc('\n');
 
-    SD_printR3(rsp_arr);
+    SD_printR1(rsp_arr[0]);
+
+
+
+    message = genSDCardMsg(41,0x00000000);
+  
+    printSDMsg(message);
+    console_putc('\n');
+
+    rsp = sdcard_cmd(message,1,0);
+    sdcard_rsp(rsp_arr, 1, rsp);
+
+    console_puts("  ");
+    printSDResult(rsp,1);
+    console_putc('\n');
+
+    SD_printR1(rsp_arr[0]);
+
     console_puts(uint32_to_hex(cnt));
     console_putc('\n');
-    display_write();
+
+    //display_write();
 
     timestamp = get_time();
     while(get_time()-timestamp < 10);
@@ -266,42 +302,87 @@ void sdcard_on(void) {
 
   } while (rsp_arr[0] != 0);
 
+  //CMD58
+
+  message = genSDCardMsg(58,0x00000000);
+
+  printSDMsg(message);
+  console_putc('\n');
+
+  rsp = sdcard_cmd(message,5,0);
+  sdcard_rsp(rsp_arr, 5, rsp);
+
+  console_puts("  ");
+  printSDResult(rsp,5);
+  console_putc('\n');
+
+  SD_printR3(rsp_arr);
+
+  //display_write();
   console_puts("Ready...");
-  display_write;
+  //display_write;
 
   return;
 }
 
-void sdcard_rsp(uint8_t * arr, unsigned int bytes, uint64_t rsp) {
+void sdcard_rsp(uint8_t * arr, uint8_t bytes, uint64_t rsp) {
     for(int i = 0; i < bytes; i++) {
       arr[i] = (rsp >> ((bytes-1-i)*8)) & 0xFF;
     }
     return;
 }
 
+void     sdcard_read(uint8_t * data, uint32_t addr) {
+  uint64_t message;
+  uint64_t rsp;
+  uint8_t  rsp_arr[5];
 
-uint64_t sdcard_cmd(uint64_t cmd, unsigned int bytes) {
+  message = genSDCardMsg(17,addr);
+
+  printSDMsg(message);
+  console_putc('\n');
+  display_write();
+
+  rsp = sdcard_cmd(message,1,1);
+  sdcard_rsp(rsp_arr, 1, rsp);
+
+  console_puts("  ");
+  printSDResult(rsp,1);
+  console_putc('\n');
+  display_write();
+
+  SD_printR1(rsp_arr[0]);
+
+  for(int i = 0; i < 512; i = i+4) {
+    uint32_t data_out = SDCARD_DATA_OUT;
+    data[i+0] = data_out >> 0;
+    data[i+1] = data_out >> 8;
+    data[i+2] = data_out >> 16;
+    data[i+3] = data_out >> 24;
+  }
+  console_puts("Read data captured\n");
+  display_write();
+  return;
+}
+
+uint64_t sdcard_cmd(uint64_t cmd, uint8_t bytes, uint8_t data) {
 
   uint64_t rsp = 0;
-  // uint64_t cmd_reversed = 0;
-  // for(uint8_t i=0;i<48;i++) {
-  //    cmd_reversed |= ((cmd>>i) & 1)<<(47-i);
-  // }
-  // //cmd_reversed = cmd_reversed >> 16;
 
-  // for(uint8_t i = 0; i < 6; i++) {
-  //   SDCARD_CMD = (cmd_reversed >> (i*8)) & 0xFF;
-  // }
+  SDCARD_CMD_LO   = cmd;
+  
+  SDCARD_CMD_HI   = cmd >> 32;
 
-  //for(int i = 5; i >= 0; i--) {
-  //  SDCARD_CMD = (cmd >> (i*8)) & 0xFF;
-  //}
-  //SDCARD_CMD = 0;
-  //SDCARD_CMD = 0;
+  SDCARD_CMD_HI  |= (uint32_t)bytes << 24;
 
-  SDCARD_CMD_LO   = cmd & 0xFFFFFFFF;
-  SDCARD_CMD_HI   = (cmd >> 32) & 0xFFFF;
-  SDCARD_CMD_HI   = SDCARD_CMD_HI | (bytes <<24);
+  SDCARD_CMD_HI  |= (uint32_t)data << 31;
+
+  console_puts(uint64_to_hex(SDCARD_CMD_LO));
+  console_putc('\n');
+
+  console_puts(uint64_to_hex(SDCARD_CMD_HI));
+  console_putc('\n');
+
   SDCARD_CMD_SEND = 1;
 
   while(SDCARD_RSP_ARRIVED == 0) {};
