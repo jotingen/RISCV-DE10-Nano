@@ -8,6 +8,24 @@ input  logic           FPGA_CLK3_50,
 //////////// LED //////////
 output logic  [7:0]    LED,
 
+//////////// HPS //////////
+output		    [14:0]		HPS_DDR3_ADDR,
+output		     [2:0]		HPS_DDR3_BA,
+output		          		HPS_DDR3_CAS_N,
+output		          		HPS_DDR3_CKE,
+output		          		HPS_DDR3_CK_N,
+output		          		HPS_DDR3_CK_P,
+output		          		HPS_DDR3_CS_N,
+output		     [3:0]		HPS_DDR3_DM,
+inout 		    [31:0]		HPS_DDR3_DQ,
+inout 		     [3:0]		HPS_DDR3_DQS_N,
+inout 		     [3:0]		HPS_DDR3_DQS_P,
+output		          		HPS_DDR3_ODT,
+output		          		HPS_DDR3_RAS_N,
+output		          		HPS_DDR3_RESET_N,
+input 		          		HPS_DDR3_RZQ,
+output		          		HPS_DDR3_WE_N,
+
 //////////// KEY //////////
 input  logic  [1:0]    KEY,
 
@@ -81,6 +99,19 @@ output logic           HDMI_TX_VS
   output reg   [63:0] rvfi_csr_minstret_wdata,
   output logic clk,
   output logic rst
+`endif
+
+`ifdef SIM
+  ,
+  input  logic         DDR3_CLK,  //100MHz
+  input  logic         ddr3_avl_ready,       
+  output logic [25:0]  ddr3_avl_addr,        
+  input  logic         ddr3_avl_rdata_valid, 
+  input  logic [127:0] ddr3_avl_rdata,       
+  output logic [127:0] ddr3_avl_wdata,       
+  output logic         ddr3_avl_read_req,    
+  output logic         ddr3_avl_write_req,   
+  output logic [0:0]   ddr3_avl_size         
 `endif
 );
 
@@ -196,6 +227,17 @@ logic  [3:0]    mmc_sdcard_bus_data_wr_mask;
 
 logic           sdcard_mmc_bus_ack;
 logic [31:0]    sdcard_mmc_bus_data;
+
+`ifndef SIM
+logic         ddr3_avl_ready;                  //          	 .avl.waitrequest
+logic [25:0]  ddr3_avl_addr;                   //             .address
+logic         ddr3_avl_rdata_valid;            //             .readdatavalid
+logic [127:0] ddr3_avl_rdata;                  //             .readdata
+logic [127:0] ddr3_avl_wdata;                  //             .writedata
+logic         ddr3_avl_read_req;               //             .read
+logic         ddr3_avl_write_req;              //             .write
+logic [0:0]   ddr3_avl_size;                   //             .burstcount
+`endif
 
 logic arst;
 logic arst_1;
@@ -599,4 +641,41 @@ shield_V1 shield (
   .sdcard_mmc_bus_data         (sdcard_mmc_bus_data        )
 );
 
+`ifndef SIM
+soc_system u0 (
+  //Clock&Reset
+  .clk_clk                               ( FPGA_CLK1_50 ),                               //                            clk.clk
+  .ddr3_clk_clk                          ( DDR3_CLK ),                             //                    clk_ddr3.clk
+  
+  //HPS ddr3
+  .memory_mem_a                          ( HPS_DDR3_ADDR),                       //                memory.mem_a
+  .memory_mem_ba                         ( HPS_DDR3_BA),                         //                .mem_ba
+  .memory_mem_ck                         ( HPS_DDR3_CK_P),                       //                .mem_ck
+  .memory_mem_ck_n                       ( HPS_DDR3_CK_N),                       //                .mem_ck_n
+  .memory_mem_cke                        ( HPS_DDR3_CKE),                        //                .mem_cke
+  .memory_mem_cs_n                       ( HPS_DDR3_CS_N),                       //                .mem_cs_n
+  .memory_mem_ras_n                      ( HPS_DDR3_RAS_N),                      //                .mem_ras_n
+  .memory_mem_cas_n                      ( HPS_DDR3_CAS_N),                      //                .mem_cas_n
+  .memory_mem_we_n                       ( HPS_DDR3_WE_N),                       //                .mem_we_n
+  .memory_mem_reset_n                    ( HPS_DDR3_RESET_N),                    //                .mem_reset_n
+  .memory_mem_dq                         ( HPS_DDR3_DQ),                         //                .mem_dq
+  .memory_mem_dqs                        ( HPS_DDR3_DQS_P),                      //                .mem_dqs
+  .memory_mem_dqs_n                      ( HPS_DDR3_DQS_N),                      //                .mem_dqs_n
+  .memory_mem_odt                        ( HPS_DDR3_ODT),                        //                .mem_odt
+  .memory_mem_dm                         ( HPS_DDR3_DM),                         //                .mem_dm
+  .memory_oct_rzqin                      ( HPS_DDR3_RZQ),                        //                .oct_rzqin
+  
+  .ddr3_hps_f2h_sdram0_clock_clk          (DDR3_CLK),          // ddr3_0_hps_f2h_sdram0_clock.clk
+  .ddr3_hps_f2h_sdram0_data_address       (ddr3_avl_addr),       //  ddr3_0_hps_f2h_sdram0_data.address
+  .ddr3_hps_f2h_sdram0_data_read          (ddr3_avl_read_req),          //                            .read
+  .ddr3_hps_f2h_sdram0_data_readdata      (ddr3_avl_rdata),      //                            .readdata
+  .ddr3_hps_f2h_sdram0_data_write         (ddr3_avl_write_req),         //                            .write
+  .ddr3_hps_f2h_sdram0_data_writedata     (ddr3_avl_wdata),     //                            .writedata
+  .ddr3_hps_f2h_sdram0_data_readdatavalid (ddr3_avl_rdata_valid), //                            .readdatavalid
+  .ddr3_hps_f2h_sdram0_data_waitrequest   (ddr3_avl_ready),   //                            .waitrequest
+  .ddr3_hps_f2h_sdram0_data_byteenable    (16'hffff),    //                            .byteenable
+  .ddr3_hps_f2h_sdram0_data_burstcount    (ddr3_avl_size)     //                            .burstcount
+);
+`endif
+       
 endmodule
