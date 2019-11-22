@@ -6,6 +6,7 @@ module tb ();
 logic           FPGA_CLK1_50;
 logic           FPGA_CLK2_50;
 logic           FPGA_CLK3_50;
+logic           DDR3_CLK;
 
 //////////// LED //////////
 logic  [7:0]    LED;
@@ -217,6 +218,7 @@ initial
   FPGA_CLK1_50 = 0; 
   FPGA_CLK2_50 = 0; 
   FPGA_CLK3_50 = 0; 
+  DDR3_CLK     = 0;
   KEY = '1;
   ADC_SDO = '0;
   reset_en = '1;
@@ -236,6 +238,12 @@ always
   FPGA_CLK1_50 =  ! FPGA_CLK1_50;
   FPGA_CLK2_50 =  ! FPGA_CLK2_50;
   FPGA_CLK3_50 =  ! FPGA_CLK3_50;
+  end
+
+always 
+  begin
+  #10  
+  DDR3_CLK =  ! DDR3_CLK;
   end
 
 final
