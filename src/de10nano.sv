@@ -158,6 +158,16 @@ logic  [3:0]    mmc_mem_bus_data_wr_mask;
 logic           mem_mmc_bus_ack;
 logic [31:0]    mem_mmc_bus_data;
 
+logic           mmc_ddr3_bus_req;
+logic           mmc_ddr3_bus_write;
+logic [31:0]    mmc_ddr3_bus_addr;
+logic [31:0]    mmc_ddr3_bus_data;
+logic  [3:0]    mmc_ddr3_bus_data_rd_mask;
+logic  [3:0]    mmc_ddr3_bus_data_wr_mask;
+
+logic           ddr3_mmc_bus_ack;
+logic [31:0]    ddr3_mmc_bus_data;
+
 logic           mmc_led_bus_req;
 logic           mmc_led_bus_write;
 logic [31:0]    mmc_led_bus_addr;
@@ -443,6 +453,16 @@ mmc mmc_data (
   .mem_mmc_bus_ack               (mem_mmc_bus_ack              ),
   .mem_mmc_bus_data              (mem_mmc_bus_data             ),
                                                                  
+  .mmc_ddr3_bus_req              (mmc_ddr3_bus_req             ),
+  .mmc_ddr3_bus_write            (mmc_ddr3_bus_write           ),
+  .mmc_ddr3_bus_addr             (mmc_ddr3_bus_addr            ),
+  .mmc_ddr3_bus_data             (mmc_ddr3_bus_data            ),
+  .mmc_ddr3_bus_data_rd_mask     (mmc_ddr3_bus_data_rd_mask    ),
+  .mmc_ddr3_bus_data_wr_mask     (mmc_ddr3_bus_data_wr_mask    ),
+                                                               
+  .ddr3_mmc_bus_ack              (ddr3_mmc_bus_ack             ),
+  .ddr3_mmc_bus_data             (ddr3_mmc_bus_data            ),
+                                                                 
   .mmc_led_bus_req               (mmc_led_bus_req              ),
   .mmc_led_bus_write             (mmc_led_bus_write            ),
   .mmc_led_bus_addr              (mmc_led_bus_addr             ),
@@ -533,6 +553,31 @@ mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
 
   .o_membus_ack           (mem_mmc_bus_ack),   
   .o_membus_data          (mem_mmc_bus_data)
+);
+
+ddr3 ddr3 (
+  .clk         (clk),
+  .ddr3_clk    (DDR3_CLK),
+  .rst         (rst),
+
+  .ddr3_avl_ready         (ddr3_avl_ready),       
+  .ddr3_avl_addr          (ddr3_avl_addr),        
+  .ddr3_avl_rdata_valid   (ddr3_avl_rdata_valid), 
+  .ddr3_avl_rdata         (ddr3_avl_rdata),       
+  .ddr3_avl_wdata         (ddr3_avl_wdata),       
+  .ddr3_avl_read_req      (ddr3_avl_read_req),    
+  .ddr3_avl_write_req     (ddr3_avl_write_req),   
+  .ddr3_avl_size          (ddr3_avl_size),         
+
+  .i_membus_req           (mmc_ddr3_bus_req),   
+  .i_membus_write         (mmc_ddr3_bus_write), 
+  .i_membus_addr          (mmc_ddr3_bus_addr),  
+  .i_membus_data          (mmc_ddr3_bus_data),
+  .i_membus_data_rd_mask  (mmc_ddr3_bus_data_rd_mask),
+  .i_membus_data_wr_mask  (mmc_ddr3_bus_data_wr_mask),
+
+  .o_membus_ack           (ddr3_mmc_bus_ack),   
+  .o_membus_data          (ddr3_mmc_bus_data)
 );
 
 led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (

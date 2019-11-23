@@ -47,6 +47,16 @@ logic           HDMI_TX_HS;
 logic           HDMI_TX_INT;
 logic           HDMI_TX_VS;
 
+/////////// SOC ///////////
+logic         ddr3_avl_ready;       
+logic [25:0]  ddr3_avl_addr;        
+logic         ddr3_avl_rdata_valid; 
+logic [127:0] ddr3_avl_rdata;       
+logic [127:0] ddr3_avl_wdata;       
+logic         ddr3_avl_read_req;    
+logic         ddr3_avl_write_req;   
+logic [0:0]   ddr3_avl_size;        
+
 logic clk;
 logic rst;
 
@@ -94,6 +104,7 @@ de10nano dut (
 .FPGA_CLK1_50,
 .FPGA_CLK2_50,
 .FPGA_CLK3_50,
+.DDR3_CLK,
 
 //////////// LED //////////
 .LED,
@@ -133,6 +144,16 @@ de10nano dut (
 .HDMI_TX_HS,
 .HDMI_TX_INT,
 .HDMI_TX_VS,
+
+/////////// SOC ///////////
+.ddr3_avl_ready,       
+.ddr3_avl_addr,        
+.ddr3_avl_rdata_valid, 
+.ddr3_avl_rdata,       
+.ddr3_avl_wdata,       
+.ddr3_avl_read_req,    
+.ddr3_avl_write_req,   
+.ddr3_avl_size,        
 
 .rvfi_valid             ,
 .rvfi_order             ,
@@ -221,6 +242,9 @@ initial
   DDR3_CLK     = 0;
   KEY = '1;
   ADC_SDO = '0;
+  ddr3_avl_ready = '1;       
+  ddr3_avl_rdata_valid = '0; 
+  ddr3_avl_rdata = '0;       
   reset_en = '1;
   reset_n = '1;
   #20
@@ -242,7 +266,7 @@ always
 
 always 
   begin
-  #10  
+  #5  
   DDR3_CLK =  ! DDR3_CLK;
   end
 
