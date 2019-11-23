@@ -23,6 +23,16 @@ module mmc (
   input  logic           mem_mmc_bus_ack,
   input  logic [31:0]    mem_mmc_bus_data,
 
+  output logic           mmc_ddr3_bus_req,
+  output logic           mmc_ddr3_bus_write,
+  output logic [31:0]    mmc_ddr3_bus_addr,
+  output logic [31:0]    mmc_ddr3_bus_data,
+  output logic  [3:0]    mmc_ddr3_bus_data_rd_mask,
+  output logic  [3:0]    mmc_ddr3_bus_data_wr_mask,
+
+  input  logic           ddr3_mmc_bus_ack,
+  input  logic [31:0]    ddr3_mmc_bus_data,
+
   output logic           mmc_led_bus_req,
   output logic           mmc_led_bus_write,
   output logic [31:0]    mmc_led_bus_addr,
@@ -98,27 +108,30 @@ module mmc (
 logic null_ack;
 
 //Memory mapping
-logic [31:0]    MEM_ADDR_HI      = 'h0001_FFFF;
 logic [31:0]    MEM_ADDR_LO      = 'h0000_0000;
-logic [31:0]    LED_ADDR_HI      = 'hC000_FFFF;
+logic [31:0]    MEM_ADDR_HI      = 'h0001_FFFF;
+logic [31:0]    DDR3_ADDR_LO     = 'h1000_0000;
+logic [31:0]    DDR3_ADDR_HI     = 'h13FF_FFFF;
 logic [31:0]    LED_ADDR_LO      = 'hC000_0000;
-logic [31:0]    KEYS_ADDR_HI     = 'hC100_FFFF;
+logic [31:0]    LED_ADDR_HI      = 'hC000_FFFF;
 logic [31:0]    KEYS_ADDR_LO     = 'hC100_0000;
-logic [31:0]    JOYSTICK_ADDR_HI = 'hC101_FFFF;
+logic [31:0]    KEYS_ADDR_HI     = 'hC100_FFFF;
 logic [31:0]    JOYSTICK_ADDR_LO = 'hC101_0000;
-logic [31:0]    DISPLAY_ADDR_HI  = 'hC200_FFFF;
+logic [31:0]    JOYSTICK_ADDR_HI = 'hC101_FFFF;
 logic [31:0]    DISPLAY_ADDR_LO  = 'hC200_0000;
-logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_3FFC;
+logic [31:0]    DISPLAY_ADDR_HI  = 'hC200_FFFF;
 logic [31:0]    DISPBUFF_ADDR_LO = 'hC300_0000;
-logic [31:0]    CONSOLEBUFF_ADDR_HI = 'hC301_44FC;
+logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_3FFC;
 logic [31:0]    CONSOLEBUFF_ADDR_LO = 'hC301_4000;
-logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
+logic [31:0]    CONSOLEBUFF_ADDR_HI = 'hC301_44FC;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
+logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
 
 //CPU to subsystems
 always_comb
   begin
   mmc_mem_bus_req      = '0;
+  mmc_ddr3_bus_req     = '0;
   mmc_led_bus_req      = '0;
   mmc_keys_bus_req     = '0;
   mmc_joystick_bus_req = '0;
@@ -132,6 +145,12 @@ always_comb
      riscv_mmc_bus_addr <= MEM_ADDR_HI)
     begin
     mmc_mem_bus_req = riscv_mmc_bus_req;
+    end
+
+  if(riscv_mmc_bus_addr >= DDR3_ADDR_LO &
+     riscv_mmc_bus_addr <= DDR3_ADDR_HI)
+    begin
+    mmc_ddr3_bus_req = riscv_mmc_bus_req;
     end
 
   if(riscv_mmc_bus_addr >= LED_ADDR_LO &
@@ -182,6 +201,12 @@ always_comb
   mmc_mem_bus_data              = riscv_mmc_bus_data;
   mmc_mem_bus_data_rd_mask      = riscv_mmc_bus_data_rd_mask;
   mmc_mem_bus_data_wr_mask      = riscv_mmc_bus_data_wr_mask;
+
+  mmc_ddr3_bus_write            = riscv_mmc_bus_write;
+  mmc_ddr3_bus_addr             = riscv_mmc_bus_addr - DDR3_ADDR_LO;
+  mmc_ddr3_bus_data             = riscv_mmc_bus_data;
+  mmc_ddr3_bus_data_rd_mask     = riscv_mmc_bus_data_rd_mask;
+  mmc_ddr3_bus_data_wr_mask     = riscv_mmc_bus_data_wr_mask;
 
   mmc_led_bus_write             = riscv_mmc_bus_write;
   mmc_led_bus_addr              = riscv_mmc_bus_addr - LED_ADDR_LO;
@@ -236,6 +261,12 @@ always_comb
     begin
     mmc_riscv_bus_ack  = mem_mmc_bus_ack;
     mmc_riscv_bus_data = mem_mmc_bus_data;
+    end
+
+  if(ddr3_mmc_bus_ack)
+    begin
+    mmc_riscv_bus_ack  = ddr3_mmc_bus_ack;
+    mmc_riscv_bus_data = ddr3_mmc_bus_data;
     end
 
   if(led_mmc_bus_ack)
@@ -295,6 +326,7 @@ always_ff @(posedge clk)
   null_ack <= '0;
   if( riscv_mmc_bus_req &
      ~mmc_mem_bus_req &
+     ~mmc_ddr3_bus_req &
      ~mmc_led_bus_req &
      ~mmc_keys_bus_req &
      ~mmc_joystick_bus_req &

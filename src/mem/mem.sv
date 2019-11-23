@@ -92,10 +92,10 @@ always_ff @(posedge clk)
 
 initial
   begin
-    $readmemh("../../output/programs/sdcardtest/sdcardtest_3.v", mem_array_3);
-    $readmemh("../../output/programs/sdcardtest/sdcardtest_2.v", mem_array_2);
-    $readmemh("../../output/programs/sdcardtest/sdcardtest_1.v", mem_array_1);
-    $readmemh("../../output/programs/sdcardtest/sdcardtest_0.v", mem_array_0);
+    $readmemh("../../output/programs/ddr3_test/ddr3_test_3.v", mem_array_3);
+    $readmemh("../../output/programs/ddr3_test/ddr3_test_2.v", mem_array_2);
+    $readmemh("../../output/programs/ddr3_test/ddr3_test_1.v", mem_array_1);
+    $readmemh("../../output/programs/ddr3_test/ddr3_test_0.v", mem_array_0);
   end
 
 endmodule
