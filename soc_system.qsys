@@ -25,6 +25,14 @@
          type = "int";
       }
    }
+   element hps_reset_manager_0
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
    element pll
    {
       datum _sortIndex
@@ -296,9 +304,17 @@
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_50.clk_in" type="clock" dir="end" />
  <interface name="ddr3_clk" internal="pll.outclk0" type="clock" dir="start" />
- <interface name="ddr3_hps_f2h_sdram0_clock" internal="ddr3.hps_f2h_sdram0_clock" />
- <interface name="ddr3_hps_f2h_sdram0_data" internal="ddr3.hps_f2h_sdram0_data" />
- <interface name="memory" internal="ddr3.memory" />
+ <interface
+   name="ddr3_hps_f2h_sdram0_clock"
+   internal="ddr3.hps_f2h_sdram0_clock"
+   type="clock"
+   dir="end" />
+ <interface
+   name="ddr3_hps_f2h_sdram0_data"
+   internal="ddr3.hps_f2h_sdram0_data"
+   type="avalon"
+   dir="end" />
+ <interface name="memory" internal="ddr3.memory" type="conduit" dir="end" />
  <module name="clk_50" kind="clock_source" version="18.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -318,6 +334,11 @@
   <parameter name="AUTO_HPS_F2H_SDRAM0_CLOCK_RESET_DOMAIN" value="3" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_ddr3" />
  </module>
+ <module
+   name="hps_reset_manager_0"
+   kind="hps_reset_manager"
+   version="1.0"
+   enabled="0" />
  <module name="pll" kind="altera_pll" version="18.1" enabled="1">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />

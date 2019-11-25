@@ -111,7 +111,7 @@ output logic           HDMI_TX_VS
   output logic [127:0] ddr3_avl_wdata,       
   output logic         ddr3_avl_read_req,    
   output logic         ddr3_avl_write_req,   
-  output logic [0:0]   ddr3_avl_size         
+  output logic [8:0]   ddr3_avl_size         
 `endif
 );
 
@@ -246,7 +246,7 @@ logic [127:0] ddr3_avl_rdata;                  //             .readdata
 logic [127:0] ddr3_avl_wdata;                  //             .writedata
 logic         ddr3_avl_read_req;               //             .read
 logic         ddr3_avl_write_req;              //             .write
-logic [0:0]   ddr3_avl_size;                   //             .burstcount
+logic [8:0]   ddr3_avl_size;                   //             .burstcount
 `endif
 
 logic arst;
@@ -579,6 +579,23 @@ ddr3 ddr3 (
   .o_membus_ack           (ddr3_mmc_bus_ack),   
   .o_membus_data          (ddr3_mmc_bus_data)
 );
+//Avalon_bus_RW_Test DDR3A_Verify(
+//		.iCLK(DDR3_CLK),
+//		.iRST_n(KEY[0]),
+//		.insert_error('0),
+//		
+//		.avl_waitrequest(ddr3_avl_ready),                 
+//		.avl_address(ddr3_avl_addr),                      
+//		.avl_readdatavalid(ddr3_avl_rdata_valid),                 
+//		.avl_readdata(ddr3_avl_rdata),                      
+//		.avl_writedata(ddr3_avl_wdata),                     
+//		.avl_read(ddr3_avl_read_req),                          
+//		.avl_write(ddr3_avl_write_req),    
+//		.avl_size(ddr3_avl_size),
+//		.drv_status_pass(),
+//		.drv_status_fail(),
+//		.drv_status_test_complete()
+//);
 
 led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
   .clk         (clk),

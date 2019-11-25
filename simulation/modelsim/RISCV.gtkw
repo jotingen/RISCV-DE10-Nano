@@ -1,17 +1,18 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Nov 23 03:41:18 2019
+[*] Mon Nov 25 16:22:55 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Sat Nov 23 03:40:29 2019"
-[dumpfile_size] 93614331
+[dumpfile_mtime] "Mon Nov 25 16:20:53 2019"
+[dumpfile_size] 100864754
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 33
+[timestart] 5091
 [size] 1858 1057
 [pos] -1 -1
-*-8.466902 1010 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-9.481349 1255 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
+[treeopen] tb.dut.ddr3.
 [treeopen] tb.dut.riscv.
 [treeopen] tb.dut.riscv.alu.
 [treeopen] tb.dut.riscv.idu.
@@ -20,10 +21,10 @@
 [treeopen] tb.dut.shield.display.transmit.
 [treeopen] tb.dut.shield.sdcard.
 [treeopen] tb.sd.
-[sst_width] 197
+[sst_width] 208
 [signals_width] 505
 [sst_expanded] 1
-[sst_vpaned_height] 527
+[sst_vpaned_height] 520
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -61,7 +62,6 @@ tb.dut.ddr3_avl_addr[25:0]
 tb.dut.ddr3_avl_rdata_valid
 tb.dut.ddr3_avl_read_req
 tb.dut.ddr3_avl_ready
-tb.dut.ddr3_avl_size[0]
 @22
 tb.dut.ddr3_avl_wdata[127:0]
 @28
@@ -307,10 +307,249 @@ tb.dut.shield.sdcard.SPIDone
 -
 -
 -DDR3
--
-@201
--
+@28
+tb.dut.ddr3.clk
+tb.dut.ddr3.ddr3_clk
 @200
+-
+@28
+tb.dut.led.LED[7:0]
+@200
+-
+@28
+tb.dut.ddr3.i_membus_req
+tb.dut.ddr3.i_membus_write
+@22
+#{tb.dut.ddr3.i_membus_addr[31:0]} tb.dut.ddr3.i_membus_addr[31] tb.dut.ddr3.i_membus_addr[30] tb.dut.ddr3.i_membus_addr[29] tb.dut.ddr3.i_membus_addr[28] tb.dut.ddr3.i_membus_addr[27] tb.dut.ddr3.i_membus_addr[26] tb.dut.ddr3.i_membus_addr[25] tb.dut.ddr3.i_membus_addr[24] tb.dut.ddr3.i_membus_addr[23] tb.dut.ddr3.i_membus_addr[22] tb.dut.ddr3.i_membus_addr[21] tb.dut.ddr3.i_membus_addr[20] tb.dut.ddr3.i_membus_addr[19] tb.dut.ddr3.i_membus_addr[18] tb.dut.ddr3.i_membus_addr[17] tb.dut.ddr3.i_membus_addr[16] tb.dut.ddr3.i_membus_addr[15] tb.dut.ddr3.i_membus_addr[14] tb.dut.ddr3.i_membus_addr[13] tb.dut.ddr3.i_membus_addr[12] tb.dut.ddr3.i_membus_addr[11] tb.dut.ddr3.i_membus_addr[10] tb.dut.ddr3.i_membus_addr[9] tb.dut.ddr3.i_membus_addr[8] tb.dut.ddr3.i_membus_addr[7] tb.dut.ddr3.i_membus_addr[6] tb.dut.ddr3.i_membus_addr[5] tb.dut.ddr3.i_membus_addr[4] tb.dut.ddr3.i_membus_addr[3] tb.dut.ddr3.i_membus_addr[2] tb.dut.ddr3.i_membus_addr[1] tb.dut.ddr3.i_membus_addr[0]
+#{tb.dut.ddr3.i_membus_data[31:0]} tb.dut.ddr3.i_membus_data[31] tb.dut.ddr3.i_membus_data[30] tb.dut.ddr3.i_membus_data[29] tb.dut.ddr3.i_membus_data[28] tb.dut.ddr3.i_membus_data[27] tb.dut.ddr3.i_membus_data[26] tb.dut.ddr3.i_membus_data[25] tb.dut.ddr3.i_membus_data[24] tb.dut.ddr3.i_membus_data[23] tb.dut.ddr3.i_membus_data[22] tb.dut.ddr3.i_membus_data[21] tb.dut.ddr3.i_membus_data[20] tb.dut.ddr3.i_membus_data[19] tb.dut.ddr3.i_membus_data[18] tb.dut.ddr3.i_membus_data[17] tb.dut.ddr3.i_membus_data[16] tb.dut.ddr3.i_membus_data[15] tb.dut.ddr3.i_membus_data[14] tb.dut.ddr3.i_membus_data[13] tb.dut.ddr3.i_membus_data[12] tb.dut.ddr3.i_membus_data[11] tb.dut.ddr3.i_membus_data[10] tb.dut.ddr3.i_membus_data[9] tb.dut.ddr3.i_membus_data[8] tb.dut.ddr3.i_membus_data[7] tb.dut.ddr3.i_membus_data[6] tb.dut.ddr3.i_membus_data[5] tb.dut.ddr3.i_membus_data[4] tb.dut.ddr3.i_membus_data[3] tb.dut.ddr3.i_membus_data[2] tb.dut.ddr3.i_membus_data[1] tb.dut.ddr3.i_membus_data[0]
+#{tb.dut.ddr3.i_membus_data_rd_mask[3:0]} tb.dut.ddr3.i_membus_data_rd_mask[3] tb.dut.ddr3.i_membus_data_rd_mask[2] tb.dut.ddr3.i_membus_data_rd_mask[1] tb.dut.ddr3.i_membus_data_rd_mask[0]
+#{tb.dut.ddr3.i_membus_data_wr_mask[3:0]} tb.dut.ddr3.i_membus_data_wr_mask[3] tb.dut.ddr3.i_membus_data_wr_mask[2] tb.dut.ddr3.i_membus_data_wr_mask[1] tb.dut.ddr3.i_membus_data_wr_mask[0]
+@200
+-
+@28
+tb.dut.ddr3.state_idle
+tb.dut.ddr3.state_flush
+tb.dut.ddr3.state_load
+tb.dut.ddr3.state_load_pending
+tb.dut.ddr3.state_update
+@22
+tb.dut.ddr3.flush_cnt[3:0]
+@200
+-
+@28
+tb.dut.ddr3.buffer_vld
+@22
+tb.dut.ddr3.buffer_addr[25:4]
+tb.dut.ddr3.buffer_data[127:0]
+@200
+-
+@28
+tb.dut.ddr3.ddr3_fifo_out_wrreq
+tb.dut.ddr3.ddr3_fifo_out_rdreq
+@22
+tb.dut.ddr3.ddr3_fifo_out_data[127:0]
+@200
+-
+@28
+tb.dut.ddr3.ddr3_fifo_out_rdempty
+tb.dut.ddr3.ddr3_fifo_out_rdreq
+tb.dut.ddr3.ddr3_fifo_out_rdack
+@200
+-
+@28
+tb.dut.ddr3.ddr3_state_idle
+tb.dut.ddr3.ddr3_state_pulse
+tb.dut.ddr3.ddr3_state_recieve
+@200
+-
+@28
+tb.dut.ddr3.double_req
+tb.ddr3.ddr3_avl_ready
+tb.ddr3.ddr3_avl_read_req
+tb.ddr3.ddr3_avl_write_req
+@22
+tb.dut.ddr3.ddr3_avl_addr[25:0]
+tb.dut.ddr3.ddr3_avl_wdata[127:0]
+@200
+-
+@28
+tb.ddr3.ddr3_avl_rdata_valid_stg1
+tb.ddr3.ddr3_avl_rdata_valid_stg2
+tb.ddr3.ddr3_avl_rdata_valid_stg3
+tb.ddr3.ddr3_avl_rdata_valid_stg4
+tb.ddr3.ddr3_avl_rdata_valid_stg5
+tb.ddr3.ddr3_avl_rdata_valid
+@200
+-
+@28
+tb.dut.ddr3.ddr3_avl_ready
+tb.dut.ddr3.ddr3_avl_rdata_valid
+@23
+#{tb.dut.ddr3.ddr3_avl_rdata[127:0]} tb.dut.ddr3.ddr3_avl_rdata[127] tb.dut.ddr3.ddr3_avl_rdata[126] tb.dut.ddr3.ddr3_avl_rdata[125] tb.dut.ddr3.ddr3_avl_rdata[124] tb.dut.ddr3.ddr3_avl_rdata[123] tb.dut.ddr3.ddr3_avl_rdata[122] tb.dut.ddr3.ddr3_avl_rdata[121] tb.dut.ddr3.ddr3_avl_rdata[120] tb.dut.ddr3.ddr3_avl_rdata[119] tb.dut.ddr3.ddr3_avl_rdata[118] tb.dut.ddr3.ddr3_avl_rdata[117] tb.dut.ddr3.ddr3_avl_rdata[116] tb.dut.ddr3.ddr3_avl_rdata[115] tb.dut.ddr3.ddr3_avl_rdata[114] tb.dut.ddr3.ddr3_avl_rdata[113] tb.dut.ddr3.ddr3_avl_rdata[112] tb.dut.ddr3.ddr3_avl_rdata[111] tb.dut.ddr3.ddr3_avl_rdata[110] tb.dut.ddr3.ddr3_avl_rdata[109] tb.dut.ddr3.ddr3_avl_rdata[108] tb.dut.ddr3.ddr3_avl_rdata[107] tb.dut.ddr3.ddr3_avl_rdata[106] tb.dut.ddr3.ddr3_avl_rdata[105] tb.dut.ddr3.ddr3_avl_rdata[104] tb.dut.ddr3.ddr3_avl_rdata[103] tb.dut.ddr3.ddr3_avl_rdata[102] tb.dut.ddr3.ddr3_avl_rdata[101] tb.dut.ddr3.ddr3_avl_rdata[100] tb.dut.ddr3.ddr3_avl_rdata[99] tb.dut.ddr3.ddr3_avl_rdata[98] tb.dut.ddr3.ddr3_avl_rdata[97] tb.dut.ddr3.ddr3_avl_rdata[96] tb.dut.ddr3.ddr3_avl_rdata[95] tb.dut.ddr3.ddr3_avl_rdata[94] tb.dut.ddr3.ddr3_avl_rdata[93] tb.dut.ddr3.ddr3_avl_rdata[92] tb.dut.ddr3.ddr3_avl_rdata[91] tb.dut.ddr3.ddr3_avl_rdata[90] tb.dut.ddr3.ddr3_avl_rdata[89] tb.dut.ddr3.ddr3_avl_rdata[88] tb.dut.ddr3.ddr3_avl_rdata[87] tb.dut.ddr3.ddr3_avl_rdata[86] tb.dut.ddr3.ddr3_avl_rdata[85] tb.dut.ddr3.ddr3_avl_rdata[84] tb.dut.ddr3.ddr3_avl_rdata[83] tb.dut.ddr3.ddr3_avl_rdata[82] tb.dut.ddr3.ddr3_avl_rdata[81] tb.dut.ddr3.ddr3_avl_rdata[80] tb.dut.ddr3.ddr3_avl_rdata[79] tb.dut.ddr3.ddr3_avl_rdata[78] tb.dut.ddr3.ddr3_avl_rdata[77] tb.dut.ddr3.ddr3_avl_rdata[76] tb.dut.ddr3.ddr3_avl_rdata[75] tb.dut.ddr3.ddr3_avl_rdata[74] tb.dut.ddr3.ddr3_avl_rdata[73] tb.dut.ddr3.ddr3_avl_rdata[72] tb.dut.ddr3.ddr3_avl_rdata[71] tb.dut.ddr3.ddr3_avl_rdata[70] tb.dut.ddr3.ddr3_avl_rdata[69] tb.dut.ddr3.ddr3_avl_rdata[68] tb.dut.ddr3.ddr3_avl_rdata[67] tb.dut.ddr3.ddr3_avl_rdata[66] tb.dut.ddr3.ddr3_avl_rdata[65] tb.dut.ddr3.ddr3_avl_rdata[64] tb.dut.ddr3.ddr3_avl_rdata[63] tb.dut.ddr3.ddr3_avl_rdata[62] tb.dut.ddr3.ddr3_avl_rdata[61] tb.dut.ddr3.ddr3_avl_rdata[60] tb.dut.ddr3.ddr3_avl_rdata[59] tb.dut.ddr3.ddr3_avl_rdata[58] tb.dut.ddr3.ddr3_avl_rdata[57] tb.dut.ddr3.ddr3_avl_rdata[56] tb.dut.ddr3.ddr3_avl_rdata[55] tb.dut.ddr3.ddr3_avl_rdata[54] tb.dut.ddr3.ddr3_avl_rdata[53] tb.dut.ddr3.ddr3_avl_rdata[52] tb.dut.ddr3.ddr3_avl_rdata[51] tb.dut.ddr3.ddr3_avl_rdata[50] tb.dut.ddr3.ddr3_avl_rdata[49] tb.dut.ddr3.ddr3_avl_rdata[48] tb.dut.ddr3.ddr3_avl_rdata[47] tb.dut.ddr3.ddr3_avl_rdata[46] tb.dut.ddr3.ddr3_avl_rdata[45] tb.dut.ddr3.ddr3_avl_rdata[44] tb.dut.ddr3.ddr3_avl_rdata[43] tb.dut.ddr3.ddr3_avl_rdata[42] tb.dut.ddr3.ddr3_avl_rdata[41] tb.dut.ddr3.ddr3_avl_rdata[40] tb.dut.ddr3.ddr3_avl_rdata[39] tb.dut.ddr3.ddr3_avl_rdata[38] tb.dut.ddr3.ddr3_avl_rdata[37] tb.dut.ddr3.ddr3_avl_rdata[36] tb.dut.ddr3.ddr3_avl_rdata[35] tb.dut.ddr3.ddr3_avl_rdata[34] tb.dut.ddr3.ddr3_avl_rdata[33] tb.dut.ddr3.ddr3_avl_rdata[32] tb.dut.ddr3.ddr3_avl_rdata[31] tb.dut.ddr3.ddr3_avl_rdata[30] tb.dut.ddr3.ddr3_avl_rdata[29] tb.dut.ddr3.ddr3_avl_rdata[28] tb.dut.ddr3.ddr3_avl_rdata[27] tb.dut.ddr3.ddr3_avl_rdata[26] tb.dut.ddr3.ddr3_avl_rdata[25] tb.dut.ddr3.ddr3_avl_rdata[24] tb.dut.ddr3.ddr3_avl_rdata[23] tb.dut.ddr3.ddr3_avl_rdata[22] tb.dut.ddr3.ddr3_avl_rdata[21] tb.dut.ddr3.ddr3_avl_rdata[20] tb.dut.ddr3.ddr3_avl_rdata[19] tb.dut.ddr3.ddr3_avl_rdata[18] tb.dut.ddr3.ddr3_avl_rdata[17] tb.dut.ddr3.ddr3_avl_rdata[16] tb.dut.ddr3.ddr3_avl_rdata[15] tb.dut.ddr3.ddr3_avl_rdata[14] tb.dut.ddr3.ddr3_avl_rdata[13] tb.dut.ddr3.ddr3_avl_rdata[12] tb.dut.ddr3.ddr3_avl_rdata[11] tb.dut.ddr3.ddr3_avl_rdata[10] tb.dut.ddr3.ddr3_avl_rdata[9] tb.dut.ddr3.ddr3_avl_rdata[8] tb.dut.ddr3.ddr3_avl_rdata[7] tb.dut.ddr3.ddr3_avl_rdata[6] tb.dut.ddr3.ddr3_avl_rdata[5] tb.dut.ddr3.ddr3_avl_rdata[4] tb.dut.ddr3.ddr3_avl_rdata[3] tb.dut.ddr3.ddr3_avl_rdata[2] tb.dut.ddr3.ddr3_avl_rdata[1] tb.dut.ddr3.ddr3_avl_rdata[0]
+@200
+-
+@28
+tb.dut.ddr3.ddr3_fifo_in_empty
+@22
+tb.dut.ddr3.ddr3_fifo_in_q[189:0]
+@28
+tb.dut.ddr3.ddr3_fifo_in_rdack
+tb.dut.ddr3.ddr3_fifo_in.aclr
+@22
+#{tb.dut.ddr3.ddr3_fifo_in.data[191:0]} tb.dut.ddr3.ddr3_fifo_in.data[191] tb.dut.ddr3.ddr3_fifo_in.data[190] tb.dut.ddr3.ddr3_fifo_in.data[189] tb.dut.ddr3.ddr3_fifo_in.data[188] tb.dut.ddr3.ddr3_fifo_in.data[187] tb.dut.ddr3.ddr3_fifo_in.data[186] tb.dut.ddr3.ddr3_fifo_in.data[185] tb.dut.ddr3.ddr3_fifo_in.data[184] tb.dut.ddr3.ddr3_fifo_in.data[183] tb.dut.ddr3.ddr3_fifo_in.data[182] tb.dut.ddr3.ddr3_fifo_in.data[181] tb.dut.ddr3.ddr3_fifo_in.data[180] tb.dut.ddr3.ddr3_fifo_in.data[179] tb.dut.ddr3.ddr3_fifo_in.data[178] tb.dut.ddr3.ddr3_fifo_in.data[177] tb.dut.ddr3.ddr3_fifo_in.data[176] tb.dut.ddr3.ddr3_fifo_in.data[175] tb.dut.ddr3.ddr3_fifo_in.data[174] tb.dut.ddr3.ddr3_fifo_in.data[173] tb.dut.ddr3.ddr3_fifo_in.data[172] tb.dut.ddr3.ddr3_fifo_in.data[171] tb.dut.ddr3.ddr3_fifo_in.data[170] tb.dut.ddr3.ddr3_fifo_in.data[169] tb.dut.ddr3.ddr3_fifo_in.data[168] tb.dut.ddr3.ddr3_fifo_in.data[167] tb.dut.ddr3.ddr3_fifo_in.data[166] tb.dut.ddr3.ddr3_fifo_in.data[165] tb.dut.ddr3.ddr3_fifo_in.data[164] tb.dut.ddr3.ddr3_fifo_in.data[163] tb.dut.ddr3.ddr3_fifo_in.data[162] tb.dut.ddr3.ddr3_fifo_in.data[161] tb.dut.ddr3.ddr3_fifo_in.data[160] tb.dut.ddr3.ddr3_fifo_in.data[159] tb.dut.ddr3.ddr3_fifo_in.data[158] tb.dut.ddr3.ddr3_fifo_in.data[157] tb.dut.ddr3.ddr3_fifo_in.data[156] tb.dut.ddr3.ddr3_fifo_in.data[155] tb.dut.ddr3.ddr3_fifo_in.data[154] tb.dut.ddr3.ddr3_fifo_in.data[153] tb.dut.ddr3.ddr3_fifo_in.data[152] tb.dut.ddr3.ddr3_fifo_in.data[151] tb.dut.ddr3.ddr3_fifo_in.data[150] tb.dut.ddr3.ddr3_fifo_in.data[149] tb.dut.ddr3.ddr3_fifo_in.data[148] tb.dut.ddr3.ddr3_fifo_in.data[147] tb.dut.ddr3.ddr3_fifo_in.data[146] tb.dut.ddr3.ddr3_fifo_in.data[145] tb.dut.ddr3.ddr3_fifo_in.data[144] tb.dut.ddr3.ddr3_fifo_in.data[143] tb.dut.ddr3.ddr3_fifo_in.data[142] tb.dut.ddr3.ddr3_fifo_in.data[141] tb.dut.ddr3.ddr3_fifo_in.data[140] tb.dut.ddr3.ddr3_fifo_in.data[139] tb.dut.ddr3.ddr3_fifo_in.data[138] tb.dut.ddr3.ddr3_fifo_in.data[137] tb.dut.ddr3.ddr3_fifo_in.data[136] tb.dut.ddr3.ddr3_fifo_in.data[135] tb.dut.ddr3.ddr3_fifo_in.data[134] tb.dut.ddr3.ddr3_fifo_in.data[133] tb.dut.ddr3.ddr3_fifo_in.data[132] tb.dut.ddr3.ddr3_fifo_in.data[131] tb.dut.ddr3.ddr3_fifo_in.data[130] tb.dut.ddr3.ddr3_fifo_in.data[129] tb.dut.ddr3.ddr3_fifo_in.data[128] tb.dut.ddr3.ddr3_fifo_in.data[127] tb.dut.ddr3.ddr3_fifo_in.data[126] tb.dut.ddr3.ddr3_fifo_in.data[125] tb.dut.ddr3.ddr3_fifo_in.data[124] tb.dut.ddr3.ddr3_fifo_in.data[123] tb.dut.ddr3.ddr3_fifo_in.data[122] tb.dut.ddr3.ddr3_fifo_in.data[121] tb.dut.ddr3.ddr3_fifo_in.data[120] tb.dut.ddr3.ddr3_fifo_in.data[119] tb.dut.ddr3.ddr3_fifo_in.data[118] tb.dut.ddr3.ddr3_fifo_in.data[117] tb.dut.ddr3.ddr3_fifo_in.data[116] tb.dut.ddr3.ddr3_fifo_in.data[115] tb.dut.ddr3.ddr3_fifo_in.data[114] tb.dut.ddr3.ddr3_fifo_in.data[113] tb.dut.ddr3.ddr3_fifo_in.data[112] tb.dut.ddr3.ddr3_fifo_in.data[111] tb.dut.ddr3.ddr3_fifo_in.data[110] tb.dut.ddr3.ddr3_fifo_in.data[109] tb.dut.ddr3.ddr3_fifo_in.data[108] tb.dut.ddr3.ddr3_fifo_in.data[107] tb.dut.ddr3.ddr3_fifo_in.data[106] tb.dut.ddr3.ddr3_fifo_in.data[105] tb.dut.ddr3.ddr3_fifo_in.data[104] tb.dut.ddr3.ddr3_fifo_in.data[103] tb.dut.ddr3.ddr3_fifo_in.data[102] tb.dut.ddr3.ddr3_fifo_in.data[101] tb.dut.ddr3.ddr3_fifo_in.data[100] tb.dut.ddr3.ddr3_fifo_in.data[99] tb.dut.ddr3.ddr3_fifo_in.data[98] tb.dut.ddr3.ddr3_fifo_in.data[97] tb.dut.ddr3.ddr3_fifo_in.data[96] tb.dut.ddr3.ddr3_fifo_in.data[95] tb.dut.ddr3.ddr3_fifo_in.data[94] tb.dut.ddr3.ddr3_fifo_in.data[93] tb.dut.ddr3.ddr3_fifo_in.data[92] tb.dut.ddr3.ddr3_fifo_in.data[91] tb.dut.ddr3.ddr3_fifo_in.data[90] tb.dut.ddr3.ddr3_fifo_in.data[89] tb.dut.ddr3.ddr3_fifo_in.data[88] tb.dut.ddr3.ddr3_fifo_in.data[87] tb.dut.ddr3.ddr3_fifo_in.data[86] tb.dut.ddr3.ddr3_fifo_in.data[85] tb.dut.ddr3.ddr3_fifo_in.data[84] tb.dut.ddr3.ddr3_fifo_in.data[83] tb.dut.ddr3.ddr3_fifo_in.data[82] tb.dut.ddr3.ddr3_fifo_in.data[81] tb.dut.ddr3.ddr3_fifo_in.data[80] tb.dut.ddr3.ddr3_fifo_in.data[79] tb.dut.ddr3.ddr3_fifo_in.data[78] tb.dut.ddr3.ddr3_fifo_in.data[77] tb.dut.ddr3.ddr3_fifo_in.data[76] tb.dut.ddr3.ddr3_fifo_in.data[75] tb.dut.ddr3.ddr3_fifo_in.data[74] tb.dut.ddr3.ddr3_fifo_in.data[73] tb.dut.ddr3.ddr3_fifo_in.data[72] tb.dut.ddr3.ddr3_fifo_in.data[71] tb.dut.ddr3.ddr3_fifo_in.data[70] tb.dut.ddr3.ddr3_fifo_in.data[69] tb.dut.ddr3.ddr3_fifo_in.data[68] tb.dut.ddr3.ddr3_fifo_in.data[67] tb.dut.ddr3.ddr3_fifo_in.data[66] tb.dut.ddr3.ddr3_fifo_in.data[65] tb.dut.ddr3.ddr3_fifo_in.data[64] tb.dut.ddr3.ddr3_fifo_in.data[63] tb.dut.ddr3.ddr3_fifo_in.data[62] tb.dut.ddr3.ddr3_fifo_in.data[61] tb.dut.ddr3.ddr3_fifo_in.data[60] tb.dut.ddr3.ddr3_fifo_in.data[59] tb.dut.ddr3.ddr3_fifo_in.data[58] tb.dut.ddr3.ddr3_fifo_in.data[57] tb.dut.ddr3.ddr3_fifo_in.data[56] tb.dut.ddr3.ddr3_fifo_in.data[55] tb.dut.ddr3.ddr3_fifo_in.data[54] tb.dut.ddr3.ddr3_fifo_in.data[53] tb.dut.ddr3.ddr3_fifo_in.data[52] tb.dut.ddr3.ddr3_fifo_in.data[51] tb.dut.ddr3.ddr3_fifo_in.data[50] tb.dut.ddr3.ddr3_fifo_in.data[49] tb.dut.ddr3.ddr3_fifo_in.data[48] tb.dut.ddr3.ddr3_fifo_in.data[47] tb.dut.ddr3.ddr3_fifo_in.data[46] tb.dut.ddr3.ddr3_fifo_in.data[45] tb.dut.ddr3.ddr3_fifo_in.data[44] tb.dut.ddr3.ddr3_fifo_in.data[43] tb.dut.ddr3.ddr3_fifo_in.data[42] tb.dut.ddr3.ddr3_fifo_in.data[41] tb.dut.ddr3.ddr3_fifo_in.data[40] tb.dut.ddr3.ddr3_fifo_in.data[39] tb.dut.ddr3.ddr3_fifo_in.data[38] tb.dut.ddr3.ddr3_fifo_in.data[37] tb.dut.ddr3.ddr3_fifo_in.data[36] tb.dut.ddr3.ddr3_fifo_in.data[35] tb.dut.ddr3.ddr3_fifo_in.data[34] tb.dut.ddr3.ddr3_fifo_in.data[33] tb.dut.ddr3.ddr3_fifo_in.data[32] tb.dut.ddr3.ddr3_fifo_in.data[31] tb.dut.ddr3.ddr3_fifo_in.data[30] tb.dut.ddr3.ddr3_fifo_in.data[29] tb.dut.ddr3.ddr3_fifo_in.data[28] tb.dut.ddr3.ddr3_fifo_in.data[27] tb.dut.ddr3.ddr3_fifo_in.data[26] tb.dut.ddr3.ddr3_fifo_in.data[25] tb.dut.ddr3.ddr3_fifo_in.data[24] tb.dut.ddr3.ddr3_fifo_in.data[23] tb.dut.ddr3.ddr3_fifo_in.data[22] tb.dut.ddr3.ddr3_fifo_in.data[21] tb.dut.ddr3.ddr3_fifo_in.data[20] tb.dut.ddr3.ddr3_fifo_in.data[19] tb.dut.ddr3.ddr3_fifo_in.data[18] tb.dut.ddr3.ddr3_fifo_in.data[17] tb.dut.ddr3.ddr3_fifo_in.data[16] tb.dut.ddr3.ddr3_fifo_in.data[15] tb.dut.ddr3.ddr3_fifo_in.data[14] tb.dut.ddr3.ddr3_fifo_in.data[13] tb.dut.ddr3.ddr3_fifo_in.data[12] tb.dut.ddr3.ddr3_fifo_in.data[11] tb.dut.ddr3.ddr3_fifo_in.data[10] tb.dut.ddr3.ddr3_fifo_in.data[9] tb.dut.ddr3.ddr3_fifo_in.data[8] tb.dut.ddr3.ddr3_fifo_in.data[7] tb.dut.ddr3.ddr3_fifo_in.data[6] tb.dut.ddr3.ddr3_fifo_in.data[5] tb.dut.ddr3.ddr3_fifo_in.data[4] tb.dut.ddr3.ddr3_fifo_in.data[3] tb.dut.ddr3.ddr3_fifo_in.data[2] tb.dut.ddr3.ddr3_fifo_in.data[1] tb.dut.ddr3.ddr3_fifo_in.data[0]
+#{tb.dut.ddr3.ddr3_fifo_in.q[191:0]} tb.dut.ddr3.ddr3_fifo_in.q[191] tb.dut.ddr3.ddr3_fifo_in.q[190] tb.dut.ddr3.ddr3_fifo_in.q[189] tb.dut.ddr3.ddr3_fifo_in.q[188] tb.dut.ddr3.ddr3_fifo_in.q[187] tb.dut.ddr3.ddr3_fifo_in.q[186] tb.dut.ddr3.ddr3_fifo_in.q[185] tb.dut.ddr3.ddr3_fifo_in.q[184] tb.dut.ddr3.ddr3_fifo_in.q[183] tb.dut.ddr3.ddr3_fifo_in.q[182] tb.dut.ddr3.ddr3_fifo_in.q[181] tb.dut.ddr3.ddr3_fifo_in.q[180] tb.dut.ddr3.ddr3_fifo_in.q[179] tb.dut.ddr3.ddr3_fifo_in.q[178] tb.dut.ddr3.ddr3_fifo_in.q[177] tb.dut.ddr3.ddr3_fifo_in.q[176] tb.dut.ddr3.ddr3_fifo_in.q[175] tb.dut.ddr3.ddr3_fifo_in.q[174] tb.dut.ddr3.ddr3_fifo_in.q[173] tb.dut.ddr3.ddr3_fifo_in.q[172] tb.dut.ddr3.ddr3_fifo_in.q[171] tb.dut.ddr3.ddr3_fifo_in.q[170] tb.dut.ddr3.ddr3_fifo_in.q[169] tb.dut.ddr3.ddr3_fifo_in.q[168] tb.dut.ddr3.ddr3_fifo_in.q[167] tb.dut.ddr3.ddr3_fifo_in.q[166] tb.dut.ddr3.ddr3_fifo_in.q[165] tb.dut.ddr3.ddr3_fifo_in.q[164] tb.dut.ddr3.ddr3_fifo_in.q[163] tb.dut.ddr3.ddr3_fifo_in.q[162] tb.dut.ddr3.ddr3_fifo_in.q[161] tb.dut.ddr3.ddr3_fifo_in.q[160] tb.dut.ddr3.ddr3_fifo_in.q[159] tb.dut.ddr3.ddr3_fifo_in.q[158] tb.dut.ddr3.ddr3_fifo_in.q[157] tb.dut.ddr3.ddr3_fifo_in.q[156] tb.dut.ddr3.ddr3_fifo_in.q[155] tb.dut.ddr3.ddr3_fifo_in.q[154] tb.dut.ddr3.ddr3_fifo_in.q[153] tb.dut.ddr3.ddr3_fifo_in.q[152] tb.dut.ddr3.ddr3_fifo_in.q[151] tb.dut.ddr3.ddr3_fifo_in.q[150] tb.dut.ddr3.ddr3_fifo_in.q[149] tb.dut.ddr3.ddr3_fifo_in.q[148] tb.dut.ddr3.ddr3_fifo_in.q[147] tb.dut.ddr3.ddr3_fifo_in.q[146] tb.dut.ddr3.ddr3_fifo_in.q[145] tb.dut.ddr3.ddr3_fifo_in.q[144] tb.dut.ddr3.ddr3_fifo_in.q[143] tb.dut.ddr3.ddr3_fifo_in.q[142] tb.dut.ddr3.ddr3_fifo_in.q[141] tb.dut.ddr3.ddr3_fifo_in.q[140] tb.dut.ddr3.ddr3_fifo_in.q[139] tb.dut.ddr3.ddr3_fifo_in.q[138] tb.dut.ddr3.ddr3_fifo_in.q[137] tb.dut.ddr3.ddr3_fifo_in.q[136] tb.dut.ddr3.ddr3_fifo_in.q[135] tb.dut.ddr3.ddr3_fifo_in.q[134] tb.dut.ddr3.ddr3_fifo_in.q[133] tb.dut.ddr3.ddr3_fifo_in.q[132] tb.dut.ddr3.ddr3_fifo_in.q[131] tb.dut.ddr3.ddr3_fifo_in.q[130] tb.dut.ddr3.ddr3_fifo_in.q[129] tb.dut.ddr3.ddr3_fifo_in.q[128] tb.dut.ddr3.ddr3_fifo_in.q[127] tb.dut.ddr3.ddr3_fifo_in.q[126] tb.dut.ddr3.ddr3_fifo_in.q[125] tb.dut.ddr3.ddr3_fifo_in.q[124] tb.dut.ddr3.ddr3_fifo_in.q[123] tb.dut.ddr3.ddr3_fifo_in.q[122] tb.dut.ddr3.ddr3_fifo_in.q[121] tb.dut.ddr3.ddr3_fifo_in.q[120] tb.dut.ddr3.ddr3_fifo_in.q[119] tb.dut.ddr3.ddr3_fifo_in.q[118] tb.dut.ddr3.ddr3_fifo_in.q[117] tb.dut.ddr3.ddr3_fifo_in.q[116] tb.dut.ddr3.ddr3_fifo_in.q[115] tb.dut.ddr3.ddr3_fifo_in.q[114] tb.dut.ddr3.ddr3_fifo_in.q[113] tb.dut.ddr3.ddr3_fifo_in.q[112] tb.dut.ddr3.ddr3_fifo_in.q[111] tb.dut.ddr3.ddr3_fifo_in.q[110] tb.dut.ddr3.ddr3_fifo_in.q[109] tb.dut.ddr3.ddr3_fifo_in.q[108] tb.dut.ddr3.ddr3_fifo_in.q[107] tb.dut.ddr3.ddr3_fifo_in.q[106] tb.dut.ddr3.ddr3_fifo_in.q[105] tb.dut.ddr3.ddr3_fifo_in.q[104] tb.dut.ddr3.ddr3_fifo_in.q[103] tb.dut.ddr3.ddr3_fifo_in.q[102] tb.dut.ddr3.ddr3_fifo_in.q[101] tb.dut.ddr3.ddr3_fifo_in.q[100] tb.dut.ddr3.ddr3_fifo_in.q[99] tb.dut.ddr3.ddr3_fifo_in.q[98] tb.dut.ddr3.ddr3_fifo_in.q[97] tb.dut.ddr3.ddr3_fifo_in.q[96] tb.dut.ddr3.ddr3_fifo_in.q[95] tb.dut.ddr3.ddr3_fifo_in.q[94] tb.dut.ddr3.ddr3_fifo_in.q[93] tb.dut.ddr3.ddr3_fifo_in.q[92] tb.dut.ddr3.ddr3_fifo_in.q[91] tb.dut.ddr3.ddr3_fifo_in.q[90] tb.dut.ddr3.ddr3_fifo_in.q[89] tb.dut.ddr3.ddr3_fifo_in.q[88] tb.dut.ddr3.ddr3_fifo_in.q[87] tb.dut.ddr3.ddr3_fifo_in.q[86] tb.dut.ddr3.ddr3_fifo_in.q[85] tb.dut.ddr3.ddr3_fifo_in.q[84] tb.dut.ddr3.ddr3_fifo_in.q[83] tb.dut.ddr3.ddr3_fifo_in.q[82] tb.dut.ddr3.ddr3_fifo_in.q[81] tb.dut.ddr3.ddr3_fifo_in.q[80] tb.dut.ddr3.ddr3_fifo_in.q[79] tb.dut.ddr3.ddr3_fifo_in.q[78] tb.dut.ddr3.ddr3_fifo_in.q[77] tb.dut.ddr3.ddr3_fifo_in.q[76] tb.dut.ddr3.ddr3_fifo_in.q[75] tb.dut.ddr3.ddr3_fifo_in.q[74] tb.dut.ddr3.ddr3_fifo_in.q[73] tb.dut.ddr3.ddr3_fifo_in.q[72] tb.dut.ddr3.ddr3_fifo_in.q[71] tb.dut.ddr3.ddr3_fifo_in.q[70] tb.dut.ddr3.ddr3_fifo_in.q[69] tb.dut.ddr3.ddr3_fifo_in.q[68] tb.dut.ddr3.ddr3_fifo_in.q[67] tb.dut.ddr3.ddr3_fifo_in.q[66] tb.dut.ddr3.ddr3_fifo_in.q[65] tb.dut.ddr3.ddr3_fifo_in.q[64] tb.dut.ddr3.ddr3_fifo_in.q[63] tb.dut.ddr3.ddr3_fifo_in.q[62] tb.dut.ddr3.ddr3_fifo_in.q[61] tb.dut.ddr3.ddr3_fifo_in.q[60] tb.dut.ddr3.ddr3_fifo_in.q[59] tb.dut.ddr3.ddr3_fifo_in.q[58] tb.dut.ddr3.ddr3_fifo_in.q[57] tb.dut.ddr3.ddr3_fifo_in.q[56] tb.dut.ddr3.ddr3_fifo_in.q[55] tb.dut.ddr3.ddr3_fifo_in.q[54] tb.dut.ddr3.ddr3_fifo_in.q[53] tb.dut.ddr3.ddr3_fifo_in.q[52] tb.dut.ddr3.ddr3_fifo_in.q[51] tb.dut.ddr3.ddr3_fifo_in.q[50] tb.dut.ddr3.ddr3_fifo_in.q[49] tb.dut.ddr3.ddr3_fifo_in.q[48] tb.dut.ddr3.ddr3_fifo_in.q[47] tb.dut.ddr3.ddr3_fifo_in.q[46] tb.dut.ddr3.ddr3_fifo_in.q[45] tb.dut.ddr3.ddr3_fifo_in.q[44] tb.dut.ddr3.ddr3_fifo_in.q[43] tb.dut.ddr3.ddr3_fifo_in.q[42] tb.dut.ddr3.ddr3_fifo_in.q[41] tb.dut.ddr3.ddr3_fifo_in.q[40] tb.dut.ddr3.ddr3_fifo_in.q[39] tb.dut.ddr3.ddr3_fifo_in.q[38] tb.dut.ddr3.ddr3_fifo_in.q[37] tb.dut.ddr3.ddr3_fifo_in.q[36] tb.dut.ddr3.ddr3_fifo_in.q[35] tb.dut.ddr3.ddr3_fifo_in.q[34] tb.dut.ddr3.ddr3_fifo_in.q[33] tb.dut.ddr3.ddr3_fifo_in.q[32] tb.dut.ddr3.ddr3_fifo_in.q[31] tb.dut.ddr3.ddr3_fifo_in.q[30] tb.dut.ddr3.ddr3_fifo_in.q[29] tb.dut.ddr3.ddr3_fifo_in.q[28] tb.dut.ddr3.ddr3_fifo_in.q[27] tb.dut.ddr3.ddr3_fifo_in.q[26] tb.dut.ddr3.ddr3_fifo_in.q[25] tb.dut.ddr3.ddr3_fifo_in.q[24] tb.dut.ddr3.ddr3_fifo_in.q[23] tb.dut.ddr3.ddr3_fifo_in.q[22] tb.dut.ddr3.ddr3_fifo_in.q[21] tb.dut.ddr3.ddr3_fifo_in.q[20] tb.dut.ddr3.ddr3_fifo_in.q[19] tb.dut.ddr3.ddr3_fifo_in.q[18] tb.dut.ddr3.ddr3_fifo_in.q[17] tb.dut.ddr3.ddr3_fifo_in.q[16] tb.dut.ddr3.ddr3_fifo_in.q[15] tb.dut.ddr3.ddr3_fifo_in.q[14] tb.dut.ddr3.ddr3_fifo_in.q[13] tb.dut.ddr3.ddr3_fifo_in.q[12] tb.dut.ddr3.ddr3_fifo_in.q[11] tb.dut.ddr3.ddr3_fifo_in.q[10] tb.dut.ddr3.ddr3_fifo_in.q[9] tb.dut.ddr3.ddr3_fifo_in.q[8] tb.dut.ddr3.ddr3_fifo_in.q[7] tb.dut.ddr3.ddr3_fifo_in.q[6] tb.dut.ddr3.ddr3_fifo_in.q[5] tb.dut.ddr3.ddr3_fifo_in.q[4] tb.dut.ddr3.ddr3_fifo_in.q[3] tb.dut.ddr3.ddr3_fifo_in.q[2] tb.dut.ddr3.ddr3_fifo_in.q[1] tb.dut.ddr3.ddr3_fifo_in.q[0]
+@28
+tb.dut.ddr3.ddr3_fifo_in.rdclk
+tb.dut.ddr3.ddr3_fifo_in.rdempty
+tb.dut.ddr3.ddr3_fifo_in.rdreq
+tb.dut.ddr3.ddr3_fifo_in.wrclk
+tb.dut.ddr3.ddr3_fifo_in.wrreq
+@200
+-
+@28
+tb.dut.ddr3.buffer_vld
+@c00022
+tb.dut.ddr3.buffer_data[127:0]
+@28
+(0)tb.dut.ddr3.buffer_data[127:0]
+(1)tb.dut.ddr3.buffer_data[127:0]
+(2)tb.dut.ddr3.buffer_data[127:0]
+(3)tb.dut.ddr3.buffer_data[127:0]
+(4)tb.dut.ddr3.buffer_data[127:0]
+(5)tb.dut.ddr3.buffer_data[127:0]
+(6)tb.dut.ddr3.buffer_data[127:0]
+(7)tb.dut.ddr3.buffer_data[127:0]
+(8)tb.dut.ddr3.buffer_data[127:0]
+(9)tb.dut.ddr3.buffer_data[127:0]
+(10)tb.dut.ddr3.buffer_data[127:0]
+(11)tb.dut.ddr3.buffer_data[127:0]
+(12)tb.dut.ddr3.buffer_data[127:0]
+(13)tb.dut.ddr3.buffer_data[127:0]
+(14)tb.dut.ddr3.buffer_data[127:0]
+(15)tb.dut.ddr3.buffer_data[127:0]
+(16)tb.dut.ddr3.buffer_data[127:0]
+(17)tb.dut.ddr3.buffer_data[127:0]
+(18)tb.dut.ddr3.buffer_data[127:0]
+(19)tb.dut.ddr3.buffer_data[127:0]
+(20)tb.dut.ddr3.buffer_data[127:0]
+(21)tb.dut.ddr3.buffer_data[127:0]
+(22)tb.dut.ddr3.buffer_data[127:0]
+(23)tb.dut.ddr3.buffer_data[127:0]
+(24)tb.dut.ddr3.buffer_data[127:0]
+(25)tb.dut.ddr3.buffer_data[127:0]
+(26)tb.dut.ddr3.buffer_data[127:0]
+(27)tb.dut.ddr3.buffer_data[127:0]
+(28)tb.dut.ddr3.buffer_data[127:0]
+(29)tb.dut.ddr3.buffer_data[127:0]
+(30)tb.dut.ddr3.buffer_data[127:0]
+(31)tb.dut.ddr3.buffer_data[127:0]
+(32)tb.dut.ddr3.buffer_data[127:0]
+(33)tb.dut.ddr3.buffer_data[127:0]
+(34)tb.dut.ddr3.buffer_data[127:0]
+(35)tb.dut.ddr3.buffer_data[127:0]
+(36)tb.dut.ddr3.buffer_data[127:0]
+(37)tb.dut.ddr3.buffer_data[127:0]
+(38)tb.dut.ddr3.buffer_data[127:0]
+(39)tb.dut.ddr3.buffer_data[127:0]
+(40)tb.dut.ddr3.buffer_data[127:0]
+(41)tb.dut.ddr3.buffer_data[127:0]
+(42)tb.dut.ddr3.buffer_data[127:0]
+(43)tb.dut.ddr3.buffer_data[127:0]
+(44)tb.dut.ddr3.buffer_data[127:0]
+(45)tb.dut.ddr3.buffer_data[127:0]
+(46)tb.dut.ddr3.buffer_data[127:0]
+(47)tb.dut.ddr3.buffer_data[127:0]
+(48)tb.dut.ddr3.buffer_data[127:0]
+(49)tb.dut.ddr3.buffer_data[127:0]
+(50)tb.dut.ddr3.buffer_data[127:0]
+(51)tb.dut.ddr3.buffer_data[127:0]
+(52)tb.dut.ddr3.buffer_data[127:0]
+(53)tb.dut.ddr3.buffer_data[127:0]
+(54)tb.dut.ddr3.buffer_data[127:0]
+(55)tb.dut.ddr3.buffer_data[127:0]
+(56)tb.dut.ddr3.buffer_data[127:0]
+(57)tb.dut.ddr3.buffer_data[127:0]
+(58)tb.dut.ddr3.buffer_data[127:0]
+(59)tb.dut.ddr3.buffer_data[127:0]
+(60)tb.dut.ddr3.buffer_data[127:0]
+(61)tb.dut.ddr3.buffer_data[127:0]
+(62)tb.dut.ddr3.buffer_data[127:0]
+(63)tb.dut.ddr3.buffer_data[127:0]
+(64)tb.dut.ddr3.buffer_data[127:0]
+(65)tb.dut.ddr3.buffer_data[127:0]
+(66)tb.dut.ddr3.buffer_data[127:0]
+(67)tb.dut.ddr3.buffer_data[127:0]
+(68)tb.dut.ddr3.buffer_data[127:0]
+(69)tb.dut.ddr3.buffer_data[127:0]
+(70)tb.dut.ddr3.buffer_data[127:0]
+(71)tb.dut.ddr3.buffer_data[127:0]
+(72)tb.dut.ddr3.buffer_data[127:0]
+(73)tb.dut.ddr3.buffer_data[127:0]
+(74)tb.dut.ddr3.buffer_data[127:0]
+(75)tb.dut.ddr3.buffer_data[127:0]
+(76)tb.dut.ddr3.buffer_data[127:0]
+(77)tb.dut.ddr3.buffer_data[127:0]
+(78)tb.dut.ddr3.buffer_data[127:0]
+(79)tb.dut.ddr3.buffer_data[127:0]
+(80)tb.dut.ddr3.buffer_data[127:0]
+(81)tb.dut.ddr3.buffer_data[127:0]
+(82)tb.dut.ddr3.buffer_data[127:0]
+(83)tb.dut.ddr3.buffer_data[127:0]
+(84)tb.dut.ddr3.buffer_data[127:0]
+(85)tb.dut.ddr3.buffer_data[127:0]
+(86)tb.dut.ddr3.buffer_data[127:0]
+(87)tb.dut.ddr3.buffer_data[127:0]
+(88)tb.dut.ddr3.buffer_data[127:0]
+(89)tb.dut.ddr3.buffer_data[127:0]
+(90)tb.dut.ddr3.buffer_data[127:0]
+(91)tb.dut.ddr3.buffer_data[127:0]
+(92)tb.dut.ddr3.buffer_data[127:0]
+(93)tb.dut.ddr3.buffer_data[127:0]
+(94)tb.dut.ddr3.buffer_data[127:0]
+(95)tb.dut.ddr3.buffer_data[127:0]
+(96)tb.dut.ddr3.buffer_data[127:0]
+(97)tb.dut.ddr3.buffer_data[127:0]
+(98)tb.dut.ddr3.buffer_data[127:0]
+(99)tb.dut.ddr3.buffer_data[127:0]
+(100)tb.dut.ddr3.buffer_data[127:0]
+(101)tb.dut.ddr3.buffer_data[127:0]
+(102)tb.dut.ddr3.buffer_data[127:0]
+(103)tb.dut.ddr3.buffer_data[127:0]
+(104)tb.dut.ddr3.buffer_data[127:0]
+(105)tb.dut.ddr3.buffer_data[127:0]
+(106)tb.dut.ddr3.buffer_data[127:0]
+(107)tb.dut.ddr3.buffer_data[127:0]
+(108)tb.dut.ddr3.buffer_data[127:0]
+(109)tb.dut.ddr3.buffer_data[127:0]
+(110)tb.dut.ddr3.buffer_data[127:0]
+(111)tb.dut.ddr3.buffer_data[127:0]
+(112)tb.dut.ddr3.buffer_data[127:0]
+(113)tb.dut.ddr3.buffer_data[127:0]
+(114)tb.dut.ddr3.buffer_data[127:0]
+(115)tb.dut.ddr3.buffer_data[127:0]
+(116)tb.dut.ddr3.buffer_data[127:0]
+(117)tb.dut.ddr3.buffer_data[127:0]
+(118)tb.dut.ddr3.buffer_data[127:0]
+(119)tb.dut.ddr3.buffer_data[127:0]
+(120)tb.dut.ddr3.buffer_data[127:0]
+(121)tb.dut.ddr3.buffer_data[127:0]
+(122)tb.dut.ddr3.buffer_data[127:0]
+(123)tb.dut.ddr3.buffer_data[127:0]
+(124)tb.dut.ddr3.buffer_data[127:0]
+(125)tb.dut.ddr3.buffer_data[127:0]
+(126)tb.dut.ddr3.buffer_data[127:0]
+(127)tb.dut.ddr3.buffer_data[127:0]
+@1401200
+-group_end
+@200
+-
+@28
+tb.dut.ddr3.o_membus_ack
+@22
+tb.dut.ddr3.o_membus_data[31:0]
+@200
+-
+-
 -DISPLAY
 @28
 tb.dut.shield.display.SCK
