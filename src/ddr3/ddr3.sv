@@ -10,7 +10,7 @@ module ddr3 (
   output logic [127:0]   ddr3_avl_wdata,       
   output logic           ddr3_avl_read_req,    
   output logic           ddr3_avl_write_req,   
-  output logic [0:0]     ddr3_avl_size,
+  output logic [8:0]     ddr3_avl_size,
 
   input  logic           i_membus_req,
   input  logic           i_membus_write,
@@ -23,28 +23,43 @@ module ddr3 (
   output logic [31:0]    o_membus_data
 );
 
+//Force 3 reads to get accurate data on the 3rd
+//still not sure why things are off
+logic [1:0] load_pump;
+logic       double_req;
+logic       double_ack;
 
 logic state_idle;
 logic state_flush;
-logic state_flush_pending;
 logic state_load;
 logic state_load_pending;
 logic state_update;
 
+logic [3:0] flush_cnt;
 
 logic             buffer_vld;
-logic [25:0]      buffer_addr;
-logic [3:0][31:0] buffer_data;
+logic [25:4]      buffer_addr;
+logic [127:0]     buffer_data;
 
 logic         ddr3_fifo_out_wrreq;
 logic         ddr3_fifo_out_rdreq;
 logic [127:0] ddr3_fifo_out_data;
 logic [25:0]  ddr3_fifo_out_addr;
 
+logic         ddr3_fifo_out_wrreq_q;
+logic         ddr3_fifo_out_rdreq_q;
+logic [127:0] ddr3_fifo_out_wdata_q;
+logic [25:0]  ddr3_fifo_out_addr_q;
+
 logic         ddr3_fifo_out_rdempty;
 logic         ddr3_fifo_out_rdack;
 
+logic         ddr3_avl_wait;
+logic         ddr3_avl_rd;
+logic         ddr3_avl_wr;
+
 logic         ddr3_fifo_in_rdack;
+logic         ddr3_fifo_in_wrreq;
 logic [189:0] ddr3_fifo_in_q;
 logic         ddr3_fifo_in_empty;
 
@@ -52,10 +67,11 @@ always_ff @(posedge clk)
   begin
   state_idle          <= '0;
   state_flush         <= '0;
-  state_flush_pending <= '0;
   state_load          <= '0;
   state_load_pending  <= '0;
   state_update        <= '0;
+
+  flush_cnt <= flush_cnt;
 
   buffer_vld  <= buffer_vld; 
   buffer_addr <= buffer_addr;
@@ -65,21 +81,17 @@ always_ff @(posedge clk)
   o_membus_data  <= i_membus_data;   
   ddr3_fifo_out_wrreq <= '0;
   ddr3_fifo_out_rdreq <= '0;
+  ddr3_fifo_out_data  <= ddr3_fifo_out_data;
+  ddr3_fifo_out_addr  <= ddr3_fifo_out_addr;
+  ddr3_fifo_in_rdack  <= '0;
 
-                  //o_membus_ack <= '1;
-                  //o_membus_data <= '0;
-
-                  //ddr3_fifo_out_wrreq <= i_membus_data_wr_mask;
-                  //ddr3_fifo_out_rdreq <= i_membus_data_rd_mask;
-                  //ddr3_fifo_out_data  <= {4{i_membus_data}};
-                  //ddr3_fifo_out_addr  <= i_membus_addr;
   case (1'b1)
     state_idle: begin
                 if(i_membus_req)
                   begin
                   if(buffer_vld)
                     begin
-                    if(buffer_addr == i_membus_addr[25:0])
+                    if(buffer_addr[25:4] == i_membus_addr[25:4])
                       begin
                       state_update <= '1;
                       end
@@ -99,36 +111,58 @@ always_ff @(posedge clk)
                   end
                 end
       state_flush: begin             
-                   ddr3_fifo_out_wrreq <= '1;
-                   buffer_vld <= '0;
-                   ddr3_fifo_out_data  <= buffer_data;
-                   ddr3_fifo_out_addr  <= buffer_addr;
-                   state_flush_pending <= '1;
+                   if(flush_cnt == 0)
+                     begin
+                     ddr3_fifo_out_wrreq <= '1;
+                     buffer_vld <= '0;
+                     ddr3_fifo_out_data  <= buffer_data;
+                     ddr3_fifo_out_addr  <= {buffer_addr[25:4],4'b0000};
+                     flush_cnt <= flush_cnt+1;
+                     state_flush <= '1;
+                     end
+                   else if(flush_cnt == 4'b1111)
+                     begin
+                     flush_cnt <= flush_cnt+1;
+                     state_load <= '1;
+                     end
+                   else
+                     begin
+                     flush_cnt <= flush_cnt+1;
+                     state_flush <= '1;
+                     end
                    end
-      state_flush_pending: begin             
-                           if(~ddr3_fifo_in_empty)
-                             begin
-                             ddr3_fifo_in_rdack <= '1;
-                             state_load <= '1;
-                             end
-                           else
-                             begin
-                             state_flush_pending <= '1;
-                             end
-                           end
       state_load: begin             
                   ddr3_fifo_out_rdreq <= '1;
-                  ddr3_fifo_out_addr  <= i_membus_addr;
-                  buffer_addr  <= i_membus_addr;
-                  state_load_pending <= '1;
+                  ddr3_fifo_out_addr  <= {i_membus_addr[25:4],4'b0000};
+                  buffer_addr  <= i_membus_addr[25:4];
+                  if(load_pump == 0)
+                    begin
+                    load_pump <= 0;
+                    state_load_pending <= '1;
+                    end
+                  else
+                    begin
+                    load_pump <= load_pump+1;
+                    state_load <= '1;
+                    end
                   end
       state_load_pending: begin             
                           if(~ddr3_fifo_in_empty)
                             begin
-                            ddr3_fifo_in_rdack <= '1;   
-                            buffer_vld <= '1;
-                            buffer_data = ddr3_fifo_in_q[127:0];
-                            state_update <= '1;
+                            if(load_pump == 0)
+                              begin
+                              ddr3_fifo_in_rdack <= '1;   
+                              buffer_vld <= '1;
+                              buffer_data <= ddr3_fifo_in_q[127:0];
+                              load_pump <= 0;
+                              state_update <= '1;
+                              end
+                            else
+                              begin
+                              ddr3_fifo_in_rdack <= '1;   
+                              load_pump <= load_pump+1;
+                              state_load_pending <= '1;
+                              end
                             end
                           else
                             begin
@@ -136,12 +170,26 @@ always_ff @(posedge clk)
                             end
                           end
       state_update: begin             
-                  case(i_membus_addr[5:4])
-                    2'b00: buffer_addr[31:0]   <= i_membus_data;
-                    2'b01: buffer_addr[63:32]  <= i_membus_data;
-                    2'b10: buffer_addr[95:64]  <= i_membus_data;
-                    2'b11: buffer_addr[127:96] <= i_membus_data;
-                  endcase
+                  o_membus_ack   <= '1;    
+                  if(i_membus_write)
+                    begin
+                    case(i_membus_addr[3:2])
+                      2'b00: buffer_data[31:0]   <= i_membus_data;
+                      2'b01: buffer_data[63:32]  <= i_membus_data;
+                      2'b10: buffer_data[95:64]  <= i_membus_data;
+                      2'b11: buffer_data[127:96] <= i_membus_data;
+                    endcase
+                    o_membus_data  <= i_membus_data;   
+                    end
+                  else
+                    begin
+                    case(i_membus_addr[3:2])
+                      2'b00: o_membus_data <= buffer_data[31:0]  ;
+                      2'b01: o_membus_data <= buffer_data[63:32] ;
+                      2'b10: o_membus_data <= buffer_data[95:64] ;
+                      2'b11: o_membus_data <= buffer_data[127:96];
+                    endcase
+                    end
                   state_idle <= '1;
                   end
       endcase
@@ -150,10 +198,12 @@ always_ff @(posedge clk)
       begin
       state_idle          <= '1;
       state_flush         <= '0;
-      state_flush_pending <= '0;
       state_load          <= '0;
       state_load_pending  <= '0;
       state_update        <= '0;
+
+      load_pump <= '0;
+      flush_cnt <= '0;
 
       buffer_vld  <= '0;
       buffer_addr <= '0;
@@ -164,19 +214,122 @@ always_ff @(posedge clk)
       end
   end
 
+logic ddr3_state_idle;
+logic ddr3_state_pulse;
+logic ddr3_state_recieve;
+logic [1:0] ddr3_cnt;
+
+assign ddr3_avl_wait = ~ddr3_avl_ready;
 always_ff @(posedge ddr3_clk)
   begin
 
-  ddr3_avl_addr      <= '0;  
-  ddr3_avl_wdata     <= '0;  
-  ddr3_avl_read_req  <= '0;  
-  ddr3_avl_write_req <= '0;  
-  ddr3_avl_size      <= '1;   
-  ddr3_fifo_out_rdack <= '0;
+  ddr3_state_idle     <= '0;
+  ddr3_state_pulse    <= '0;
+  ddr3_state_recieve <= '0;
 
-  if(~ddr3_fifo_out_rdempty & ddr3_avl_ready & ~ddr3_fifo_out_rdack) 
+  ddr3_avl_read_req   <= ddr3_avl_read_req;  
+  ddr3_avl_write_req  <= ddr3_avl_write_req;  
+  ddr3_avl_addr       <= ddr3_avl_addr;
+  ddr3_avl_wdata      <= ddr3_avl_wdata; 
+  ddr3_avl_size       <= 9'd1;   
+  ddr3_fifo_out_rdack <= '0;
+  ddr3_fifo_in_wrreq  <= '0;
+
+  case(1'b1)
+		ddr3_state_idle: begin
+										 if(~ddr3_fifo_out_rdempty)
+											 begin
+											 ddr3_fifo_out_rdack <= '1;
+                       ddr3_avl_read_req   <= ddr3_fifo_out_rdreq_q;  
+                       ddr3_avl_write_req  <= ddr3_fifo_out_wrreq_q;  
+                       ddr3_avl_addr       <= ddr3_fifo_out_addr_q;
+                       ddr3_avl_wdata      <= ddr3_fifo_out_wdata_q; 
+											 ddr3_cnt <= '0;
+											 ddr3_state_pulse <= '1;
+											 end
+										 else
+										   begin
+                       ddr3_state_idle <= '1;
+                       end
+                     end
+    ddr3_state_pulse: begin
+                      if(ddr3_cnt == 2) 
+                        begin
+                        ddr3_cnt <= '0;
+                        ddr3_avl_read_req   <= '0;  
+                        ddr3_avl_write_req  <= '0;  
+                        if(ddr3_avl_read_req)
+                          begin
+                          ddr3_state_recieve <= '1;
+                          end
+                        else
+                          begin
+                          ddr3_state_idle <= '1;
+                          end
+                        end
+                      else
+                        begin
+                        ddr3_cnt <= ddr3_cnt + 1;
+                        ddr3_state_pulse <= '1;
+                        end
+                      end
+   ddr3_state_recieve: begin
+                       if(ddr3_avl_rdata_valid)
+                         begin
+                         if(ddr3_cnt == 2)
+                           begin
+                           ddr3_fifo_in_wrreq <= '1;
+                           ddr3_state_idle <= '1;
+                           end
+                         else
+                           begin
+                           ddr3_cnt <= ddr3_cnt + 1;
+                           ddr3_state_recieve <= '1;
+                           end
+                         end
+                       else
+                         begin
+                         ddr3_state_recieve <= '1;
+                         end
+                       end
+  endcase
+
+//    double_ack <= double_ack;
+//    double_req <= double_req;
+//
+//  if(~ddr3_fifo_out_rdempty & ddr3_avl_wait & ~ddr3_fifo_out_rdack) 
+//    begin
+//    ddr3_fifo_out_rdack <= '1;
+//    double_ack <= '1;
+//    ddr3_avl_write_req <= ddr3_fifo_out_wrreq_q;
+//    ddr3_avl_read_req  <= ddr3_fifo_out_rdreq_q;
+//    ddr3_avl_addr      <= ddr3_fifo_out_addr_q;
+//    ddr3_avl_wdata     <= ddr3_fifo_out_wdata_q; 
+//    end
+//  if(ddr3_fifo_out_rdack  & double_ack)
+//    begin
+//    double_ack <= '0;
+//    ddr3_avl_write_req <= ddr3_fifo_out_wrreq_q;
+//    ddr3_avl_read_req  <= ddr3_fifo_out_rdreq_q;
+//    ddr3_avl_addr      <= ddr3_fifo_out_addr_q;
+//    ddr3_avl_wdata     <= ddr3_fifo_out_wdata_q; 
+//    end
+//
+//  if( ddr3_fifo_out_wrreq | ddr3_fifo_out_rdreq )
+//    begin 
+//    double_req <= '1;
+//    end
+//  if(double_req)
+//    begin 
+//    double_req <= '0;
+//    end
+
+  if(rst)
     begin
-    ddr3_fifo_out_rdack <= '1;
+    ddr3_state_idle     <= '1;
+    ddr3_state_pulse    <= '0;
+    ddr3_state_recieve <= '0;
+		ddr3_cnt <= '0;
     end
 
   end
@@ -191,11 +344,11 @@ ddr3_fifo ddr3_fifo_out (
   .rdclk   ( ddr3_clk ),
   .rdreq   ( ddr3_fifo_out_rdack ),
   .wrclk   ( clk ),
-  .wrreq   ( ddr3_fifo_out_wrreq ),
-  .q       ( {ddr3_avl_wr,
-              ddr3_avl_rd,
-              ddr3_avl_addr,
-              ddr3_avl_wdata} ),
+  .wrreq   ( (ddr3_fifo_out_wrreq | ddr3_fifo_out_rdreq) ),
+  .q       ( {ddr3_fifo_out_wrreq_q,
+              ddr3_fifo_out_rdreq_q,
+              ddr3_fifo_out_addr_q,
+              ddr3_fifo_out_wdata_q} ),
   .rdempty ( ddr3_fifo_out_rdempty )
 );
 
@@ -205,7 +358,7 @@ ddr3_fifo ddr3_fifo_in (
   .rdclk   ( clk ),
   .rdreq   ( ddr3_fifo_in_rdack ),
   .wrclk   ( ddr3_clk ),
-  .wrreq   ( ddr3_avl_rdata_valid ),
+  .wrreq   ( ddr3_fifo_in_wrreq ),
   .q       ( ddr3_fifo_in_q ),
   .rdempty ( ddr3_fifo_in_empty )
 );

@@ -55,7 +55,7 @@ logic [127:0] ddr3_avl_rdata;
 logic [127:0] ddr3_avl_wdata;       
 logic         ddr3_avl_read_req;    
 logic         ddr3_avl_write_req;   
-logic [0:0]   ddr3_avl_size;        
+logic [8:0]   ddr3_avl_size;        
 
 logic clk;
 logic rst;
@@ -191,6 +191,18 @@ de10nano dut (
 .rst
 );
 
+ddr3_model ddr3 (
+  .clk                  (DDR3_CLK),
+  .ddr3_avl_ready       (ddr3_avl_ready),       
+  .ddr3_avl_addr        (ddr3_avl_addr),        
+  .ddr3_avl_rdata_valid (ddr3_avl_rdata_valid), 
+  .ddr3_avl_rdata       (ddr3_avl_rdata),       
+  .ddr3_avl_wdata       (ddr3_avl_wdata),       
+  .ddr3_avl_read_req    (ddr3_avl_read_req),    
+  .ddr3_avl_write_req   (ddr3_avl_write_req),   
+  .ddr3_avl_size        (ddr3_avl_size)        
+);
+
 spi_sd_model sd (
   .rstn  (ARDUINO_RESET_N),
   .ncs   (SD_CS),
@@ -242,9 +254,6 @@ initial
   DDR3_CLK     = 0;
   KEY = '1;
   ADC_SDO = '0;
-  ddr3_avl_ready = '1;       
-  ddr3_avl_rdata_valid = '0; 
-  ddr3_avl_rdata = '0;       
   reset_en = '1;
   reset_n = '1;
   #20
