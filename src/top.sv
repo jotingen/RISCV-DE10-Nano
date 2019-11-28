@@ -1,4 +1,4 @@
-module de10nano(
+module top (
 
 //////////// CLOCK //////////
 input  logic           FPGA_CLK1_50,

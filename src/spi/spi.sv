@@ -48,22 +48,6 @@ always_ff @(posedge clk)
   data_cnt <= data_cnt;
 
   data_ndx = bytes*8-data_cnt - 1;
-  //if(data_cnt == 3'b000)
-  //  data_ndx = 7;
-  //if(data_cnt == 3'b001)
-  //  data_ndx = 6;
-  //if(data_cnt == 3'b010)
-  //  data_ndx = 5;
-  //if(data_cnt == 3'b011)
-  //  data_ndx = 4;
-  //if(data_cnt == 3'b100)
-  //  data_ndx = 3;
-  //if(data_cnt == 3'b101)
-  //  data_ndx = 2;
-  //if(data_cnt == 3'b110)
-  //  data_ndx = 1;
-  //if(data_cnt == 3'b111)
-  //  data_ndx = 0;
 
   if(sck_cnt==0)
   begin

@@ -45,12 +45,12 @@ set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:41:47 AUGUST 03,2019"
 set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output/quartus
-set_global_assignment -name QIP_FILE src/ADC/synthesis/ADC.qip
 set_global_assignment -name SDC_FILE DE10Nano.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE src/riscv/riscv_pkg.sv
 set_global_assignment -name SIGNALTAP_FILE DE10Nano.stp
 set_global_assignment -name CDF_FILE DE10NanoFast.cdf
-set_global_assignment -name QIP_FILE src/st7735r/fifo.qip
+set_global_assignment -name QIP_FILE src/de10nano/ADC/synthesis/ADC.qip
+set_global_assignment -name QIP_FILE src/adafruit/st7735r/fifo.qip
 set_global_assignment -name QIP_FILE src/quartus/multiplier/multiplier.qip
 set_global_assignment -name QIP_FILE src/quartus/multiplier_unsigned/multiplier_unsigned.qip
 set_global_assignment -name QIP_FILE src/quartus/divider/divider.qip
@@ -58,7 +58,7 @@ set_global_assignment -name QIP_FILE src/quartus/divider_unsigned/divider_unsign
 set_global_assignment -name QIP_FILE src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.qip
 set_global_assignment -name QIP_FILE src/quartus/display_buffer/display_buffer.qip
 set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
-set_global_assignment -name QIP_FILE src/ddr3/ddr3_fifo.qip
+set_global_assignment -name QIP_FILE src/de10nano/ddr3/ddr3_fifo.qip
 
 # Pin & Location Assignments
 # ==========================
@@ -173,7 +173,7 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 # Analysis & Synthesis Assignments
 # ================================
 set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name TOP_LEVEL_ENTITY de10nano
+set_global_assignment -name TOP_LEVEL_ENTITY top
 set_global_assignment -name DEVICE_FILTER_PACKAGE UFBGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 672
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 7
@@ -183,19 +183,6 @@ set_global_assignment -name OPTIMIZATION_TECHNIQUE SPEED
 set_global_assignment -name ADV_NETLIST_OPT_SYNTH_WYSIWYG_REMAP ON
 set_global_assignment -name MUX_RESTRUCTURE OFF
 set_global_assignment -name SYNTHESIS_EFFORT FAST
-set_global_assignment -name SEARCH_PATH src/ddr3
-set_global_assignment -name SEARCH_PATH ip/terasic_hps_ddr3
-set_global_assignment -name SEARCH_PATH src
-set_global_assignment -name SEARCH_PATH src/quartus
-set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
-set_global_assignment -name SEARCH_PATH src/quartus/ram_1r1w_64kbx32b
-set_global_assignment -name SEARCH_PATH src/quartus/pll
-set_global_assignment -name SEARCH_PATH src/riscv
-set_global_assignment -name SEARCH_PATH src/mmc
-set_global_assignment -name SEARCH_PATH src/mem
-set_global_assignment -name SEARCH_PATH src/shield
-set_global_assignment -name SEARCH_PATH src/st7735r
-set_global_assignment -name SEARCH_PATH src/sdcard
 
 # Fitter Assignments
 # ==================
@@ -1641,5 +1628,24 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
 
-set_global_assignment -name SLD_FILE db/DE10Nano_auto_stripped.stp
+
+set_global_assignment -name SEARCH_PATH src/spi
+set_global_assignment -name SEARCH_PATH src/de10nano/ddr3
+set_global_assignment -name SEARCH_PATH src/adafruit/st7735r
+set_global_assignment -name SEARCH_PATH src/adafruit
+set_global_assignment -name SEARCH_PATH ip/terasic_hps_ddr3
+set_global_assignment -name SEARCH_PATH src
+set_global_assignment -name SEARCH_PATH src/ddr3
+set_global_assignment -name SEARCH_PATH src/de10nano
+set_global_assignment -name SEARCH_PATH src/de10nano/st7735r
+set_global_assignment -name SEARCH_PATH src/mem
+set_global_assignment -name SEARCH_PATH src/mmc
+set_global_assignment -name SEARCH_PATH src/quartus
+set_global_assignment -name SEARCH_PATH src/quartus/pll
+set_global_assignment -name SEARCH_PATH src/quartus/ram_1r1w_64kbx32b
+set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
+set_global_assignment -name SEARCH_PATH src/riscv
+set_global_assignment -name SEARCH_PATH src/sdcard
+set_global_assignment -name SEARCH_PATH src/shield
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SLD_FILE db/DE10Nano_auto_stripped.stp
