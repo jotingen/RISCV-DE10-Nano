@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "../lib/csr.h"
-#include "../lib/display.h"
-#include "../lib/rand.h"
+#include "../../lib/csr.h"
+#include "../../lib/display.h"
+#include "../../lib/rand.h"
 
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 

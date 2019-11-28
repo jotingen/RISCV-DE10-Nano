@@ -341,7 +341,7 @@ void     sdcard_read(uint8_t * data, uint32_t addr) {
 
   printSDMsg(message);
   console_putc('\n');
-  display_write();
+  //display_write();
 
   rsp = sdcard_cmd(message,1,1);
   sdcard_rsp(rsp_arr, 1, rsp);
@@ -349,7 +349,7 @@ void     sdcard_read(uint8_t * data, uint32_t addr) {
   console_puts("  ");
   printSDResult(rsp,1);
   console_putc('\n');
-  display_write();
+  //display_write();
 
   SD_printR1(rsp_arr[0]);
 
@@ -361,7 +361,7 @@ void     sdcard_read(uint8_t * data, uint32_t addr) {
     data[i+3] = data_out >> 24;
   }
   console_puts("Read data captured\n");
-  display_write();
+  //display_write();
   return;
 }
 
