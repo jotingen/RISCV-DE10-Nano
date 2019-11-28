@@ -23,12 +23,6 @@ module ddr3 (
   output logic [31:0]    o_membus_data
 );
 
-//Force 3 reads to get accurate data on the 3rd
-//still not sure why things are off
-logic [1:0] load_pump;
-logic       double_req;
-logic       double_ack;
-
 logic state_idle;
 logic state_flush;
 logic state_load;
@@ -135,34 +129,15 @@ always_ff @(posedge clk)
                   ddr3_fifo_out_rdreq <= '1;
                   ddr3_fifo_out_addr  <= {i_membus_addr[25:4],4'b0000};
                   buffer_addr  <= i_membus_addr[25:4];
-                  if(load_pump == 0)
-                    begin
-                    load_pump <= 0;
-                    state_load_pending <= '1;
-                    end
-                  else
-                    begin
-                    load_pump <= load_pump+1;
-                    state_load <= '1;
-                    end
+                  state_load_pending <= '1;
                   end
       state_load_pending: begin             
                           if(~ddr3_fifo_in_empty)
                             begin
-                            if(load_pump == 0)
-                              begin
-                              ddr3_fifo_in_rdack <= '1;   
-                              buffer_vld <= '1;
-                              buffer_data <= ddr3_fifo_in_q[127:0];
-                              load_pump <= 0;
-                              state_update <= '1;
-                              end
-                            else
-                              begin
-                              ddr3_fifo_in_rdack <= '1;   
-                              load_pump <= load_pump+1;
-                              state_load_pending <= '1;
-                              end
+                            ddr3_fifo_in_rdack <= '1;   
+                            buffer_vld <= '1;
+                            buffer_data <= ddr3_fifo_in_q[127:0];
+                            state_update <= '1;
                             end
                           else
                             begin
@@ -202,7 +177,6 @@ always_ff @(posedge clk)
       state_load_pending  <= '0;
       state_update        <= '0;
 
-      load_pump <= '0;
       flush_cnt <= '0;
 
       buffer_vld  <= '0;
@@ -217,6 +191,8 @@ always_ff @(posedge clk)
 logic ddr3_state_idle;
 logic ddr3_state_pulse;
 logic ddr3_state_recieve;
+//Force 3 reads/writes to get accurate data back on the 3rd
+//still not sure why things are off, maybe ddr3 clock is unnnecessary
 logic [1:0] ddr3_cnt;
 
 assign ddr3_avl_wait = ~ddr3_avl_ready;
@@ -293,36 +269,6 @@ always_ff @(posedge ddr3_clk)
                          end
                        end
   endcase
-
-//    double_ack <= double_ack;
-//    double_req <= double_req;
-//
-//  if(~ddr3_fifo_out_rdempty & ddr3_avl_wait & ~ddr3_fifo_out_rdack) 
-//    begin
-//    ddr3_fifo_out_rdack <= '1;
-//    double_ack <= '1;
-//    ddr3_avl_write_req <= ddr3_fifo_out_wrreq_q;
-//    ddr3_avl_read_req  <= ddr3_fifo_out_rdreq_q;
-//    ddr3_avl_addr      <= ddr3_fifo_out_addr_q;
-//    ddr3_avl_wdata     <= ddr3_fifo_out_wdata_q; 
-//    end
-//  if(ddr3_fifo_out_rdack  & double_ack)
-//    begin
-//    double_ack <= '0;
-//    ddr3_avl_write_req <= ddr3_fifo_out_wrreq_q;
-//    ddr3_avl_read_req  <= ddr3_fifo_out_rdreq_q;
-//    ddr3_avl_addr      <= ddr3_fifo_out_addr_q;
-//    ddr3_avl_wdata     <= ddr3_fifo_out_wdata_q; 
-//    end
-//
-//  if( ddr3_fifo_out_wrreq | ddr3_fifo_out_rdreq )
-//    begin 
-//    double_req <= '1;
-//    end
-//  if(double_req)
-//    begin 
-//    double_req <= '0;
-//    end
 
   if(rst)
     begin
