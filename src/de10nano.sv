@@ -38,6 +38,12 @@ output logic           ADC_SCK,
 output logic           ADC_SDI,
 input  logic           ADC_SDO,
 
+//////////// GPIO_0, GPIO connect to GPIO Default //////////
+inout  logic  [35:0]   GPIO_0,
+
+//////////// GPIO_1, GPIO connect to GPIO Default //////////
+inout  logic  [35:0]   GPIO_1,
+
 //////////// ARDUINO //////////
 //inout  logic  [15:0]   ARDUINO_IO,
 output  SD_CS, 
@@ -534,7 +540,7 @@ mmc mmc_data (
   .sdcard_mmc_bus_data           (sdcard_mmc_bus_data        )
 );
 
-mem #(.SIZE(17),.ADDR_BASE(32'h00000000)) mem (
+mem mem (
   .clk         (clk),
   .rst         (rst),
 
@@ -579,23 +585,6 @@ ddr3 ddr3 (
   .o_membus_ack           (ddr3_mmc_bus_ack),   
   .o_membus_data          (ddr3_mmc_bus_data)
 );
-//Avalon_bus_RW_Test DDR3A_Verify(
-//		.iCLK(DDR3_CLK),
-//		.iRST_n(KEY[0]),
-//		.insert_error('0),
-//		
-//		.avl_waitrequest(ddr3_avl_ready),                 
-//		.avl_address(ddr3_avl_addr),                      
-//		.avl_readdatavalid(ddr3_avl_rdata_valid),                 
-//		.avl_readdata(ddr3_avl_rdata),                      
-//		.avl_writedata(ddr3_avl_wdata),                     
-//		.avl_read(ddr3_avl_read_req),                          
-//		.avl_write(ddr3_avl_write_req),    
-//		.avl_size(ddr3_avl_size),
-//		.drv_status_pass(),
-//		.drv_status_fail(),
-//		.drv_status_test_complete()
-//);
 
 led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
   .clk         (clk),
