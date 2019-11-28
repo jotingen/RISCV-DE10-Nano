@@ -4,6 +4,7 @@ output
 
 db
 incremental_db
+/hps_sdram_p0_summary.csv
 /c5_pin_model_dump.txt
 /*.asm.rpt
 /*.done
