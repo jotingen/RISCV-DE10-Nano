@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "../lib/csr.h"
-#include "../lib/display.h"
-#include "../lib/rand.h"
+#include "../../lib/csr.h"
+#include "../../lib/display.h"
+#include "../../lib/rand.h"
 
 #define DISPLAY_CMD     (*((volatile unsigned int *) (0xC2000004)))
 #define DISPLAY_DATA    (*((volatile unsigned int *) (0xC2000008)))
