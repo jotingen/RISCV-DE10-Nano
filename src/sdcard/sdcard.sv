@@ -1,6 +1,4 @@
-module sdcard #(
-  parameter integer      SIZE = 2
-) (
+module sdcard  (
 input  logic clk,
 input  logic rst,
 input  logic arst,
@@ -48,6 +46,7 @@ logic [31:0] rspArrived;
 logic [47:0] rsp;
 logic             data_capture;
 logic [512*8+16-1:0] data;
+logic [8:0] data_pending_timeout;
 logic [8:0] data_32b_out;
 
 logic [31:0] dataIn;
@@ -91,6 +90,7 @@ always_ff @(posedge clk)
   rsp         <= rsp;         
   data        <= data;
   data_32b_out<= data_32b_out;
+  data_pending_timeout<= data_pending_timeout;
   dataIn      <= dataIn;      
   dataArrived <= dataArrived; 
   dataOut     <= dataOut;     
@@ -180,12 +180,20 @@ always_ff @(posedge clk)
                    //Data
                    'h0007:  begin 
                             o_bus_ack             <= '1;
-                            if(data_32b_out < 'd128) 
+                            if(data_32b_out < 'd129) 
                               begin
                               for(int i = 0; i < 8; i++)
-                                begin
-                                o_bus_data[i+24]     <= i_bus_data_rd_mask ? data[31-i] : '0; //Reverse bytes to compensate for stream
-                                o_bus_data[i+16]     <= i_bus_data_rd_mask ? data[23-i] : '0; //Reverse bytes to compensate for stream
+                                begin            ;
+                                if(data_32b_out == 'd128)
+                                  begin
+                                  o_bus_data[i+24]     <= '0;
+                                  o_bus_data[i+16]     <= '0;
+                                  end
+                                else
+                                  begin
+                                  o_bus_data[i+24]     <= i_bus_data_rd_mask ? data[31-i] : '0; //Reverse bytes to compensate for stream
+                                  o_bus_data[i+16]     <= i_bus_data_rd_mask ? data[23-i] : '0; //Reverse bytes to compensate for stream
+                                  end
                                 o_bus_data[i+8]      <= i_bus_data_rd_mask ? data[15-i] : '0; //Reverse bytes to compensate for stream
                                 o_bus_data[i+0]      <= i_bus_data_rd_mask ? data[7-i]  : '0; //Reverse bytes to compensate for stream
                                 end
@@ -228,18 +236,18 @@ always_ff @(posedge clk)
                         if(bits == 'd0)
                           begin
                           state_rsp_pending    <= '1;
-		          end
+		                      end
                         else
                           begin
                           MOSI <= cmd[bits - 'd1];
                           bits <= bits - 'd1;
                           state_cmd_sending    <= '1;
-		          end
-			end
+                  		    end
+                  			end
                       else
                         begin
                         state_cmd_sending    <= '1;
-			end
+                  			end
                       end
   state_rsp_pending : begin
                       if(sck_put)
@@ -250,15 +258,15 @@ always_ff @(posedge clk)
                           rsp[0] <= '0;
                           state_rsp_recieved <= '1;
                           end
-			else
-			  begin
+                  			else
+                  			  begin
                           state_rsp_pending    <= '1;
                           end
-			end
+                  			end
                       else
                         begin
                         state_rsp_pending    <= '1;
-			end
+                  			end
                       end
   state_rsp_recieved : begin
                       if(sck_put)
@@ -268,12 +276,14 @@ always_ff @(posedge clk)
                           begin
                           if(data_capture)
                             begin
-                            data <= '0;
+                            data <= '1;
+                            data_pending_timeout <= '0;
+                            data_32b_out<= '0;
                             rspArrived <= '1;  
                             state_data_pending <= '1;
                             end
-			  else
-			    begin
+			                    else
+			                      begin
                             CS <= '1;
                             SPIDone    <= '1;
                             rspArrived <= '1;  
@@ -290,13 +300,19 @@ always_ff @(posedge clk)
                       else
                         begin
                         state_rsp_recieved <= '1;
-			end
+			                  end
                       end
   state_data_pending : begin
                       if(sck_put)
                         begin
                        data <= {MISO,data[512*8+16-1:1]};
-                       if({MISO,data[512*8+16-1:512*8+16-1-6]} == 'h7F)
+                       if(data_pending_timeout == '1)
+                         begin
+                           SPIDone     <= '1;
+                           state_idle <= '1;
+                           o_bus_ack  <= '1;
+                         end
+                       else if({MISO,data[512*8+16-1:512*8+16-1-6]} == 'h7F)
                          begin
                          bits <= 'd1;
                          state_data_recieved <= '1;
@@ -304,12 +320,13 @@ always_ff @(posedge clk)
                        else
                          begin
                          state_data_pending <= '1;
+                         data_pending_timeout <= data_pending_timeout + 'd1;
                          end
                         end
                       else
                         begin
                         state_data_pending <= '1;
-			end
+			                  end
                        end
   state_data_recieved : begin
                       if(sck_put)
@@ -357,7 +374,9 @@ always_ff @(posedge clk)
     cmd         <= '0;
     rspArrived  <= '0;
     rsp         <= '0;
-    data        <= '0;
+    data        <= '1;
+    data_32b_out<= '0;
+    data_pending_timeout <= '0;
     dataIn      <= '0;
     dataArrived <= '0;
     dataOut     <= '0;

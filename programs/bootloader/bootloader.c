@@ -32,7 +32,7 @@ void paint_pixel(int row, int col, uint8_t * cell) {
 }
 
 void main(void) {
-  uint8_t sdcard_data[512];
+  static uint8_t sdcard_data[514];
 
   static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3014000;
 
@@ -76,38 +76,20 @@ void main(void) {
   display_on();
   LED = 6;
 
-  //display_write();
-  LED = 5;
-
-  sdcard_on();
+  display_write();
   LED = 7;
 
-  //display_write();
+  sdcard_on();
   LED = 8;
 
-    console_puts("Data Read Test\n");
   //display_write();
   LED = 9;
-  sdcard_read(sdcard_data,0);
+
+  console_puts("Data Read Test\n");
+  //display_write();
   LED = 10;
-    console_puts(uint8_to_hex(sdcard_data[0]));
-    console_puts(uint8_to_hex(sdcard_data[1]));
-    console_puts(uint8_to_hex(sdcard_data[2]));
-    console_puts(uint8_to_hex(sdcard_data[3]));
-    console_puts(uint8_to_hex(sdcard_data[4]));
-    console_puts(uint8_to_hex(sdcard_data[5]));
-    console_puts(uint8_to_hex(sdcard_data[6]));
-    console_puts(uint8_to_hex(sdcard_data[7]));
-    console_putc('\n');
-    console_puts(uint8_to_hex(sdcard_data[504]));
-    console_puts(uint8_to_hex(sdcard_data[505]));
-    console_puts(uint8_to_hex(sdcard_data[506]));
-    console_puts(uint8_to_hex(sdcard_data[507]));
-    console_puts(uint8_to_hex(sdcard_data[508]));
-    console_puts(uint8_to_hex(sdcard_data[509]));
-    console_puts(uint8_to_hex(sdcard_data[510]));
-    console_puts(uint8_to_hex(sdcard_data[511]));
-    console_putc('\n');
+  sdcard_read(sdcard_data,512*0);
+  sdcard_read(sdcard_data,512*128);
   //display_write();
 
   while(1);
