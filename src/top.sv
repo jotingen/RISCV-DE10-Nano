@@ -9,22 +9,22 @@ input  logic           FPGA_CLK3_50,
 output logic  [7:0]    LED,
 
 //////////// HPS //////////
-output		    [14:0]		HPS_DDR3_ADDR,
-output		     [2:0]		HPS_DDR3_BA,
-output		          		HPS_DDR3_CAS_N,
-output		          		HPS_DDR3_CKE,
-output		          		HPS_DDR3_CK_N,
-output		          		HPS_DDR3_CK_P,
-output		          		HPS_DDR3_CS_N,
-output		     [3:0]		HPS_DDR3_DM,
-inout 		    [31:0]		HPS_DDR3_DQ,
-inout 		     [3:0]		HPS_DDR3_DQS_N,
-inout 		     [3:0]		HPS_DDR3_DQS_P,
-output		          		HPS_DDR3_ODT,
-output		          		HPS_DDR3_RAS_N,
-output		          		HPS_DDR3_RESET_N,
-input 		          		HPS_DDR3_RZQ,
-output		          		HPS_DDR3_WE_N,
+output logic [14:0]    HPS_DDR3_ADDR,
+output logic  [2:0]    HPS_DDR3_BA,
+output logic           HPS_DDR3_CAS_N,
+output logic           HPS_DDR3_CKE,
+output logic           HPS_DDR3_CK_N,
+output logic           HPS_DDR3_CK_P,
+output logic           HPS_DDR3_CS_N,
+output logic  [3:0]    HPS_DDR3_DM,
+inout  logic [31:0]    HPS_DDR3_DQ,
+inout  logic  [3:0]    HPS_DDR3_DQS_N,
+inout  logic  [3:0]    HPS_DDR3_DQS_P,
+output logic           HPS_DDR3_ODT,
+output logic           HPS_DDR3_RAS_N,
+output logic           HPS_DDR3_RESET_N,
+input  logic           HPS_DDR3_RZQ,
+output logic           HPS_DDR3_WE_N,
 
 //////////// KEY //////////
 input  logic  [1:0]    KEY,
@@ -45,14 +45,22 @@ inout  logic  [35:0]   GPIO_0,
 inout  logic  [35:0]   GPIO_1,
 
 //////////// ARDUINO //////////
-//inout  logic  [15:0]   ARDUINO_IO,
-output  SD_CS, 
-output  TFT_DC,
-output  TFT_CS,
-output  MOSI,  
-input   MISO,  
-output  SCK,   
-output  GND,   
+inout  logic           ARDUINO_IO_00,
+inout  logic           ARDUINO_IO_01,
+inout  logic           ARDUINO_IO_02,
+inout  logic           ARDUINO_IO_03,
+inout  logic           ARDUINO_IO_04,
+inout  logic           ARDUINO_IO_05,
+inout  logic           ARDUINO_IO_06,
+inout  logic           ARDUINO_IO_07,
+inout  logic           ARDUINO_IO_08,
+inout  logic           ARDUINO_IO_09,
+inout  logic           ARDUINO_IO_10,
+inout  logic           ARDUINO_IO_11,
+inout  logic           ARDUINO_IO_12,
+inout  logic           ARDUINO_IO_13,
+inout  logic           ARDUINO_IO_14,
+inout  logic           ARDUINO_IO_15,
 
 inout  logic           ARDUINO_RESET_N,
 
@@ -194,15 +202,15 @@ logic  [3:0]    mmc_keys_bus_data_wr_mask;
 logic           keys_mmc_bus_ack;
 logic [31:0]    keys_mmc_bus_data;
 
-logic           mmc_joystick_bus_req;
-logic           mmc_joystick_bus_write;
-logic [31:0]    mmc_joystick_bus_addr;
-logic [31:0]    mmc_joystick_bus_data;
-logic  [3:0]    mmc_joystick_bus_data_rd_mask;
-logic  [3:0]    mmc_joystick_bus_data_wr_mask;
+logic           mmc_touchpad_bus_req;
+logic           mmc_touchpad_bus_write;
+logic [31:0]    mmc_touchpad_bus_addr;
+logic [31:0]    mmc_touchpad_bus_data;
+logic  [3:0]    mmc_touchpad_bus_data_rd_mask;
+logic  [3:0]    mmc_touchpad_bus_data_wr_mask;
 
-logic           joystick_mmc_bus_ack;
-logic [31:0]    joystick_mmc_bus_data;
+logic           touchpad_mmc_bus_ack;
+logic [31:0]    touchpad_mmc_bus_data;
 
 logic           mmc_display_bus_req;
 logic           mmc_display_bus_write;
@@ -234,6 +242,16 @@ logic  [3:0]    mmc_consolebuff_bus_data_wr_mask;
 logic           consolebuff_mmc_bus_ack;
 logic [31:0]    consolebuff_mmc_bus_data;
 
+logic           mmc_uart_bus_req;
+logic           mmc_uart_bus_write;
+logic [31:0]    mmc_uart_bus_addr;
+logic [31:0]    mmc_uart_bus_data;
+logic  [3:0]    mmc_uart_bus_data_rd_mask;
+logic  [3:0]    mmc_uart_bus_data_wr_mask;
+
+logic           uart_mmc_bus_ack;
+logic [31:0]    uart_mmc_bus_data;
+
 logic           mmc_sdcard_bus_req;
 logic           mmc_sdcard_bus_write;
 logic [31:0]    mmc_sdcard_bus_addr;
@@ -262,11 +280,13 @@ logic arst_3;
 
 always @(posedge clk)
   begin
-  arst_1 <= arst;
+  //arst_1 <= arst;  //Reset pin got shocked and is burned out, using key0
+  arst_1 <= ~KEY[0];
   arst_2 <= arst_1;
   arst_3 <= arst_2;
   rst    <= arst_3;
   end  
+
   
 //PLL pll (
 //  .inclk0 (FPGA_CLK1_50),
@@ -424,6 +444,16 @@ mmc mmc_inst (
   .consolebuff_mmc_bus_ack          ('0                           ),
   .consolebuff_mmc_bus_data         ('0                           ),
 
+  .mmc_uart_bus_req          (                             ),
+  .mmc_uart_bus_write        (                             ),
+  .mmc_uart_bus_addr         (                             ),
+  .mmc_uart_bus_data         (                             ),
+  .mmc_uart_bus_data_rd_mask (                             ),
+  .mmc_uart_bus_data_wr_mask (                             ),
+                                                                 
+  .uart_mmc_bus_ack          ('0                           ),
+  .uart_mmc_bus_data         ('0                           ),
+
   .mmc_sdcard_bus_req            (                             ),
   .mmc_sdcard_bus_write          (                             ),
   .mmc_sdcard_bus_addr           (                             ),
@@ -489,15 +519,15 @@ mmc mmc_data (
   .keys_mmc_bus_ack              (keys_mmc_bus_ack             ),
   .keys_mmc_bus_data             (keys_mmc_bus_data            ),
                                                                  
-  .mmc_joystick_bus_req          (mmc_joystick_bus_req         ),
-  .mmc_joystick_bus_write        (mmc_joystick_bus_write       ),
-  .mmc_joystick_bus_addr         (mmc_joystick_bus_addr        ),
-  .mmc_joystick_bus_data         (mmc_joystick_bus_data        ),
-  .mmc_joystick_bus_data_rd_mask (mmc_joystick_bus_data_rd_mask),
-  .mmc_joystick_bus_data_wr_mask (mmc_joystick_bus_data_wr_mask),
+  .mmc_joystick_bus_req          (mmc_touchpad_bus_req         ),
+  .mmc_joystick_bus_write        (mmc_touchpad_bus_write       ),
+  .mmc_joystick_bus_addr         (mmc_touchpad_bus_addr        ),
+  .mmc_joystick_bus_data         (mmc_touchpad_bus_data        ),
+  .mmc_joystick_bus_data_rd_mask (mmc_touchpad_bus_data_rd_mask),
+  .mmc_joystick_bus_data_wr_mask (mmc_touchpad_bus_data_wr_mask),
                                                                  
-  .joystick_mmc_bus_ack          (joystick_mmc_bus_ack         ),
-  .joystick_mmc_bus_data         (joystick_mmc_bus_data        ),
+  .joystick_mmc_bus_ack          (touchpad_mmc_bus_ack         ),
+  .joystick_mmc_bus_data         (touchpad_mmc_bus_data        ),
                                                                  
   .mmc_display_bus_req           (mmc_display_bus_req          ),
   .mmc_display_bus_write         (mmc_display_bus_write        ),
@@ -528,6 +558,16 @@ mmc mmc_data (
                                                                  
   .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
   .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
+                                                                 
+  .mmc_uart_bus_req          (mmc_uart_bus_req         ),
+  .mmc_uart_bus_write        (mmc_uart_bus_write       ),
+  .mmc_uart_bus_addr         (mmc_uart_bus_addr        ),
+  .mmc_uart_bus_data         (mmc_uart_bus_data        ),
+  .mmc_uart_bus_data_rd_mask (mmc_uart_bus_data_rd_mask),
+  .mmc_uart_bus_data_wr_mask (mmc_uart_bus_data_wr_mask),
+                                                                 
+  .uart_mmc_bus_ack          (uart_mmc_bus_ack         ),
+  .uart_mmc_bus_data         (uart_mmc_bus_data        ),
                                                                  
   .mmc_sdcard_bus_req            (mmc_sdcard_bus_req         ),
   .mmc_sdcard_bus_write          (mmc_sdcard_bus_write       ),
@@ -620,7 +660,28 @@ keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
   .o_bus_data          (keys_mmc_bus_data)
 );
 
-shield_V1 shield (
+uart uart (
+  .clk (clk),
+  .rst (rst),
+  
+  .GND (GPIO_0[1]),
+  .TXD (GPIO_0[5]),
+  .RXD (GPIO_0[3]),
+  .CTS (GPIO_0[9]),
+  .RTS (GPIO_0[7]),
+
+  .i_bus_req           (mmc_uart_bus_req),   
+  .i_bus_write         (mmc_uart_bus_write), 
+  .i_bus_addr          (mmc_uart_bus_addr),  
+  .i_bus_data          (mmc_uart_bus_data),
+  .i_bus_data_rd_mask  (mmc_uart_bus_data_rd_mask),
+  .i_bus_data_wr_mask  (mmc_uart_bus_data_wr_mask),
+
+  .o_bus_ack           (uart_mmc_bus_ack),   
+  .o_bus_data          (uart_mmc_bus_data)
+);
+
+waveshare_tft_touch_shield shield (
   .clk (FPGA_CLK1_50),
   .rst (rst),
 
@@ -631,25 +692,33 @@ shield_V1 shield (
   .ADC_SDI         (ADC_SDI),        
   .ADC_SDO         (ADC_SDO),        
                                     
-  //.ARDUINO_IO      (ARDUINO_IO),     
-  .SD_CS           (SD_CS     ),
-  .TFT_DC          (TFT_DC    ),
-  .TFT_CS          (TFT_CS    ),
-  .MOSI            (MOSI      ),
-  .MISO            (MISO      ),
-  .SCK             (SCK       ),
-  .GND             (GND       ),
+  .ARDUINO_IO_00   (ARDUINO_IO_00),
+  .ARDUINO_IO_01   (ARDUINO_IO_01),
+  .ARDUINO_IO_02   (ARDUINO_IO_02),
+  .ARDUINO_IO_03   (ARDUINO_IO_03),
+  .ARDUINO_IO_04   (ARDUINO_IO_04),
+  .ARDUINO_IO_05   (ARDUINO_IO_05),
+  .ARDUINO_IO_06   (ARDUINO_IO_06),
+  .ARDUINO_IO_07   (ARDUINO_IO_07),
+  .ARDUINO_IO_08   (ARDUINO_IO_08),
+  .ARDUINO_IO_09   (ARDUINO_IO_09),
+  .ARDUINO_IO_10   (ARDUINO_IO_10),
+  .ARDUINO_IO_11   (ARDUINO_IO_11),
+  .ARDUINO_IO_12   (ARDUINO_IO_12),
+  .ARDUINO_IO_13   (ARDUINO_IO_13),
+  .ARDUINO_IO_14   (ARDUINO_IO_14),
+  .ARDUINO_IO_15   (ARDUINO_IO_15),
   .ARDUINO_RESET_N (ARDUINO_RESET_N),
 
-  .mmc_joystick_bus_req          (mmc_joystick_bus_req         ),
-  .mmc_joystick_bus_write        (mmc_joystick_bus_write       ),
-  .mmc_joystick_bus_addr         (mmc_joystick_bus_addr        ),
-  .mmc_joystick_bus_data         (mmc_joystick_bus_data        ),
-  .mmc_joystick_bus_data_rd_mask (mmc_joystick_bus_data_rd_mask),
-  .mmc_joystick_bus_data_wr_mask (mmc_joystick_bus_data_wr_mask),
+  .mmc_touchpad_bus_req          (mmc_touchpad_bus_req         ),
+  .mmc_touchpad_bus_write        (mmc_touchpad_bus_write       ),
+  .mmc_touchpad_bus_addr         (mmc_touchpad_bus_addr        ),
+  .mmc_touchpad_bus_data         (mmc_touchpad_bus_data        ),
+  .mmc_touchpad_bus_data_rd_mask (mmc_touchpad_bus_data_rd_mask),
+  .mmc_touchpad_bus_data_wr_mask (mmc_touchpad_bus_data_wr_mask),
                                                                  
-  .joystick_mmc_bus_ack          (joystick_mmc_bus_ack         ),
-  .joystick_mmc_bus_data         (joystick_mmc_bus_data        ),
+  .touchpad_mmc_bus_ack          (touchpad_mmc_bus_ack         ),
+  .touchpad_mmc_bus_data         (touchpad_mmc_bus_data        ),
                                                                  
   .mmc_display_bus_req           (mmc_display_bus_req          ),
   .mmc_display_bus_write         (mmc_display_bus_write        ),

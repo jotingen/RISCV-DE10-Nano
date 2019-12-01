@@ -10,13 +10,15 @@
 #define DISPLAY_DATA    (*((volatile uint32_t *) (0xC2000008)))
 #define DISPLAY_BUFF    (*((volatile uint32_t *) (0xC3000000)))  
 
+#define UART            (*((volatile uint32_t *) (0xC3030000)))  
+
 #define DISPLAY_POWERON_DELAY 120
 
-#define DISPLAY_HEIGHT    128
-#define DISPLAY_WIDTH    160
+#define DISPLAY_HEIGHT    320
+#define DISPLAY_WIDTH    480
 
-#define CONSOLE_ROWS    16
-#define CONSOLE_COLS    20
+#define CONSOLE_ROWS    60
+#define CONSOLE_COLS    40
 
 #define DISPLAY_CMD_DISPON   0x29
 #define DISPLAY_CMD_SLEEPOUT 0x11
@@ -24,18 +26,30 @@
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
 static volatile uint32_t * const display_buffer = (volatile uint32_t *) 0xC3000000;
-static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3014000;
+static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3020000;
 
 console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
+  uint64_t timestamp;
+  console_puts("Entering display_on...\n");
 
+  timestamp = get_time();
+  while(get_time()-timestamp < 500) {}
 
-  //timestamp = get_time();
-  while(get_time() < 1) {}
-
-  DISPLAY_CMD = DISPLAY_CMD_DISPON;
+  console_puts("Sending SLEEPOUT on...\n");
   DISPLAY_CMD = DISPLAY_CMD_SLEEPOUT; // SLPOUT (11h): Sleep Out
+
+  timestamp = get_time();
+  while(get_time()-timestamp < 500) {}
+
+  console_puts("Sending DISPON...\n");
+  DISPLAY_CMD = DISPLAY_CMD_DISPON;
+
+  timestamp = get_time();
+  while(get_time()-timestamp < 500) {}
+
+  console_puts("Leaving display_on...\n");
 
   return;
 }
@@ -131,6 +145,8 @@ void console_clear() {
 }
   
 void console_put_char(char c) {
+  UART = c;
+
   if(c == '\n') {
     //If curser is at bottom, shift everything up by one row
     if(curser_index.Y == CONSOLE_ROWS-1) {
@@ -205,7 +221,7 @@ void console_puthex8(uint8_t val)
   
 char * uint8_to_hex(uint8_t number) {
   static char s[3];
-  for(int d = 0; d < 2; d++) {
+  for(int8_t d = 0; d < 2; d++) {
     uint8_t hex = (number >> ((2-1-d)*4)) & 0xF;
     if(hex < 10) {
       s[d] = hex+48;
@@ -213,13 +229,13 @@ char * uint8_to_hex(uint8_t number) {
       s[d] = hex+55;
     }
   }
-  s[3] = '\0';
+  s[2] = '\0';
   return s;
 }
   
 char * uint32_to_hex(uint32_t number) {
   static char s[9];
-  for(int d = 0; d < 8; d++) {
+  for(int32_t d = 0; d < 8; d++) {
     uint8_t hex = (number >> ((8-1-d)*4)) & 0xF;
     if(hex < 10) {
       s[d] = hex+48;
@@ -233,7 +249,7 @@ char * uint32_to_hex(uint32_t number) {
   
 char * uint64_to_hex(uint64_t number) {
   static char s[17];
-  for(int d = 0; d < 16; d++) {
+  for(int64_t d = 0; d < 16; d++) {
     uint8_t hex = (number >> ((16-1-d)*4)) & 0xF;
     if(hex < 10) {
       s[d] = hex+48;
