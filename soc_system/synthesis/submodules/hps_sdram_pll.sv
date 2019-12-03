@@ -50,8 +50,8 @@ parameter IS_HHP_HPS = "true";
 
 // Clock settings
 parameter GENERIC_PLL = "true";
-parameter REF_CLK_FREQ = "25.0 MHz";
-parameter REF_CLK_PERIOD_PS = 40000;
+parameter REF_CLK_FREQ = "50.0 MHz";
+parameter REF_CLK_PERIOD_PS = 20000;
 
 parameter PLL_MEM_CLK_FREQ_STR = "400.0 MHz";
 parameter PLL_WRITE_CLK_FREQ_STR = "400.0 MHz";

@@ -17,6 +17,8 @@
 #define JOYSTICK_DOWN   (*((volatile unsigned int *) (0xC100010C)))
 #define JOYSTICK_LEFT   (*((volatile unsigned int *) (0xC1000110)))
 
+#define DDR3            (*((volatile unsigned int *) (0x10000010)))
+
 void paint_pixel(int row, int col, uint8_t * cell) {
   display_pixel_t pixel;
       if(*cell == 0) {
@@ -34,63 +36,52 @@ void paint_pixel(int row, int col, uint8_t * cell) {
 void main(void) {
   static uint8_t sdcard_data[514];
 
-  static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3014000;
+  static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3020000;
+  static volatile uint32_t * const ddr3 = (volatile uint32_t *) 0x10000010;
 
-  uint32_t key_pressed;
-
-  //uint64_t timestamp;
-  //uint64_t keystamp;
-  //uint64_t displaystamp;
-
-  uint32_t led;
-
-  display_pixel_t pixel;
-
-  char buff[21];
-
-  LED = 0;
   console_clear();
-  LED = 1;
-  LED = console_curser().X;
-  console_putc('T');
-  LED = console_curser().X;
-  console_putc('E');
-  LED = console_curser().X;
-  console_putc('S');
-  LED = console_curser().X;
-  console_putc('T');
-  LED = console_curser().X;
-  console_putc('\n');
-  LED = 2;
-  LED = console_buffer[0];
-  LED = console_buffer[1];
-  LED = console_buffer[2];
-  LED = console_buffer[3];
-  LED = 3;
-  while(get_time() < 1) {} //Wait for SDCARD to warm up
-
-  LED = 4;
-  rand_init();
-
-  LED = 5;
   display_on();
-  LED = 6;
-
   display_write();
-  LED = 7;
 
+  console_puts("Booting DE10Nano RISCV Bootloader...\n\n");
+  display_write();
+
+  console_puts("Initiating SDCard...");
+  display_write();
   sdcard_on();
-  LED = 8;
+  console_puts("done\n");
+  display_write();
 
-  //display_write();
-  LED = 9;
+  console_puts("Initiating Random Number Generator...");
+  display_write();
+  rand_init();
+  console_puts("done\n");
+  display_write();
 
-  console_puts("Data Read Test\n");
-  //display_write();
-  LED = 10;
+  console_puts("Testing SDCard read of Sector 0...");
+  display_write();
   sdcard_read(sdcard_data,512*0);
-  sdcard_read(sdcard_data,512*128);
-  //display_write();
+  for(int i = 0; i < 514; i++) {
+    console_puts(uint8_to_hex(sdcard_data[i]));
+  }
+  console_puts("\ndone\n");
+  display_write();
+
+  console_puts("DDR3 Test");
+  console_puts("Writing SDCard Sector 0 to DDR3...");
+  for(int i = 0; i < 514; i++) {
+    uint32_t word = 0;
+    word = word | sdcard_data[i];
+    ddr3[i] = word;
+  }
+  console_puts("done\n");
+  console_puts("Reading SDCard Sector 0 from DDR3...\n");
+  display_write();
+  for(int i = 0; i < 514; i++) {
+    console_puts(uint8_to_hex(ddr3[i] & 0xFF));
+  }
+  console_puts("\ndone\n");
+  display_write();
 
   while(1);
 }

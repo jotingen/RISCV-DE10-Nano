@@ -22,6 +22,7 @@ incremental_db
 /*.sof
 /*.sta.rpt
 /*.sta.summary
+/*.rpt
 /*_assignment_defaults.qdf
 /simulation/modelsim/*.sft
 /simulation/modelsim/*.svo
@@ -34,3 +35,5 @@ incremental_db
 greybox_tmp
 
 rtl_work
+
+*.vcd
