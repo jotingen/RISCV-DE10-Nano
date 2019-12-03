@@ -5,25 +5,6 @@ Progress: Reading input file
 Progress: Adding clk_50 [clock_source 18.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
-Progress: Reading input file
-Progress: Adding address_span_extender_0 [altera_address_span_extender 16.0]
-Warning: address_span_extender_0: Used altera_address_span_extender 18.1 (instead of 16.0)
-Progress: Parameterizing module address_span_extender_0
-Progress: Adding clk_50 [clock_source 16.0]
-Warning: clk_50: Used clock_source 18.1 (instead of 16.0)
-Progress: Parameterizing module clk_50
-Progress: Adding clock_bridge_0 [altera_clock_bridge 16.0]
-Warning: clock_bridge_0: Used altera_clock_bridge 18.1 (instead of 16.0)
-Progress: Parameterizing module clock_bridge_0
-Progress: Adding hps [altera_hps 16.0]
-Warning: hps: Used altera_hps 18.1 (instead of 16.0)
-Progress: Parameterizing module hps
-Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
-Progress: Parameterizing module hps_reset_manager_0
-Progress: Building connections
-Progress: Parameterizing connections
-Progress: Validating
-Progress: Done reading input file
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
 Progress: Parameterizing module hps_reset_manager_0

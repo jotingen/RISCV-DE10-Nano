@@ -134,10 +134,10 @@
         <define name="USE_USER_RDIMM_VALUE" value="0"/>
     </sequencer>
     <pll>
-        <define name="PLL_MEM_CLK_MULT" value="31"/>
+        <define name="PLL_MEM_CLK_MULT" value="15"/>
         <define name="PLL_MEM_CLK_DIV" value="0"/>
         <define name="PLL_MEM_CLK_PHASE_DEG" value="0"/>
-        <define name="PLL_WRITE_CLK_MULT" value="31"/>
+        <define name="PLL_WRITE_CLK_MULT" value="15"/>
         <define name="PLL_WRITE_CLK_DIV" value="0"/>
         <define name="PLL_WRITE_CLK_PHASE_DEG" value="4"/>
     </pll>

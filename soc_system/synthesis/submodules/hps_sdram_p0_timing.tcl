@@ -36,7 +36,7 @@ package require ::quartus::ddr_timing_model
 set t(CK) 2.5
 
 # Reference Clock Period
-set t(refCK) 40.0
+set t(refCK) 20.0
 
 # Minimum Clock Period
 set t(min_CK) 1.25
