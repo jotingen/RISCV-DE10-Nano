@@ -1,19 +1,17 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Nov 25 16:22:55 2019
+[*] Thu Dec 05 21:49:01 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Mon Nov 25 16:20:53 2019"
-[dumpfile_size] 100864754
-[savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\simulation\modelsim\RISCV.gtkw"
-[timestart] 5091
-[size] 1858 1057
+[dumpfile_mtime] "Thu Dec 05 21:41:31 2019"
+[dumpfile_size] 486119954
+[savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
+[timestart] 675245
+[size] 1854 1046
 [pos] -1 -1
-*-9.481349 1255 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.060261 677050 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
-[treeopen] tb.dut.ddr3.
-[treeopen] tb.dut.riscv.
 [treeopen] tb.dut.riscv.alu.
 [treeopen] tb.dut.riscv.idu.
 [treeopen] tb.dut.shield.
@@ -21,10 +19,10 @@
 [treeopen] tb.dut.shield.display.transmit.
 [treeopen] tb.dut.shield.sdcard.
 [treeopen] tb.sd.
-[sst_width] 208
-[signals_width] 505
+[sst_width] 290
+[signals_width] 457
 [sst_expanded] 1
-[sst_vpaned_height] 520
+[sst_vpaned_height] 514
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -69,12 +67,6 @@ tb.dut.ddr3_avl_write_req
 @200
 -
 @28
-tb.dut.SCK
-tb.dut.SD_CS
-tb.dut.TFT_CS
-tb.dut.TFT_DC
-tb.dut.MOSI
-tb.dut.MISO
 tb.ARDUINO_RESET_N
 @c00200
 -tb.ARDUINO_IO
@@ -82,8 +74,6 @@ tb.ARDUINO_RESET_N
 -group_end
 @28
 tb.dut.shield.SD_CS
-tb.dut.shield.TFT_CS
-tb.dut.shield.TFT_DC
 tb.dut.shield.MOSI
 tb.dut.shield.MISO
 @200
@@ -188,6 +178,20 @@ tb.dut.mmc_data.mmc_sdcard_bus_data_rd_mask[3:0]
 tb.dut.mmc_data.sdcard_mmc_bus_ack
 @22
 #{tb.dut.mmc_data.sdcard_mmc_bus_data[31:0]} tb.dut.mmc_data.sdcard_mmc_bus_data[31] tb.dut.mmc_data.sdcard_mmc_bus_data[30] tb.dut.mmc_data.sdcard_mmc_bus_data[29] tb.dut.mmc_data.sdcard_mmc_bus_data[28] tb.dut.mmc_data.sdcard_mmc_bus_data[27] tb.dut.mmc_data.sdcard_mmc_bus_data[26] tb.dut.mmc_data.sdcard_mmc_bus_data[25] tb.dut.mmc_data.sdcard_mmc_bus_data[24] tb.dut.mmc_data.sdcard_mmc_bus_data[23] tb.dut.mmc_data.sdcard_mmc_bus_data[22] tb.dut.mmc_data.sdcard_mmc_bus_data[21] tb.dut.mmc_data.sdcard_mmc_bus_data[20] tb.dut.mmc_data.sdcard_mmc_bus_data[19] tb.dut.mmc_data.sdcard_mmc_bus_data[18] tb.dut.mmc_data.sdcard_mmc_bus_data[17] tb.dut.mmc_data.sdcard_mmc_bus_data[16] tb.dut.mmc_data.sdcard_mmc_bus_data[15] tb.dut.mmc_data.sdcard_mmc_bus_data[14] tb.dut.mmc_data.sdcard_mmc_bus_data[13] tb.dut.mmc_data.sdcard_mmc_bus_data[12] tb.dut.mmc_data.sdcard_mmc_bus_data[11] tb.dut.mmc_data.sdcard_mmc_bus_data[10] tb.dut.mmc_data.sdcard_mmc_bus_data[9] tb.dut.mmc_data.sdcard_mmc_bus_data[8] tb.dut.mmc_data.sdcard_mmc_bus_data[7] tb.dut.mmc_data.sdcard_mmc_bus_data[6] tb.dut.mmc_data.sdcard_mmc_bus_data[5] tb.dut.mmc_data.sdcard_mmc_bus_data[4] tb.dut.mmc_data.sdcard_mmc_bus_data[3] tb.dut.mmc_data.sdcard_mmc_bus_data[2] tb.dut.mmc_data.sdcard_mmc_bus_data[1] tb.dut.mmc_data.sdcard_mmc_bus_data[0]
+@200
+-
+@28
+tb.dut.mmc_uart_bus_req
+tb.dut.mmc_uart_bus_write
+@22
+tb.dut.mmc_uart_bus_addr[31:0]
+tb.dut.mmc_uart_bus_data[31:0]
+tb.dut.mmc_uart_bus_data_wr_mask[3:0]
+tb.dut.mmc_uart_bus_data_rd_mask[3:0]
+@28
+tb.dut.uart_mmc_bus_ack
+@22
+tb.dut.uart_mmc_bus_data[31:0]
 @200
 -
 @28
@@ -363,7 +367,6 @@ tb.dut.ddr3.ddr3_state_recieve
 @200
 -
 @28
-tb.dut.ddr3.double_req
 tb.ddr3.ddr3_avl_ready
 tb.ddr3.ddr3_avl_read_req
 tb.ddr3.ddr3_avl_write_req
@@ -384,7 +387,7 @@ tb.ddr3.ddr3_avl_rdata_valid
 @28
 tb.dut.ddr3.ddr3_avl_ready
 tb.dut.ddr3.ddr3_avl_rdata_valid
-@23
+@22
 #{tb.dut.ddr3.ddr3_avl_rdata[127:0]} tb.dut.ddr3.ddr3_avl_rdata[127] tb.dut.ddr3.ddr3_avl_rdata[126] tb.dut.ddr3.ddr3_avl_rdata[125] tb.dut.ddr3.ddr3_avl_rdata[124] tb.dut.ddr3.ddr3_avl_rdata[123] tb.dut.ddr3.ddr3_avl_rdata[122] tb.dut.ddr3.ddr3_avl_rdata[121] tb.dut.ddr3.ddr3_avl_rdata[120] tb.dut.ddr3.ddr3_avl_rdata[119] tb.dut.ddr3.ddr3_avl_rdata[118] tb.dut.ddr3.ddr3_avl_rdata[117] tb.dut.ddr3.ddr3_avl_rdata[116] tb.dut.ddr3.ddr3_avl_rdata[115] tb.dut.ddr3.ddr3_avl_rdata[114] tb.dut.ddr3.ddr3_avl_rdata[113] tb.dut.ddr3.ddr3_avl_rdata[112] tb.dut.ddr3.ddr3_avl_rdata[111] tb.dut.ddr3.ddr3_avl_rdata[110] tb.dut.ddr3.ddr3_avl_rdata[109] tb.dut.ddr3.ddr3_avl_rdata[108] tb.dut.ddr3.ddr3_avl_rdata[107] tb.dut.ddr3.ddr3_avl_rdata[106] tb.dut.ddr3.ddr3_avl_rdata[105] tb.dut.ddr3.ddr3_avl_rdata[104] tb.dut.ddr3.ddr3_avl_rdata[103] tb.dut.ddr3.ddr3_avl_rdata[102] tb.dut.ddr3.ddr3_avl_rdata[101] tb.dut.ddr3.ddr3_avl_rdata[100] tb.dut.ddr3.ddr3_avl_rdata[99] tb.dut.ddr3.ddr3_avl_rdata[98] tb.dut.ddr3.ddr3_avl_rdata[97] tb.dut.ddr3.ddr3_avl_rdata[96] tb.dut.ddr3.ddr3_avl_rdata[95] tb.dut.ddr3.ddr3_avl_rdata[94] tb.dut.ddr3.ddr3_avl_rdata[93] tb.dut.ddr3.ddr3_avl_rdata[92] tb.dut.ddr3.ddr3_avl_rdata[91] tb.dut.ddr3.ddr3_avl_rdata[90] tb.dut.ddr3.ddr3_avl_rdata[89] tb.dut.ddr3.ddr3_avl_rdata[88] tb.dut.ddr3.ddr3_avl_rdata[87] tb.dut.ddr3.ddr3_avl_rdata[86] tb.dut.ddr3.ddr3_avl_rdata[85] tb.dut.ddr3.ddr3_avl_rdata[84] tb.dut.ddr3.ddr3_avl_rdata[83] tb.dut.ddr3.ddr3_avl_rdata[82] tb.dut.ddr3.ddr3_avl_rdata[81] tb.dut.ddr3.ddr3_avl_rdata[80] tb.dut.ddr3.ddr3_avl_rdata[79] tb.dut.ddr3.ddr3_avl_rdata[78] tb.dut.ddr3.ddr3_avl_rdata[77] tb.dut.ddr3.ddr3_avl_rdata[76] tb.dut.ddr3.ddr3_avl_rdata[75] tb.dut.ddr3.ddr3_avl_rdata[74] tb.dut.ddr3.ddr3_avl_rdata[73] tb.dut.ddr3.ddr3_avl_rdata[72] tb.dut.ddr3.ddr3_avl_rdata[71] tb.dut.ddr3.ddr3_avl_rdata[70] tb.dut.ddr3.ddr3_avl_rdata[69] tb.dut.ddr3.ddr3_avl_rdata[68] tb.dut.ddr3.ddr3_avl_rdata[67] tb.dut.ddr3.ddr3_avl_rdata[66] tb.dut.ddr3.ddr3_avl_rdata[65] tb.dut.ddr3.ddr3_avl_rdata[64] tb.dut.ddr3.ddr3_avl_rdata[63] tb.dut.ddr3.ddr3_avl_rdata[62] tb.dut.ddr3.ddr3_avl_rdata[61] tb.dut.ddr3.ddr3_avl_rdata[60] tb.dut.ddr3.ddr3_avl_rdata[59] tb.dut.ddr3.ddr3_avl_rdata[58] tb.dut.ddr3.ddr3_avl_rdata[57] tb.dut.ddr3.ddr3_avl_rdata[56] tb.dut.ddr3.ddr3_avl_rdata[55] tb.dut.ddr3.ddr3_avl_rdata[54] tb.dut.ddr3.ddr3_avl_rdata[53] tb.dut.ddr3.ddr3_avl_rdata[52] tb.dut.ddr3.ddr3_avl_rdata[51] tb.dut.ddr3.ddr3_avl_rdata[50] tb.dut.ddr3.ddr3_avl_rdata[49] tb.dut.ddr3.ddr3_avl_rdata[48] tb.dut.ddr3.ddr3_avl_rdata[47] tb.dut.ddr3.ddr3_avl_rdata[46] tb.dut.ddr3.ddr3_avl_rdata[45] tb.dut.ddr3.ddr3_avl_rdata[44] tb.dut.ddr3.ddr3_avl_rdata[43] tb.dut.ddr3.ddr3_avl_rdata[42] tb.dut.ddr3.ddr3_avl_rdata[41] tb.dut.ddr3.ddr3_avl_rdata[40] tb.dut.ddr3.ddr3_avl_rdata[39] tb.dut.ddr3.ddr3_avl_rdata[38] tb.dut.ddr3.ddr3_avl_rdata[37] tb.dut.ddr3.ddr3_avl_rdata[36] tb.dut.ddr3.ddr3_avl_rdata[35] tb.dut.ddr3.ddr3_avl_rdata[34] tb.dut.ddr3.ddr3_avl_rdata[33] tb.dut.ddr3.ddr3_avl_rdata[32] tb.dut.ddr3.ddr3_avl_rdata[31] tb.dut.ddr3.ddr3_avl_rdata[30] tb.dut.ddr3.ddr3_avl_rdata[29] tb.dut.ddr3.ddr3_avl_rdata[28] tb.dut.ddr3.ddr3_avl_rdata[27] tb.dut.ddr3.ddr3_avl_rdata[26] tb.dut.ddr3.ddr3_avl_rdata[25] tb.dut.ddr3.ddr3_avl_rdata[24] tb.dut.ddr3.ddr3_avl_rdata[23] tb.dut.ddr3.ddr3_avl_rdata[22] tb.dut.ddr3.ddr3_avl_rdata[21] tb.dut.ddr3.ddr3_avl_rdata[20] tb.dut.ddr3.ddr3_avl_rdata[19] tb.dut.ddr3.ddr3_avl_rdata[18] tb.dut.ddr3.ddr3_avl_rdata[17] tb.dut.ddr3.ddr3_avl_rdata[16] tb.dut.ddr3.ddr3_avl_rdata[15] tb.dut.ddr3.ddr3_avl_rdata[14] tb.dut.ddr3.ddr3_avl_rdata[13] tb.dut.ddr3.ddr3_avl_rdata[12] tb.dut.ddr3.ddr3_avl_rdata[11] tb.dut.ddr3.ddr3_avl_rdata[10] tb.dut.ddr3.ddr3_avl_rdata[9] tb.dut.ddr3.ddr3_avl_rdata[8] tb.dut.ddr3.ddr3_avl_rdata[7] tb.dut.ddr3.ddr3_avl_rdata[6] tb.dut.ddr3.ddr3_avl_rdata[5] tb.dut.ddr3.ddr3_avl_rdata[4] tb.dut.ddr3.ddr3_avl_rdata[3] tb.dut.ddr3.ddr3_avl_rdata[2] tb.dut.ddr3.ddr3_avl_rdata[1] tb.dut.ddr3.ddr3_avl_rdata[0]
 @200
 -
@@ -567,6 +570,12 @@ tb.dut.shield.display.i_bus_write
 @200
 -
 @28
+tb.dut.shield.display.fifo_full
+tb.dut.shield.display.pending_cmd
+tb.dut.shield.display.pending_data
+@200
+-
+@28
 tb.dut.shield.display.o_bus_ack
 @22
 tb.dut.shield.display.o_bus_data[31:0]
@@ -574,9 +583,8 @@ tb.dut.shield.display.o_bus_data[31:0]
 -
 @28
 tb.dut.shield.display.req
+@29
 tb.dut.shield.display.cmd
-@22
-tb.dut.shield.display.data[7:0]
 @200
 -
 @28
@@ -588,14 +596,11 @@ tb.dut.shield.display.transmit.SPIDone
 @28
 tb.dut.shield.display.transmit.SCK_clk
 tb.dut.shield.display.transmit.ack_recieved
-tb.dut.shield.display.transmit.data_cnt[2:0]
 @200
 -
 @28
 tb.dut.shield.display.SCK_empty
 tb.dut.shield.display.SCK_cmd
-@22
-tb.dut.shield.display.SCK_data[7:0]
 @200
 -
 @28
@@ -606,8 +611,6 @@ tb.dut.shield.display.transmit.cmd
 @22
 #{tb.dut.shield.display.transmit.data[7:0]} tb.dut.shield.display.transmit.data[7] tb.dut.shield.display.transmit.data[6] tb.dut.shield.display.transmit.data[5] tb.dut.shield.display.transmit.data[4] tb.dut.shield.display.transmit.data[3] tb.dut.shield.display.transmit.data[2] tb.dut.shield.display.transmit.data[1] tb.dut.shield.display.transmit.data[0]
 tb.dut.shield.display.transmit.cooldown_cnt[20:0]
-@28
-tb.dut.shield.display.transmit.data_cnt[2:0]
 @200
 -
 -DISPLAY BUFFER
@@ -1154,9 +1157,6 @@ tb.dut.riscv.alu.bus_data_wr[31:0]
 @200
 -
 -SDCARD Model
-@28
-tb.dut.SCK
-@200
 -
 @28
 tb.sd.rstn

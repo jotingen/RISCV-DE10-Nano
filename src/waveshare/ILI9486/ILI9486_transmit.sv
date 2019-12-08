@@ -11,7 +11,7 @@ output logic CS,
 
 input  logic       req,
 input  logic       cmd,
-input  logic [7:0] data,
+input  logic [15:0] data,
 
 output logic     SPIDone,
 output logic     rdy
@@ -20,9 +20,6 @@ output logic     rdy
 logic        ack_recieved;
 logic [20:0] cooldown_cnt;
 logic  [3:0] data_cnt;
-logic [15:0] msg;
-
-assign msg = {8'd0,data};
 
 always_ff @(posedge clk)
   begin
@@ -88,7 +85,7 @@ always_ff @(posedge clk)
                   SPIReq <= '0;
                   CS    <= '0;
                   RS_DC <= ~cmd;
-                  DATA  <= msg[data_ndx];
+                  DATA  <= data[data_ndx];
                   data_cnt <= data_cnt + 1;
                   end
                 else if(req)
@@ -103,11 +100,11 @@ always_ff @(posedge clk)
                 end
       'd15:      begin
 		            SPIDone <= '1;
-                DATA  <= msg[data_ndx];
+                DATA  <= data[data_ndx];
                 data_cnt <= '0;
                 end
       default:  begin
-                DATA  <= msg[data_ndx];
+                DATA  <= data[data_ndx];
                 data_cnt <= data_cnt + 1;
                 end
     endcase

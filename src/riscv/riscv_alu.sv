@@ -1515,7 +1515,7 @@ always_ff @(posedge clk)
                      alu_freeze <= '1;
                      cnt <= cnt + 1;
                      end
-                   else if(cnt=='d7)
+                   else if(cnt=='d10)
                      begin
                      alu_retired <= '1;
                      x_wr[alu_rd] <= '1;
@@ -1536,7 +1536,7 @@ always_ff @(posedge clk)
                      alu_freeze <= '1;
                      cnt <= cnt + 1;
                      end
-                   else if(cnt=='d7)
+                   else if(cnt=='d10)
                      begin
                      alu_retired <= '1;
                      x_wr[alu_rd] <= '1;
@@ -1557,7 +1557,7 @@ always_ff @(posedge clk)
                      alu_freeze <= '1;
                      cnt <= cnt + 1;
                      end
-                   else if(cnt=='d7)
+                   else if(cnt=='d10)
                      begin
                      alu_retired <= '1;
                      x_wr[alu_rd] <= '1;
@@ -1578,7 +1578,7 @@ always_ff @(posedge clk)
                      alu_freeze <= '1;
                      cnt <= cnt + 1;
                      end
-                   else if(cnt=='d7)
+                   else if(cnt=='d10)
                      begin
                      alu_retired <= '1;
                      x_wr[alu_rd] <= '1;

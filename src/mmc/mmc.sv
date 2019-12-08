@@ -131,11 +131,11 @@ logic [31:0]    JOYSTICK_ADDR_HI = 'hC101_FFFF;
 logic [31:0]    DISPLAY_ADDR_LO  = 'hC200_0000;
 logic [31:0]    DISPLAY_ADDR_HI  = 'hC200_FFFF;
 logic [31:0]    DISPBUFF_ADDR_LO = 'hC300_0000;
-logic [31:0]    DISPBUFF_ADDR_HI = 'hC301_FFFF;
-logic [31:0]    CONSOLEBUFF_ADDR_LO = 'hC302_0000;
-logic [31:0]    CONSOLEBUFF_ADDR_HI = 'hC302_FFFF;
-logic [31:0]    UART_ADDR_LO     = 'hC303_0000;
-logic [31:0]    UART_ADDR_HI     = 'hC303_FFFF;
+logic [31:0]    DISPBUFF_ADDR_HI = 'hC302_FFFF;
+logic [31:0]    CONSOLEBUFF_ADDR_LO = 'hC303_0000;
+logic [31:0]    CONSOLEBUFF_ADDR_HI = 'hC303_FFFF;
+logic [31:0]    UART_ADDR_LO     = 'hC304_0000;
+logic [31:0]    UART_ADDR_HI     = 'hC304_FFFF;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
 

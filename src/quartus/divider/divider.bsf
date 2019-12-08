@@ -61,7 +61,7 @@ refer to the applicable agreement for further details.
 	(drawing
 		(text "Numer is SIGNED" (rect 83 50 241 111)(font "Arial" ))
 		(text "Denom is SIGNED" (rect 81 66 239 143)(font "Arial" ))
-		(text "Pipeline length of 5" (rect 80 82 238 175)(font "Arial" ))
+		(text "Pipeline length of 10" (rect 75 82 233 175)(font "Arial" ))
 		(line (pt 16 16)(pt 16 96))
 		(line (pt 16 16)(pt 160 16))
 		(line (pt 16 96)(pt 160 96))
