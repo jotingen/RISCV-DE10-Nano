@@ -13,12 +13,24 @@ module ILI9486_buffer (
   output logic [31:0]    o_membus_data
 );
 
-logic         buffer_R_wren;
-logic [7:0]   buffer_R_out;
-logic         buffer_G_wren;
-logic [7:0]   buffer_G_out;
-logic         buffer_B_wren;
-logic [7:0]   buffer_B_out;
+logic         buffer_R_0_wren;
+logic [7:0]   buffer_R_0_out;
+logic         buffer_R_1_wren;
+logic [7:0]   buffer_R_1_out;
+logic         buffer_R_2_wren;
+logic [7:0]   buffer_R_2_out;
+logic         buffer_G_0_wren;
+logic [7:0]   buffer_G_0_out;
+logic         buffer_G_1_wren;
+logic [7:0]   buffer_G_1_out;
+logic         buffer_G_2_wren;
+logic [7:0]   buffer_G_2_out;
+logic         buffer_B_0_wren;
+logic [7:0]   buffer_B_0_out;
+logic         buffer_B_1_wren;
+logic [7:0]   buffer_B_1_out;
+logic         buffer_B_2_wren;
+logic [7:0]   buffer_B_2_out;
 
 logic           membus_req;
 logic           membus_ack;
@@ -34,36 +46,70 @@ logic         accessing;
 
 always_comb
   begin
-  buffer_R_wren = '0;
-  buffer_G_wren = '0;
-  buffer_B_wren = '0;
+  buffer_R_0_wren = '0;
+  buffer_R_1_wren = '0;
+  buffer_R_2_wren = '0;
+  buffer_G_0_wren = '0;
+  buffer_G_1_wren = '0;
+  buffer_G_2_wren = '0;
+  buffer_B_0_wren = '0;
+  buffer_B_1_wren = '0;
+  buffer_B_2_wren = '0;
 
   if(i_membus_req)
     begin
     if (i_membus_write & i_membus_data_wr_mask[0])
       begin
-      buffer_B_wren = '1;
+      if(i_membus_addr[31:16] == 'h0000)
+        begin
+        buffer_B_0_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0001)
+        begin
+        buffer_B_1_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0010)
+        begin
+        buffer_B_2_wren = '1;
+        end
       end
     if (i_membus_write & i_membus_data_wr_mask[1])
       begin
-      buffer_G_wren = '1;
+      if(i_membus_addr[31:16] == 'h0000)
+        begin
+        buffer_G_0_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0001)
+        begin
+        buffer_G_1_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0010)
+        begin
+        buffer_G_2_wren = '1;
+        end
       end
     if (i_membus_write & i_membus_data_wr_mask[2])
       begin
-      buffer_R_wren = '1;
+      if(i_membus_addr[31:16] == 'h0000)
+        begin
+        buffer_R_0_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0001)
+        begin
+        buffer_R_1_wren = '1;
+        end
+      if(i_membus_addr[31:16] == 'h0010)
+        begin
+        buffer_R_2_wren = '1;
+        end
       end
     end
   end
 
 always_ff @(posedge clk)
   begin
-  //o_membus_req           <= '0;
   o_membus_ack           <= '0;
-  //o_membus_write         <= '0;
-  //o_membus_addr          <= '0;
   o_membus_data          <= '0;
-  //o_membus_data_rd_mask  <= '0;
-  //o_membus_data_wr_mask  <= '0;
 
   idle <= '0;
   accessing <= '0;
@@ -73,36 +119,36 @@ always_ff @(posedge clk)
               if(i_membus_req)
                 begin
                 accessing <= '1;
-                //membus_req           <= i_membus_req;    
-                //membus_ack           <= i_membus_ack;    
-                //membus_write         <= i_membus_write;  
-                //membus_addr          <= i_membus_addr;   
-                //membus_data          <= i_membus_data;   
-                //membus_data_rd_mask  <= i_membus_data_rd_mask;   
-                //membus_data_wr_mask  <= i_membus_data_wr_mask;   
-                end else begin
+                end 
+              else 
+                begin
                   idle <= '1;
-                  //o_membus_req           <= i_membus_req;    
-                  //o_membus_ack           <= i_membus_ack;    
-                  //o_membus_write         <= i_membus_write;  
-                  //o_membus_addr          <= i_membus_addr;   
-                  //o_membus_data          <= i_membus_data;   
-                  //o_membus_data_rd_mask  <= i_membus_data_rd_mask;   
-                  //o_membus_data_wr_mask  <= i_membus_data_wr_mask;   
                 end
               end
   accessing : begin
               idle <= '1;
-              //o_membus_req <= '0;    
               o_membus_ack <= '1;
-              //o_membus_write         <= membus_write;  
-              //o_membus_addr          <= membus_addr;   
-              o_membus_data[7:0]     <= buffer_B_out;
-              o_membus_data[15:8]    <= buffer_G_out;
-              o_membus_data[23:16]   <= buffer_R_out;
-              o_membus_data[31:24]   <= '0;
-              //o_membus_data_rd_mask  <= membus_data_rd_mask;   
-              //o_membus_data_wr_mask  <= membus_data_wr_mask;   
+              if(i_membus_addr[31:16] == 'h0000)
+                begin
+                o_membus_data[7:0]     <= buffer_B_0_out;
+                o_membus_data[15:8]    <= buffer_G_0_out;
+                o_membus_data[23:16]   <= buffer_R_0_out;
+                o_membus_data[31:24]   <= '0;
+                end
+              if(i_membus_addr[31:16] == 'h0001)
+                begin
+                o_membus_data[7:0]     <= buffer_B_1_out;
+                o_membus_data[15:8]    <= buffer_G_1_out;
+                o_membus_data[23:16]   <= buffer_R_1_out;
+                o_membus_data[31:24]   <= '0;
+                end
+              if(i_membus_addr[31:16] == 'h0010)
+                begin
+                o_membus_data[7:0]     <= buffer_B_2_out;
+                o_membus_data[15:8]    <= buffer_G_2_out;
+                o_membus_data[23:16]   <= buffer_R_2_out;
+                o_membus_data[31:24]   <= '0;
+                end
               end
     
   endcase
@@ -114,31 +160,79 @@ always_ff @(posedge clk)
     end
   end
 
-display_buffer display_buffer_R (
-  .clock ( clk ),
-  .data ( i_membus_data[23:16] ),
-  .rdaddress ( i_membus_addr ),
-  .wraddress ( i_membus_addr ),
-  .wren ( buffer_R_wren ),
-  .q ( buffer_R_out )
-  );
-
-display_buffer display_buffer_G (
-  .clock ( clk ),
-  .data ( i_membus_data[15:8] ),
-  .rdaddress ( i_membus_addr ),
-  .wraddress ( i_membus_addr ),
-  .wren ( buffer_G_wren ),
-  .q ( buffer_G_out )
-  );
-
-display_buffer display_buffer_B (
-  .clock ( clk ),
-  .data ( i_membus_data[7:0] ),
-  .rdaddress ( i_membus_addr ),
-  .wraddress ( i_membus_addr ),
-  .wren ( buffer_B_wren ),
-  .q ( buffer_B_out )
-  );
+//display_buffer display_buffer_R_0 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[23:16] ),
+//  .rdaddress ( i_membus_addr ),
+//  .wraddress ( i_membus_addr ),
+//  .wren ( buffer_R_0_wren ),
+//  .q ( buffer_R_0_out )
+//  );
+//display_buffer display_buffer_R_1 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[23:16] ),
+//  .rdaddress ( i_membus_addr ),
+//  .wraddress ( i_membus_addr ),
+//  .wren ( buffer_R_1_wren ),
+//  .q ( buffer_R_1_out )
+//  );
+//display_buffer_32k display_buffer_R_2 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[23:16] ),
+//  .rdaddress ( i_membus_addr ),
+//  .wraddress ( i_membus_addr ),
+//  .wren ( buffer_R_2_wren ),
+//  .q ( buffer_R_2_out )
+//  );
+//
+//display_buffer display_buffer_G_0 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[15:8] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_G_0_wren ),
+//  .q ( buffer_G_0_out )
+//  );
+//display_buffer display_buffer_G_1 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[15:8] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_G_1_wren ),
+//  .q ( buffer_G_1_out )
+//  );
+//display_buffer_32k display_buffer_G_2 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[15:8] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_G_2_wren ),
+//  .q ( buffer_G_2_out )
+//  );
+//
+//display_buffer display_buffer_B_0 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[7:0] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_B_0_wren ),
+//  .q ( buffer_B_0_out )
+//  );
+//display_buffer display_buffer_B_1 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[7:0] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_B_1_wren ),
+//  .q ( buffer_B_1_out )
+//  );
+//display_buffer_32k display_buffer_B_2 (
+//  .clock ( clk ),
+//  .data ( i_membus_data[7:0] ),
+//  .rdaddress ( i_membus_addr[15:0] ),
+//  .wraddress ( i_membus_addr[15:0] ),
+//  .wren ( buffer_B_2_wren ),
+//  .q ( buffer_B_2_out )
+//  );
 
 endmodule

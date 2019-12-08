@@ -30,12 +30,16 @@ logic arst_3;
 logic       SCK_clk;
 logic       SCK_empty;
 logic       SCK_cmd;
-logic [7:0] SCK_data;
+logic [15:0] SCK_data;
 
 logic       req;
 logic       cmd;
-logic [7:0] data;
+logic [15:0] data;
 logic       rdy;
+
+logic fifo_full;
+logic pending_cmd;
+logic pending_data;
 
 always_ff @(posedge clk)
   begin
@@ -46,33 +50,79 @@ always_ff @(posedge clk)
   o_bus_ack   <= '0;    
   o_bus_data  <= i_bus_data;   
 
+  pending_cmd  <= '0;
+  pending_data <= '0;
+
   if(i_bus_req)
     begin
-    o_bus_ack <= '1;
     if(i_bus_write)
       begin
       case (i_bus_addr[31:2])
         'h0: begin
+                 o_bus_ack <= '1;
                  o_bus_data    <= '0;
-                 o_bus_data[0] <= rdy;
                  end
         'h1: begin 
-                 req           <= '1;
                  cmd           <= '1;
                  data          <= i_bus_data;
-                 o_bus_data    <= '0;
+                 if(fifo_full)
+                   begin
+                   pending_cmd  <= '1;
+                   end
+                 else
+                   begin
+                   req           <= '1;
+                   o_bus_ack     <= '1;
+                   o_bus_data    <= '0;
+                   end
                  end
         'h2: begin 
-                 req           <= '1;
                  cmd           <= '0;
-                 data          <= i_bus_data; 
-                 o_bus_data    <= '0;
+                 data          <= i_bus_data;
+                 if(fifo_full)
+                   begin
+                   pending_data <= '1;
+                   end
+                 else
+                   begin
+                   req           <= '1;
+                   o_bus_ack     <= '1;
+                   o_bus_data    <= '0;
+                   end
                  end
         default: begin
+                 o_bus_ack <= '1;
                  o_bus_data    <= '0;
-                 o_bus_data[0] <= rdy;
                  end
       endcase
+      end
+    end
+
+  if(pending_cmd)
+    begin
+    if(fifo_full)
+      begin
+      pending_cmd  <= '1;
+      end
+    else
+      begin
+      req           <= '1;
+      o_bus_ack     <= '1;
+      o_bus_data    <= '0;
+      end
+    end
+
+  if(pending_data)
+    begin
+    if(fifo_full)
+      begin
+      pending_data  <= '1;
+      end
+    else
+      begin
+      req           <= '1;
+      o_bus_ack     <= '1;
+      o_bus_data    <= '0;
       end
     end
   end
@@ -89,7 +139,7 @@ fifo	fifo (
 	.rdfull  (  ),
 	.rdusedw (  ),
 	.wrempty (  ),
-	.wrfull  (  ),
+	.wrfull  ( fifo_full ),
 	.wrusedw (  )
 	);
 

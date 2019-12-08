@@ -17,30 +17,105 @@
 #define JOYSTICK_DOWN   (*((volatile unsigned int *) (0xC100010C)))
 #define JOYSTICK_LEFT   (*((volatile unsigned int *) (0xC1000110)))
 
-#define DDR3            (*((volatile unsigned int *) (0x10000010)))
-
-void paint_pixel(int row, int col, uint8_t * cell) {
-  display_pixel_t pixel;
-      if(*cell == 0) {
-          pixel.R = 0xFC;
-          pixel.G = 0xFC;
-          pixel.B = 0xFC;
-      } else {
-        pixel.R = 0x00;
-        pixel.G = 0x00;
-        pixel.B = 0x00;
-      }
-      dispbuff_write_pixel(row,col,&pixel);
-}
+#define DDR3            (*((volatile unsigned int *) (0x10000000)))
 
 void main(void) {
   static uint8_t sdcard_data[514];
 
-  static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3020000;
-  static volatile uint32_t * const ddr3 = (volatile uint32_t *) 0x10000010;
+  static volatile uint32_t * const ddr3 = (volatile uint32_t *) 0x10000000;
+
+  display_pixel_t pixel;
+  uint16_t x_grid;
+  uint16_t y_grid;
 
   console_clear();
   display_on();
+  display_write();
+
+  for(uint16_t y = 0; y < display_height(); y++) {
+    for(uint16_t x = 0; x < display_width(); x++) {
+      x_grid = x/30;
+      y_grid = y/20;
+      if(x == 0 || x == display_width()-1 ||
+         y == 0 || y == display_height()-1) {
+        dispbuff_write_pixel(y,x,PXL_WHITE);
+
+      } else if(y_grid >=1  && y_grid <= 1 &&
+                x_grid >=1  && x_grid <= 2) {
+        dispbuff_write_pixel(y,x,PXL_RED);
+      } else if(y_grid >=1  && y_grid <= 1 &&
+                x_grid >=4  && x_grid <= 5) {
+        dispbuff_write_pixel(y,x,PXL_LIME);
+      } else if(y_grid >=1  && y_grid <= 1 &&
+                x_grid >=7  && x_grid <= 8) {
+        dispbuff_write_pixel(y,x,PXL_BLUE);
+      } else if(y_grid >=1  && y_grid <= 1 &&
+                x_grid >=11 && x_grid <= 14) {
+        dispbuff_write_pixel(y,x,PXL_WHITE);
+
+      } else if(y_grid >=4  && y_grid <= 6 &&
+                x_grid >=1  && x_grid <= 3) {
+        dispbuff_write_pixel(y,x,PXL_NAVY);
+      } else if(y_grid >=4  && y_grid <= 6 &&
+                x_grid >=4  && x_grid <= 6) {
+        dispbuff_write_pixel(y,x,PXL_WHITE);
+      } else if(y_grid >=4  && y_grid <= 6 &&
+                x_grid >=7  && x_grid <= 9) {
+        dispbuff_write_pixel(y,x,PXL_PURPLE);
+      } else if(y_grid >=4  && y_grid <= 6 &&
+                x_grid >=10 && x_grid <= 14) {
+        dispbuff_write_pixel(y,x,PXL_GRAY);
+
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=1  && x_grid <= 2) {
+        dispbuff_write_pixel(y,x,PXL_BLUE);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=3  && x_grid <= 4) {
+        dispbuff_write_pixel(y,x,PXL_BLACK);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=5  && x_grid <= 6) {
+        dispbuff_write_pixel(y,x,PXL_MAGENTA);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=7  && x_grid <= 8) {
+        dispbuff_write_pixel(y,x,PXL_BLACK);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=9  && x_grid <= 10) {
+        dispbuff_write_pixel(y,x,PXL_CYAN);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=11 && x_grid <= 12) {
+        dispbuff_write_pixel(y,x,PXL_BLACK);
+      } else if(y_grid >=7  && y_grid <= 7 &&
+                x_grid >=13 && x_grid <= 14) {
+        dispbuff_write_pixel(y,x,PXL_SILVER);
+
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=1  && x_grid <= 2) {
+        dispbuff_write_pixel(y,x,PXL_SILVER);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=3  && x_grid <= 4) {
+        dispbuff_write_pixel(y,x,PXL_YELLOW);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=5  && x_grid <= 6) {
+        dispbuff_write_pixel(y,x,PXL_CYAN);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=7  && x_grid <= 8) {
+        dispbuff_write_pixel(y,x,PXL_GREEN);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=9  && x_grid <= 10) {
+        dispbuff_write_pixel(y,x,PXL_MAGENTA);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=11 && x_grid <= 12) {
+        dispbuff_write_pixel(y,x,PXL_RED);
+      } else if(y_grid >=8  && y_grid <= 14 &&
+                x_grid >=13 && x_grid <= 14) {
+        dispbuff_write_pixel(y,x,PXL_BLUE);
+
+      } else {
+        dispbuff_write_pixel(y,x,PXL_BLACK);
+      }
+
+    }
+  }
   display_write();
 
   console_puts("Booting DE10Nano RISCV Bootloader...\n\n");

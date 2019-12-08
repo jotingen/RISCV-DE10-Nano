@@ -25,8 +25,8 @@ logic           ADC_SDO;
 
 //////////// ARDUINO //////////
 logic           SD_CS; 
-logic           TFT_DC;
-logic           TFT_CS;
+logic           LCD_DC;
+logic           LCD_CS;
 logic           MOSI;  
 logic           MISO;  
 logic           SCK;   
@@ -122,13 +122,22 @@ top dut (
 .ADC_SDO,
 
 //////////// ARDUINO //////////
-.SD_CS, 
-.TFT_DC,
-.TFT_CS,
-.MOSI,  
-.MISO,  
-.SCK,   
-.GND,   
+.ARDUINO_IO_00 (),
+.ARDUINO_IO_01 (),
+.ARDUINO_IO_02 (),
+.ARDUINO_IO_03 (),
+.ARDUINO_IO_04 (TP_CS),
+.ARDUINO_IO_05 (SD_CS),
+.ARDUINO_IO_06 (),
+.ARDUINO_IO_07 (LCD_DC),
+.ARDUINO_IO_08 (LCD_RST),
+.ARDUINO_IO_09 (LCD_BL),
+.ARDUINO_IO_10 (LCD_CS),
+.ARDUINO_IO_11 (MOSI),
+.ARDUINO_IO_12 (),
+.ARDUINO_IO_13 (SCLK),
+.ARDUINO_IO_14 (GND),
+.ARDUINO_IO_15 (),
 .ARDUINO_RESET_N,
 
 //////////// HDMI //////////
@@ -258,10 +267,10 @@ initial
   reset_n = '1;
   #20
   reset_n = '0;
+  KEY[0] = '0;
   #200
   reset_n = '1;
-  #27000000
-  KEY[0] = '0;
+  KEY[0] = '1;
 //  ARDUINO_RESET_N = 0; 
   end 
     

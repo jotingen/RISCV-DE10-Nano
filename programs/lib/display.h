@@ -3,28 +3,46 @@
 
 #include <stdio.h>
 
-struct display_pixel_t {  
-    uint8_t R;
-    uint8_t G;
-    uint8_t B;
+#define PXL_BLACK   (struct display_pixel_t) {0x00,0x00,0x00}
+#define PXL_WHITE   (struct display_pixel_t) {0x1F,0x3F,0x1F}
+#define PXL_RED     (struct display_pixel_t) {0x1F,0x00,0x00}
+#define PXL_LIME    (struct display_pixel_t) {0x00,0x3F,0x00}
+#define PXL_BLUE    (struct display_pixel_t) {0x00,0x00,0x1F}
+#define PXL_YELLOW  (struct display_pixel_t) {0x1F,0x3F,0x00}
+#define PXL_CYAN    (struct display_pixel_t) {0x00,0x3F,0x1F}
+#define PXL_MAGENTA (struct display_pixel_t) {0x1F,0x00,0x1F}
+#define PXL_SILVER  (struct display_pixel_t) {0x18,0x30,0x18}
+#define PXL_GRAY    (struct display_pixel_t) {0x10,0x20,0x10}
+#define PXL_MAROON  (struct display_pixel_t) {0x10,0x00,0x00}
+#define PXL_OLIVE   (struct display_pixel_t) {0x10,0x20,0x00}
+#define PXL_GREEN   (struct display_pixel_t) {0x00,0x20,0x00}
+#define PXL_PURPLE  (struct display_pixel_t) {0x10,0x00,0x10}
+#define PXL_TEAL    (struct display_pixel_t) {0x00,0x20,0x10}
+#define PXL_NAVY    (struct display_pixel_t) {0x00,0x00,0x10}
+
+struct __attribute__((__packed__)) display_pixel_t {  
+    unsigned int R : 5;
+    unsigned int G : 6;
+    unsigned int B : 5;
 };
 typedef struct display_pixel_t display_pixel_t;
 
-struct console_index_t {  
+struct __attribute__((__packed__)) console_index_t {  
     uint8_t X;
     uint8_t Y;
 };
 typedef struct console_index_t console_index_t;
 
 extern void     display_on(void);
+extern void     display_init(void);
 extern uint32_t display_height(void);
 extern uint32_t display_width(void);
 
-extern void     dispbuff_write_pixel(uint8_t x, uint8_t y, display_pixel_t * pixel);
-extern void     dispbuff_read_pixel(uint8_t x, uint8_t y, display_pixel_t * pixel);
+extern void     dispbuff_write_pixel(uint16_t x, uint16_t y, display_pixel_t pixel);
+extern display_pixel_t dispbuff_read_pixel(uint16_t x, uint16_t y);
 
        void     display_write_start(void);
-       void     display_write_pixel(display_pixel_t * pixel);
+       void     display_write_pixel(display_pixel_t pixel);
 
 
 extern void     display_write(void);

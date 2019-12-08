@@ -10,48 +10,179 @@
 #define DISPLAY_DATA    (*((volatile uint32_t *) (0xC2000008)))
 #define DISPLAY_BUFF    (*((volatile uint32_t *) (0xC3000000)))  
 
-#define UART            (*((volatile uint32_t *) (0xC3030000)))  
+#define UART            (*((volatile uint32_t *) (0xC3040000)))  
 
-#define DISPLAY_POWERON_DELAY 120
+#define DISPLAY_WAIT_DELAY 120
 
-#define DISPLAY_HEIGHT    320
-#define DISPLAY_WIDTH    480
+#ifndef SIMULATION
+  #define DISPLAY_HEIGHT    320
+  #define DISPLAY_WIDTH    480
+#else
+  #define DISPLAY_HEIGHT    16
+  #define DISPLAY_WIDTH    24
+#endif
 
-#define CONSOLE_ROWS    60
-#define CONSOLE_COLS    40
+#define CONSOLE_ROWS    DISPLAY_HEIGHT/8
+#define CONSOLE_COLS    DISPLAY_WIDTH/8
 
 #define DISPLAY_CMD_DISPON   0x29
 #define DISPLAY_CMD_SLEEPOUT 0x11
 #define DISPLAY_CMD_RAMWR    0x2C
-#define LED             (*((volatile unsigned int *) (0xC0000000)))
 
-static volatile uint32_t * const display_buffer = (volatile uint32_t *) 0xC3000000;
-static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0xC3020000;
+static volatile display_pixel_t * const display_buffer = (volatile display_pixel_t *) 0x10001000;
+static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0x10080000;
 
 console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
   uint64_t timestamp;
-  console_puts("Entering display_on...\n");
+  #ifndef NO_UART
+    console_puts("Entering display_on...\n");
+  #endif
 
-  timestamp = get_time();
-  while(get_time()-timestamp < 500) {}
+  #ifndef SIMULATION
+    timestamp = get_time();
+    while(get_time()-timestamp < DISPLAY_WAIT_DELAY) {}
+  #endif
 
-  console_puts("Sending SLEEPOUT on...\n");
+  #ifndef NO_UART
+    console_puts("Sending initialization settings...\n");
+  #endif
+  display_init();
+
+  #ifndef NO_UART
+    console_puts("Sending SLEEPOUT on...\n");
+  #endif
   DISPLAY_CMD = DISPLAY_CMD_SLEEPOUT; // SLPOUT (11h): Sleep Out
 
-  timestamp = get_time();
-  while(get_time()-timestamp < 500) {}
+  #ifndef SIMULATION
+    timestamp = get_time();
+    while(get_time()-timestamp < DISPLAY_WAIT_DELAY) {}
+  #endif
 
-  console_puts("Sending DISPON...\n");
+  #ifndef NO_UART
+    console_puts("Sending DISPON...\n");
+  #endif
   DISPLAY_CMD = DISPLAY_CMD_DISPON;
 
-  timestamp = get_time();
-  while(get_time()-timestamp < 500) {}
+  #ifndef SIMULATION
+    timestamp = get_time();
+    while(get_time()-timestamp < DISPLAY_WAIT_DELAY) {}
+  #endif
 
-  console_puts("Leaving display_on...\n");
+  #ifndef NO_UART
+    console_puts("Leaving display_on...\n");
+  #endif
 
   return;
+}
+
+void display_init(void) {
+  DISPLAY_CMD  = 0xC0; //Power Control 1
+  DISPLAY_DATA = 0x19; //VREG1OUT POSITIVE
+  DISPLAY_DATA = 0x1A; //VREG2OUT NEGATIVE
+
+  DISPLAY_CMD  = 0xC1;
+  DISPLAY_DATA = 0x45;//VGH,VGL    VGH>=14V.
+  DISPLAY_DATA = 0x00;
+
+  DISPLAY_CMD  = 0xC2;//Normal mode, increase can change the display quality, while increasing power consumption
+  DISPLAY_DATA = 0x33;
+
+  DISPLAY_CMD  = 0XC5;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x28;//VCM_REG[7:0]. <=0X80.
+
+  DISPLAY_CMD  = 0xB1;//Sets the frame frequency of full color normal mode
+  DISPLAY_DATA = 0xA0;//0XB0 =70HZ, <=0XB0.0xA0=62HZ
+  DISPLAY_DATA = 0x11;
+
+  DISPLAY_CMD  = 0xB4;
+  DISPLAY_DATA = 0x02; //2 DOT FRAME MODE,F<=70HZ.
+
+  DISPLAY_CMD  = 0xB6;//
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x42;//0 GS SS SM ISC[3:0];
+  DISPLAY_DATA = 0x3B;
+
+  DISPLAY_CMD  = 0xB7;
+  DISPLAY_DATA = 0x07;
+
+  DISPLAY_CMD  = 0xE0;
+  DISPLAY_DATA = 0x1F;
+  DISPLAY_DATA = 0x25;
+  DISPLAY_DATA = 0x22;
+  DISPLAY_DATA = 0x0B;
+  DISPLAY_DATA = 0x06;
+  DISPLAY_DATA = 0x0A;
+  DISPLAY_DATA = 0x4E;
+  DISPLAY_DATA = 0xC6;
+  DISPLAY_DATA = 0x39;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x00;
+
+  DISPLAY_CMD  = 0XE1;
+  DISPLAY_DATA = 0x1F;
+  DISPLAY_DATA = 0x3F;
+  DISPLAY_DATA = 0x3F;
+  DISPLAY_DATA = 0x0F;
+  DISPLAY_DATA = 0x1F;
+  DISPLAY_DATA = 0x0F;
+  DISPLAY_DATA = 0x46;
+  DISPLAY_DATA = 0x49;
+  DISPLAY_DATA = 0x31;
+  DISPLAY_DATA = 0x05;
+  DISPLAY_DATA = 0x09;
+  DISPLAY_DATA = 0x03;
+  DISPLAY_DATA = 0x1C;
+  DISPLAY_DATA = 0x1A;
+  DISPLAY_DATA = 0x00;
+
+  DISPLAY_CMD  = 0XF1;
+  DISPLAY_DATA = 0x36;
+  DISPLAY_DATA = 0x04;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x3C;
+  DISPLAY_DATA = 0x0F;
+  DISPLAY_DATA = 0x0F;
+  DISPLAY_DATA = 0xA4;
+  DISPLAY_DATA = 0x02;
+
+  DISPLAY_CMD  = 0XF2;
+  DISPLAY_DATA = 0x18;
+  DISPLAY_DATA = 0xA3;
+  DISPLAY_DATA = 0x12;
+  DISPLAY_DATA = 0x02;
+  DISPLAY_DATA = 0x32;
+  DISPLAY_DATA = 0x12;
+  DISPLAY_DATA = 0xFF;
+  DISPLAY_DATA = 0x32;
+  DISPLAY_DATA = 0x00;
+
+  DISPLAY_CMD  = 0XF4;
+  DISPLAY_DATA = 0x40;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x08;
+  DISPLAY_DATA = 0x91;
+  DISPLAY_DATA = 0x04;
+
+  DISPLAY_CMD  = 0XF8;
+  DISPLAY_DATA = 0x21;
+  DISPLAY_DATA = 0x04;
+
+  DISPLAY_CMD  = 0X3A;//Set Interface Pixel Format
+  DISPLAY_DATA = 0x55;
+
+  //Set scan direction, U2D,L2R
+  DISPLAY_CMD  = 0XB6;
+  DISPLAY_DATA = 0x00;
+  DISPLAY_DATA = 0x22;
+  DISPLAY_CMD  = 0X36;
+  DISPLAY_DATA = 0x08;
 }
 
        uint32_t display_height(void) {
@@ -62,20 +193,13 @@ void display_on(void) {
   return DISPLAY_WIDTH;
 }
 
-       void     dispbuff_write_pixel(uint8_t y, uint8_t x, display_pixel_t * pixel) {
-  x = DISPLAY_WIDTH-1-x;
-  y = DISPLAY_HEIGHT-1-y;
-  display_buffer[x*DISPLAY_HEIGHT+y] = 0 | (pixel->R << 16) | (pixel->G << 8) | (pixel->B << 0);
+       void     dispbuff_write_pixel(uint16_t y, uint16_t x, display_pixel_t pixel) {
+  display_buffer[y*DISPLAY_WIDTH+x] = pixel;
   return;
 }
 
-       void     dispbuff_read_pixel(uint8_t y, uint8_t x, display_pixel_t * pixel) {
-  uint32_t buff;
-  buff = display_buffer[y*DISPLAY_WIDTH+x];
-  pixel->R = (buff >> 16) & 0x000000FF;
-  pixel->G = (buff >> 8)  & 0x000000FF;
-  pixel->B = (buff >> 0)  & 0x000000FF;
-  return;
+  display_pixel_t dispbuff_read_pixel(uint16_t y, uint16_t x) {
+  return display_buffer[y*DISPLAY_WIDTH+x];
 }
 
 
@@ -85,31 +209,27 @@ void display_on(void) {
   return;
 }
 
-       void     display_write_pixel(display_pixel_t * pixel) {
-  DISPLAY_DATA = 0x80 | pixel->R;
-  DISPLAY_DATA = 0x80 | pixel->G;
-  DISPLAY_DATA = 0x80 | pixel->B;
+       void     display_write_pixel(display_pixel_t pixel) {
+  DISPLAY_DATA = *(uint32_t*)&pixel;
   return;
 }
 
        void display_write(void) {
   display_write_start();
   display_pixel_t pixel;
-  for(int x = DISPLAY_WIDTH-1; x >= 0; x--) {
-    for(int y = DISPLAY_HEIGHT-1; y >= 0; y--) {
+  for(int x = 0; x < DISPLAY_WIDTH; x++) {
+    for(int y = 0; y < DISPLAY_HEIGHT; y++) {
       int consoleX = x/8;
       int consoleY = y/8;
       int charX = x%8;
       int charY = y%8;
-      uint8_t char_set = font8x8_basic[console_buffer[consoleY*CONSOLE_COLS+(DISPLAY_WIDTH/8-1-consoleX)]][charY] & (1 << (7-charX));
+      uint8_t char_set = font8x8_basic[console_buffer[(DISPLAY_HEIGHT/8-1-consoleY)*CONSOLE_COLS+consoleX]][7-charY] & (1 << charX);
       if(char_set) {
-        pixel.R = 0x3F;
-        pixel.G = 0x3F;
-        pixel.B = 0x3F;
+        pixel = PXL_WHITE;
       } else {
-        dispbuff_read_pixel(y,x,&pixel);
+        pixel = dispbuff_read_pixel(y,x);
       }
-      display_write_pixel(&pixel);
+      display_write_pixel(pixel);
     }
   }
   return;
@@ -135,9 +255,6 @@ void console_clear() {
   curser_index.Y = 0;
   for(int y = 0; y < CONSOLE_ROWS; y++) {
     for(int x = 0; x < CONSOLE_COLS; x++) {
-      LED = 0xFF;
-      LED = x;
-      LED = y;
       console_buffer[y*CONSOLE_COLS+x] = 0;
     }
   }
