@@ -26,7 +26,7 @@ output logic           o_bus_ack,
 output logic [31:0]    o_bus_data
 );
 
-parameter PERIOD_20ns = 125;
+parameter SDCARD_PERIOD = 8;//Trying faster  125;
 
 parameter R1_BITS  = 1*8;
 parameter R1B_BITS = 1*8;
@@ -230,9 +230,9 @@ always_ff @(posedge clk)
                         end
                       end
   state_cmd_sending : begin
-                      CS <= '0;
                       if(sck_put)
                         begin
+                        CS <= '0;
                         if(bits == 'd0)
                           begin
                           state_rsp_pending    <= '1;
@@ -395,7 +395,7 @@ always_ff @(posedge clk)
     end
   else
     begin
-    if(sck_cnt >= PERIOD_20ns*1/4 && sck_cnt <= PERIOD_20ns*3/4)
+    if(sck_cnt >= SDCARD_PERIOD*1/4 && sck_cnt <= SDCARD_PERIOD*3/4)
       begin 
       SCK <= '1;
       end
@@ -403,7 +403,7 @@ always_ff @(posedge clk)
       begin
       SCK <= '0;
       end
-    if(sck_cnt >= PERIOD_20ns)
+    if(sck_cnt >= SDCARD_PERIOD)
       begin
       sck_put <= '1;
       sck_cnt <= '0;

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Dec 05 21:49:01 2019
+[*] Fri Dec 13 05:02:28 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Dec 05 21:41:31 2019"
-[dumpfile_size] 486119954
+[dumpfile_mtime] "Fri Dec 13 04:56:54 2019"
+[dumpfile_size] 2165996597
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 675245
-[size] 1854 1046
+[timestart] 11914487
+[size] 1854 1048
 [pos] -1 -1
-*-10.060261 677050 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.854325 11915470 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.alu.
@@ -22,7 +22,7 @@
 [sst_width] 290
 [signals_width] 457
 [sst_expanded] 1
-[sst_vpaned_height] 514
+[sst_vpaned_height] 516
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -53,19 +53,6 @@ tb.dut.riscv.csrfile.csr_req
 tb.dut.riscv.csrfile.csr_data_rd[31:0]
 @200
 -
-@22
-tb.dut.ddr3_avl_addr[25:0]
-#{tb.dut.ddr3_avl_rdata[127:0]} tb.dut.ddr3_avl_rdata[127] tb.dut.ddr3_avl_rdata[126] tb.dut.ddr3_avl_rdata[125] tb.dut.ddr3_avl_rdata[124] tb.dut.ddr3_avl_rdata[123] tb.dut.ddr3_avl_rdata[122] tb.dut.ddr3_avl_rdata[121] tb.dut.ddr3_avl_rdata[120] tb.dut.ddr3_avl_rdata[119] tb.dut.ddr3_avl_rdata[118] tb.dut.ddr3_avl_rdata[117] tb.dut.ddr3_avl_rdata[116] tb.dut.ddr3_avl_rdata[115] tb.dut.ddr3_avl_rdata[114] tb.dut.ddr3_avl_rdata[113] tb.dut.ddr3_avl_rdata[112] tb.dut.ddr3_avl_rdata[111] tb.dut.ddr3_avl_rdata[110] tb.dut.ddr3_avl_rdata[109] tb.dut.ddr3_avl_rdata[108] tb.dut.ddr3_avl_rdata[107] tb.dut.ddr3_avl_rdata[106] tb.dut.ddr3_avl_rdata[105] tb.dut.ddr3_avl_rdata[104] tb.dut.ddr3_avl_rdata[103] tb.dut.ddr3_avl_rdata[102] tb.dut.ddr3_avl_rdata[101] tb.dut.ddr3_avl_rdata[100] tb.dut.ddr3_avl_rdata[99] tb.dut.ddr3_avl_rdata[98] tb.dut.ddr3_avl_rdata[97] tb.dut.ddr3_avl_rdata[96] tb.dut.ddr3_avl_rdata[95] tb.dut.ddr3_avl_rdata[94] tb.dut.ddr3_avl_rdata[93] tb.dut.ddr3_avl_rdata[92] tb.dut.ddr3_avl_rdata[91] tb.dut.ddr3_avl_rdata[90] tb.dut.ddr3_avl_rdata[89] tb.dut.ddr3_avl_rdata[88] tb.dut.ddr3_avl_rdata[87] tb.dut.ddr3_avl_rdata[86] tb.dut.ddr3_avl_rdata[85] tb.dut.ddr3_avl_rdata[84] tb.dut.ddr3_avl_rdata[83] tb.dut.ddr3_avl_rdata[82] tb.dut.ddr3_avl_rdata[81] tb.dut.ddr3_avl_rdata[80] tb.dut.ddr3_avl_rdata[79] tb.dut.ddr3_avl_rdata[78] tb.dut.ddr3_avl_rdata[77] tb.dut.ddr3_avl_rdata[76] tb.dut.ddr3_avl_rdata[75] tb.dut.ddr3_avl_rdata[74] tb.dut.ddr3_avl_rdata[73] tb.dut.ddr3_avl_rdata[72] tb.dut.ddr3_avl_rdata[71] tb.dut.ddr3_avl_rdata[70] tb.dut.ddr3_avl_rdata[69] tb.dut.ddr3_avl_rdata[68] tb.dut.ddr3_avl_rdata[67] tb.dut.ddr3_avl_rdata[66] tb.dut.ddr3_avl_rdata[65] tb.dut.ddr3_avl_rdata[64] tb.dut.ddr3_avl_rdata[63] tb.dut.ddr3_avl_rdata[62] tb.dut.ddr3_avl_rdata[61] tb.dut.ddr3_avl_rdata[60] tb.dut.ddr3_avl_rdata[59] tb.dut.ddr3_avl_rdata[58] tb.dut.ddr3_avl_rdata[57] tb.dut.ddr3_avl_rdata[56] tb.dut.ddr3_avl_rdata[55] tb.dut.ddr3_avl_rdata[54] tb.dut.ddr3_avl_rdata[53] tb.dut.ddr3_avl_rdata[52] tb.dut.ddr3_avl_rdata[51] tb.dut.ddr3_avl_rdata[50] tb.dut.ddr3_avl_rdata[49] tb.dut.ddr3_avl_rdata[48] tb.dut.ddr3_avl_rdata[47] tb.dut.ddr3_avl_rdata[46] tb.dut.ddr3_avl_rdata[45] tb.dut.ddr3_avl_rdata[44] tb.dut.ddr3_avl_rdata[43] tb.dut.ddr3_avl_rdata[42] tb.dut.ddr3_avl_rdata[41] tb.dut.ddr3_avl_rdata[40] tb.dut.ddr3_avl_rdata[39] tb.dut.ddr3_avl_rdata[38] tb.dut.ddr3_avl_rdata[37] tb.dut.ddr3_avl_rdata[36] tb.dut.ddr3_avl_rdata[35] tb.dut.ddr3_avl_rdata[34] tb.dut.ddr3_avl_rdata[33] tb.dut.ddr3_avl_rdata[32] tb.dut.ddr3_avl_rdata[31] tb.dut.ddr3_avl_rdata[30] tb.dut.ddr3_avl_rdata[29] tb.dut.ddr3_avl_rdata[28] tb.dut.ddr3_avl_rdata[27] tb.dut.ddr3_avl_rdata[26] tb.dut.ddr3_avl_rdata[25] tb.dut.ddr3_avl_rdata[24] tb.dut.ddr3_avl_rdata[23] tb.dut.ddr3_avl_rdata[22] tb.dut.ddr3_avl_rdata[21] tb.dut.ddr3_avl_rdata[20] tb.dut.ddr3_avl_rdata[19] tb.dut.ddr3_avl_rdata[18] tb.dut.ddr3_avl_rdata[17] tb.dut.ddr3_avl_rdata[16] tb.dut.ddr3_avl_rdata[15] tb.dut.ddr3_avl_rdata[14] tb.dut.ddr3_avl_rdata[13] tb.dut.ddr3_avl_rdata[12] tb.dut.ddr3_avl_rdata[11] tb.dut.ddr3_avl_rdata[10] tb.dut.ddr3_avl_rdata[9] tb.dut.ddr3_avl_rdata[8] tb.dut.ddr3_avl_rdata[7] tb.dut.ddr3_avl_rdata[6] tb.dut.ddr3_avl_rdata[5] tb.dut.ddr3_avl_rdata[4] tb.dut.ddr3_avl_rdata[3] tb.dut.ddr3_avl_rdata[2] tb.dut.ddr3_avl_rdata[1] tb.dut.ddr3_avl_rdata[0]
-@28
-tb.dut.ddr3_avl_rdata_valid
-tb.dut.ddr3_avl_read_req
-tb.dut.ddr3_avl_ready
-@22
-tb.dut.ddr3_avl_wdata[127:0]
-@28
-tb.dut.ddr3_avl_write_req
-@200
--
 @28
 tb.ARDUINO_RESET_N
 @c00200
@@ -78,6 +65,7 @@ tb.dut.shield.MOSI
 tb.dut.shield.MISO
 @200
 -
+@800200
 -MMC INST
 @28
 tb.dut.riscv_mmc_instbus_req
@@ -97,8 +85,9 @@ tb.dut.mem_mmc_instbus_ack
 tb.dut.mmc_riscv_instbus_ack
 @22
 tb.dut.mmc_riscv_instbus_data[31:0]
-@200
--
+@1000200
+-MMC INST
+@c00200
 -MMC DATA
 @28
 tb.dut.riscv_mmc_bus_req
@@ -198,9 +187,12 @@ tb.dut.uart_mmc_bus_data[31:0]
 tb.dut.mmc_riscv_bus_ack
 @22
 tb.dut.mmc_riscv_bus_data[31:0]
+@1401200
+-MMC DATA
 @200
 -
--SPI ARB
+@c00200
+-SPI Arb
 @28
 tb.dut.shield.spi_arb.SCK
 tb.dut.shield.spi_arb.DISPLAY_CS
@@ -224,11 +216,20 @@ tb.dut.shield.spi_arb.sdcard_SPIDone
 @200
 -
 @28
-tb.dut.shield.spi_arb.clk_stgd
-tb.dut.shield.spi_arb.clk_settled
+tb.dut.shield.spi_arb.state_idle
+tb.dut.shield.spi_arb.state_requested
+tb.dut.shield.spi_arb.state_granted
 @200
 -
--SD CARD
+@28
+tb.dut.shield.spi_arb.clk_stgd
+tb.dut.shield.spi_arb.clk_settled
+@1401200
+-SPI Arb
+@200
+-
+@800200
+-SDCard
 @28
 tb.sd.rstn
 tb.sd.ncs
@@ -292,14 +293,85 @@ tb.dut.shield.sdcard.MOSI
 tb.dut.shield.sdcard.MISO
 @200
 -
-@22
+@c00022
 tb.dut.shield.sdcard.cmd[63:0]
+@28
+(0)tb.dut.shield.sdcard.cmd[63:0]
+(1)tb.dut.shield.sdcard.cmd[63:0]
+(2)tb.dut.shield.sdcard.cmd[63:0]
+(3)tb.dut.shield.sdcard.cmd[63:0]
+(4)tb.dut.shield.sdcard.cmd[63:0]
+(5)tb.dut.shield.sdcard.cmd[63:0]
+(6)tb.dut.shield.sdcard.cmd[63:0]
+(7)tb.dut.shield.sdcard.cmd[63:0]
+(8)tb.dut.shield.sdcard.cmd[63:0]
+(9)tb.dut.shield.sdcard.cmd[63:0]
+(10)tb.dut.shield.sdcard.cmd[63:0]
+(11)tb.dut.shield.sdcard.cmd[63:0]
+(12)tb.dut.shield.sdcard.cmd[63:0]
+(13)tb.dut.shield.sdcard.cmd[63:0]
+(14)tb.dut.shield.sdcard.cmd[63:0]
+(15)tb.dut.shield.sdcard.cmd[63:0]
+(16)tb.dut.shield.sdcard.cmd[63:0]
+(17)tb.dut.shield.sdcard.cmd[63:0]
+(18)tb.dut.shield.sdcard.cmd[63:0]
+(19)tb.dut.shield.sdcard.cmd[63:0]
+(20)tb.dut.shield.sdcard.cmd[63:0]
+(21)tb.dut.shield.sdcard.cmd[63:0]
+(22)tb.dut.shield.sdcard.cmd[63:0]
+(23)tb.dut.shield.sdcard.cmd[63:0]
+(24)tb.dut.shield.sdcard.cmd[63:0]
+(25)tb.dut.shield.sdcard.cmd[63:0]
+(26)tb.dut.shield.sdcard.cmd[63:0]
+(27)tb.dut.shield.sdcard.cmd[63:0]
+(28)tb.dut.shield.sdcard.cmd[63:0]
+(29)tb.dut.shield.sdcard.cmd[63:0]
+(30)tb.dut.shield.sdcard.cmd[63:0]
+(31)tb.dut.shield.sdcard.cmd[63:0]
+(32)tb.dut.shield.sdcard.cmd[63:0]
+(33)tb.dut.shield.sdcard.cmd[63:0]
+(34)tb.dut.shield.sdcard.cmd[63:0]
+(35)tb.dut.shield.sdcard.cmd[63:0]
+(36)tb.dut.shield.sdcard.cmd[63:0]
+(37)tb.dut.shield.sdcard.cmd[63:0]
+(38)tb.dut.shield.sdcard.cmd[63:0]
+(39)tb.dut.shield.sdcard.cmd[63:0]
+(40)tb.dut.shield.sdcard.cmd[63:0]
+(41)tb.dut.shield.sdcard.cmd[63:0]
+(42)tb.dut.shield.sdcard.cmd[63:0]
+(43)tb.dut.shield.sdcard.cmd[63:0]
+(44)tb.dut.shield.sdcard.cmd[63:0]
+(45)tb.dut.shield.sdcard.cmd[63:0]
+(46)tb.dut.shield.sdcard.cmd[63:0]
+(47)tb.dut.shield.sdcard.cmd[63:0]
+(48)tb.dut.shield.sdcard.cmd[63:0]
+(49)tb.dut.shield.sdcard.cmd[63:0]
+(50)tb.dut.shield.sdcard.cmd[63:0]
+(51)tb.dut.shield.sdcard.cmd[63:0]
+(52)tb.dut.shield.sdcard.cmd[63:0]
+(53)tb.dut.shield.sdcard.cmd[63:0]
+(54)tb.dut.shield.sdcard.cmd[63:0]
+(55)tb.dut.shield.sdcard.cmd[63:0]
+(56)tb.dut.shield.sdcard.cmd[63:0]
+(57)tb.dut.shield.sdcard.cmd[63:0]
+(58)tb.dut.shield.sdcard.cmd[63:0]
+(59)tb.dut.shield.sdcard.cmd[63:0]
+(60)tb.dut.shield.sdcard.cmd[63:0]
+(61)tb.dut.shield.sdcard.cmd[63:0]
+(62)tb.dut.shield.sdcard.cmd[63:0]
+(63)tb.dut.shield.sdcard.cmd[63:0]
+@1401200
+-group_end
 @200
 -
 @22
 tb.dut.shield.sdcard.data_bits[12:0]
 tb.dut.shield.sdcard.rsp_bits[8:0]
+@24
 tb.dut.shield.sdcard.bits[12:0]
+@28
+tb.dut.shield.sdcard.MOSI
+tb.dut.shield.sdcard.CS
 @200
 -
 -
@@ -307,9 +379,11 @@ tb.dut.shield.sdcard.bits[12:0]
 tb.dut.shield.sdcard.SPIReq
 tb.dut.shield.sdcard.SPIAck
 tb.dut.shield.sdcard.SPIDone
+@1000200
+-SDCard
 @200
 -
--
+@800200
 -DDR3
 @28
 tb.dut.ddr3.clk
@@ -318,6 +392,12 @@ tb.dut.ddr3.ddr3_clk
 -
 @28
 tb.dut.led.LED[7:0]
+@200
+-
+@28
+tb.dut.ddr3.i_instbus_req
+@22
+#{tb.dut.ddr3.i_instbus_addr[31:0]} tb.dut.ddr3.i_instbus_addr[31] tb.dut.ddr3.i_instbus_addr[30] tb.dut.ddr3.i_instbus_addr[29] tb.dut.ddr3.i_instbus_addr[28] tb.dut.ddr3.i_instbus_addr[27] tb.dut.ddr3.i_instbus_addr[26] tb.dut.ddr3.i_instbus_addr[25] tb.dut.ddr3.i_instbus_addr[24] tb.dut.ddr3.i_instbus_addr[23] tb.dut.ddr3.i_instbus_addr[22] tb.dut.ddr3.i_instbus_addr[21] tb.dut.ddr3.i_instbus_addr[20] tb.dut.ddr3.i_instbus_addr[19] tb.dut.ddr3.i_instbus_addr[18] tb.dut.ddr3.i_instbus_addr[17] tb.dut.ddr3.i_instbus_addr[16] tb.dut.ddr3.i_instbus_addr[15] tb.dut.ddr3.i_instbus_addr[14] tb.dut.ddr3.i_instbus_addr[13] tb.dut.ddr3.i_instbus_addr[12] tb.dut.ddr3.i_instbus_addr[11] tb.dut.ddr3.i_instbus_addr[10] tb.dut.ddr3.i_instbus_addr[9] tb.dut.ddr3.i_instbus_addr[8] tb.dut.ddr3.i_instbus_addr[7] tb.dut.ddr3.i_instbus_addr[6] tb.dut.ddr3.i_instbus_addr[5] tb.dut.ddr3.i_instbus_addr[4] tb.dut.ddr3.i_instbus_addr[3] tb.dut.ddr3.i_instbus_addr[2] tb.dut.ddr3.i_instbus_addr[1] tb.dut.ddr3.i_instbus_addr[0]
 @200
 -
 @28
@@ -341,10 +421,17 @@ tb.dut.ddr3.flush_cnt[3:0]
 @200
 -
 @28
-tb.dut.ddr3.buffer_vld
+tb.dut.ddr3.inst_buffer_vld
 @22
-tb.dut.ddr3.buffer_addr[25:4]
-tb.dut.ddr3.buffer_data[127:0]
+tb.dut.ddr3.inst_buffer_addr[25:4]
+tb.dut.ddr3.inst_buffer_data[127:0]
+@201
+-
+@28
+tb.dut.ddr3.mem_buffer_vld
+@22
+tb.dut.ddr3.mem_buffer_addr[25:4]
+tb.dut.ddr3.mem_buffer_data[127:0]
 @200
 -
 @28
@@ -409,139 +496,8 @@ tb.dut.ddr3.ddr3_fifo_in.wrclk
 tb.dut.ddr3.ddr3_fifo_in.wrreq
 @200
 -
-@28
-tb.dut.ddr3.buffer_vld
-@c00022
-tb.dut.ddr3.buffer_data[127:0]
-@28
-(0)tb.dut.ddr3.buffer_data[127:0]
-(1)tb.dut.ddr3.buffer_data[127:0]
-(2)tb.dut.ddr3.buffer_data[127:0]
-(3)tb.dut.ddr3.buffer_data[127:0]
-(4)tb.dut.ddr3.buffer_data[127:0]
-(5)tb.dut.ddr3.buffer_data[127:0]
-(6)tb.dut.ddr3.buffer_data[127:0]
-(7)tb.dut.ddr3.buffer_data[127:0]
-(8)tb.dut.ddr3.buffer_data[127:0]
-(9)tb.dut.ddr3.buffer_data[127:0]
-(10)tb.dut.ddr3.buffer_data[127:0]
-(11)tb.dut.ddr3.buffer_data[127:0]
-(12)tb.dut.ddr3.buffer_data[127:0]
-(13)tb.dut.ddr3.buffer_data[127:0]
-(14)tb.dut.ddr3.buffer_data[127:0]
-(15)tb.dut.ddr3.buffer_data[127:0]
-(16)tb.dut.ddr3.buffer_data[127:0]
-(17)tb.dut.ddr3.buffer_data[127:0]
-(18)tb.dut.ddr3.buffer_data[127:0]
-(19)tb.dut.ddr3.buffer_data[127:0]
-(20)tb.dut.ddr3.buffer_data[127:0]
-(21)tb.dut.ddr3.buffer_data[127:0]
-(22)tb.dut.ddr3.buffer_data[127:0]
-(23)tb.dut.ddr3.buffer_data[127:0]
-(24)tb.dut.ddr3.buffer_data[127:0]
-(25)tb.dut.ddr3.buffer_data[127:0]
-(26)tb.dut.ddr3.buffer_data[127:0]
-(27)tb.dut.ddr3.buffer_data[127:0]
-(28)tb.dut.ddr3.buffer_data[127:0]
-(29)tb.dut.ddr3.buffer_data[127:0]
-(30)tb.dut.ddr3.buffer_data[127:0]
-(31)tb.dut.ddr3.buffer_data[127:0]
-(32)tb.dut.ddr3.buffer_data[127:0]
-(33)tb.dut.ddr3.buffer_data[127:0]
-(34)tb.dut.ddr3.buffer_data[127:0]
-(35)tb.dut.ddr3.buffer_data[127:0]
-(36)tb.dut.ddr3.buffer_data[127:0]
-(37)tb.dut.ddr3.buffer_data[127:0]
-(38)tb.dut.ddr3.buffer_data[127:0]
-(39)tb.dut.ddr3.buffer_data[127:0]
-(40)tb.dut.ddr3.buffer_data[127:0]
-(41)tb.dut.ddr3.buffer_data[127:0]
-(42)tb.dut.ddr3.buffer_data[127:0]
-(43)tb.dut.ddr3.buffer_data[127:0]
-(44)tb.dut.ddr3.buffer_data[127:0]
-(45)tb.dut.ddr3.buffer_data[127:0]
-(46)tb.dut.ddr3.buffer_data[127:0]
-(47)tb.dut.ddr3.buffer_data[127:0]
-(48)tb.dut.ddr3.buffer_data[127:0]
-(49)tb.dut.ddr3.buffer_data[127:0]
-(50)tb.dut.ddr3.buffer_data[127:0]
-(51)tb.dut.ddr3.buffer_data[127:0]
-(52)tb.dut.ddr3.buffer_data[127:0]
-(53)tb.dut.ddr3.buffer_data[127:0]
-(54)tb.dut.ddr3.buffer_data[127:0]
-(55)tb.dut.ddr3.buffer_data[127:0]
-(56)tb.dut.ddr3.buffer_data[127:0]
-(57)tb.dut.ddr3.buffer_data[127:0]
-(58)tb.dut.ddr3.buffer_data[127:0]
-(59)tb.dut.ddr3.buffer_data[127:0]
-(60)tb.dut.ddr3.buffer_data[127:0]
-(61)tb.dut.ddr3.buffer_data[127:0]
-(62)tb.dut.ddr3.buffer_data[127:0]
-(63)tb.dut.ddr3.buffer_data[127:0]
-(64)tb.dut.ddr3.buffer_data[127:0]
-(65)tb.dut.ddr3.buffer_data[127:0]
-(66)tb.dut.ddr3.buffer_data[127:0]
-(67)tb.dut.ddr3.buffer_data[127:0]
-(68)tb.dut.ddr3.buffer_data[127:0]
-(69)tb.dut.ddr3.buffer_data[127:0]
-(70)tb.dut.ddr3.buffer_data[127:0]
-(71)tb.dut.ddr3.buffer_data[127:0]
-(72)tb.dut.ddr3.buffer_data[127:0]
-(73)tb.dut.ddr3.buffer_data[127:0]
-(74)tb.dut.ddr3.buffer_data[127:0]
-(75)tb.dut.ddr3.buffer_data[127:0]
-(76)tb.dut.ddr3.buffer_data[127:0]
-(77)tb.dut.ddr3.buffer_data[127:0]
-(78)tb.dut.ddr3.buffer_data[127:0]
-(79)tb.dut.ddr3.buffer_data[127:0]
-(80)tb.dut.ddr3.buffer_data[127:0]
-(81)tb.dut.ddr3.buffer_data[127:0]
-(82)tb.dut.ddr3.buffer_data[127:0]
-(83)tb.dut.ddr3.buffer_data[127:0]
-(84)tb.dut.ddr3.buffer_data[127:0]
-(85)tb.dut.ddr3.buffer_data[127:0]
-(86)tb.dut.ddr3.buffer_data[127:0]
-(87)tb.dut.ddr3.buffer_data[127:0]
-(88)tb.dut.ddr3.buffer_data[127:0]
-(89)tb.dut.ddr3.buffer_data[127:0]
-(90)tb.dut.ddr3.buffer_data[127:0]
-(91)tb.dut.ddr3.buffer_data[127:0]
-(92)tb.dut.ddr3.buffer_data[127:0]
-(93)tb.dut.ddr3.buffer_data[127:0]
-(94)tb.dut.ddr3.buffer_data[127:0]
-(95)tb.dut.ddr3.buffer_data[127:0]
-(96)tb.dut.ddr3.buffer_data[127:0]
-(97)tb.dut.ddr3.buffer_data[127:0]
-(98)tb.dut.ddr3.buffer_data[127:0]
-(99)tb.dut.ddr3.buffer_data[127:0]
-(100)tb.dut.ddr3.buffer_data[127:0]
-(101)tb.dut.ddr3.buffer_data[127:0]
-(102)tb.dut.ddr3.buffer_data[127:0]
-(103)tb.dut.ddr3.buffer_data[127:0]
-(104)tb.dut.ddr3.buffer_data[127:0]
-(105)tb.dut.ddr3.buffer_data[127:0]
-(106)tb.dut.ddr3.buffer_data[127:0]
-(107)tb.dut.ddr3.buffer_data[127:0]
-(108)tb.dut.ddr3.buffer_data[127:0]
-(109)tb.dut.ddr3.buffer_data[127:0]
-(110)tb.dut.ddr3.buffer_data[127:0]
-(111)tb.dut.ddr3.buffer_data[127:0]
-(112)tb.dut.ddr3.buffer_data[127:0]
-(113)tb.dut.ddr3.buffer_data[127:0]
-(114)tb.dut.ddr3.buffer_data[127:0]
-(115)tb.dut.ddr3.buffer_data[127:0]
-(116)tb.dut.ddr3.buffer_data[127:0]
-(117)tb.dut.ddr3.buffer_data[127:0]
-(118)tb.dut.ddr3.buffer_data[127:0]
-(119)tb.dut.ddr3.buffer_data[127:0]
-(120)tb.dut.ddr3.buffer_data[127:0]
-(121)tb.dut.ddr3.buffer_data[127:0]
-(122)tb.dut.ddr3.buffer_data[127:0]
-(123)tb.dut.ddr3.buffer_data[127:0]
-(124)tb.dut.ddr3.buffer_data[127:0]
-(125)tb.dut.ddr3.buffer_data[127:0]
-(126)tb.dut.ddr3.buffer_data[127:0]
-(127)tb.dut.ddr3.buffer_data[127:0]
+@c00200
+-tb.dut.ddr3.buffer_data
 @1401200
 -group_end
 @200
@@ -550,9 +506,11 @@ tb.dut.ddr3.buffer_data[127:0]
 tb.dut.ddr3.o_membus_ack
 @22
 tb.dut.ddr3.o_membus_data[31:0]
+@1000200
+-DDR3
 @200
 -
--
+@c00200
 -DISPLAY
 @28
 tb.dut.shield.display.SCK
@@ -583,7 +541,6 @@ tb.dut.shield.display.o_bus_data[31:0]
 -
 @28
 tb.dut.shield.display.req
-@29
 tb.dut.shield.display.cmd
 @200
 -
@@ -611,57 +568,11 @@ tb.dut.shield.display.transmit.cmd
 @22
 #{tb.dut.shield.display.transmit.data[7:0]} tb.dut.shield.display.transmit.data[7] tb.dut.shield.display.transmit.data[6] tb.dut.shield.display.transmit.data[5] tb.dut.shield.display.transmit.data[4] tb.dut.shield.display.transmit.data[3] tb.dut.shield.display.transmit.data[2] tb.dut.shield.display.transmit.data[1] tb.dut.shield.display.transmit.data[0]
 tb.dut.shield.display.transmit.cooldown_cnt[20:0]
+@1401200
+-DISPLAY
 @200
 -
--DISPLAY BUFFER
-@28
-tb.dut.shield.display_buffer.i_membus_req
-tb.dut.shield.display_buffer.i_membus_write
-@22
-#{tb.dut.shield.display_buffer.i_membus_addr[31:0]} tb.dut.shield.display_buffer.i_membus_addr[31] tb.dut.shield.display_buffer.i_membus_addr[30] tb.dut.shield.display_buffer.i_membus_addr[29] tb.dut.shield.display_buffer.i_membus_addr[28] tb.dut.shield.display_buffer.i_membus_addr[27] tb.dut.shield.display_buffer.i_membus_addr[26] tb.dut.shield.display_buffer.i_membus_addr[25] tb.dut.shield.display_buffer.i_membus_addr[24] tb.dut.shield.display_buffer.i_membus_addr[23] tb.dut.shield.display_buffer.i_membus_addr[22] tb.dut.shield.display_buffer.i_membus_addr[21] tb.dut.shield.display_buffer.i_membus_addr[20] tb.dut.shield.display_buffer.i_membus_addr[19] tb.dut.shield.display_buffer.i_membus_addr[18] tb.dut.shield.display_buffer.i_membus_addr[17] tb.dut.shield.display_buffer.i_membus_addr[16] tb.dut.shield.display_buffer.i_membus_addr[15] tb.dut.shield.display_buffer.i_membus_addr[14] tb.dut.shield.display_buffer.i_membus_addr[13] tb.dut.shield.display_buffer.i_membus_addr[12] tb.dut.shield.display_buffer.i_membus_addr[11] tb.dut.shield.display_buffer.i_membus_addr[10] tb.dut.shield.display_buffer.i_membus_addr[9] tb.dut.shield.display_buffer.i_membus_addr[8] tb.dut.shield.display_buffer.i_membus_addr[7] tb.dut.shield.display_buffer.i_membus_addr[6] tb.dut.shield.display_buffer.i_membus_addr[5] tb.dut.shield.display_buffer.i_membus_addr[4] tb.dut.shield.display_buffer.i_membus_addr[3] tb.dut.shield.display_buffer.i_membus_addr[2] tb.dut.shield.display_buffer.i_membus_addr[1] tb.dut.shield.display_buffer.i_membus_addr[0]
-#{tb.dut.shield.display_buffer.i_membus_data[31:0]} tb.dut.shield.display_buffer.i_membus_data[31] tb.dut.shield.display_buffer.i_membus_data[30] tb.dut.shield.display_buffer.i_membus_data[29] tb.dut.shield.display_buffer.i_membus_data[28] tb.dut.shield.display_buffer.i_membus_data[27] tb.dut.shield.display_buffer.i_membus_data[26] tb.dut.shield.display_buffer.i_membus_data[25] tb.dut.shield.display_buffer.i_membus_data[24] tb.dut.shield.display_buffer.i_membus_data[23] tb.dut.shield.display_buffer.i_membus_data[22] tb.dut.shield.display_buffer.i_membus_data[21] tb.dut.shield.display_buffer.i_membus_data[20] tb.dut.shield.display_buffer.i_membus_data[19] tb.dut.shield.display_buffer.i_membus_data[18] tb.dut.shield.display_buffer.i_membus_data[17] tb.dut.shield.display_buffer.i_membus_data[16] tb.dut.shield.display_buffer.i_membus_data[15] tb.dut.shield.display_buffer.i_membus_data[14] tb.dut.shield.display_buffer.i_membus_data[13] tb.dut.shield.display_buffer.i_membus_data[12] tb.dut.shield.display_buffer.i_membus_data[11] tb.dut.shield.display_buffer.i_membus_data[10] tb.dut.shield.display_buffer.i_membus_data[9] tb.dut.shield.display_buffer.i_membus_data[8] tb.dut.shield.display_buffer.i_membus_data[7] tb.dut.shield.display_buffer.i_membus_data[6] tb.dut.shield.display_buffer.i_membus_data[5] tb.dut.shield.display_buffer.i_membus_data[4] tb.dut.shield.display_buffer.i_membus_data[3] tb.dut.shield.display_buffer.i_membus_data[2] tb.dut.shield.display_buffer.i_membus_data[1] tb.dut.shield.display_buffer.i_membus_data[0]
-@200
--
-@28
-tb.dut.shield.display_buffer.o_membus_ack
-@22
-tb.dut.shield.display_buffer.o_membus_data[31:0]
-@200
--
--CONSOLE_BUFFER
-@28
-tb.dut.shield.console_buffer.i_membus_req
-tb.dut.shield.console_buffer.i_membus_write
-@22
-#{tb.dut.shield.console_buffer.i_membus_addr[31:0]} tb.dut.shield.console_buffer.i_membus_addr[31] tb.dut.shield.console_buffer.i_membus_addr[30] tb.dut.shield.console_buffer.i_membus_addr[29] tb.dut.shield.console_buffer.i_membus_addr[28] tb.dut.shield.console_buffer.i_membus_addr[27] tb.dut.shield.console_buffer.i_membus_addr[26] tb.dut.shield.console_buffer.i_membus_addr[25] tb.dut.shield.console_buffer.i_membus_addr[24] tb.dut.shield.console_buffer.i_membus_addr[23] tb.dut.shield.console_buffer.i_membus_addr[22] tb.dut.shield.console_buffer.i_membus_addr[21] tb.dut.shield.console_buffer.i_membus_addr[20] tb.dut.shield.console_buffer.i_membus_addr[19] tb.dut.shield.console_buffer.i_membus_addr[18] tb.dut.shield.console_buffer.i_membus_addr[17] tb.dut.shield.console_buffer.i_membus_addr[16] tb.dut.shield.console_buffer.i_membus_addr[15] tb.dut.shield.console_buffer.i_membus_addr[14] tb.dut.shield.console_buffer.i_membus_addr[13] tb.dut.shield.console_buffer.i_membus_addr[12] tb.dut.shield.console_buffer.i_membus_addr[11] tb.dut.shield.console_buffer.i_membus_addr[10] tb.dut.shield.console_buffer.i_membus_addr[9] tb.dut.shield.console_buffer.i_membus_addr[8] tb.dut.shield.console_buffer.i_membus_addr[7] tb.dut.shield.console_buffer.i_membus_addr[6] tb.dut.shield.console_buffer.i_membus_addr[5] tb.dut.shield.console_buffer.i_membus_addr[4] tb.dut.shield.console_buffer.i_membus_addr[3] tb.dut.shield.console_buffer.i_membus_addr[2] tb.dut.shield.console_buffer.i_membus_addr[1] tb.dut.shield.console_buffer.i_membus_addr[0]
-#{tb.dut.shield.console_buffer.i_membus_data[31:0]} tb.dut.shield.console_buffer.i_membus_data[31] tb.dut.shield.console_buffer.i_membus_data[30] tb.dut.shield.console_buffer.i_membus_data[29] tb.dut.shield.console_buffer.i_membus_data[28] tb.dut.shield.console_buffer.i_membus_data[27] tb.dut.shield.console_buffer.i_membus_data[26] tb.dut.shield.console_buffer.i_membus_data[25] tb.dut.shield.console_buffer.i_membus_data[24] tb.dut.shield.console_buffer.i_membus_data[23] tb.dut.shield.console_buffer.i_membus_data[22] tb.dut.shield.console_buffer.i_membus_data[21] tb.dut.shield.console_buffer.i_membus_data[20] tb.dut.shield.console_buffer.i_membus_data[19] tb.dut.shield.console_buffer.i_membus_data[18] tb.dut.shield.console_buffer.i_membus_data[17] tb.dut.shield.console_buffer.i_membus_data[16] tb.dut.shield.console_buffer.i_membus_data[15] tb.dut.shield.console_buffer.i_membus_data[14] tb.dut.shield.console_buffer.i_membus_data[13] tb.dut.shield.console_buffer.i_membus_data[12] tb.dut.shield.console_buffer.i_membus_data[11] tb.dut.shield.console_buffer.i_membus_data[10] tb.dut.shield.console_buffer.i_membus_data[9] tb.dut.shield.console_buffer.i_membus_data[8] tb.dut.shield.console_buffer.i_membus_data[7] tb.dut.shield.console_buffer.i_membus_data[6] tb.dut.shield.console_buffer.i_membus_data[5] tb.dut.shield.console_buffer.i_membus_data[4] tb.dut.shield.console_buffer.i_membus_data[3] tb.dut.shield.console_buffer.i_membus_data[2] tb.dut.shield.console_buffer.i_membus_data[1] tb.dut.shield.console_buffer.i_membus_data[0]
-@200
--
-@28
-tb.dut.shield.console_buffer.o_membus_ack
-@22
-tb.dut.shield.console_buffer.o_membus_data[31:0]
-@200
--
-@8a0
-tb.dut.shield.console_buffer.dbg_console_00[159:0]
-tb.dut.shield.console_buffer.dbg_console_01[159:0]
-tb.dut.shield.console_buffer.dbg_console_02[159:0]
-tb.dut.shield.console_buffer.dbg_console_03[159:0]
-tb.dut.shield.console_buffer.dbg_console_04[159:0]
-tb.dut.shield.console_buffer.dbg_console_05[159:0]
-tb.dut.shield.console_buffer.dbg_console_06[159:0]
-tb.dut.shield.console_buffer.dbg_console_07[159:0]
-tb.dut.shield.console_buffer.dbg_console_08[159:0]
-tb.dut.shield.console_buffer.dbg_console_09[159:0]
-tb.dut.shield.console_buffer.dbg_console_10[159:0]
-tb.dut.shield.console_buffer.dbg_console_11[159:0]
-tb.dut.shield.console_buffer.dbg_console_12[159:0]
-tb.dut.shield.console_buffer.dbg_console_13[159:0]
-tb.dut.shield.console_buffer.dbg_console_14[159:0]
-tb.dut.shield.console_buffer.dbg_console_15[159:0]
-@200
--
+@c00200
 -LED
 @22
 tb.dut.led.LED[7:0]
@@ -669,8 +580,11 @@ tb.dut.led.LED[7:0]
 tb.dut.led.LED[7:0]
 @820
 tb.dut.led.LED[7:0]
+@1401200
+-LED
 @200
 -
+@c00200
 -MEM
 @28
 tb.dut.mem.i_instbus_req
@@ -729,6 +643,8 @@ tb.dut.mem.i_membus_write
 tb.dut.mem.o_membus_ack
 @22
 tb.dut.mem.o_membus_data[31:0]
+@1401200
+-MEM
 @200
 -
 -RISCV
@@ -737,6 +653,9 @@ tb.dut.riscv.clk
 tb.dut.riscv.rst
 @22
 tb.dut.led.LED[7:0]
+@c00200
+-REGS
+@22
 tb.dut.riscv.regfile.x00[31:0]
 tb.dut.riscv.regfile.x01[31:0]
 tb.dut.riscv.regfile.x02[31:0]
@@ -769,8 +688,9 @@ tb.dut.riscv.regfile.x28[31:0]
 tb.dut.riscv.regfile.x29[31:0]
 tb.dut.riscv.regfile.x30[31:0]
 tb.dut.riscv.regfile.x31[31:0]
-@200
--
+@1401200
+-REGS
+@c00200
 -IFU
 @28
 tb.dut.riscv.ifu.accessing
@@ -832,8 +752,9 @@ tb.dut.riscv.ifu.ifu_inst_PC[31:0]
 tb.dut.riscv.ifu.ifu_inst[31:0]
 @28
 tb.dut.riscv.ifu.illegal
-@200
--
+@1401200
+-IFU
+@c00200
 -IDU
 @28
 tb.dut.riscv.idu.alu_vld
@@ -922,8 +843,9 @@ tb.dut.riscv.idu.idu_decode_DIV
 tb.dut.riscv.idu.idu_decode_DIVU
 tb.dut.riscv.idu.idu_decode_REM
 tb.dut.riscv.idu.idu_decode_REMU
-@200
--
+@1401200
+-IDU
+@c00200
 -ALU
 @28
 tb.dut.riscv.ifu.idu_vld
@@ -1154,9 +1076,19 @@ tb.dut.riscv.alu.bus_write
 @22
 tb.dut.riscv.alu.bus_data_wr_mask[3:0]
 tb.dut.riscv.alu.bus_data_wr[31:0]
+@1401200
+-ALU
 @200
 -
+@800200
 -SDCARD Model
+@28
+tb.SD_CS
+tb.MOSI
+tb.MISO
+tb.SCLK
+tb.GND
+@200
 -
 @28
 tb.sd.rstn
@@ -1181,8 +1113,127 @@ tb.sd.ascii_command_state[511:0]
 tb.sd.app_cmd
 @22
 tb.sd.sck_cnt[7:0]
+@c00022
 tb.sd.serial_in[45:0]
+@28
+(0)tb.sd.serial_in[45:0]
+(1)tb.sd.serial_in[45:0]
+(2)tb.sd.serial_in[45:0]
+(3)tb.sd.serial_in[45:0]
+(4)tb.sd.serial_in[45:0]
+(5)tb.sd.serial_in[45:0]
+(6)tb.sd.serial_in[45:0]
+(7)tb.sd.serial_in[45:0]
+(8)tb.sd.serial_in[45:0]
+(9)tb.sd.serial_in[45:0]
+(10)tb.sd.serial_in[45:0]
+(11)tb.sd.serial_in[45:0]
+(12)tb.sd.serial_in[45:0]
+(13)tb.sd.serial_in[45:0]
+(14)tb.sd.serial_in[45:0]
+(15)tb.sd.serial_in[45:0]
+(16)tb.sd.serial_in[45:0]
+(17)tb.sd.serial_in[45:0]
+(18)tb.sd.serial_in[45:0]
+(19)tb.sd.serial_in[45:0]
+(20)tb.sd.serial_in[45:0]
+(21)tb.sd.serial_in[45:0]
+(22)tb.sd.serial_in[45:0]
+(23)tb.sd.serial_in[45:0]
+(24)tb.sd.serial_in[45:0]
+(25)tb.sd.serial_in[45:0]
+(26)tb.sd.serial_in[45:0]
+(27)tb.sd.serial_in[45:0]
+(28)tb.sd.serial_in[45:0]
+(29)tb.sd.serial_in[45:0]
+(30)tb.sd.serial_in[45:0]
+(31)tb.sd.serial_in[45:0]
+(32)tb.sd.serial_in[45:0]
+(33)tb.sd.serial_in[45:0]
+(34)tb.sd.serial_in[45:0]
+(35)tb.sd.serial_in[45:0]
+(36)tb.sd.serial_in[45:0]
+(37)tb.sd.serial_in[45:0]
+(38)tb.sd.serial_in[45:0]
+(39)tb.sd.serial_in[45:0]
+(40)tb.sd.serial_in[45:0]
+(41)tb.sd.serial_in[45:0]
+(42)tb.sd.serial_in[45:0]
+(43)tb.sd.serial_in[45:0]
+(44)tb.sd.serial_in[45:0]
+(45)tb.sd.serial_in[45:0]
+@1401200
+-group_end
+@c00022
 tb.sd.cmd_in[45:0]
+@28
+(0)tb.sd.cmd_in[45:0]
+(1)tb.sd.cmd_in[45:0]
+(2)tb.sd.cmd_in[45:0]
+(3)tb.sd.cmd_in[45:0]
+(4)tb.sd.cmd_in[45:0]
+(5)tb.sd.cmd_in[45:0]
+(6)tb.sd.cmd_in[45:0]
+(7)tb.sd.cmd_in[45:0]
+(8)tb.sd.cmd_in[45:0]
+(9)tb.sd.cmd_in[45:0]
+(10)tb.sd.cmd_in[45:0]
+(11)tb.sd.cmd_in[45:0]
+(12)tb.sd.cmd_in[45:0]
+(13)tb.sd.cmd_in[45:0]
+(14)tb.sd.cmd_in[45:0]
+(15)tb.sd.cmd_in[45:0]
+(16)tb.sd.cmd_in[45:0]
+(17)tb.sd.cmd_in[45:0]
+(18)tb.sd.cmd_in[45:0]
+(19)tb.sd.cmd_in[45:0]
+(20)tb.sd.cmd_in[45:0]
+(21)tb.sd.cmd_in[45:0]
+(22)tb.sd.cmd_in[45:0]
+(23)tb.sd.cmd_in[45:0]
+(24)tb.sd.cmd_in[45:0]
+(25)tb.sd.cmd_in[45:0]
+(26)tb.sd.cmd_in[45:0]
+(27)tb.sd.cmd_in[45:0]
+(28)tb.sd.cmd_in[45:0]
+(29)tb.sd.cmd_in[45:0]
+(30)tb.sd.cmd_in[45:0]
+(31)tb.sd.cmd_in[45:0]
+(32)tb.sd.cmd_in[45:0]
+(33)tb.sd.cmd_in[45:0]
+(34)tb.sd.cmd_in[45:0]
+(35)tb.sd.cmd_in[45:0]
+(36)tb.sd.cmd_in[45:0]
+(37)tb.sd.cmd_in[45:0]
+(38)tb.sd.cmd_in[45:0]
+(39)tb.sd.cmd_in[45:0]
+(40)tb.sd.cmd_in[45:0]
+(41)tb.sd.cmd_in[45:0]
+(42)tb.sd.cmd_in[45:0]
+(43)tb.sd.cmd_in[45:0]
+(44)tb.sd.cmd_in[45:0]
+(45)tb.sd.cmd_in[45:0]
+@1401200
+-group_end
+@24
 #{tb.sd.cmd_index[5:0]} tb.sd.cmd_index[5] tb.sd.cmd_index[4] tb.sd.cmd_index[3] tb.sd.cmd_index[2] tb.sd.cmd_index[1] tb.sd.cmd_index[0]
+@200
+-
+@28
+tb.sd.read_cmd
+tb.sd.init_done
+tb.sd.stop_transmission
+tb.sd.send_csd
+tb.sd.send_cid
+tb.sd.send_scr
+tb.sd.write_cmd
+@22
+tb.sd.st[3:0]
+@28
+tb.sd.read_single
+@24
+tb.sd.block_len[31:0]
+@1000200
+-SDCARD Model
 [pattern_trace] 1
 [pattern_trace] 0

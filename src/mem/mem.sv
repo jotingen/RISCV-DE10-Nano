@@ -19,7 +19,7 @@ module mem (
   output logic [31:0]    o_membus_data
 );
 
-localparam SIZE = 14;
+localparam SIZE = 15;
 
 logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
 logic [7:0] mem_array_2 [2**(SIZE-2)-1:0];
@@ -77,10 +77,14 @@ always_ff @(posedge clk)
 
 initial
   begin
-    $readmemh("../../output/programs/bootloader/bootloader_3.v", mem_array_3);
-    $readmemh("../../output/programs/bootloader/bootloader_2.v", mem_array_2);
-    $readmemh("../../output/programs/bootloader/bootloader_1.v", mem_array_1);
-    $readmemh("../../output/programs/bootloader/bootloader_0.v", mem_array_0);
+    //$readmemh("../../output/programs/bootloader/bootloader_3.v", mem_array_3);
+    //$readmemh("../../output/programs/bootloader/bootloader_2.v", mem_array_2);
+    //$readmemh("../../output/programs/bootloader/bootloader_1.v", mem_array_1);
+    //$readmemh("../../output/programs/bootloader/bootloader_0.v", mem_array_0);
+    $readmemh("../../output/programs/bootloader/bootloader_fast_3.v", mem_array_3);
+    $readmemh("../../output/programs/bootloader/bootloader_fast_2.v", mem_array_2);
+    $readmemh("../../output/programs/bootloader/bootloader_fast_1.v", mem_array_1);
+    $readmemh("../../output/programs/bootloader/bootloader_fast_0.v", mem_array_0);
     //$readmemh("../../output/programs/test/display_test_3.v", mem_array_3);
     //$readmemh("../../output/programs/test/display_test_2.v", mem_array_2);
     //$readmemh("../../output/programs/test/display_test_1.v", mem_array_1);

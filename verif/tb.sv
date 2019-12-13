@@ -134,7 +134,7 @@ top dut (
 .ARDUINO_IO_09 (LCD_BL),
 .ARDUINO_IO_10 (LCD_CS),
 .ARDUINO_IO_11 (MOSI),
-.ARDUINO_IO_12 (),
+.ARDUINO_IO_12 (MISO),
 .ARDUINO_IO_13 (SCLK),
 .ARDUINO_IO_14 (GND),
 .ARDUINO_IO_15 (),
@@ -215,7 +215,7 @@ ddr3_model ddr3 (
 spi_sd_model sd (
   .rstn  (ARDUINO_RESET_N),
   .ncs   (SD_CS),
-  .sclk  (SCK),
+  .sclk  (SCLK),
   .mosi  (MOSI),
   .miso  (MISO)
 );

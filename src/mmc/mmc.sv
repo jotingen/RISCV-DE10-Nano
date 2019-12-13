@@ -119,7 +119,7 @@ logic null_ack;
 
 //Memory mapping
 logic [31:0]    MEM_ADDR_LO      = 'h0000_0000;
-logic [31:0]    MEM_ADDR_HI      = 'h0000_3FFF;
+logic [31:0]    MEM_ADDR_HI      = 'h0000_7FFF;
 logic [31:0]    DDR3_ADDR_LO     = 'h1000_0000;
 logic [31:0]    DDR3_ADDR_HI     = 'h13FF_FFFF;
 logic [31:0]    LED_ADDR_LO      = 'hC000_0000;

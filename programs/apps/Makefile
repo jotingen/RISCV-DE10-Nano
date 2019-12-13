@@ -44,6 +44,7 @@ init:
 	$(CC) $(CCFLAGS) -S -o ../../output/programs/apps/$(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@) 
 	$(CC) $(CCFLAGS)    -o ../../output/programs/apps/$(patsubst %.s,%.out,$@)  $(patsubst %.s,%.c,$@) $(addprefix ../../output/programs/lib/,$(LIB_OBJ)) ../../output/programs/apps/riscv.o
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_0.v,$@)
+	sed -i 's/@04/@00/' ../../output/programs/apps/$(patsubst %.s,%_0.v,$@)
 	$(RV_PREFIX)objcopy -O binary                      ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%.bin,$@)
 
 .PHONY: clean
