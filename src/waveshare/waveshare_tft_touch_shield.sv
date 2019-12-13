@@ -61,6 +61,24 @@ output logic           ADC_SDI,
 input  logic           ADC_SDO,
 
 //////////// ARDUINO //////////
+`ifdef SIM
+output logic           ARDUINO_IO_00,
+output logic           ARDUINO_IO_01,
+output logic           ARDUINO_IO_02,
+output logic           ARDUINO_IO_03,
+output logic           ARDUINO_IO_04,
+output logic           ARDUINO_IO_05,
+output logic           ARDUINO_IO_06,
+output logic           ARDUINO_IO_07,
+output logic           ARDUINO_IO_08,
+output logic           ARDUINO_IO_09,
+output logic           ARDUINO_IO_10,
+output logic           ARDUINO_IO_11,
+input  logic           ARDUINO_IO_12,
+output logic           ARDUINO_IO_13,
+output logic           ARDUINO_IO_14,
+output logic           ARDUINO_IO_15,
+`else
 inout  logic           ARDUINO_IO_00,
 inout  logic           ARDUINO_IO_01,
 inout  logic           ARDUINO_IO_02,
@@ -77,6 +95,7 @@ inout  logic           ARDUINO_IO_12,
 inout  logic           ARDUINO_IO_13,
 inout  logic           ARDUINO_IO_14,
 inout  logic           ARDUINO_IO_15,
+`endif
 
 inout  logic           ARDUINO_RESET_N
 

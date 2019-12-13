@@ -45,6 +45,24 @@ inout  logic  [35:0]   GPIO_0,
 inout  logic  [35:0]   GPIO_1,
 
 //////////// ARDUINO //////////
+`ifdef SIM
+output logic           ARDUINO_IO_00,
+output logic           ARDUINO_IO_01,
+output logic           ARDUINO_IO_02,
+output logic           ARDUINO_IO_03,
+output logic           ARDUINO_IO_04,
+output logic           ARDUINO_IO_05,
+output logic           ARDUINO_IO_06,
+output logic           ARDUINO_IO_07,
+output logic           ARDUINO_IO_08,
+output logic           ARDUINO_IO_09,
+output logic           ARDUINO_IO_10,
+output logic           ARDUINO_IO_11,
+input  logic           ARDUINO_IO_12,
+output logic           ARDUINO_IO_13,
+output logic           ARDUINO_IO_14,
+output logic           ARDUINO_IO_15,
+`else
 inout  logic           ARDUINO_IO_00,
 inout  logic           ARDUINO_IO_01,
 inout  logic           ARDUINO_IO_02,
@@ -61,6 +79,7 @@ inout  logic           ARDUINO_IO_12,
 inout  logic           ARDUINO_IO_13,
 inout  logic           ARDUINO_IO_14,
 inout  logic           ARDUINO_IO_15,
+`endif
 
 inout  logic           ARDUINO_RESET_N,
 
@@ -151,6 +170,16 @@ logic  [3:0]    mmc_mem_instbus_data_wr_mask;
 
 logic           mem_mmc_instbus_ack;
 logic [31:0]    mem_mmc_instbus_data;
+
+logic           mmc_ddr3_instbus_req;
+logic           mmc_ddr3_instbus_write;
+logic [31:0]    mmc_ddr3_instbus_addr;
+logic [31:0]    mmc_ddr3_instbus_data;
+logic  [3:0]    mmc_ddr3_instbus_data_rd_mask;
+logic  [3:0]    mmc_ddr3_instbus_data_wr_mask;
+
+logic           ddr3_mmc_instbus_ack;
+logic [31:0]    ddr3_mmc_instbus_data;
 
 logic           riscv_mmc_bus_req;
 logic           riscv_mmc_bus_write;
@@ -384,6 +413,16 @@ mmc mmc_inst (
   .mem_mmc_bus_ack               (mem_mmc_instbus_ack              ),
   .mem_mmc_bus_data              (mem_mmc_instbus_data             ),
                                                                  
+  .mmc_ddr3_bus_req              (mmc_ddr3_instbus_req             ),
+  .mmc_ddr3_bus_write            (mmc_ddr3_instbus_write           ),
+  .mmc_ddr3_bus_addr             (mmc_ddr3_instbus_addr            ),
+  .mmc_ddr3_bus_data             (mmc_ddr3_instbus_data            ),
+  .mmc_ddr3_bus_data_rd_mask     (mmc_ddr3_instbus_data_rd_mask    ),
+  .mmc_ddr3_bus_data_wr_mask     (mmc_ddr3_instbus_data_wr_mask    ),
+                                                               
+  .ddr3_mmc_bus_ack              (ddr3_mmc_instbus_ack             ),
+  .ddr3_mmc_bus_data             (ddr3_mmc_instbus_data            ),
+                                                                 
   .mmc_led_bus_req               (                             ),
   .mmc_led_bus_write             (                             ),
   .mmc_led_bus_addr              (                             ),
@@ -614,6 +653,12 @@ ddr3 ddr3 (
   .ddr3_avl_read_req      (ddr3_avl_read_req),    
   .ddr3_avl_write_req     (ddr3_avl_write_req),   
   .ddr3_avl_size          (ddr3_avl_size),         
+
+  .i_instbus_req          (mmc_ddr3_instbus_req),   
+  .i_instbus_addr         (mmc_ddr3_instbus_addr),  
+
+  .o_instbus_ack          (ddr3_mmc_instbus_ack),   
+  .o_instbus_data         (ddr3_mmc_instbus_data),
 
   .i_membus_req           (mmc_ddr3_bus_req),   
   .i_membus_write         (mmc_ddr3_bus_write), 
