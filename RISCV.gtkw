@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Dec 13 05:02:28 2019
+[*] Sat Dec 14 02:09:32 2019
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Fri Dec 13 04:56:54 2019"
-[dumpfile_size] 2165996597
+[dumpfile_mtime] "Sat Dec 14 01:37:32 2019"
+[dumpfile_size] 2381336568
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 11914487
+[timestart] 0
 [size] 1854 1048
 [pos] -1 -1
-*-8.854325 11915470 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-21.854326 11915470 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.riscv.alu.
@@ -65,7 +65,7 @@ tb.dut.shield.MOSI
 tb.dut.shield.MISO
 @200
 -
-@800200
+@c00200
 -MMC INST
 @28
 tb.dut.riscv_mmc_instbus_req
@@ -85,7 +85,7 @@ tb.dut.mem_mmc_instbus_ack
 tb.dut.mmc_riscv_instbus_ack
 @22
 tb.dut.mmc_riscv_instbus_data[31:0]
-@1000200
+@1401200
 -MMC INST
 @c00200
 -MMC DATA
@@ -228,7 +228,7 @@ tb.dut.shield.spi_arb.clk_settled
 -SPI Arb
 @200
 -
-@800200
+@c00201
 -SDCard
 @28
 tb.sd.rstn
@@ -379,7 +379,7 @@ tb.dut.shield.sdcard.CS
 tb.dut.shield.sdcard.SPIReq
 tb.dut.shield.sdcard.SPIAck
 tb.dut.shield.sdcard.SPIDone
-@1000200
+@1401201
 -SDCard
 @200
 -
@@ -425,7 +425,7 @@ tb.dut.ddr3.inst_buffer_vld
 @22
 tb.dut.ddr3.inst_buffer_addr[25:4]
 tb.dut.ddr3.inst_buffer_data[127:0]
-@201
+@200
 -
 @28
 tb.dut.ddr3.mem_buffer_vld
