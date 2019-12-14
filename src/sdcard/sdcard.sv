@@ -26,7 +26,7 @@ output logic           o_bus_ack,
 output logic [31:0]    o_bus_data
 );
 
-parameter SDCARD_PERIOD = 8;//Trying faster  125;
+parameter SDCARD_PERIOD = 6;//Trying faster  125;
 
 parameter R1_BITS  = 1*8;
 parameter R1B_BITS = 1*8;

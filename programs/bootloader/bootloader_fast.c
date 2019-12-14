@@ -35,11 +35,11 @@ void main(void) {
 
     for(int i = 0; i < 512; i= i+4) {
       uint32_t word = 0;
-      word = (word << 8) | sdcard_data[i+0];
-      word = (word << 8) | sdcard_data[i+1];
-      word = (word << 8) | sdcard_data[i+2];
       word = (word << 8) | sdcard_data[i+3];
-      ddr3[sector_index*512/4+i] = word;
+      word = (word << 8) | sdcard_data[i+2];
+      word = (word << 8) | sdcard_data[i+1];
+      word = (word << 8) | sdcard_data[i+0];
+      ddr3[sector_index*512/4+i/4] = word;
     }
 
     sector_index += 1;
