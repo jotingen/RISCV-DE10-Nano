@@ -613,13 +613,6 @@ initial
       multi_st = 0;
       block_len = 0;
       $readmemh("../../output/programs/apps/blinky/blinky_0.v", flash_mem);
-      $display(flash_mem[0]);
-      $display(flash_mem[1]);
-      $display(flash_mem[2]);
-      $display(flash_mem[3]);
-      $display(flash_mem[4]);
-      $display(flash_mem[5]);
-      $display(flash_mem[6]);
       //for (i = 0; i < MEM_SIZE - 1; i = i + 1) begin
       //   flash_mem[i] = i[7:0]+3;
       //end
