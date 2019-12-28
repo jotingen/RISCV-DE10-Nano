@@ -178,7 +178,8 @@ always_ff @(posedge clk)
   if(alu_vld & alu_retired)
     idu_freeze <= '0;
 
-  if((frozen & ~idu_vld) | ~frozen | (alu_vld & alu_retired))
+  //if((frozen & ~idu_vld) | ~frozen | (alu_vld & alu_retired))
+  if(~frozen)
     begin
     idu_vld <= ifu_vld;
     //Throw away if branch missed or trapped

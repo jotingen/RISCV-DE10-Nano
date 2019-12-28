@@ -30,7 +30,7 @@ void main(void) {
 
   LED = 0x00;
 
-  while(sector_index < 10) {
+  while(sector_index < 3) {
     sdcard_read(sdcard_data,512*sector_index);
 
     for(int i = 0; i < 512; i= i+4) {
