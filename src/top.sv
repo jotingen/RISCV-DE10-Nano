@@ -153,13 +153,43 @@ output logic           HDMI_TX_VS
   logic rst;
 `endif
 
-logic           riscv_mmc_instbus_req;
-logic           riscv_mmc_instbus_write;
-logic [31:0]    riscv_mmc_instbus_addr;
-logic [31:0]    riscv_mmc_instbus_data;
+logic [31:0]      riscv_mmc_inst_adr;
+logic [31:0]      riscv_mmc_inst_data;
+logic             riscv_mmc_inst_we;
+logic  [3:0]      riscv_mmc_inst_sel;
+logic             riscv_mmc_inst_stb;
+logic             riscv_mmc_inst_cyc;
+logic             riscv_mmc_inst_tga;
+logic             riscv_mmc_inst_tgd;
+logic  [3:0]      riscv_mmc_inst_tgc;
 
-logic           mmc_riscv_instbus_ack;
-logic [31:0]    mmc_riscv_instbus_data;
+logic             mmc_riscv_inst_ack;
+logic             mmc_riscv_inst_stall;
+logic             mmc_riscv_inst_err;
+logic             mmc_riscv_inst_rty;
+logic [31:0]      mmc_riscv_inst_data;
+logic             mmc_riscv_inst_tga;
+logic             mmc_riscv_inst_tgd;
+logic  [3:0]      mmc_riscv_inst_tgc;
+
+logic [31:0]      mmc_mem_inst_adr;
+logic [31:0]      mmc_mem_inst_data;
+logic             mmc_mem_inst_we;
+logic  [3:0]      mmc_mem_inst_sel;
+logic             mmc_mem_inst_stb;
+logic             mmc_mem_inst_cyc;
+logic             mmc_mem_inst_tga;
+logic             mmc_mem_inst_tgd;
+logic  [3:0]      mmc_mem_inst_tgc;
+
+logic             mem_mmc_inst_ack;
+logic             mem_mmc_inst_stall;
+logic             mem_mmc_inst_err;
+logic             mem_mmc_inst_rty;
+logic [31:0]      mem_mmc_inst_data;
+logic             mem_mmc_inst_tga;
+logic             mem_mmc_inst_tgd;
+logic  [3:0]      mem_mmc_inst_tgc;
 
 logic           mmc_mem_instbus_req;
 logic           mmc_mem_instbus_write;
@@ -335,13 +365,24 @@ riscv #(.M_EXT(1)) riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .i_instbus_ack   (mmc_riscv_instbus_ack),  
-  .i_instbus_data  (mmc_riscv_instbus_data), 
-                                            
-  .o_instbus_req   (riscv_mmc_instbus_req),     
-  .o_instbus_write (riscv_mmc_instbus_write),   
-  .o_instbus_addr  (riscv_mmc_instbus_addr),    
-  .o_instbus_data  (riscv_mmc_instbus_data),    
+  .bus_inst_adr_o   (riscv_mmc_inst_adr), 
+  .bus_inst_data_o  (riscv_mmc_inst_data),
+  .bus_inst_we_o    (riscv_mmc_inst_we),  
+  .bus_inst_sel_o   (riscv_mmc_inst_sel), 
+  .bus_inst_stb_o   (riscv_mmc_inst_stb), 
+  .bus_inst_cyc_o   (riscv_mmc_inst_cyc), 
+  .bus_inst_tga_o   (riscv_mmc_inst_tga), 
+  .bus_inst_tgd_o   (riscv_mmc_inst_tgd), 
+  .bus_inst_tgc_o   (riscv_mmc_inst_tgc), 
+                                     
+  .bus_inst_ack_i   (mmc_riscv_inst_ack), 
+  .bus_inst_stall_i (mmc_riscv_inst_stall),
+  .bus_inst_err_i   (mmc_riscv_inst_err), 
+  .bus_inst_rty_i   (mmc_riscv_inst_rty), 
+  .bus_inst_data_i  (mmc_riscv_inst_data), 
+  .bus_inst_tga_i   (mmc_riscv_inst_tga), 
+  .bus_inst_tgd_i   (mmc_riscv_inst_tgd), 
+  .bus_inst_tgc_i   (mmc_riscv_inst_tgc), 
 
   .i_membus_ack   (mmc_riscv_bus_ack),   
   .i_membus_data  (mmc_riscv_bus_data),
@@ -389,119 +430,157 @@ riscv #(.M_EXT(1)) riscv (
 `endif
 );
 
-mmc mmc_inst (
+mmc_wb mmc_inst (
   .clk         (clk),
   .rst         (rst),
   
-  .riscv_mmc_bus_req             (riscv_mmc_instbus_req            ),    
-  .riscv_mmc_bus_write           ('0                               ),  
-  .riscv_mmc_bus_addr            (riscv_mmc_instbus_addr           ),   
-  .riscv_mmc_bus_data            (riscv_mmc_instbus_data           ),   
-  .riscv_mmc_bus_data_rd_mask    ('0                               ), 
-  .riscv_mmc_bus_data_wr_mask    ('0                               ), 
-        
-  .mmc_riscv_bus_ack             (mmc_riscv_instbus_ack            ),
-  .mmc_riscv_bus_data            (mmc_riscv_instbus_data           ),
-                                                                 
-  .mmc_mem_bus_req               (mmc_mem_instbus_req              ),
-  .mmc_mem_bus_write             (mmc_mem_instbus_write            ),
-  .mmc_mem_bus_addr              (mmc_mem_instbus_addr             ),
-  .mmc_mem_bus_data              (mmc_mem_instbus_data             ),
-  .mmc_mem_bus_data_rd_mask      (mmc_mem_instbus_data_rd_mask     ),
-  .mmc_mem_bus_data_wr_mask      (mmc_mem_instbus_data_wr_mask     ),
-                                                                 
-  .mem_mmc_bus_ack               (mem_mmc_instbus_ack              ),
-  .mem_mmc_bus_data              (mem_mmc_instbus_data             ),
-                                                                 
-  .mmc_ddr3_bus_req              (mmc_ddr3_instbus_req             ),
-  .mmc_ddr3_bus_write            (mmc_ddr3_instbus_write           ),
-  .mmc_ddr3_bus_addr             (mmc_ddr3_instbus_addr            ),
-  .mmc_ddr3_bus_data             (mmc_ddr3_instbus_data            ),
-  .mmc_ddr3_bus_data_rd_mask     (mmc_ddr3_instbus_data_rd_mask    ),
-  .mmc_ddr3_bus_data_wr_mask     (mmc_ddr3_instbus_data_wr_mask    ),
-                                                               
-  .ddr3_mmc_bus_ack              (ddr3_mmc_instbus_ack             ),
-  .ddr3_mmc_bus_data             (ddr3_mmc_instbus_data            ),
-                                                                 
-  .mmc_led_bus_req               (                             ),
-  .mmc_led_bus_write             (                             ),
-  .mmc_led_bus_addr              (                             ),
-  .mmc_led_bus_data              (                             ),
-  .mmc_led_bus_data_rd_mask      (                             ),
-  .mmc_led_bus_data_wr_mask      (                             ),
-                                                                 
-  .led_mmc_bus_ack               ('0                           ),
-  .led_mmc_bus_data              ('0                           ),
-                                                                 
-  .mmc_keys_bus_req              (                             ),
-  .mmc_keys_bus_write            (                             ),
-  .mmc_keys_bus_addr             (                             ),
-  .mmc_keys_bus_data             (                             ),
-  .mmc_keys_bus_data_rd_mask     (                             ),
-  .mmc_keys_bus_data_wr_mask     (                             ),
-                                                                 
-  .keys_mmc_bus_ack              ('0                           ),
-  .keys_mmc_bus_data             ('0                           ),
-                                                                 
-  .mmc_joystick_bus_req          (                             ),
-  .mmc_joystick_bus_write        (                             ),
-  .mmc_joystick_bus_addr         (                             ),
-  .mmc_joystick_bus_data         (                             ),
-  .mmc_joystick_bus_data_rd_mask (                             ),
-  .mmc_joystick_bus_data_wr_mask (                             ),
-                                                                 
-  .joystick_mmc_bus_ack          ('0                           ),
-  .joystick_mmc_bus_data         ('0                           ),
-                                                                 
-  .mmc_display_bus_req           (                             ),
-  .mmc_display_bus_write         (                             ),
-  .mmc_display_bus_addr          (                             ),
-  .mmc_display_bus_data          (                             ),
-  .mmc_display_bus_data_rd_mask  (                             ),
-  .mmc_display_bus_data_wr_mask  (                             ),
-                                                                 
-  .display_mmc_bus_ack           ('0                           ),
-  .display_mmc_bus_data          ('0                           ),
-                                                                 
-  .mmc_dispbuff_bus_req          (                             ),
-  .mmc_dispbuff_bus_write        (                             ),
-  .mmc_dispbuff_bus_addr         (                             ),
-  .mmc_dispbuff_bus_data         (                             ),
-  .mmc_dispbuff_bus_data_rd_mask (                             ),
-  .mmc_dispbuff_bus_data_wr_mask (                             ),
-                                                                 
-  .dispbuff_mmc_bus_ack          ('0                           ),
-  .dispbuff_mmc_bus_data         ('0                           ),
+  .riscv_mmc_adr_i               (riscv_mmc_inst_adr),  
+  .riscv_mmc_data_i              (riscv_mmc_inst_data), 
+  .riscv_mmc_we_i                (riscv_mmc_inst_we),   
+  .riscv_mmc_sel_i               (riscv_mmc_inst_sel),  
+  .riscv_mmc_stb_i               (riscv_mmc_inst_stb),  
+  .riscv_mmc_cyc_i               (riscv_mmc_inst_cyc),  
+  .riscv_mmc_tga_i               (riscv_mmc_inst_tga),  
+  .riscv_mmc_tgd_i               (riscv_mmc_inst_tgd),  
+  .riscv_mmc_tgc_i               (riscv_mmc_inst_tgc),  
+                                                        
+  .mmc_riscv_ack_o               (mmc_riscv_inst_ack),  
+  .mmc_riscv_stall_o             (mmc_riscv_inst_stall),
+  .mmc_riscv_err_o               (mmc_riscv_inst_err),  
+  .mmc_riscv_rty_o               (mmc_riscv_inst_rty),  
+  .mmc_riscv_data_o              (mmc_riscv_inst_data),  
+  .mmc_riscv_tga_o               (mmc_riscv_inst_tga),  
+  .mmc_riscv_tgd_o               (mmc_riscv_inst_tgd),  
+  .mmc_riscv_tgc_o               (mmc_riscv_inst_tgc),  
 
-  .mmc_consolebuff_bus_req          (                             ),
-  .mmc_consolebuff_bus_write        (                             ),
-  .mmc_consolebuff_bus_addr         (                             ),
-  .mmc_consolebuff_bus_data         (                             ),
-  .mmc_consolebuff_bus_data_rd_mask (                             ),
-  .mmc_consolebuff_bus_data_wr_mask (                             ),
-                                                                 
-  .consolebuff_mmc_bus_ack          ('0                           ),
-  .consolebuff_mmc_bus_data         ('0                           ),
+  .mmc_mem_adr_o                 (mmc_mem_inst_adr),  
+  .mmc_mem_data_o                (mmc_mem_inst_data), 
+  .mmc_mem_we_o                  (mmc_mem_inst_we),   
+  .mmc_mem_sel_o                 (mmc_mem_inst_sel),  
+  .mmc_mem_stb_o                 (mmc_mem_inst_stb),  
+  .mmc_mem_cyc_o                 (mmc_mem_inst_cyc),  
+  .mmc_mem_tga_o                 (mmc_mem_inst_tga),  
+  .mmc_mem_tgd_o                 (mmc_mem_inst_tgd),  
+  .mmc_mem_tgc_o                 (mmc_mem_inst_tgc),  
+                                                          
+  .mem_mmc_ack_i                 (mem_mmc_inst_ack),  
+  .mem_mmc_stall_i               (mem_mmc_inst_stall),
+  .mem_mmc_err_i                 (mem_mmc_inst_err),  
+  .mem_mmc_rty_i                 (mem_mmc_inst_rty),  
+  .mem_mmc_data_i                (mem_mmc_inst_data),  
+  .mem_mmc_tga_i                 (mem_mmc_inst_tga),  
+  .mem_mmc_tgd_i                 (mem_mmc_inst_tgd),  
+  .mem_mmc_tgc_i                 (mem_mmc_inst_tgc)  
 
-  .mmc_uart_bus_req          (                             ),
-  .mmc_uart_bus_write        (                             ),
-  .mmc_uart_bus_addr         (                             ),
-  .mmc_uart_bus_data         (                             ),
-  .mmc_uart_bus_data_rd_mask (                             ),
-  .mmc_uart_bus_data_wr_mask (                             ),
-                                                                 
-  .uart_mmc_bus_ack          ('0                           ),
-  .uart_mmc_bus_data         ('0                           ),
+  //.riscv_mmc_bus_req             (riscv_mmc_instbus_req            ),    
+  //.riscv_mmc_bus_write           ('0                               ),  
+  //.riscv_mmc_bus_addr            (riscv_mmc_instbus_addr           ),   
+  //.riscv_mmc_bus_data            (riscv_mmc_instbus_data           ),   
+  //.riscv_mmc_bus_data_rd_mask    ('0                               ), 
+  //.riscv_mmc_bus_data_wr_mask    ('0                               ), 
+  //      
+  //.mmc_riscv_bus_ack             (mmc_riscv_instbus_ack            ),
+  //.mmc_riscv_bus_data            (mmc_riscv_instbus_data           ),
+  //                                                               
+  //.mmc_mem_bus_req               (mmc_mem_instbus_req              ),
+  //.mmc_mem_bus_write             (mmc_mem_instbus_write            ),
+  //.mmc_mem_bus_addr              (mmc_mem_instbus_addr             ),
+  //.mmc_mem_bus_data              (mmc_mem_instbus_data             ),
+  //.mmc_mem_bus_data_rd_mask      (mmc_mem_instbus_data_rd_mask     ),
+  //.mmc_mem_bus_data_wr_mask      (mmc_mem_instbus_data_wr_mask     ),
+  //                                                               
+  //.mem_mmc_bus_ack               (mem_mmc_instbus_ack              ),
+  //.mem_mmc_bus_data              (mem_mmc_instbus_data             ),
+  //                                                               
+  //.mmc_ddr3_bus_req              (mmc_ddr3_instbus_req             ),
+  //.mmc_ddr3_bus_write            (mmc_ddr3_instbus_write           ),
+  //.mmc_ddr3_bus_addr             (mmc_ddr3_instbus_addr            ),
+  //.mmc_ddr3_bus_data             (mmc_ddr3_instbus_data            ),
+  //.mmc_ddr3_bus_data_rd_mask     (mmc_ddr3_instbus_data_rd_mask    ),
+  //.mmc_ddr3_bus_data_wr_mask     (mmc_ddr3_instbus_data_wr_mask    ),
+  //                                                             
+  //.ddr3_mmc_bus_ack              (ddr3_mmc_instbus_ack             ),
+  //.ddr3_mmc_bus_data             (ddr3_mmc_instbus_data            ),
+  //                                                               
+  //.mmc_led_bus_req               (                             ),
+  //.mmc_led_bus_write             (                             ),
+  //.mmc_led_bus_addr              (                             ),
+  //.mmc_led_bus_data              (                             ),
+  //.mmc_led_bus_data_rd_mask      (                             ),
+  //.mmc_led_bus_data_wr_mask      (                             ),
+  //                                                               
+  //.led_mmc_bus_ack               ('0                           ),
+  //.led_mmc_bus_data              ('0                           ),
+  //                                                               
+  //.mmc_keys_bus_req              (                             ),
+  //.mmc_keys_bus_write            (                             ),
+  //.mmc_keys_bus_addr             (                             ),
+  //.mmc_keys_bus_data             (                             ),
+  //.mmc_keys_bus_data_rd_mask     (                             ),
+  //.mmc_keys_bus_data_wr_mask     (                             ),
+  //                                                               
+  //.keys_mmc_bus_ack              ('0                           ),
+  //.keys_mmc_bus_data             ('0                           ),
+  //                                                               
+  //.mmc_joystick_bus_req          (                             ),
+  //.mmc_joystick_bus_write        (                             ),
+  //.mmc_joystick_bus_addr         (                             ),
+  //.mmc_joystick_bus_data         (                             ),
+  //.mmc_joystick_bus_data_rd_mask (                             ),
+  //.mmc_joystick_bus_data_wr_mask (                             ),
+  //                                                               
+  //.joystick_mmc_bus_ack          ('0                           ),
+  //.joystick_mmc_bus_data         ('0                           ),
+  //                                                               
+  //.mmc_display_bus_req           (                             ),
+  //.mmc_display_bus_write         (                             ),
+  //.mmc_display_bus_addr          (                             ),
+  //.mmc_display_bus_data          (                             ),
+  //.mmc_display_bus_data_rd_mask  (                             ),
+  //.mmc_display_bus_data_wr_mask  (                             ),
+  //                                                               
+  //.display_mmc_bus_ack           ('0                           ),
+  //.display_mmc_bus_data          ('0                           ),
+  //                                                               
+  //.mmc_dispbuff_bus_req          (                             ),
+  //.mmc_dispbuff_bus_write        (                             ),
+  //.mmc_dispbuff_bus_addr         (                             ),
+  //.mmc_dispbuff_bus_data         (                             ),
+  //.mmc_dispbuff_bus_data_rd_mask (                             ),
+  //.mmc_dispbuff_bus_data_wr_mask (                             ),
+  //                                                               
+  //.dispbuff_mmc_bus_ack          ('0                           ),
+  //.dispbuff_mmc_bus_data         ('0                           ),
 
-  .mmc_sdcard_bus_req            (                             ),
-  .mmc_sdcard_bus_write          (                             ),
-  .mmc_sdcard_bus_addr           (                             ),
-  .mmc_sdcard_bus_data           (                             ),
-  .mmc_sdcard_bus_data_rd_mask   (                             ),
-  .mmc_sdcard_bus_data_wr_mask   (                             ),
-                                                                   
-  .sdcard_mmc_bus_ack            ('0                           ),
-  .sdcard_mmc_bus_data           ('0                           )
+  //.mmc_consolebuff_bus_req          (                             ),
+  //.mmc_consolebuff_bus_write        (                             ),
+  //.mmc_consolebuff_bus_addr         (                             ),
+  //.mmc_consolebuff_bus_data         (                             ),
+  //.mmc_consolebuff_bus_data_rd_mask (                             ),
+  //.mmc_consolebuff_bus_data_wr_mask (                             ),
+  //                                                               
+  //.consolebuff_mmc_bus_ack          ('0                           ),
+  //.consolebuff_mmc_bus_data         ('0                           ),
+
+  //.mmc_uart_bus_req          (                             ),
+  //.mmc_uart_bus_write        (                             ),
+  //.mmc_uart_bus_addr         (                             ),
+  //.mmc_uart_bus_data         (                             ),
+  //.mmc_uart_bus_data_rd_mask (                             ),
+  //.mmc_uart_bus_data_wr_mask (                             ),
+  //                                                               
+  //.uart_mmc_bus_ack          ('0                           ),
+  //.uart_mmc_bus_data         ('0                           ),
+
+  //.mmc_sdcard_bus_req            (                             ),
+  //.mmc_sdcard_bus_write          (                             ),
+  //.mmc_sdcard_bus_addr           (                             ),
+  //.mmc_sdcard_bus_data           (                             ),
+  //.mmc_sdcard_bus_data_rd_mask   (                             ),
+  //.mmc_sdcard_bus_data_wr_mask   (                             ),
+  //                                                                 
+  //.sdcard_mmc_bus_ack            ('0                           ),
+  //.sdcard_mmc_bus_data           ('0                           )
 );
 
 mmc mmc_data (
@@ -623,11 +702,24 @@ mem mem (
   .clk         (clk),
   .rst         (rst),
 
-  .i_instbus_req          (mmc_mem_instbus_req),   
-  .i_instbus_addr         (mmc_mem_instbus_addr),  
-
-  .o_instbus_ack          (mem_mmc_instbus_ack),   
-  .o_instbus_data         (mem_mmc_instbus_data),
+  .bus_inst_adr_i                 (mmc_mem_inst_adr),  
+  .bus_inst_data_i                (mmc_mem_inst_data), 
+  .bus_inst_we_i                  (mmc_mem_inst_we),   
+  .bus_inst_sel_i                 (mmc_mem_inst_sel),  
+  .bus_inst_stb_i                 (mmc_mem_inst_stb),  
+  .bus_inst_cyc_i                 (mmc_mem_inst_cyc),  
+  .bus_inst_tga_i                 (mmc_mem_inst_tga),  
+  .bus_inst_tgd_i                 (mmc_mem_inst_tgd),  
+  .bus_inst_tgc_i                 (mmc_mem_inst_tgc),  
+                                                          
+  .bus_inst_ack_o                 (mem_mmc_inst_ack),  
+  .bus_inst_stall_o               (mem_mmc_inst_stall),
+  .bus_inst_err_o                 (mem_mmc_inst_err),  
+  .bus_inst_rty_o                 (mem_mmc_inst_rty),  
+  .bus_inst_data_o                (mem_mmc_inst_data),  
+  .bus_inst_tga_o                 (mem_mmc_inst_tga),  
+  .bus_inst_tgd_o                 (mem_mmc_inst_tgd),  
+  .bus_inst_tgc_o                 (mem_mmc_inst_tgc),  
 
   .i_membus_req           (mmc_mem_bus_req),   
   .i_membus_write         (mmc_mem_bus_write), 

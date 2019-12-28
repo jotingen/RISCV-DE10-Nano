@@ -38,13 +38,24 @@ module riscv #(
   output reg   [63:0] rvfi_csr_minstret_wdata,
 `endif
 
-  input  logic        i_instbus_ack,
-  input  logic [31:0] i_instbus_data,
+  output logic [31:0]      bus_inst_adr_o,
+  output logic [31:0]      bus_inst_data_o,
+  output logic             bus_inst_we_o,
+  output logic  [3:0]      bus_inst_sel_o,
+  output logic             bus_inst_stb_o,
+  output logic             bus_inst_cyc_o,
+  output logic             bus_inst_tga_o,
+  output logic             bus_inst_tgd_o,
+  output logic  [3:0]      bus_inst_tgc_o,
 
-  output logic        o_instbus_req,
-  output logic        o_instbus_write,
-  output logic [31:0] o_instbus_addr,
-  output logic [31:0] o_instbus_data,
+  input  logic             bus_inst_ack_i,
+  input  logic             bus_inst_stall_i,
+  input  logic             bus_inst_err_i,
+  input  logic             bus_inst_rty_i,
+  input  logic [31:0]      bus_inst_data_i,
+  input  logic             bus_inst_tga_i,
+  input  logic             bus_inst_tgd_i,
+  input  logic  [3:0]      bus_inst_tgc_i,
 
   input  logic        i_membus_ack,
   input  logic [31:0] i_membus_data,
@@ -327,13 +338,24 @@ riscv_ifu ifu (
   .ifu_inst       (ifu_inst),
   .ifu_inst_PC    (ifu_inst_PC),
 
-  .o_instbus_req   (o_instbus_req),   
-  .o_instbus_write (o_instbus_write), 
-  .o_instbus_addr  (o_instbus_addr),  
-  .o_instbus_data  (o_instbus_data),
-
-  .i_instbus_ack   (i_instbus_ack),   
-  .i_instbus_data  (i_instbus_data)  
+  .bus_inst_adr_o   (bus_inst_adr_o), 
+  .bus_inst_data_o  (bus_inst_data_o),
+  .bus_inst_we_o    (bus_inst_we_o),  
+  .bus_inst_sel_o   (bus_inst_sel_o), 
+  .bus_inst_stb_o   (bus_inst_stb_o), 
+  .bus_inst_cyc_o   (bus_inst_cyc_o), 
+  .bus_inst_tga_o   (bus_inst_tga_o), 
+  .bus_inst_tgd_o   (bus_inst_tgd_o), 
+  .bus_inst_tgc_o   (bus_inst_tgc_o), 
+                                     
+  .bus_inst_ack_i   (bus_inst_ack_i), 
+  .bus_inst_stall_i (bus_inst_stall_i),
+  .bus_inst_err_i   (bus_inst_err_i), 
+  .bus_inst_rty_i   (bus_inst_rty_i), 
+  .bus_inst_data_i  (bus_inst_data_i), 
+  .bus_inst_tga_i   (bus_inst_tga_i), 
+  .bus_inst_tgd_i   (bus_inst_tgd_i), 
+  .bus_inst_tgc_i   (bus_inst_tgc_i) 
 );
 
 riscv_idu #(.M_EXT(M_EXT)) idu (

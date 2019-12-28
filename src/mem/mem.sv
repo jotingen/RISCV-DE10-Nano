@@ -2,11 +2,24 @@ module mem (
   input  logic           clk,
   input  logic           rst,
 
-  input  logic           i_instbus_req,
-  input  logic [31:0]    i_instbus_addr,
+  input  logic [31:0]    bus_inst_adr_i,
+  input  logic [31:0]    bus_inst_data_i,
+  input  logic           bus_inst_we_i,
+  input  logic  [3:0]    bus_inst_sel_i,
+  input  logic           bus_inst_stb_i,
+  input  logic           bus_inst_cyc_i,
+  input  logic           bus_inst_tga_i,
+  input  logic           bus_inst_tgd_i,
+  input  logic  [3:0]    bus_inst_tgc_i,
 
-  output logic           o_instbus_ack,
-  output logic [31:0]    o_instbus_data,
+  output logic           bus_inst_ack_o,
+  output logic           bus_inst_stall_o,
+  output logic           bus_inst_err_o,
+  output logic           bus_inst_rty_o,
+  output logic [31:0]    bus_inst_data_o,
+  output logic           bus_inst_tga_o,
+  output logic           bus_inst_tgd_o,
+  output logic  [3:0]    bus_inst_tgc_o,
 
   input  logic           i_membus_req,
   input  logic           i_membus_write,
@@ -29,17 +42,17 @@ logic [7:0] mem_array_0 [2**(SIZE-2)-1:0];
 //Instruction bus
 always_ff @(posedge clk)
   begin
-  o_instbus_ack   <= '0;    
-  o_instbus_data  <= '0;   
-
-  if(i_instbus_req)
-    begin
-    o_instbus_ack <= '1;
-    o_instbus_data[7:0]   <= mem_array_0[i_instbus_addr[SIZE+2:2]];
-    o_instbus_data[15:8]  <= mem_array_1[i_instbus_addr[SIZE+2:2]];
-    o_instbus_data[23:16] <= mem_array_2[i_instbus_addr[SIZE+2:2]];
-    o_instbus_data[31:24] <= mem_array_3[i_instbus_addr[SIZE+2:2]];
-    end
+  bus_inst_ack_o         <= bus_inst_cyc_i & bus_inst_stb_i;    
+  bus_inst_stall_o       <= '0;
+  bus_inst_err_o         <= '0;
+  bus_inst_rty_o         <= '0;
+  bus_inst_data_o[31:24] <= {8{bus_inst_sel_i[3]}} & mem_array_3[bus_inst_adr_i[SIZE+2:2]];
+  bus_inst_data_o[23:16] <= {8{bus_inst_sel_i[2]}} & mem_array_2[bus_inst_adr_i[SIZE+2:2]];
+  bus_inst_data_o[15:8]  <= {8{bus_inst_sel_i[1]}} & mem_array_1[bus_inst_adr_i[SIZE+2:2]];
+  bus_inst_data_o[7:0]   <= {8{bus_inst_sel_i[0]}} & mem_array_0[bus_inst_adr_i[SIZE+2:2]];
+  bus_inst_tga_o         <= bus_inst_tga_i;
+  bus_inst_tgd_o         <= bus_inst_tgd_i;
+  bus_inst_tgc_o         <= bus_inst_tgc_i;
   end
 
 
@@ -77,6 +90,10 @@ always_ff @(posedge clk)
 
 initial
   begin
+    //$readmemh("../../output/programs/bootloader/test_3.v", mem_array_3);
+    //$readmemh("../../output/programs/bootloader/test_2.v", mem_array_2);
+    //$readmemh("../../output/programs/bootloader/test_1.v", mem_array_1);
+    //$readmemh("../../output/programs/bootloader/test_0.v", mem_array_0);
     //$readmemh("../../output/programs/bootloader/bootloader_3.v", mem_array_3);
     //$readmemh("../../output/programs/bootloader/bootloader_2.v", mem_array_2);
     //$readmemh("../../output/programs/bootloader/bootloader_1.v", mem_array_1);
