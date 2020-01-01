@@ -146,6 +146,13 @@ module mmc_wb (
 
 logic null_ack;
 
+logic [15:0]    mem_stb_cnt;
+logic [15:0]    ddr3_stb_cnt;
+logic [15:0]    led_stb_cnt;
+logic [15:0]    keys_stb_cnt;
+logic [15:0]    uart_stb_cnt;
+logic [15:0]    sdcard_stb_cnt;
+
 //Memory mapping
 logic [31:0]    MEM_ADDR_LO      = 'h0000_0000;
 logic [31:0]    MEM_ADDR_HI      = 'h0000_7FFF;
@@ -168,6 +175,27 @@ logic [31:0]    UART_ADDR_HI     = 'hC304_FFFF;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
 
+//Instruction counters
+always_ff @(posedge clk)
+  begin
+  mem_stb_cnt    <= mem_stb_cnt    + mmc_mem_stb_o    - mem_mmc_ack_i;
+  ddr3_stb_cnt   <= ddr3_stb_cnt   + mmc_ddr3_stb_o   - ddr3_mmc_ack_i;
+  led_stb_cnt    <= '0; //led_stb_cnt    + mmc_led_stb_o    - led_mmc_ack_i;
+  keys_stb_cnt   <= '0; //keys_stb_cnt   + mmc_keys_stb_o   - keys_mmc_ack_i;
+  uart_stb_cnt   <= '0; //uart_stb_cnt   + mmc_uart_stb_o   - uart_mmc_ack_i;
+  sdcard_stb_cnt <= '0; //sdcard_stb_cnt + mmc_sdcard_stb_o - sdcard_mmc_ack_i;
+
+  if(rst)
+    begin
+    mem_stb_cnt    <= '0;
+    ddr3_stb_cnt   <= '0;
+    led_stb_cnt    <= '0;
+    keys_stb_cnt   <= '0;
+    uart_stb_cnt   <= '0;
+    sdcard_stb_cnt <= '0;
+    end
+  end
+//
 //CPU to subsystems
 always_comb
   begin
@@ -287,10 +315,39 @@ always_comb
   mmc_riscv_tgd_o   = '0;
   mmc_riscv_tgc_o   = '0;
 
+  if(mem_stb_cnt)
+    begin
+    mmc_riscv_stall_o = mem_mmc_stall_i;
+    end
+
+  if(ddr3_stb_cnt)
+    begin
+    mmc_riscv_stall_o = ddr3_mmc_stall_i;
+    end
+
+  if(led_stb_cnt)
+    begin
+    mmc_riscv_stall_o = led_mmc_stall_i;
+    end
+
+  if(keys_stb_cnt)
+    begin
+    mmc_riscv_stall_o = keys_mmc_stall_i;
+    end
+
+  if(uart_stb_cnt)
+    begin
+    mmc_riscv_stall_o = uart_mmc_stall_i;
+    end
+
+  if(sdcard_stb_cnt)
+    begin
+    mmc_riscv_stall_o = sdcard_mmc_stall_i;
+    end
+
   if(mem_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = mem_mmc_ack_i;
-    mmc_riscv_stall_o = mem_mmc_stall_i;
     mmc_riscv_err_o   = mem_mmc_err_i;
     mmc_riscv_rty_o   = mem_mmc_rty_i;
     mmc_riscv_data_o  = mem_mmc_data_i;
@@ -302,7 +359,6 @@ always_comb
   if(ddr3_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = ddr3_mmc_ack_i;
-    mmc_riscv_stall_o = ddr3_mmc_stall_i;
     mmc_riscv_err_o   = ddr3_mmc_err_i;
     mmc_riscv_rty_o   = ddr3_mmc_rty_i;
     mmc_riscv_data_o  = ddr3_mmc_data_i;
@@ -314,7 +370,6 @@ always_comb
   if(led_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = led_mmc_ack_i;
-    mmc_riscv_stall_o = led_mmc_stall_i;
     mmc_riscv_err_o   = led_mmc_err_i;
     mmc_riscv_rty_o   = led_mmc_rty_i;
     mmc_riscv_data_o  = led_mmc_data_i;
@@ -326,7 +381,6 @@ always_comb
   if(keys_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = keys_mmc_ack_i;
-    mmc_riscv_stall_o = keys_mmc_stall_i;
     mmc_riscv_err_o   = keys_mmc_err_i;
     mmc_riscv_rty_o   = keys_mmc_rty_i;
     mmc_riscv_data_o  = keys_mmc_data_i;
@@ -338,7 +392,6 @@ always_comb
   if(uart_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = uart_mmc_ack_i;
-    mmc_riscv_stall_o = uart_mmc_stall_i;
     mmc_riscv_err_o   = uart_mmc_err_i;
     mmc_riscv_rty_o   = uart_mmc_rty_i;
     mmc_riscv_data_o  = uart_mmc_data_i;
@@ -350,7 +403,6 @@ always_comb
   if(sdcard_mmc_ack_i)
     begin
     mmc_riscv_ack_o   = sdcard_mmc_ack_i;
-    mmc_riscv_stall_o = sdcard_mmc_stall_i;
     mmc_riscv_err_o   = sdcard_mmc_err_i;
     mmc_riscv_rty_o   = sdcard_mmc_rty_i;
     mmc_riscv_data_o  = sdcard_mmc_data_i;

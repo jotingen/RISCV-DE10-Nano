@@ -91,7 +91,7 @@ ifu_buff ifu_buff_addr (
   .rdreq ( ifu_buff_addr_ack ),
   .sclr  ( ifu_buff_addr_clear ),
   .wrreq ( ifu_buff_addr_wrreq ),
-  .almost_empty ( ifu_buff_addr_empty ),
+  .empty ( ifu_buff_addr_empty ),
   .almost_full  ( ifu_buff_addr_full ),
   .q     ( ifu_buff_addr_out ),
   .usedw ( ifu_buff_addr_used )
@@ -102,7 +102,7 @@ ifu_buff ifu_buff_data (
   .rdreq ( ifu_buff_data_ack ),
   .sclr  ( ifu_buff_data_clear ),
   .wrreq ( ifu_buff_data_wrreq ),
-  .almost_empty ( ifu_buff_data_empty ),
+  .empty ( ifu_buff_data_empty ),
   .almost_full  ( ifu_buff_data_full ),
   .q     ( ifu_buff_data_out ),
   .usedw ( ifu_buff_data_used )
@@ -113,7 +113,7 @@ always_comb
   instbus_req  = '0;
   ifu_buff_addr_ack   = '0;
   ifu_buff_data_ack   = '0;
-  if(~ifu_buff_addr_full)
+  if(~ifu_buff_addr_full & ~bus_inst_stall_i)
     begin
     instbus_req  = '1;
     end
@@ -158,7 +158,7 @@ always_ff @(posedge clk)
   ifu_buff_data_wrreq <= '0;
 
   //Make requests while we have buffers available
-  if(~ifu_buff_addr_full)
+  if(~ifu_buff_addr_full & ~bus_inst_stall_i)
     begin
     //instbus_req  <= '1;
     instbus_addr <= instbus_addr + 'd4;

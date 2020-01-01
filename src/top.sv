@@ -191,6 +191,25 @@ logic             mem_mmc_inst_tga;
 logic             mem_mmc_inst_tgd;
 logic  [3:0]      mem_mmc_inst_tgc;
 
+logic [31:0]      mmc_ddr3_inst_adr;
+logic [31:0]      mmc_ddr3_inst_data;
+logic             mmc_ddr3_inst_we;
+logic  [3:0]      mmc_ddr3_inst_sel;
+logic             mmc_ddr3_inst_stb;
+logic             mmc_ddr3_inst_cyc;
+logic             mmc_ddr3_inst_tga;
+logic             mmc_ddr3_inst_tgd;
+logic  [3:0]      mmc_ddr3_inst_tgc;
+
+logic             ddr3_mmc_inst_ack;
+logic             ddr3_mmc_inst_stall;
+logic             ddr3_mmc_inst_err;
+logic             ddr3_mmc_inst_rty;
+logic [31:0]      ddr3_mmc_inst_data;
+logic             ddr3_mmc_inst_tga;
+logic             ddr3_mmc_inst_tgd;
+logic  [3:0]      ddr3_mmc_inst_tgc;
+
 logic           mmc_mem_instbus_req;
 logic           mmc_mem_instbus_write;
 logic [31:0]    mmc_mem_instbus_addr;
@@ -470,7 +489,26 @@ mmc_wb mmc_inst (
   .mem_mmc_data_i                (mem_mmc_inst_data),  
   .mem_mmc_tga_i                 (mem_mmc_inst_tga),  
   .mem_mmc_tgd_i                 (mem_mmc_inst_tgd),  
-  .mem_mmc_tgc_i                 (mem_mmc_inst_tgc)  
+  .mem_mmc_tgc_i                 (mem_mmc_inst_tgc), 
+
+  .mmc_ddr3_adr_o                (mmc_ddr3_inst_adr),  
+  .mmc_ddr3_data_o               (mmc_ddr3_inst_data), 
+  .mmc_ddr3_we_o                 (mmc_ddr3_inst_we),   
+  .mmc_ddr3_sel_o                (mmc_ddr3_inst_sel),  
+  .mmc_ddr3_stb_o                (mmc_ddr3_inst_stb),  
+  .mmc_ddr3_cyc_o                (mmc_ddr3_inst_cyc),  
+  .mmc_ddr3_tga_o                (mmc_ddr3_inst_tga),  
+  .mmc_ddr3_tgd_o                (mmc_ddr3_inst_tgd),  
+  .mmc_ddr3_tgc_o                (mmc_ddr3_inst_tgc),  
+                                                         
+  .ddr3_mmc_ack_i                (ddr3_mmc_inst_ack),  
+  .ddr3_mmc_stall_i              (ddr3_mmc_inst_stall),
+  .ddr3_mmc_err_i                (ddr3_mmc_inst_err),  
+  .ddr3_mmc_rty_i                (ddr3_mmc_inst_rty),  
+  .ddr3_mmc_data_i               (ddr3_mmc_inst_data),  
+  .ddr3_mmc_tga_i                (ddr3_mmc_inst_tga),  
+  .ddr3_mmc_tgd_i                (ddr3_mmc_inst_tgd),  
+  .ddr3_mmc_tgc_i                (ddr3_mmc_inst_tgc)  
 
   //.riscv_mmc_bus_req             (riscv_mmc_instbus_req            ),    
   //.riscv_mmc_bus_write           ('0                               ),  
@@ -702,24 +740,24 @@ mem mem (
   .clk         (clk),
   .rst         (rst),
 
-  .bus_inst_adr_i                 (mmc_mem_inst_adr),  
-  .bus_inst_data_i                (mmc_mem_inst_data), 
-  .bus_inst_we_i                  (mmc_mem_inst_we),   
-  .bus_inst_sel_i                 (mmc_mem_inst_sel),  
-  .bus_inst_stb_i                 (mmc_mem_inst_stb),  
-  .bus_inst_cyc_i                 (mmc_mem_inst_cyc),  
-  .bus_inst_tga_i                 (mmc_mem_inst_tga),  
-  .bus_inst_tgd_i                 (mmc_mem_inst_tgd),  
-  .bus_inst_tgc_i                 (mmc_mem_inst_tgc),  
-                                                          
-  .bus_inst_ack_o                 (mem_mmc_inst_ack),  
-  .bus_inst_stall_o               (mem_mmc_inst_stall),
-  .bus_inst_err_o                 (mem_mmc_inst_err),  
-  .bus_inst_rty_o                 (mem_mmc_inst_rty),  
-  .bus_inst_data_o                (mem_mmc_inst_data),  
-  .bus_inst_tga_o                 (mem_mmc_inst_tga),  
-  .bus_inst_tgd_o                 (mem_mmc_inst_tgd),  
-  .bus_inst_tgc_o                 (mem_mmc_inst_tgc),  
+  .bus_inst_adr_i         (mmc_mem_inst_adr),  
+  .bus_inst_data_i        (mmc_mem_inst_data), 
+  .bus_inst_we_i          (mmc_mem_inst_we),   
+  .bus_inst_sel_i         (mmc_mem_inst_sel),  
+  .bus_inst_stb_i         (mmc_mem_inst_stb),  
+  .bus_inst_cyc_i         (mmc_mem_inst_cyc),  
+  .bus_inst_tga_i         (mmc_mem_inst_tga),  
+  .bus_inst_tgd_i         (mmc_mem_inst_tgd),  
+  .bus_inst_tgc_i         (mmc_mem_inst_tgc),  
+                                                  
+  .bus_inst_ack_o         (mem_mmc_inst_ack),  
+  .bus_inst_stall_o       (mem_mmc_inst_stall),
+  .bus_inst_err_o         (mem_mmc_inst_err),  
+  .bus_inst_rty_o         (mem_mmc_inst_rty),  
+  .bus_inst_data_o        (mem_mmc_inst_data),  
+  .bus_inst_tga_o         (mem_mmc_inst_tga),  
+  .bus_inst_tgd_o         (mem_mmc_inst_tgd),  
+  .bus_inst_tgc_o         (mem_mmc_inst_tgc),  
 
   .i_membus_req           (mmc_mem_bus_req),   
   .i_membus_write         (mmc_mem_bus_write), 
@@ -745,6 +783,25 @@ ddr3 ddr3 (
   .ddr3_avl_read_req      (ddr3_avl_read_req),    
   .ddr3_avl_write_req     (ddr3_avl_write_req),   
   .ddr3_avl_size          (ddr3_avl_size),         
+
+  .bus_inst_adr_i         (mmc_ddr3_inst_adr),  
+  .bus_inst_data_i        (mmc_ddr3_inst_data), 
+  .bus_inst_we_i          (mmc_ddr3_inst_we),   
+  .bus_inst_sel_i         (mmc_ddr3_inst_sel),  
+  .bus_inst_stb_i         (mmc_ddr3_inst_stb),  
+  .bus_inst_cyc_i         (mmc_ddr3_inst_cyc),  
+  .bus_inst_tga_i         (mmc_ddr3_inst_tga),  
+  .bus_inst_tgd_i         (mmc_ddr3_inst_tgd),  
+  .bus_inst_tgc_i         (mmc_ddr3_inst_tgc),  
+                                                  
+  .bus_inst_ack_o         (ddr3_mmc_inst_ack),  
+  .bus_inst_stall_o       (ddr3_mmc_inst_stall),
+  .bus_inst_err_o         (ddr3_mmc_inst_err),  
+  .bus_inst_rty_o         (ddr3_mmc_inst_rty),  
+  .bus_inst_data_o        (ddr3_mmc_inst_data),  
+  .bus_inst_tga_o         (ddr3_mmc_inst_tga),  
+  .bus_inst_tgd_o         (ddr3_mmc_inst_tgd),  
+  .bus_inst_tgc_o         (ddr3_mmc_inst_tgc),  
 
   .i_instbus_req          (mmc_ddr3_instbus_req),   
   .i_instbus_addr         (mmc_ddr3_instbus_addr),  

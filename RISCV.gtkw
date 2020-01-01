@@ -1,17 +1,18 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Dec 27 02:12:02 2019
+[*] Wed Jan 01 02:52:38 2020
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Fri Dec 27 02:04:33 2019"
-[dumpfile_size] 254668411
+[dumpfile_mtime] "Wed Jan 01 01:00:22 2020"
+[dumpfile_size] 738638226
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 207
+[timestart] 0
 [size] 1858 1057
 [pos] -1 -1
-*-7.532398 610 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-12.526938 7010 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
+[treeopen] tb.dut.ddr3.
 [treeopen] tb.dut.mmc_data.
 [treeopen] tb.dut.mmc_inst.
 [treeopen] tb.dut.riscv.
@@ -85,8 +86,19 @@ tb.dut.mmc_inst.riscv_mmc_we_i
 #{tb.dut.mmc_inst.riscv_mmc_data_i[31:0]} tb.dut.mmc_inst.riscv_mmc_data_i[31] tb.dut.mmc_inst.riscv_mmc_data_i[30] tb.dut.mmc_inst.riscv_mmc_data_i[29] tb.dut.mmc_inst.riscv_mmc_data_i[28] tb.dut.mmc_inst.riscv_mmc_data_i[27] tb.dut.mmc_inst.riscv_mmc_data_i[26] tb.dut.mmc_inst.riscv_mmc_data_i[25] tb.dut.mmc_inst.riscv_mmc_data_i[24] tb.dut.mmc_inst.riscv_mmc_data_i[23] tb.dut.mmc_inst.riscv_mmc_data_i[22] tb.dut.mmc_inst.riscv_mmc_data_i[21] tb.dut.mmc_inst.riscv_mmc_data_i[20] tb.dut.mmc_inst.riscv_mmc_data_i[19] tb.dut.mmc_inst.riscv_mmc_data_i[18] tb.dut.mmc_inst.riscv_mmc_data_i[17] tb.dut.mmc_inst.riscv_mmc_data_i[16] tb.dut.mmc_inst.riscv_mmc_data_i[15] tb.dut.mmc_inst.riscv_mmc_data_i[14] tb.dut.mmc_inst.riscv_mmc_data_i[13] tb.dut.mmc_inst.riscv_mmc_data_i[12] tb.dut.mmc_inst.riscv_mmc_data_i[11] tb.dut.mmc_inst.riscv_mmc_data_i[10] tb.dut.mmc_inst.riscv_mmc_data_i[9] tb.dut.mmc_inst.riscv_mmc_data_i[8] tb.dut.mmc_inst.riscv_mmc_data_i[7] tb.dut.mmc_inst.riscv_mmc_data_i[6] tb.dut.mmc_inst.riscv_mmc_data_i[5] tb.dut.mmc_inst.riscv_mmc_data_i[4] tb.dut.mmc_inst.riscv_mmc_data_i[3] tb.dut.mmc_inst.riscv_mmc_data_i[2] tb.dut.mmc_inst.riscv_mmc_data_i[1] tb.dut.mmc_inst.riscv_mmc_data_i[0]
 @28
 tb.dut.mmc_inst.riscv_mmc_tga_i
-tb.dut.mmc_inst.riscv_mmc_tgc_i[0]
+@22
+#{tb.dut.mmc_inst.riscv_mmc_tgc_i[3:0]} tb.dut.mmc_inst.riscv_mmc_tgc_i[3] tb.dut.mmc_inst.riscv_mmc_tgc_i[2] tb.dut.mmc_inst.riscv_mmc_tgc_i[1] tb.dut.mmc_inst.riscv_mmc_tgc_i[0]
+@28
 tb.dut.mmc_inst.riscv_mmc_tgd_i
+@200
+-
+@24
+tb.dut.mmc_inst.mem_stb_cnt[15:0]
+tb.dut.mmc_inst.ddr3_stb_cnt[15:0]
+tb.dut.mmc_inst.led_stb_cnt[15:0]
+tb.dut.mmc_inst.keys_stb_cnt[15:0]
+tb.dut.mmc_inst.uart_stb_cnt[15:0]
+tb.dut.mmc_inst.sdcard_stb_cnt[15:0]
 @200
 -
 @28
@@ -408,7 +420,7 @@ tb.dut.shield.sdcard.SPIDone
 -SDCard
 @200
 -
-@c00200
+@800200
 -DDR3
 @28
 tb.dut.ddr3.clk
@@ -417,6 +429,73 @@ tb.dut.ddr3.ddr3_clk
 -
 @28
 tb.dut.led.LED[7:0]
+@200
+-
+@28
+tb.dut.ddr3.bus_inst_cyc_i
+tb.dut.ddr3.bus_inst_stb_i
+@22
+#{tb.dut.ddr3.bus_inst_adr_i[31:0]} tb.dut.ddr3.bus_inst_adr_i[31] tb.dut.ddr3.bus_inst_adr_i[30] tb.dut.ddr3.bus_inst_adr_i[29] tb.dut.ddr3.bus_inst_adr_i[28] tb.dut.ddr3.bus_inst_adr_i[27] tb.dut.ddr3.bus_inst_adr_i[26] tb.dut.ddr3.bus_inst_adr_i[25] tb.dut.ddr3.bus_inst_adr_i[24] tb.dut.ddr3.bus_inst_adr_i[23] tb.dut.ddr3.bus_inst_adr_i[22] tb.dut.ddr3.bus_inst_adr_i[21] tb.dut.ddr3.bus_inst_adr_i[20] tb.dut.ddr3.bus_inst_adr_i[19] tb.dut.ddr3.bus_inst_adr_i[18] tb.dut.ddr3.bus_inst_adr_i[17] tb.dut.ddr3.bus_inst_adr_i[16] tb.dut.ddr3.bus_inst_adr_i[15] tb.dut.ddr3.bus_inst_adr_i[14] tb.dut.ddr3.bus_inst_adr_i[13] tb.dut.ddr3.bus_inst_adr_i[12] tb.dut.ddr3.bus_inst_adr_i[11] tb.dut.ddr3.bus_inst_adr_i[10] tb.dut.ddr3.bus_inst_adr_i[9] tb.dut.ddr3.bus_inst_adr_i[8] tb.dut.ddr3.bus_inst_adr_i[7] tb.dut.ddr3.bus_inst_adr_i[6] tb.dut.ddr3.bus_inst_adr_i[5] tb.dut.ddr3.bus_inst_adr_i[4] tb.dut.ddr3.bus_inst_adr_i[3] tb.dut.ddr3.bus_inst_adr_i[2] tb.dut.ddr3.bus_inst_adr_i[1] tb.dut.ddr3.bus_inst_adr_i[0]
+#{tb.dut.ddr3.bus_inst_data_i[31:0]} tb.dut.ddr3.bus_inst_data_i[31] tb.dut.ddr3.bus_inst_data_i[30] tb.dut.ddr3.bus_inst_data_i[29] tb.dut.ddr3.bus_inst_data_i[28] tb.dut.ddr3.bus_inst_data_i[27] tb.dut.ddr3.bus_inst_data_i[26] tb.dut.ddr3.bus_inst_data_i[25] tb.dut.ddr3.bus_inst_data_i[24] tb.dut.ddr3.bus_inst_data_i[23] tb.dut.ddr3.bus_inst_data_i[22] tb.dut.ddr3.bus_inst_data_i[21] tb.dut.ddr3.bus_inst_data_i[20] tb.dut.ddr3.bus_inst_data_i[19] tb.dut.ddr3.bus_inst_data_i[18] tb.dut.ddr3.bus_inst_data_i[17] tb.dut.ddr3.bus_inst_data_i[16] tb.dut.ddr3.bus_inst_data_i[15] tb.dut.ddr3.bus_inst_data_i[14] tb.dut.ddr3.bus_inst_data_i[13] tb.dut.ddr3.bus_inst_data_i[12] tb.dut.ddr3.bus_inst_data_i[11] tb.dut.ddr3.bus_inst_data_i[10] tb.dut.ddr3.bus_inst_data_i[9] tb.dut.ddr3.bus_inst_data_i[8] tb.dut.ddr3.bus_inst_data_i[7] tb.dut.ddr3.bus_inst_data_i[6] tb.dut.ddr3.bus_inst_data_i[5] tb.dut.ddr3.bus_inst_data_i[4] tb.dut.ddr3.bus_inst_data_i[3] tb.dut.ddr3.bus_inst_data_i[2] tb.dut.ddr3.bus_inst_data_i[1] tb.dut.ddr3.bus_inst_data_i[0]
+@28
+tb.dut.ddr3.bus_inst_we_i
+@22
+#{tb.dut.ddr3.bus_inst_sel_i[3:0]} tb.dut.ddr3.bus_inst_sel_i[3] tb.dut.ddr3.bus_inst_sel_i[2] tb.dut.ddr3.bus_inst_sel_i[1] tb.dut.ddr3.bus_inst_sel_i[0]
+@28
+tb.dut.ddr3.bus_inst_tga_i
+tb.dut.ddr3.bus_inst_tgd_i
+@22
+#{tb.dut.ddr3.bus_inst_tgc_i[3:0]} tb.dut.ddr3.bus_inst_tgc_i[3] tb.dut.ddr3.bus_inst_tgc_i[2] tb.dut.ddr3.bus_inst_tgc_i[1] tb.dut.ddr3.bus_inst_tgc_i[0]
+@200
+-
+-
+@28
+tb.dut.ddr3.bus_inst_stall_o
+tb.dut.ddr3.bus_inst_ack_o
+tb.dut.ddr3.bus_inst_err_o
+tb.dut.ddr3.bus_inst_rty_o
+@22
+tb.dut.ddr3.bus_inst_data_o[31:0]
+@28
+tb.dut.ddr3.bus_inst_tga_o
+tb.dut.ddr3.bus_inst_tgd_o
+@22
+tb.dut.ddr3.bus_inst_tgc_o[3:0]
+@200
+-
+@28
+tb.dut.ddr3.bus_inst_buff.clock
+tb.dut.ddr3.bus_inst_buff.sclr
+tb.dut.ddr3.bus_inst_buff.wrreq
+@22
+#{tb.dut.ddr3.bus_inst_buff.data[79:0]} tb.dut.ddr3.bus_inst_buff.data[79] tb.dut.ddr3.bus_inst_buff.data[78] tb.dut.ddr3.bus_inst_buff.data[77] tb.dut.ddr3.bus_inst_buff.data[76] tb.dut.ddr3.bus_inst_buff.data[75] tb.dut.ddr3.bus_inst_buff.data[74] tb.dut.ddr3.bus_inst_buff.data[73] tb.dut.ddr3.bus_inst_buff.data[72] tb.dut.ddr3.bus_inst_buff.data[71] tb.dut.ddr3.bus_inst_buff.data[70] tb.dut.ddr3.bus_inst_buff.data[69] tb.dut.ddr3.bus_inst_buff.data[68] tb.dut.ddr3.bus_inst_buff.data[67] tb.dut.ddr3.bus_inst_buff.data[66] tb.dut.ddr3.bus_inst_buff.data[65] tb.dut.ddr3.bus_inst_buff.data[64] tb.dut.ddr3.bus_inst_buff.data[63] tb.dut.ddr3.bus_inst_buff.data[62] tb.dut.ddr3.bus_inst_buff.data[61] tb.dut.ddr3.bus_inst_buff.data[60] tb.dut.ddr3.bus_inst_buff.data[59] tb.dut.ddr3.bus_inst_buff.data[58] tb.dut.ddr3.bus_inst_buff.data[57] tb.dut.ddr3.bus_inst_buff.data[56] tb.dut.ddr3.bus_inst_buff.data[55] tb.dut.ddr3.bus_inst_buff.data[54] tb.dut.ddr3.bus_inst_buff.data[53] tb.dut.ddr3.bus_inst_buff.data[52] tb.dut.ddr3.bus_inst_buff.data[51] tb.dut.ddr3.bus_inst_buff.data[50] tb.dut.ddr3.bus_inst_buff.data[49] tb.dut.ddr3.bus_inst_buff.data[48] tb.dut.ddr3.bus_inst_buff.data[47] tb.dut.ddr3.bus_inst_buff.data[46] tb.dut.ddr3.bus_inst_buff.data[45] tb.dut.ddr3.bus_inst_buff.data[44] tb.dut.ddr3.bus_inst_buff.data[43] tb.dut.ddr3.bus_inst_buff.data[42] tb.dut.ddr3.bus_inst_buff.data[41] tb.dut.ddr3.bus_inst_buff.data[40] tb.dut.ddr3.bus_inst_buff.data[39] tb.dut.ddr3.bus_inst_buff.data[38] tb.dut.ddr3.bus_inst_buff.data[37] tb.dut.ddr3.bus_inst_buff.data[36] tb.dut.ddr3.bus_inst_buff.data[35] tb.dut.ddr3.bus_inst_buff.data[34] tb.dut.ddr3.bus_inst_buff.data[33] tb.dut.ddr3.bus_inst_buff.data[32] tb.dut.ddr3.bus_inst_buff.data[31] tb.dut.ddr3.bus_inst_buff.data[30] tb.dut.ddr3.bus_inst_buff.data[29] tb.dut.ddr3.bus_inst_buff.data[28] tb.dut.ddr3.bus_inst_buff.data[27] tb.dut.ddr3.bus_inst_buff.data[26] tb.dut.ddr3.bus_inst_buff.data[25] tb.dut.ddr3.bus_inst_buff.data[24] tb.dut.ddr3.bus_inst_buff.data[23] tb.dut.ddr3.bus_inst_buff.data[22] tb.dut.ddr3.bus_inst_buff.data[21] tb.dut.ddr3.bus_inst_buff.data[20] tb.dut.ddr3.bus_inst_buff.data[19] tb.dut.ddr3.bus_inst_buff.data[18] tb.dut.ddr3.bus_inst_buff.data[17] tb.dut.ddr3.bus_inst_buff.data[16] tb.dut.ddr3.bus_inst_buff.data[15] tb.dut.ddr3.bus_inst_buff.data[14] tb.dut.ddr3.bus_inst_buff.data[13] tb.dut.ddr3.bus_inst_buff.data[12] tb.dut.ddr3.bus_inst_buff.data[11] tb.dut.ddr3.bus_inst_buff.data[10] tb.dut.ddr3.bus_inst_buff.data[9] tb.dut.ddr3.bus_inst_buff.data[8] tb.dut.ddr3.bus_inst_buff.data[7] tb.dut.ddr3.bus_inst_buff.data[6] tb.dut.ddr3.bus_inst_buff.data[5] tb.dut.ddr3.bus_inst_buff.data[4] tb.dut.ddr3.bus_inst_buff.data[3] tb.dut.ddr3.bus_inst_buff.data[2] tb.dut.ddr3.bus_inst_buff.data[1] tb.dut.ddr3.bus_inst_buff.data[0]
+#{tb.dut.ddr3.bus_inst_buff.q[79:0]} tb.dut.ddr3.bus_inst_buff.q[79] tb.dut.ddr3.bus_inst_buff.q[78] tb.dut.ddr3.bus_inst_buff.q[77] tb.dut.ddr3.bus_inst_buff.q[76] tb.dut.ddr3.bus_inst_buff.q[75] tb.dut.ddr3.bus_inst_buff.q[74] tb.dut.ddr3.bus_inst_buff.q[73] tb.dut.ddr3.bus_inst_buff.q[72] tb.dut.ddr3.bus_inst_buff.q[71] tb.dut.ddr3.bus_inst_buff.q[70] tb.dut.ddr3.bus_inst_buff.q[69] tb.dut.ddr3.bus_inst_buff.q[68] tb.dut.ddr3.bus_inst_buff.q[67] tb.dut.ddr3.bus_inst_buff.q[66] tb.dut.ddr3.bus_inst_buff.q[65] tb.dut.ddr3.bus_inst_buff.q[64] tb.dut.ddr3.bus_inst_buff.q[63] tb.dut.ddr3.bus_inst_buff.q[62] tb.dut.ddr3.bus_inst_buff.q[61] tb.dut.ddr3.bus_inst_buff.q[60] tb.dut.ddr3.bus_inst_buff.q[59] tb.dut.ddr3.bus_inst_buff.q[58] tb.dut.ddr3.bus_inst_buff.q[57] tb.dut.ddr3.bus_inst_buff.q[56] tb.dut.ddr3.bus_inst_buff.q[55] tb.dut.ddr3.bus_inst_buff.q[54] tb.dut.ddr3.bus_inst_buff.q[53] tb.dut.ddr3.bus_inst_buff.q[52] tb.dut.ddr3.bus_inst_buff.q[51] tb.dut.ddr3.bus_inst_buff.q[50] tb.dut.ddr3.bus_inst_buff.q[49] tb.dut.ddr3.bus_inst_buff.q[48] tb.dut.ddr3.bus_inst_buff.q[47] tb.dut.ddr3.bus_inst_buff.q[46] tb.dut.ddr3.bus_inst_buff.q[45] tb.dut.ddr3.bus_inst_buff.q[44] tb.dut.ddr3.bus_inst_buff.q[43] tb.dut.ddr3.bus_inst_buff.q[42] tb.dut.ddr3.bus_inst_buff.q[41] tb.dut.ddr3.bus_inst_buff.q[40] tb.dut.ddr3.bus_inst_buff.q[39] tb.dut.ddr3.bus_inst_buff.q[38] tb.dut.ddr3.bus_inst_buff.q[37] tb.dut.ddr3.bus_inst_buff.q[36] tb.dut.ddr3.bus_inst_buff.q[35] tb.dut.ddr3.bus_inst_buff.q[34] tb.dut.ddr3.bus_inst_buff.q[33] tb.dut.ddr3.bus_inst_buff.q[32] tb.dut.ddr3.bus_inst_buff.q[31] tb.dut.ddr3.bus_inst_buff.q[30] tb.dut.ddr3.bus_inst_buff.q[29] tb.dut.ddr3.bus_inst_buff.q[28] tb.dut.ddr3.bus_inst_buff.q[27] tb.dut.ddr3.bus_inst_buff.q[26] tb.dut.ddr3.bus_inst_buff.q[25] tb.dut.ddr3.bus_inst_buff.q[24] tb.dut.ddr3.bus_inst_buff.q[23] tb.dut.ddr3.bus_inst_buff.q[22] tb.dut.ddr3.bus_inst_buff.q[21] tb.dut.ddr3.bus_inst_buff.q[20] tb.dut.ddr3.bus_inst_buff.q[19] tb.dut.ddr3.bus_inst_buff.q[18] tb.dut.ddr3.bus_inst_buff.q[17] tb.dut.ddr3.bus_inst_buff.q[16] tb.dut.ddr3.bus_inst_buff.q[15] tb.dut.ddr3.bus_inst_buff.q[14] tb.dut.ddr3.bus_inst_buff.q[13] tb.dut.ddr3.bus_inst_buff.q[12] tb.dut.ddr3.bus_inst_buff.q[11] tb.dut.ddr3.bus_inst_buff.q[10] tb.dut.ddr3.bus_inst_buff.q[9] tb.dut.ddr3.bus_inst_buff.q[8] tb.dut.ddr3.bus_inst_buff.q[7] tb.dut.ddr3.bus_inst_buff.q[6] tb.dut.ddr3.bus_inst_buff.q[5] tb.dut.ddr3.bus_inst_buff.q[4] tb.dut.ddr3.bus_inst_buff.q[3] tb.dut.ddr3.bus_inst_buff.q[2] tb.dut.ddr3.bus_inst_buff.q[1] tb.dut.ddr3.bus_inst_buff.q[0]
+@28
+tb.dut.ddr3.bus_inst_buff.rdreq
+@22
+#{tb.dut.ddr3.bus_inst_buff.usedw[3:0]} tb.dut.ddr3.bus_inst_buff.usedw[3] tb.dut.ddr3.bus_inst_buff.usedw[2] tb.dut.ddr3.bus_inst_buff.usedw[1] tb.dut.ddr3.bus_inst_buff.usedw[0]
+@28
+tb.dut.ddr3.bus_inst_buff.almost_empty
+tb.dut.ddr3.bus_inst_buff.empty
+tb.dut.ddr3.bus_inst_buff.almost_full
+tb.dut.ddr3.bus_inst_buff.full
+tb.dut.ddr3.bus_inst_buff_empty
+@200
+-
+@28
+tb.dut.ddr3.bus_inst_req_stgd
+@22
+tb.dut.ddr3.bus_inst_adr_stgd[31:0]
+tb.dut.ddr3.bus_inst_data_stgd[31:0]
+@28
+tb.dut.ddr3.bus_inst_we_stgd
+@22
+tb.dut.ddr3.bus_inst_sel_stgd[3:0]
+@28
+tb.dut.ddr3.bus_inst_tga_stgd
+tb.dut.ddr3.bus_inst_tgd_stgd
+@22
+tb.dut.ddr3.bus_inst_tgc_stgd[3:0]
 @200
 -
 @28
@@ -531,7 +610,7 @@ tb.dut.ddr3.ddr3_fifo_in.wrreq
 tb.dut.ddr3.o_membus_ack
 @22
 tb.dut.ddr3.o_membus_data[31:0]
-@1401200
+@1000200
 -DDR3
 @200
 -
@@ -631,9 +710,7 @@ tb.dut.mem.bus_inst_tgd_i
 -
 @28
 tb.dut.mem.bus_inst_ack_o
-@29
 tb.dut.mem.bus_inst_err_o
-@28
 tb.dut.mem.bus_inst_rty_o
 tb.dut.mem.bus_inst_stall_o
 @22
@@ -781,7 +858,7 @@ tb.dut.riscv.ifu.alu_retired
 -IFU
 @200
 -
-@800200
+@c00200
 -IDU
 @28
 tb.dut.riscv.idu.idu_vld
@@ -865,7 +942,7 @@ tb.dut.riscv.idu.idu_decode_rs2[4:0]
 tb.dut.riscv.idu.idu_decode_shamt[4:0]
 tb.dut.riscv.idu.idu_decode_succ[3:0]
 tb.dut.riscv.idu.idu_decode_uimm[4:0]
-@1000200
+@1401200
 -IDU
 @200
 -
