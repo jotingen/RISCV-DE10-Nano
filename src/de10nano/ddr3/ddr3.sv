@@ -12,6 +12,25 @@ module ddr3 (
   output logic           ddr3_avl_write_req,   
   output logic [8:0]     ddr3_avl_size,
 
+  input  logic [31:0]    bus_inst_adr_i,
+  input  logic [31:0]    bus_inst_data_i,
+  input  logic           bus_inst_we_i,
+  input  logic  [3:0]    bus_inst_sel_i,
+  input  logic           bus_inst_stb_i,
+  input  logic           bus_inst_cyc_i,
+  input  logic           bus_inst_tga_i,
+  input  logic           bus_inst_tgd_i,
+  input  logic  [3:0]    bus_inst_tgc_i,
+
+  output logic           bus_inst_ack_o,
+  output logic           bus_inst_stall_o,
+  output logic           bus_inst_err_o,
+  output logic           bus_inst_rty_o,
+  output logic [31:0]    bus_inst_data_o,
+  output logic           bus_inst_tga_o,
+  output logic           bus_inst_tgd_o,
+  output logic  [3:0]    bus_inst_tgc_o,
+
   input  logic           i_instbus_req,
   input  logic [31:0]    i_instbus_addr,
 
@@ -28,6 +47,20 @@ module ddr3 (
   output logic           o_membus_ack,
   output logic [31:0]    o_membus_data
 );
+
+logic         bus_inst_buff_almost_empty;
+logic         bus_inst_buff_empty;
+
+logic         bus_inst_req_stgd;
+logic [31:0]  bus_inst_adr_stgd;
+logic [31:0]  bus_inst_data_stgd;
+logic         bus_inst_we_stgd;
+logic  [3:0]  bus_inst_sel_stgd;
+logic         bus_inst_tga_stgd;
+logic         bus_inst_tgd_stgd;
+logic  [3:0]  bus_inst_tgc_stgd;
+
+logic         bus_inst_rd_ack;
 
 logic         instbus_req_stgd;
 logic [31:0]  instbus_addr_stgd;
@@ -49,6 +82,7 @@ logic         state_flush;
 logic         state_load;
 logic         state_load_pending;
 logic         state_update;
+logic         state_fifo_load;
 
 logic [3:0]   flush_cnt;
 
@@ -81,6 +115,33 @@ logic         ddr3_fifo_in_wrreq;
 logic [189:0] ddr3_fifo_in_q;
 logic         ddr3_fifo_in_empty;
 
+assign bus_inst_req_stgd = ~bus_inst_buff_empty; 
+wishbone_buff	bus_inst_buff (
+	.clock        ( clk ),
+	.data         ( {bus_inst_adr_i,
+                         bus_inst_data_i,
+                         bus_inst_we_i,
+                         bus_inst_sel_i,
+                         bus_inst_tga_i,
+                         bus_inst_tgd_i,
+                         bus_inst_tgc_i} ),
+	.rdreq        ( bus_inst_rd_ack ),
+	.sclr         ( rst ),
+	.wrreq        ( bus_inst_cyc_i & bus_inst_stb_i & ~bus_inst_stall_o ),
+	.almost_empty ( bus_inst_buff_almost_empty ),
+	.almost_full  ( bus_inst_stall_o ),
+	.empty        ( bus_inst_buff_empty ),
+	.full         (  ),
+	.q            ( {bus_inst_adr_stgd,
+                         bus_inst_data_stgd,
+                         bus_inst_we_stgd,
+                         bus_inst_sel_stgd,
+                         bus_inst_tga_stgd,
+                         bus_inst_tgd_stgd,
+                         bus_inst_tgc_stgd} ),
+	.usedw        (  )
+	);
+
 always_ff @(posedge clk)
   begin
   arb_inst            <= arb_inst;
@@ -101,8 +162,19 @@ always_ff @(posedge clk)
   mem_buffer_addr     <= mem_buffer_addr;
   mem_buffer_data     <= mem_buffer_data;
 
+  bus_inst_ack_o      <= '0;
+  bus_inst_err_o      <= '0;
+  bus_inst_rty_o      <= '0;
+  bus_inst_data_o     <= '0;
+  bus_inst_tga_o      <= '0;
+  bus_inst_tgd_o      <= '0;
+  bus_inst_tgc_o      <= '0;
+
+  bus_inst_rd_ack     <= '0;
+
   o_instbus_ack       <= '0;    
   o_instbus_data      <= '0;   
+
   o_membus_ack        <= '0;    
   o_membus_data       <= membus_data_stgd;   
 
@@ -132,7 +204,7 @@ always_ff @(posedge clk)
   case (1'b1)
     state_idle: begin
                 if((arb_mem  & membus_req_stgd) |
-                   (arb_inst & membus_req_stgd & ~instbus_req_stgd))
+                   (arb_inst & membus_req_stgd & ~bus_inst_req_stgd))
                   begin
                   arb_inst <= '1;
                   arb_mem  <= '0;
@@ -154,8 +226,8 @@ always_ff @(posedge clk)
                     state_load <= '1;
                     end
                   end
-                else if((arb_inst & instbus_req_stgd) |
-                        (arb_mem  & instbus_req_stgd & ~membus_req_stgd))
+                else if((arb_inst & bus_inst_req_stgd & ~bus_inst_buff_almost_empty) |
+                        (arb_mem  & bus_inst_req_stgd & ~bus_inst_buff_almost_empty & ~membus_req_stgd))
                   begin
                   arb_inst <= '0;
                   arb_mem  <= '1;
@@ -163,7 +235,7 @@ always_ff @(posedge clk)
                   state_mem  <= '0;
                   if(inst_buffer_vld)
                     begin
-                    if(inst_buffer_addr[25:4] == instbus_addr_stgd[25:4])
+                    if(inst_buffer_addr[25:4] == bus_inst_adr_stgd[25:4])
                       begin
                       state_update <= '1;
                       end
@@ -207,8 +279,8 @@ always_ff @(posedge clk)
                   ddr3_fifo_out_rdreq <= '1;
                   if(state_inst)
                     begin
-                    ddr3_fifo_out_addr  <= {instbus_addr_stgd[25:4],4'b0000};
-                    inst_buffer_addr  <= instbus_addr_stgd[25:4];
+                    ddr3_fifo_out_addr  <= {bus_inst_adr_stgd[25:4],4'b0000};
+                    inst_buffer_addr  <= bus_inst_adr_stgd[25:4];
                     end
                   if(state_mem)
                     begin
@@ -242,33 +314,54 @@ always_ff @(posedge clk)
                     if(state_inst)
                       begin
                       instbus_req_stgd <= '0;
+		      bus_inst_rd_ack <= '1;
+                      bus_inst_ack_o  <= '1;
                       o_instbus_ack   <= '1;    
-                      case(instbus_addr_stgd[3:2])
+                      case(bus_inst_adr_stgd[3:2])
                         2'b00: begin
+                               bus_inst_data_o[31:24] <= inst_buffer_data[31:24]  ;   
+                               bus_inst_data_o[23:16] <= inst_buffer_data[23:16]  ;   
+                               bus_inst_data_o[15:8]  <= inst_buffer_data[15:8]   ;   
+                               bus_inst_data_o[7:0]   <= inst_buffer_data[7:0]    ;   
                                o_instbus_data[31:24] <= inst_buffer_data[31:24]  ;   
                                o_instbus_data[23:16] <= inst_buffer_data[23:16]  ;   
                                o_instbus_data[15:8]  <= inst_buffer_data[15:8]   ;   
                                o_instbus_data[7:0]   <= inst_buffer_data[7:0]    ;   
                                end
                         2'b01: begin
+                               bus_inst_data_o[31:24] <= inst_buffer_data[63:56]  ;   
+                               bus_inst_data_o[23:16] <= inst_buffer_data[55:48]  ;   
+                               bus_inst_data_o[15:8]  <= inst_buffer_data[47:40]  ;   
+                               bus_inst_data_o[7:0]   <= inst_buffer_data[39:32]  ;   
                                o_instbus_data[31:24] <= inst_buffer_data[63:56]  ;   
                                o_instbus_data[23:16] <= inst_buffer_data[55:48]  ;   
                                o_instbus_data[15:8]  <= inst_buffer_data[47:40]  ;   
                                o_instbus_data[7:0]   <= inst_buffer_data[39:32]  ;   
                                end
                         2'b10: begin
+                               bus_inst_data_o[31:24] <= inst_buffer_data[95:88]  ;   
+                               bus_inst_data_o[23:16] <= inst_buffer_data[87:80]  ;   
+                               bus_inst_data_o[15:8]  <= inst_buffer_data[79:72]  ;   
+                               bus_inst_data_o[7:0]   <= inst_buffer_data[71:64]  ;   
                                o_instbus_data[31:24] <= inst_buffer_data[95:88]  ;   
                                o_instbus_data[23:16] <= inst_buffer_data[87:80]  ;   
                                o_instbus_data[15:8]  <= inst_buffer_data[79:72]  ;   
                                o_instbus_data[7:0]   <= inst_buffer_data[71:64]  ;   
                                end
                         2'b11: begin
+                               bus_inst_data_o[31:24] <= inst_buffer_data[127:120];   
+                               bus_inst_data_o[23:16] <= inst_buffer_data[119:112];   
+                               bus_inst_data_o[15:8]  <= inst_buffer_data[111:104];   
+                               bus_inst_data_o[7:0]   <= inst_buffer_data[103:96] ;   
                                o_instbus_data[31:24] <= inst_buffer_data[127:120];   
                                o_instbus_data[23:16] <= inst_buffer_data[119:112];   
                                o_instbus_data[15:8]  <= inst_buffer_data[111:104];   
                                o_instbus_data[7:0]   <= inst_buffer_data[103:96] ;   
                                end
                       endcase
+                      bus_inst_tga_o <= bus_inst_tga_stgd;
+                      bus_inst_tgd_o <= bus_inst_tgd_stgd;
+                      bus_inst_tgc_o <= bus_inst_tgc_stgd;
                       end
                     if(state_mem)
                       begin
@@ -330,8 +423,11 @@ always_ff @(posedge clk)
                                end
                       endcase
                       end
-                  state_idle <= '1;
+                  state_fifo_load <= '1;
                   end
+      state_fifo_load: begin             
+                       state_idle <= '1;
+                       end
       endcase
  
     if(rst) 
