@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Jan 02 01:11:28 2020
+[*] Thu Jan 02 02:10:20 2020
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Jan 02 01:10:57 2020"
-[dumpfile_size] 756963778
+[dumpfile_mtime] "Thu Jan 02 02:06:31 2020"
+[dumpfile_size] 2619909411
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 3577830
+[timestart] 1556765
 [size] 1858 1057
 [pos] -1 -1
-*-11.526937 3585370 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.848866 1557850 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.ddr3.
@@ -44,13 +44,90 @@ tb.dut.led.LED[7:0]
 @22
 tb.dut.led.LED[7:0]
 @24
-tb.dut.riscv.csrfile.csr_C00[31:0]
-@22
 tb.dut.riscv.csrfile.csr_C80[31:0]
-tb.dut.riscv.csrfile.csr_C01[31:0]
+tb.dut.riscv.csrfile.csr_C00[31:0]
 tb.dut.riscv.csrfile.csr_C81[31:0]
-tb.dut.riscv.csrfile.csr_C02[31:0]
+tb.dut.riscv.csrfile.csr_C01[31:0]
+@c00024
 tb.dut.riscv.csrfile.csr_C82[31:0]
+@28
+(0)tb.dut.riscv.csrfile.csr_C82[31:0]
+(1)tb.dut.riscv.csrfile.csr_C82[31:0]
+(2)tb.dut.riscv.csrfile.csr_C82[31:0]
+(3)tb.dut.riscv.csrfile.csr_C82[31:0]
+(4)tb.dut.riscv.csrfile.csr_C82[31:0]
+(5)tb.dut.riscv.csrfile.csr_C82[31:0]
+(6)tb.dut.riscv.csrfile.csr_C82[31:0]
+(7)tb.dut.riscv.csrfile.csr_C82[31:0]
+(8)tb.dut.riscv.csrfile.csr_C82[31:0]
+(9)tb.dut.riscv.csrfile.csr_C82[31:0]
+(10)tb.dut.riscv.csrfile.csr_C82[31:0]
+(11)tb.dut.riscv.csrfile.csr_C82[31:0]
+(12)tb.dut.riscv.csrfile.csr_C82[31:0]
+(13)tb.dut.riscv.csrfile.csr_C82[31:0]
+(14)tb.dut.riscv.csrfile.csr_C82[31:0]
+(15)tb.dut.riscv.csrfile.csr_C82[31:0]
+(16)tb.dut.riscv.csrfile.csr_C82[31:0]
+(17)tb.dut.riscv.csrfile.csr_C82[31:0]
+(18)tb.dut.riscv.csrfile.csr_C82[31:0]
+(19)tb.dut.riscv.csrfile.csr_C82[31:0]
+(20)tb.dut.riscv.csrfile.csr_C82[31:0]
+(21)tb.dut.riscv.csrfile.csr_C82[31:0]
+(22)tb.dut.riscv.csrfile.csr_C82[31:0]
+(23)tb.dut.riscv.csrfile.csr_C82[31:0]
+(24)tb.dut.riscv.csrfile.csr_C82[31:0]
+(25)tb.dut.riscv.csrfile.csr_C82[31:0]
+(26)tb.dut.riscv.csrfile.csr_C82[31:0]
+(27)tb.dut.riscv.csrfile.csr_C82[31:0]
+(28)tb.dut.riscv.csrfile.csr_C82[31:0]
+(29)tb.dut.riscv.csrfile.csr_C82[31:0]
+(30)tb.dut.riscv.csrfile.csr_C82[31:0]
+(31)tb.dut.riscv.csrfile.csr_C82[31:0]
+@1401200
+-group_end
+@24
+tb.dut.riscv.csrfile.csr_C02[31:0]
+tb.dut.riscv.csrfile.csr_C83[31:0]
+tb.dut.riscv.csrfile.csr_C03[31:0]
+@c00025
+tb.dut.riscv.csrfile.csr_C84[31:0]
+@28
+(0)tb.dut.riscv.csrfile.csr_C84[31:0]
+(1)tb.dut.riscv.csrfile.csr_C84[31:0]
+(2)tb.dut.riscv.csrfile.csr_C84[31:0]
+(3)tb.dut.riscv.csrfile.csr_C84[31:0]
+(4)tb.dut.riscv.csrfile.csr_C84[31:0]
+(5)tb.dut.riscv.csrfile.csr_C84[31:0]
+(6)tb.dut.riscv.csrfile.csr_C84[31:0]
+(7)tb.dut.riscv.csrfile.csr_C84[31:0]
+(8)tb.dut.riscv.csrfile.csr_C84[31:0]
+(9)tb.dut.riscv.csrfile.csr_C84[31:0]
+(10)tb.dut.riscv.csrfile.csr_C84[31:0]
+(11)tb.dut.riscv.csrfile.csr_C84[31:0]
+(12)tb.dut.riscv.csrfile.csr_C84[31:0]
+(13)tb.dut.riscv.csrfile.csr_C84[31:0]
+(14)tb.dut.riscv.csrfile.csr_C84[31:0]
+(15)tb.dut.riscv.csrfile.csr_C84[31:0]
+(16)tb.dut.riscv.csrfile.csr_C84[31:0]
+(17)tb.dut.riscv.csrfile.csr_C84[31:0]
+(18)tb.dut.riscv.csrfile.csr_C84[31:0]
+(19)tb.dut.riscv.csrfile.csr_C84[31:0]
+(20)tb.dut.riscv.csrfile.csr_C84[31:0]
+(21)tb.dut.riscv.csrfile.csr_C84[31:0]
+(22)tb.dut.riscv.csrfile.csr_C84[31:0]
+(23)tb.dut.riscv.csrfile.csr_C84[31:0]
+(24)tb.dut.riscv.csrfile.csr_C84[31:0]
+(25)tb.dut.riscv.csrfile.csr_C84[31:0]
+(26)tb.dut.riscv.csrfile.csr_C84[31:0]
+(27)tb.dut.riscv.csrfile.csr_C84[31:0]
+(28)tb.dut.riscv.csrfile.csr_C84[31:0]
+(29)tb.dut.riscv.csrfile.csr_C84[31:0]
+(30)tb.dut.riscv.csrfile.csr_C84[31:0]
+(31)tb.dut.riscv.csrfile.csr_C84[31:0]
+@1401201
+-group_end
+@24
+tb.dut.riscv.csrfile.csr_C04[31:0]
 @28
 tb.dut.riscv.csrfile.csr_req
 @22
@@ -769,9 +846,8 @@ tb.dut.riscv.ifu.bus_inst_stb_o
 tb.dut.riscv.ifu.bus_inst_sel_o[3:0]
 @28
 tb.dut.riscv.ifu.bus_inst_we_o
-@23
-tb.dut.riscv.ifu.bus_inst_adr_o[31:0]
 @22
+tb.dut.riscv.ifu.bus_inst_adr_o[31:0]
 tb.dut.riscv.ifu.bus_inst_data_o[31:0]
 @28
 tb.dut.riscv.ifu.bus_inst_tga_o

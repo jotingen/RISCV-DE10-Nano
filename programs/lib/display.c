@@ -11,6 +11,7 @@
 #define DISPLAY_BUFF    (*((volatile uint32_t *) (0xC3000000)))  
 
 #define UART            (*((volatile uint32_t *) (0xC3040000)))  
+#define UART_BAUD       (*((volatile uint32_t *) (0xC3040004)))  
 
 #define DISPLAY_WAIT_DELAY 120
 
@@ -337,6 +338,11 @@ void console_puthex8(uint8_t val)
 	// print the characters
 	console_putc(upperNibble);
 	console_putc(lowerNibble);
+}
+
+void set_uart_baud(uint32_t baud)
+{
+  UART_BAUD = baud;
 }
   
 char * uint8_to_hex(uint8_t number) {

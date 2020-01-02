@@ -43,6 +43,7 @@ module riscv_alu#(
   output logic        alu_vld,
   output logic        alu_retired,
   output logic        alu_freeze,
+  output logic        alu_br,
   output logic        alu_br_miss,
   output logic        alu_trap,
   output logic [31:0] alu_PC_next,
@@ -463,6 +464,7 @@ always_ff @(posedge clk)
   alu_vld <= alu_vld;
   alu_retired <= '0;
   alu_freeze <= alu_freeze;
+  alu_br <= '0;
   alu_br_miss <= '0;
   alu_mem_access <= alu_mem_access;
 
@@ -577,6 +579,7 @@ always_ff @(posedge clk)
     begin
     alu_retired <= '0;
     alu_freeze  <= idu_vld;
+    alu_br      <= '0;
     alu_br_miss <= '0;
     alu_vld     <= idu_vld;
     alu_inst    <= idu_inst;      
@@ -662,7 +665,7 @@ always_ff @(posedge clk)
   else if(alu_vld & alu_retired)
     begin
     alu_retired <= '0;
-  alu_mem_access <= '0;
+    alu_mem_access <= '0;
     alu_freeze <= '0;
     alu_br_miss <= '0;
     alu_vld     <= '0;
@@ -846,6 +849,7 @@ always_ff @(posedge clk)
                 //if(alu_imm!='0 || alu_rd!='0)
                 //  $display("%-5s PC=%08X imm=%08X rd=(%d)", "JAL", PC, {{11{alu_imm[20]}},alu_imm[20:0]}, alu_rd);
                 alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                 alu_PC_next <= PC_next_PC_imm20;
                 x_wr[alu_rd] <= '1;
@@ -863,6 +867,7 @@ always_ff @(posedge clk)
       alu_JALR : begin
                  //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
                  alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                  alu_PC_next <= PC_next_rs1_imm11;
                  x_wr[alu_rd] <= '1;
@@ -882,6 +887,7 @@ always_ff @(posedge clk)
       alu_BEQ : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BEQ", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                 alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                 if(rs1_data == rs2_data)
                   begin
@@ -899,6 +905,7 @@ always_ff @(posedge clk)
       alu_BNE : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                 alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                 if(rs1_data != rs2_data)
                   begin
@@ -916,6 +923,7 @@ always_ff @(posedge clk)
       alu_BLT : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                 alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                 if($signed(rs1_data) < $signed(rs2_data))
                   begin
@@ -933,6 +941,7 @@ always_ff @(posedge clk)
       alu_BLTU : begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                  alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                  if(rs1_data < rs2_data)
                   begin
@@ -950,6 +959,7 @@ always_ff @(posedge clk)
       alu_BGE : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                 alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                 if($signed(rs1_data) >= $signed(rs2_data))
                   begin
@@ -967,6 +977,7 @@ always_ff @(posedge clk)
       alu_BGEU : begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
                  alu_retired <= '1;
+                alu_br <= '1;
                 alu_freeze <= '0;
                  if(rs1_data >= rs2_data)
                   begin
@@ -1690,6 +1701,7 @@ always_ff @(posedge clk)
     alu_retired <= '0;
     alu_mem_access <= '0;
     alu_freeze <= '0;
+    alu_br <= '0;
     alu_br_miss <= '0;
     cnt <= '0;
 

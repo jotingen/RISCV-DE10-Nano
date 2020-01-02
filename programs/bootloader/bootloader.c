@@ -88,6 +88,8 @@ void main(void) {
   uint16_t x_grid;
   uint16_t y_grid;
 
+  set_uart_baud(921600);
+
   console_clear();
   display_on();
   display_write();

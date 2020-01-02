@@ -4,6 +4,8 @@ module riscv_csr (
 
   input  logic              alu_vld,
   input  logic              alu_retired,
+  input  logic              alu_br,
+  input  logic              alu_br_miss,
 
   input  logic           csr_req,
   output logic           csr_ack,
@@ -23,6 +25,12 @@ logic [31:0] csr_C81;
 
 logic [31:0] csr_C02;
 logic [31:0] csr_C82;
+
+logic [31:0] csr_C03;
+logic [31:0] csr_C83;
+
+logic [31:0] csr_C04;
+logic [31:0] csr_C84;
 
 
 always_ff @(posedge clk)
@@ -61,6 +69,26 @@ always_ff @(posedge clk)
     {csr_C82,csr_C02} <= {csr_C82,csr_C02};
     end 
 
+  //Instructions Branch Type
+  if (alu_vld & alu_retired & alu_br)
+    begin 
+    {csr_C83,csr_C03} <= {csr_C83,csr_C03}+'d1;
+    end 
+  else
+    begin
+    {csr_C83,csr_C03} <= {csr_C83,csr_C03};
+    end 
+
+  //Instructions Branch Missed
+  if (alu_vld & alu_retired & alu_br_miss)
+    begin 
+    {csr_C84,csr_C04} <= {csr_C84,csr_C04}+'d1;
+    end 
+  else
+    begin
+    {csr_C84,csr_C04} <= {csr_C84,csr_C04};
+    end 
+
 
   if(csr_req & ~csr_write)
     begin
@@ -76,6 +104,12 @@ always_ff @(posedge clk)
       'hC02: begin
              csr_data_rd <= csr_C02;
              end
+      'hC03: begin
+             csr_data_rd <= csr_C03;
+             end
+      'hC04: begin
+             csr_data_rd <= csr_C04;
+             end
       'hC80: begin
              csr_data_rd <= csr_C80;
              end
@@ -84,6 +118,12 @@ always_ff @(posedge clk)
              end
       'hC82: begin
              csr_data_rd <= csr_C82;
+             end
+      'hC83: begin
+             csr_data_rd <= csr_C83;
+             end
+      'hC84: begin
+             csr_data_rd <= csr_C84;
              end
       default: begin
                end
@@ -107,6 +147,14 @@ always_ff @(posedge clk)
              csr_C02 <= (csr_C02     & ~csr_mask) | 
                         (csr_data_wr & ~csr_mask);
              end
+      'hC03: begin
+             csr_C03 <= (csr_C03     & ~csr_mask) | 
+                        (csr_data_wr & ~csr_mask);
+             end
+      'hC04: begin
+             csr_C04 <= (csr_C04     & ~csr_mask) | 
+                        (csr_data_wr & ~csr_mask);
+             end
       'hC80: begin
              csr_C80 <= (csr_C80     & ~csr_mask) | 
                         (csr_data_wr & ~csr_mask);
@@ -117,6 +165,14 @@ always_ff @(posedge clk)
              end
       'hC82: begin
              csr_C82 <= (csr_C82     & ~csr_mask) | 
+                        (csr_data_wr & ~csr_mask);
+             end
+      'hC83: begin
+             csr_C83 <= (csr_C83     & ~csr_mask) | 
+                        (csr_data_wr & ~csr_mask);
+             end
+      'hC84: begin
+             csr_C84 <= (csr_C84     & ~csr_mask) | 
                         (csr_data_wr & ~csr_mask);
              end
       default: begin
@@ -136,6 +192,12 @@ always_ff @(posedge clk)
 
     csr_C02  <= '0;
     csr_C82  <= '0;
+
+    csr_C03  <= '0;
+    csr_C83  <= '0;
+
+    csr_C04  <= '0;
+    csr_C84  <= '0;
     end
   end
 
