@@ -156,6 +156,7 @@ logic [31:0]      idu_inst_PC;
 logic             alu_vld;
 logic             alu_retired;
 logic             alu_freeze;
+logic             alu_br;
 logic             alu_br_miss;
 logic [31:0]      alu_PC_next;
 logic             alu_trap;
@@ -309,6 +310,8 @@ riscv_csr csrfile (
 
   .alu_vld          (alu_vld),
   .alu_retired    (alu_retired),
+  .alu_br         (alu_br),
+  .alu_br_miss    (alu_br_miss),
 
   .csr_req     (csr_req),   
   .csr_ack     (csr_ack),   
@@ -492,6 +495,7 @@ riscv_alu #(.M_EXT(M_EXT)) alu (
   .alu_vld          (alu_vld),
   .alu_retired    (alu_retired),
   .alu_freeze     (alu_freeze),
+  .alu_br         (alu_br),
   .alu_br_miss      (alu_br_miss),
   .alu_trap       (alu_trap),
   .alu_PC_next    (alu_PC_next),

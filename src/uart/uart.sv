@@ -21,6 +21,8 @@ module uart (
 
 logic [12:0] clk_cnt;
 
+logic [31:0] baud_rate;
+
 logic [11:0] msg;
 logic [3:0]  msg_bit;
 
@@ -40,6 +42,7 @@ always_ff @(posedge clk)
 
   msg_bit <= msg_bit;
   clk_cnt <= clk_cnt;
+  baud_rate <= baud_rate;
 
   TXD <= TXD;
 
@@ -55,6 +58,12 @@ always_ff @(posedge clk)
                o_bus_data <= '0;
                o_bus_data <= '0;
                end
+      'd1:     begin
+               state_idle    <= '1;
+               baud_rate <= i_bus_data;
+               o_bus_ack <= '1;
+               o_bus_data <= '0;
+               end
       default: begin
                state_idle    <= '1;
                o_bus_ack <= '1;
@@ -67,7 +76,7 @@ always_ff @(posedge clk)
   if(state_sending)
     begin
     clk_cnt <= clk_cnt + 1;
-    if(clk_cnt == 'd5050)
+    if(clk_cnt == 50000000/baud_rate)
       begin
       TXD <= msg[msg_bit];
       msg_bit <= msg_bit + 1;
@@ -95,6 +104,7 @@ always_ff @(posedge clk)
     state_sending <= '0;
     msg_bit <= '0;
     clk_cnt <= '0;
+    baud_rate <= 'd9600;
     end
   end
 
