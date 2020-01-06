@@ -7,6 +7,8 @@ module riscv_idu #(
   input  logic        ifu_vld,
   input  logic [31:0] ifu_inst,
   input  logic [31:0] ifu_inst_PC,
+  input  logic        ifu_inst_br_taken,
+  input  logic [31:0] ifu_inst_br_pred_PC_next,
 
   input  logic        alu_vld,
   input  logic        alu_retired,
@@ -18,6 +20,8 @@ module riscv_idu #(
   output logic        idu_freeze,
   output logic [31:0] idu_inst,
   output logic [31:0] idu_inst_PC,
+  output logic        idu_inst_br_taken,
+  output logic [31:0] idu_inst_br_pred_PC_next,
 
   output logic  [3:0] idu_decode_fm,
   output logic  [3:0] idu_decode_pred,
@@ -184,9 +188,13 @@ always_ff @(posedge clk)
     idu_vld <= ifu_vld;
     //Throw away if branch missed or trapped
     if(alu_vld & (alu_br_miss | alu_trap))
+      begin
       idu_vld <= '0;
+      end
     idu_inst    <= ifu_inst;
     idu_inst_PC <= ifu_inst_PC;
+    idu_inst_br_taken    <= ifu_inst_br_taken;
+    idu_inst_br_pred_PC_next    <= ifu_inst_br_pred_PC_next;
 
     idu_decode_opcode  <= ifu_inst[6:0];
     idu_decode_fm      <= '0;
@@ -890,6 +898,8 @@ always_ff @(posedge clk)
     idu_freeze <= idu_freeze;
     idu_inst    <= idu_inst;
     idu_inst_PC <= idu_inst_PC;
+    idu_inst_br_taken    <= idu_inst_br_taken;
+    idu_inst_br_pred_PC_next    <= idu_inst_br_pred_PC_next;
 
     idu_decode_opcode  <= idu_decode_opcode;
     idu_decode_fm      <= idu_decode_fm     ;

@@ -13,9 +13,15 @@ module riscv_ifu (
   input  logic             idu_vld,
   input  logic             idu_freeze,
 
+  output logic [31:0]      pre_ifu_PC,
+  input  logic             pre_ifu_br_pred_taken,
+  input  logic [31:0]      pre_ifu_br_pred_PC_next,
+
   output logic             ifu_vld,
   output logic [31:0]      ifu_inst,
   output logic [31:0]      ifu_inst_PC,
+  output logic             ifu_inst_br_taken,
+  output logic [31:0]      ifu_inst_br_pred_PC_next,
 
   output logic [31:0]      bus_inst_adr_o,
   output logic [31:0]      bus_inst_data_o,
@@ -49,12 +55,9 @@ logic accessing;
 logic loaded;
 
 //Branch era, used to throw away fetches ona  branch midd
-logic [3:0] era;
+logic [3:0] pre_ifu_era;
 
-logic [31:0] PC;
-logic             instbus_req;
-//logic             instbus_write;
-logic [31:0]      instbus_addr;
+logic             pre_ifu_vld;
 logic [31:0]      instbus_data;
 
 logic        ifu_buff_addr_wrreq;
@@ -75,15 +78,21 @@ logic        ifu_buff_data_full;
 logic        ifu_buff_data_clear;
 logic  [3:0] ifu_buff_data_used;
 
-assign bus_inst_stb_o   = instbus_req; //(instbus_req | accessing) & ~(alu_vld & (alu_trap | alu_br_miss)); 
+logic [31:0] ifu_buff_br_taken_in;
+logic [31:0] ifu_buff_br_taken_out;
+
+logic [31:0] ifu_buff_br_pred_PC_next_in;
+logic [31:0] ifu_buff_br_pred_PC_next_out;
+
+assign bus_inst_stb_o   = pre_ifu_vld; 
 assign bus_inst_cyc_o   = bus_inst_stb_o;
 assign bus_inst_we_o    = '0;
 assign bus_inst_sel_o   = '1;
-assign bus_inst_adr_o   = instbus_addr;
+assign bus_inst_adr_o   = pre_ifu_PC;
 assign bus_inst_data_o  = '0;
-assign bus_inst_tga_o   = '0;
+assign bus_inst_tga_o   = pre_ifu_br_pred_taken;
 assign bus_inst_tgd_o   = '0;
-assign bus_inst_tgc_o   = era;
+assign bus_inst_tgc_o   = pre_ifu_era;
 
 ifu_buff ifu_buff_addr (
   .clock ( clk ),
@@ -95,6 +104,28 @@ ifu_buff ifu_buff_addr (
   .almost_full  ( ifu_buff_addr_full ),
   .q     ( ifu_buff_addr_out ),
   .usedw ( ifu_buff_addr_used )
+  );
+ifu_buff ifu_buff_br_taken (
+  .clock ( clk ),
+  .data  ( ifu_buff_br_taken_in ),
+  .rdreq ( ifu_buff_addr_ack ),
+  .sclr  ( ifu_buff_addr_clear ),
+  .wrreq ( ifu_buff_addr_wrreq ),
+  .empty (  ),
+  .almost_full  (  ),
+  .q     ( ifu_buff_br_taken_out ),
+  .usedw (  )
+  );
+ifu_buff ifu_buff_br_pred_PC_next (
+  .clock ( clk ),
+  .data  ( ifu_buff_br_pred_PC_next_in ),
+  .rdreq ( ifu_buff_addr_ack ),
+  .sclr  ( ifu_buff_addr_clear ),
+  .wrreq ( ifu_buff_addr_wrreq ),
+  .empty (  ),
+  .almost_full  (  ),
+  .q     ( ifu_buff_br_pred_PC_next_out ),
+  .usedw (  )
   );
 ifu_buff ifu_buff_data (
   .clock ( clk ),
@@ -110,12 +141,12 @@ ifu_buff ifu_buff_data (
 
 always_comb
   begin
-  instbus_req  = '0;
+  pre_ifu_vld  = '0;
   ifu_buff_addr_ack   = '0;
   ifu_buff_data_ack   = '0;
   if(~ifu_buff_addr_full & ~bus_inst_stall_i)
     begin
-    instbus_req  = '1;
+    pre_ifu_vld  = '1;
     end
     if(~((alu_vld & alu_freeze)))
       begin
@@ -134,7 +165,7 @@ always_comb
 
   if(rst)
     begin
-    instbus_req   = '0;
+    pre_ifu_vld   = '0;
     ifu_buff_addr_ack = '0;
     ifu_buff_data_ack = '0;
     end
@@ -143,35 +174,57 @@ always_comb
 always_ff @(posedge clk)
   begin
 
-  ifu_vld     <= ifu_vld;   
-  ifu_inst    <= ifu_inst;  
-  ifu_inst_PC <= ifu_inst_PC;
+  ifu_vld           <= ifu_vld;   
+  ifu_inst          <= ifu_inst;  
+  ifu_inst_PC       <= ifu_inst_PC;
+  ifu_inst_br_taken <= ifu_inst_br_taken;
+  ifu_inst_br_pred_PC_next <= ifu_inst_br_pred_PC_next;
 
-  era          <= era;
+  pre_ifu_era          <= pre_ifu_era;
 
-  ifu_buff_addr_in    <= '0;
-  ifu_buff_addr_clear <= '0;
-  ifu_buff_addr_wrreq <= '0;
+  ifu_buff_addr_in     <= '0;
+  ifu_buff_addr_clear  <= '0;
+  ifu_buff_addr_wrreq  <= '0;
+  ifu_buff_br_taken_in <= '0;
+  ifu_buff_br_pred_PC_next_in <= '0;
 
   ifu_buff_data_in    <= '0;
   ifu_buff_data_clear <= '0;
   ifu_buff_data_wrreq <= '0;
 
+
+
   //Make requests while we have buffers available
   if(~ifu_buff_addr_full & ~bus_inst_stall_i)
     begin
-    //instbus_req  <= '1;
-    instbus_addr <= instbus_addr + 'd4;
 
-    ifu_buff_addr_wrreq <= '1;
-    ifu_buff_addr_in    <= instbus_addr;
+    if(pre_ifu_br_pred_taken)
+      begin
+      pre_ifu_PC <= pre_ifu_br_pred_PC_next;
+      end
+    else
+      begin
+      pre_ifu_PC <= pre_ifu_PC + 'd4;
+      end
+
+    ifu_buff_addr_wrreq  <= '1;
+    ifu_buff_addr_in     <= pre_ifu_PC;
+    ifu_buff_br_taken_in <= pre_ifu_br_pred_taken;
+    if(pre_ifu_br_pred_taken)
+      begin
+      ifu_buff_br_pred_PC_next_in <= pre_ifu_br_pred_PC_next;
+      end
+    else
+      begin
+      ifu_buff_br_pred_PC_next_in <= pre_ifu_PC + 'd4;
+      end
     end
 
   //Recieve from memory
-  if(bus_inst_ack_i & bus_inst_tgc_i == era)
+  if(bus_inst_ack_i & bus_inst_tgc_i == pre_ifu_era)
     begin
-    ifu_buff_data_wrreq <= '1;
-    ifu_buff_data_in    <= bus_inst_data_i;
+    ifu_buff_data_wrreq  <= '1;
+    ifu_buff_data_in     <= bus_inst_data_i;
     end
 
   //TODO put in bypass
@@ -181,9 +234,11 @@ always_ff @(posedge clk)
     if(~ifu_buff_addr_empty & ~ifu_buff_data_empty &
        ~ifu_buff_addr_clear & ~ifu_buff_data_clear)
       begin
-      ifu_vld     <= '1;
-      ifu_inst    <= ifu_buff_data_out;
-      ifu_inst_PC <= ifu_buff_addr_out;
+      ifu_vld           <= '1;
+      ifu_inst          <= ifu_buff_data_out;
+      ifu_inst_PC       <= ifu_buff_addr_out;
+      ifu_inst_br_taken <= ifu_buff_br_taken_out;
+      ifu_inst_br_pred_PC_next <= ifu_buff_br_pred_PC_next_out;
       end
     else
       begin
@@ -195,8 +250,8 @@ always_ff @(posedge clk)
   if(alu_vld & alu_br_miss)
     begin
     ifu_vld     <= '0;
-    instbus_addr <= alu_PC_next;
-    era          <= era + 'd1;
+    pre_ifu_PC <= alu_PC_next;
+    pre_ifu_era          <= pre_ifu_era + 'd1;
 
     ifu_buff_addr_clear <= '1;
     ifu_buff_data_clear <= '1;
@@ -204,9 +259,9 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
-    instbus_addr  <= '0;
+    pre_ifu_PC  <= '0;
 
-    era           <= '0;
+    pre_ifu_era           <= '0;
 
     ifu_buff_addr_clear <= '1;
     ifu_buff_data_clear <= '1;
