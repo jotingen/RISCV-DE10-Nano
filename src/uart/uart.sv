@@ -76,7 +76,7 @@ always_ff @(posedge clk)
   if(state_sending)
     begin
     clk_cnt <= clk_cnt + 1;
-    if(clk_cnt == 50000000/baud_rate)
+    if(clk_cnt == baud_rate)
       begin
       TXD <= msg[msg_bit];
       msg_bit <= msg_bit + 1;
@@ -104,7 +104,7 @@ always_ff @(posedge clk)
     state_sending <= '0;
     msg_bit <= '0;
     clk_cnt <= '0;
-    baud_rate <= 'd9600;
+    baud_rate <= 'd5050;
     end
   end
 

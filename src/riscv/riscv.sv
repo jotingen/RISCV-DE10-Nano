@@ -142,9 +142,15 @@ logic [31:0]       x29;
 logic [31:0]       x30;
 logic [31:0]       x31;
 
+logic [31:0]       pre_ifu_PC;
+logic              pre_ifu_br_pred_taken;
+logic [31:0]       pre_ifu_br_pred_PC_next;
+
 logic             ifu_req;
 logic [31:0]      ifu_inst;
 logic [31:0]      ifu_inst_PC;
+logic             ifu_inst_br_taken;
+logic [31:0]      ifu_inst_br_pred_PC_next;
 
 logic [31:0]      idu_inst;
 logic             idu_done;
@@ -153,11 +159,16 @@ logic             ifu_vld;
 logic             idu_vld;
 logic             idu_freeze;
 logic [31:0]      idu_inst_PC;
+logic             idu_inst_br_taken;
+logic [31:0]      idu_inst_br_pred_PC_next;
 logic             alu_vld;
 logic             alu_retired;
 logic             alu_freeze;
 logic             alu_br;
+logic             alu_br_taken;
+logic [31:0]      alu_br_pred_PC_next;
 logic             alu_br_miss;
+logic [31:0]      alu_PC;
 logic [31:0]      alu_PC_next;
 logic             alu_trap;
 
@@ -322,7 +333,23 @@ riscv_csr csrfile (
   .csr_data_rd (csr_data_rd)  
 );
 
-assign o_instbus_ack = '0;
+riscv_br_pred br_pred (
+  .clk         (clk),
+  .rst         (rst),
+
+  .pre_ifu_PC          (pre_ifu_PC),         
+  .pre_ifu_br_pred_taken (pre_ifu_br_pred_taken),
+  .pre_ifu_br_pred_PC_next  (pre_ifu_br_pred_PC_next), 
+
+  .alu_vld        (alu_vld),
+  .alu_retired    (alu_retired),
+  .alu_br         (alu_br),
+  .alu_br_taken   (alu_br_taken),
+  .alu_br_miss    (alu_br_miss),
+  .alu_PC         (alu_PC),
+  .alu_PC_next    (alu_PC_next)
+);
+
 riscv_ifu ifu (
   .clk            (clk),
   .rst            (rst),
@@ -337,9 +364,15 @@ riscv_ifu ifu (
   .idu_vld   (idu_vld),
   .idu_freeze   (idu_freeze),
 
+  .pre_ifu_PC          (pre_ifu_PC),         
+  .pre_ifu_br_pred_taken (pre_ifu_br_pred_taken),
+  .pre_ifu_br_pred_PC_next  (pre_ifu_br_pred_PC_next), 
+
   .ifu_vld        (ifu_vld),
   .ifu_inst       (ifu_inst),
   .ifu_inst_PC    (ifu_inst_PC),
+  .ifu_inst_br_taken    (ifu_inst_br_taken),
+  .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
 
   .bus_inst_adr_o   (bus_inst_adr_o), 
   .bus_inst_data_o  (bus_inst_data_o),
@@ -368,6 +401,8 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
   .ifu_vld   (ifu_vld),
   .ifu_inst  (ifu_inst),
   .ifu_inst_PC    (ifu_inst_PC),
+  .ifu_inst_br_taken    (ifu_inst_br_taken),
+  .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
                              
   .alu_vld        (alu_vld),
   .alu_retired    (alu_retired),
@@ -379,6 +414,8 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
   .idu_freeze   (idu_freeze),
   .idu_inst    (idu_inst),
   .idu_inst_PC    (idu_inst_PC),
+  .idu_inst_br_taken    (idu_inst_br_taken),
+  .idu_inst_br_pred_PC_next    (idu_inst_br_pred_PC_next),
 
   .idu_decode_fm        (idu_decode_fm      ),
   .idu_decode_pred      (idu_decode_pred    ),
@@ -496,13 +533,17 @@ riscv_alu #(.M_EXT(M_EXT)) alu (
   .alu_retired    (alu_retired),
   .alu_freeze     (alu_freeze),
   .alu_br         (alu_br),
+  .alu_br_taken   (alu_br_taken),
   .alu_br_miss      (alu_br_miss),
   .alu_trap       (alu_trap),
+  .alu_PC         (alu_PC),
   .alu_PC_next    (alu_PC_next),
                                
   .idu_vld          (idu_vld),
   .idu_inst             (idu_inst    ),
   .idu_inst_PC    (idu_inst_PC),
+  .idu_inst_br_taken    (idu_inst_br_taken),
+  .idu_inst_br_pred_PC_next    (idu_inst_br_pred_PC_next),
   .idu_decode_fm               (idu_decode_fm      ),
   .idu_decode_pred             (idu_decode_pred    ),
   .idu_decode_succ             (idu_decode_succ    ),

@@ -15,7 +15,17 @@
 #define SDCARD_DATA_OUT    (*((volatile uint32_t *) (0xC400001C)))
 #define SDCARD_DATA_IN     (*((volatile uint32_t *) (0xC4000020)))
 
+uint8_t CRCCheckEnable = 1;
+uint8_t CRCTableGenerated = 0;
 uint8_t CRCTable[256];
+
+void sdcard_crc_check_on(void){
+	CRCCheckEnable = 1;
+}
+
+void sdcard_crc_check_off(void){
+	CRCCheckEnable = 0;
+}
 
 void generateCRCTable(void) {
 	int i, j;
@@ -30,22 +40,26 @@ void generateCRCTable(void) {
 				CRCTable[i] ^= CRCPoly;
 		}
 	}
+        CRCTableGenerated = 1;
 }
 
 // adds a message byte to the current CRC-7 to get a the new CRC-7
 uint8_t CRCAdd(uint8_t CRC, uint8_t message_byte) {
-				return CRCTable[(CRC << 1) ^ message_byte];
+	if(!CRCTableGenerated) {
+		generateCRCTable();
+	}
+	return CRCTable[(CRC << 1) ^ message_byte];
 }
 
 uint8_t getCRC(uint64_t message, unsigned int bytes) {
-				int i;
-				uint8_t CRC = 0;
+	int i;
+	uint8_t CRC = 0;
 
-				for (i = 0; i < bytes; ++i) {
-								CRC = CRCAdd(CRC, (message >> ((bytes-1-i)*8)) & 0xFF);
-				}
+	for (i = 0; i < bytes; ++i) {
+		CRC = CRCAdd(CRC, (message >> ((bytes-1-i)*8)) & 0xFF);
+	}
 
-				return CRC;
+	return CRC;
 }
 
 uint64_t genSDCardMsg(uint8_t op, uint32_t args) {
@@ -58,7 +72,9 @@ uint64_t genSDCardMsg(uint8_t op, uint32_t args) {
   msg = msg | ((uint64_t)args << 8);
 
   //Add CRC
-  msg = msg | (getCRC(msg>>8,6) << 1);
+  if(CRCCheckEnable) {
+    msg = msg | (getCRC(msg>>8,6) << 1);
+  }
 
   return msg;
 }
@@ -195,7 +211,9 @@ void sdcard_on(void) {
   uint8_t  rsp_arr[5];
   uint32_t cnt = 0;
 
-  generateCRCTable();
+  if(CRCCheckEnable) {
+    generateCRCTable();
+  }
 
 
   //CMD0

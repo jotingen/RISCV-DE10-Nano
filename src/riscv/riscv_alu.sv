@@ -44,13 +44,17 @@ module riscv_alu#(
   output logic        alu_retired,
   output logic        alu_freeze,
   output logic        alu_br,
+  output logic        alu_br_taken,
   output logic        alu_br_miss,
   output logic        alu_trap,
+  output logic [31:0] alu_PC,
   output logic [31:0] alu_PC_next,
 
   input  logic        idu_vld,
   input  logic [31:0] idu_inst,
   input  logic [31:0] idu_inst_PC,
+  input  logic        idu_inst_br_taken,
+  input  logic [31:0] idu_inst_br_pred_PC_next,
   input  logic  [3:0] idu_decode_fm,
   input  logic  [3:0] idu_decode_pred,
   input  logic  [3:0] idu_decode_succ,
@@ -206,7 +210,6 @@ module riscv_alu#(
   input  logic [31:0]      bus_data_rd
 );
 
-logic [31:0] alu_PC;
 logic [31:0] PC_next_PC_imm20;
 logic [31:0] PC_next_PC_imm12;
 logic [31:0] PC_next_rs1_imm11;
@@ -214,6 +217,8 @@ logic [31:0] PC_next_rs1_imm11;
 logic [31:0] rs1_data;
 logic [31:0] rs2_data;
 logic [31:0] rd_data;
+
+logic [31:0] alu_br_pred_PC_next;
 
 logic [31:0] alu_inst;
 logic  [3:0] alu_fm;
@@ -465,16 +470,10 @@ always_ff @(posedge clk)
   alu_retired <= '0;
   alu_freeze <= alu_freeze;
   alu_br <= '0;
+  alu_br_taken <= alu_br_taken;
+  alu_br_pred_PC_next <= alu_br_pred_PC_next;
   alu_br_miss <= '0;
   alu_mem_access <= alu_mem_access;
-
-  //if(alu_retired)
-  //  begin
-  //  alu_vld <= '0;
-  //  alu_retired <= '0;
-  //  alu_freeze <= '0;
-  //  alu_br_miss <= '0;
-  //  end
 
   alu_PC      <= alu_PC;
   alu_PC_next <= alu_PC_next;
@@ -580,6 +579,8 @@ always_ff @(posedge clk)
     alu_retired <= '0;
     alu_freeze  <= idu_vld;
     alu_br      <= '0;
+    alu_br_taken <= idu_inst_br_taken;
+    alu_br_pred_PC_next <= idu_inst_br_pred_PC_next;
     alu_br_miss <= '0;
     alu_vld     <= idu_vld;
     alu_inst    <= idu_inst;      
@@ -667,6 +668,8 @@ always_ff @(posedge clk)
     alu_retired <= '0;
     alu_mem_access <= '0;
     alu_freeze <= '0;
+    alu_br_taken <= '0;
+    alu_br_pred_PC_next <= '0;
     alu_br_miss <= '0;
     alu_vld     <= '0;
     end
@@ -860,15 +863,17 @@ always_ff @(posedge clk)
                 else
                   begin
                   rd_data <= alu_PC+'d4;
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm20;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm20)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                 end
       alu_JALR : begin
                  //$display("%-5s PC=%08X imm=%08X rd=(%d)", "JALR", PC, {{20{alu_imm[11]}},alu_imm[11:0]}, alu_rd);
                  alu_retired <= '1;
-                alu_br <= '1;
-                alu_freeze <= '0;
+                 alu_br <= '1;
+                 alu_freeze <= '0;
                  alu_PC_next <= PC_next_rs1_imm11;
                  x_wr[alu_rd] <= '1;
                  if(PC_next_rs1_imm11[1:0] != '0)
@@ -878,8 +883,10 @@ always_ff @(posedge clk)
                  else
                    begin
                    rd_data <= alu_PC+'d4;
-                   alu_br_miss <= '1;
-                   alu_PC_next <= PC_next_rs1_imm11;
+                  if(alu_br_pred_PC_next != PC_next_rs1_imm11)
+                     begin
+                     alu_br_miss <= '1;
+                     end
                    end
                  end
 
@@ -896,11 +903,19 @@ always_ff @(posedge clk)
                     begin
                     alu_trap <= '1;
                     end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                 else                  
+                  begin
                   alu_PC_next <= alu_PC+'d4;
+                  if(alu_br_pred_PC_next != alu_PC+'d4)
+                    begin
+                    alu_br_miss <= '1;
+                    end
+                  end
                 end
       alu_BNE : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BNE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
@@ -914,11 +929,19 @@ always_ff @(posedge clk)
                     begin
                     alu_trap <= '1;
                     end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                 else                  
+                  begin
                   alu_PC_next <= alu_PC+'d4;
+                  if(alu_br_pred_PC_next != alu_PC+'d4)
+                    begin
+                    alu_br_miss <= '1;
+                    end
+                  end
                 end
       alu_BLT : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLT", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
@@ -932,11 +955,19 @@ always_ff @(posedge clk)
                     begin
                     alu_trap <= '1;
                     end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                 else                  
+                  begin
                   alu_PC_next <= alu_PC+'d4;
+                  if(alu_br_pred_PC_next != alu_PC+'d4)
+                    begin
+                    alu_br_miss <= '1;
+                    end
+                  end
                 end
       alu_BLTU : begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BLTU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
@@ -950,11 +981,19 @@ always_ff @(posedge clk)
                     begin
                     alu_trap <= '1;
                     end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                  else                  
+                   begin
                    alu_PC_next <= alu_PC+'d4;
+                  if(alu_br_pred_PC_next != alu_PC+'d4)
+                    begin
+                    alu_br_miss <= '1;
+                    end
+                   end
                  end
       alu_BGE : begin
                 //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGE", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
@@ -968,11 +1007,19 @@ always_ff @(posedge clk)
                     begin
                     alu_trap <= '1;
                     end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                 else                  
+                  begin
                   alu_PC_next <= alu_PC+'d4;
+                  if(alu_br_pred_PC_next != alu_PC+'d4)
+                    begin
+                    alu_br_miss <= '1;
+                    end
+                  end
                 end
       alu_BGEU : begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "BGEU", PC, alu_rs1, rs1_data, alu_rs2, rs2_data, {{19{alu_imm[12]}},alu_imm[12:0]});
@@ -986,11 +1033,19 @@ always_ff @(posedge clk)
                      begin
                      alu_trap <= '1;
                      end
-                  alu_br_miss <= '1;
-                  alu_PC_next <= PC_next_PC_imm12;
+                  if(alu_br_pred_PC_next != PC_next_PC_imm12)
+                    begin
+                    alu_br_miss <= '1;
+                    end
                   end
                  else                  
+                   begin
                    alu_PC_next <= alu_PC+'d4;
+                   if(alu_br_pred_PC_next != alu_PC+'d4)
+                     begin
+                     alu_br_miss <= '1;
+                     end
+                   end
                  end
 
 
@@ -1501,7 +1556,7 @@ always_ff @(posedge clk)
                    else if(cnt=='d2)
                      begin
                      alu_retired <= '1;
-                alu_freeze <= '0;
+                     alu_freeze <= '0;
                      x_wr[alu_rd] <= '1;
                      rd_data <= product[31:0];
                      alu_PC_next <= alu_PC+'d4;

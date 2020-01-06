@@ -180,7 +180,8 @@ endtask
 task DataOut;
 input [7:0] data;
 begin
-   $display("   SD DataOut 0x%2H at %0t ns",data, $realtime);
+   //$display("   SD DataOut 0x%2H at %0t ns",data, $realtime);
+   $write("%2H",data);
    k = 0;
    while (k < 8) begin
       @(negedge sclk) miso = data[7 - k];
@@ -480,6 +481,7 @@ always @(*) begin
 		      for (i = 0; i < block_len; i = i + 1) begin
 		         DataOut(flash_mem[start_addr+i]);
 		      end
+                      $display("");
                       CRCOut(16'haaaa);//CRC[15:0]
 		      @(posedge sclk);
 		      repeat (tNEC*8) @(negedge sclk);
@@ -493,6 +495,7 @@ always @(*) begin
 		            DataOut(flash_mem[start_addr+i+block_len*j]);
                             i = i + 1;
                          end
+                         $display("");
                          CRCOut(16'haaaa);
                          if (stop_transmission) begin//check stop_tx at end of each data block?
                             repeat (tNEC*8) @(posedge sclk);

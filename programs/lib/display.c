@@ -13,7 +13,7 @@
 #define UART            (*((volatile uint32_t *) (0xC3040000)))  
 #define UART_BAUD       (*((volatile uint32_t *) (0xC3040004)))  
 
-#define DISPLAY_WAIT_DELAY 120
+#define DISPLAY_WAIT_DELAY 1 //TODO was 120
 
 #ifndef SIMULATION
   #define DISPLAY_HEIGHT    320
@@ -342,7 +342,7 @@ void console_puthex8(uint8_t val)
 
 void set_uart_baud(uint32_t baud)
 {
-  UART_BAUD = baud;
+  UART_BAUD = 50000000/baud;
 }
   
 char * uint8_to_hex(uint8_t number) {

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Jan 02 02:10:20 2020
+[*] Sat Jan 04 00:23:40 2020
 [*]
 [dumpfile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Jan 02 02:06:31 2020"
-[dumpfile_size] 2619909411
+[dumpfile_mtime] "Sat Jan 04 00:15:20 2020"
+[dumpfile_size] 11869662
 [savefile] "D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 1556765
+[timestart] 0
 [size] 1858 1057
 [pos] -1 -1
-*-8.848866 1557850 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.468092 770 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.ddr3.
@@ -89,7 +89,7 @@ tb.dut.riscv.csrfile.csr_C82[31:0]
 tb.dut.riscv.csrfile.csr_C02[31:0]
 tb.dut.riscv.csrfile.csr_C83[31:0]
 tb.dut.riscv.csrfile.csr_C03[31:0]
-@c00025
+@c00024
 tb.dut.riscv.csrfile.csr_C84[31:0]
 @28
 (0)tb.dut.riscv.csrfile.csr_C84[31:0]
@@ -124,7 +124,7 @@ tb.dut.riscv.csrfile.csr_C84[31:0]
 (29)tb.dut.riscv.csrfile.csr_C84[31:0]
 (30)tb.dut.riscv.csrfile.csr_C84[31:0]
 (31)tb.dut.riscv.csrfile.csr_C84[31:0]
-@1401201
+@1401200
 -group_end
 @24
 tb.dut.riscv.csrfile.csr_C04[31:0]
@@ -147,7 +147,7 @@ tb.dut.shield.MOSI
 tb.dut.shield.MISO
 @200
 -
-@800200
+@c00200
 -MMC INST
 @200
 -
@@ -196,9 +196,9 @@ tb.dut.mmc_mem_instbus_req
 tb.dut.mem_mmc_instbus_ack
 @200
 -
-@1000200
+@1401200
 -MMC INST
-@800200
+@c00200
 -MMC DATA
 @200
 -
@@ -301,7 +301,7 @@ tb.dut.uart_mmc_bus_data[31:0]
 tb.dut.mmc_riscv_bus_ack
 @22
 tb.dut.mmc_riscv_bus_data[31:0]
-@1000200
+@1401200
 -MMC DATA
 @200
 -
@@ -497,7 +497,7 @@ tb.dut.shield.sdcard.SPIDone
 -SDCard
 @200
 -
-@800200
+@c00200
 -DDR3
 @28
 tb.dut.ddr3.clk
@@ -684,7 +684,7 @@ tb.dut.ddr3.ddr3_fifo_in.wrreq
 tb.dut.ddr3.o_membus_ack
 @22
 tb.dut.ddr3.o_membus_data[31:0]
-@1000200
+@1401200
 -DDR3
 @200
 -
@@ -750,7 +750,7 @@ tb.dut.shield.display.transmit.cooldown_cnt[20:0]
 -DISPLAY
 @200
 -
-@800200
+@c00200
 -LED
 @22
 tb.dut.led.LED[7:0]
@@ -758,11 +758,11 @@ tb.dut.led.LED[7:0]
 tb.dut.led.LED[7:0]
 @820
 tb.dut.led.LED[7:0]
-@1000200
+@1401200
 -LED
 @200
 -
-@800200
+@c00200
 -MEM
 @28
 tb.dut.mem.bus_inst_cyc_i
@@ -795,10 +795,12 @@ tb.dut.mem.bus_inst_tga_o
 tb.dut.mem.bus_inst_tgc_o[3:0]
 @28
 tb.dut.mem.bus_inst_tgd_o
-@1000200
+@1401200
 -group_end
 @200
 -
+@c00200
+-REGS
 @22
 tb.dut.riscv.regfile.x00[31:0]
 tb.dut.riscv.regfile.x01[31:0]
@@ -832,11 +834,112 @@ tb.dut.riscv.regfile.x28[31:0]
 tb.dut.riscv.regfile.x29[31:0]
 tb.dut.riscv.regfile.x30[31:0]
 tb.dut.riscv.regfile.x31[31:0]
+@1401200
+-REGS
+@200
+-
+@800200
+-BR PRED
+@28
+tb.dut.riscv.br_pred.alu_vld
+tb.dut.riscv.br_pred.alu_retired
+tb.dut.riscv.br_pred.alu_br
+tb.dut.riscv.br_pred.alu_br_miss
+tb.dut.riscv.br_pred.alu_br_taken
+@22
+#{tb.dut.riscv.br_pred.alu_PC[31:0]} tb.dut.riscv.br_pred.alu_PC[31] tb.dut.riscv.br_pred.alu_PC[30] tb.dut.riscv.br_pred.alu_PC[29] tb.dut.riscv.br_pred.alu_PC[28] tb.dut.riscv.br_pred.alu_PC[27] tb.dut.riscv.br_pred.alu_PC[26] tb.dut.riscv.br_pred.alu_PC[25] tb.dut.riscv.br_pred.alu_PC[24] tb.dut.riscv.br_pred.alu_PC[23] tb.dut.riscv.br_pred.alu_PC[22] tb.dut.riscv.br_pred.alu_PC[21] tb.dut.riscv.br_pred.alu_PC[20] tb.dut.riscv.br_pred.alu_PC[19] tb.dut.riscv.br_pred.alu_PC[18] tb.dut.riscv.br_pred.alu_PC[17] tb.dut.riscv.br_pred.alu_PC[16] tb.dut.riscv.br_pred.alu_PC[15] tb.dut.riscv.br_pred.alu_PC[14] tb.dut.riscv.br_pred.alu_PC[13] tb.dut.riscv.br_pred.alu_PC[12] tb.dut.riscv.br_pred.alu_PC[11] tb.dut.riscv.br_pred.alu_PC[10] tb.dut.riscv.br_pred.alu_PC[9] tb.dut.riscv.br_pred.alu_PC[8] tb.dut.riscv.br_pred.alu_PC[7] tb.dut.riscv.br_pred.alu_PC[6] tb.dut.riscv.br_pred.alu_PC[5] tb.dut.riscv.br_pred.alu_PC[4] tb.dut.riscv.br_pred.alu_PC[3] tb.dut.riscv.br_pred.alu_PC[2] tb.dut.riscv.br_pred.alu_PC[1] tb.dut.riscv.br_pred.alu_PC[0]
+#{tb.dut.riscv.br_pred.alu_PC_next[31:0]} tb.dut.riscv.br_pred.alu_PC_next[31] tb.dut.riscv.br_pred.alu_PC_next[30] tb.dut.riscv.br_pred.alu_PC_next[29] tb.dut.riscv.br_pred.alu_PC_next[28] tb.dut.riscv.br_pred.alu_PC_next[27] tb.dut.riscv.br_pred.alu_PC_next[26] tb.dut.riscv.br_pred.alu_PC_next[25] tb.dut.riscv.br_pred.alu_PC_next[24] tb.dut.riscv.br_pred.alu_PC_next[23] tb.dut.riscv.br_pred.alu_PC_next[22] tb.dut.riscv.br_pred.alu_PC_next[21] tb.dut.riscv.br_pred.alu_PC_next[20] tb.dut.riscv.br_pred.alu_PC_next[19] tb.dut.riscv.br_pred.alu_PC_next[18] tb.dut.riscv.br_pred.alu_PC_next[17] tb.dut.riscv.br_pred.alu_PC_next[16] tb.dut.riscv.br_pred.alu_PC_next[15] tb.dut.riscv.br_pred.alu_PC_next[14] tb.dut.riscv.br_pred.alu_PC_next[13] tb.dut.riscv.br_pred.alu_PC_next[12] tb.dut.riscv.br_pred.alu_PC_next[11] tb.dut.riscv.br_pred.alu_PC_next[10] tb.dut.riscv.br_pred.alu_PC_next[9] tb.dut.riscv.br_pred.alu_PC_next[8] tb.dut.riscv.br_pred.alu_PC_next[7] tb.dut.riscv.br_pred.alu_PC_next[6] tb.dut.riscv.br_pred.alu_PC_next[5] tb.dut.riscv.br_pred.alu_PC_next[4] tb.dut.riscv.br_pred.alu_PC_next[3] tb.dut.riscv.br_pred.alu_PC_next[2] tb.dut.riscv.br_pred.alu_PC_next[1] tb.dut.riscv.br_pred.alu_PC_next[0]
+@200
+-
+@24
+tb.dut.riscv.br_pred.lru[3:0]
+@28
+tb.dut.riscv.br_pred.lru0[0]
+tb.dut.riscv.br_pred.lru1[1:0]
+tb.dut.riscv.br_pred.lru2[3:0]
+tb.dut.riscv.br_pred.lru3[7:0]
+@200
+-
+@28
+tb.dut.riscv.br_pred.br_pred_0_vld
+tb.dut.riscv.br_pred.br_pred_1_vld
+tb.dut.riscv.br_pred.br_pred_2_vld
+tb.dut.riscv.br_pred.br_pred_2_take[3:0]
+@22
+tb.dut.riscv.br_pred.br_pred_2_PC[31:0]
+tb.dut.riscv.br_pred.br_pred_2_PC_taken[31:0]
+@28
+tb.dut.riscv.br_pred.br_pred_3_vld
+tb.dut.riscv.br_pred.br_pred_4_vld
+tb.dut.riscv.br_pred.br_pred_5_vld
+tb.dut.riscv.br_pred.br_pred_6_vld
+tb.dut.riscv.br_pred.br_pred_7_vld
+tb.dut.riscv.br_pred.br_pred_7_take[3:0]
+@22
+tb.dut.riscv.br_pred.br_pred_7_PC[31:0]
+tb.dut.riscv.br_pred.br_pred_7_PC_taken[31:0]
+@28
+tb.dut.riscv.br_pred.br_pred_8_vld
+tb.dut.riscv.br_pred.br_pred_9_vld
+tb.dut.riscv.br_pred.br_pred_10_vld
+tb.dut.riscv.br_pred.br_pred_11_vld
+tb.dut.riscv.br_pred.br_pred_12_vld
+tb.dut.riscv.br_pred.br_pred_13_vld
+tb.dut.riscv.br_pred.br_pred_14_vld
+tb.dut.riscv.br_pred.br_pred_15_vld
+@200
+-
+@28
+tb.dut.riscv.br_pred.ifu_br_match
+@22
+tb.dut.riscv.br_pred.ifu_br_match_ndx[3:0]
+#{tb.dut.riscv.br_pred.pre_ifu_PC[31:0]} tb.dut.riscv.br_pred.pre_ifu_PC[31] tb.dut.riscv.br_pred.pre_ifu_PC[30] tb.dut.riscv.br_pred.pre_ifu_PC[29] tb.dut.riscv.br_pred.pre_ifu_PC[28] tb.dut.riscv.br_pred.pre_ifu_PC[27] tb.dut.riscv.br_pred.pre_ifu_PC[26] tb.dut.riscv.br_pred.pre_ifu_PC[25] tb.dut.riscv.br_pred.pre_ifu_PC[24] tb.dut.riscv.br_pred.pre_ifu_PC[23] tb.dut.riscv.br_pred.pre_ifu_PC[22] tb.dut.riscv.br_pred.pre_ifu_PC[21] tb.dut.riscv.br_pred.pre_ifu_PC[20] tb.dut.riscv.br_pred.pre_ifu_PC[19] tb.dut.riscv.br_pred.pre_ifu_PC[18] tb.dut.riscv.br_pred.pre_ifu_PC[17] tb.dut.riscv.br_pred.pre_ifu_PC[16] tb.dut.riscv.br_pred.pre_ifu_PC[15] tb.dut.riscv.br_pred.pre_ifu_PC[14] tb.dut.riscv.br_pred.pre_ifu_PC[13] tb.dut.riscv.br_pred.pre_ifu_PC[12] tb.dut.riscv.br_pred.pre_ifu_PC[11] tb.dut.riscv.br_pred.pre_ifu_PC[10] tb.dut.riscv.br_pred.pre_ifu_PC[9] tb.dut.riscv.br_pred.pre_ifu_PC[8] tb.dut.riscv.br_pred.pre_ifu_PC[7] tb.dut.riscv.br_pred.pre_ifu_PC[6] tb.dut.riscv.br_pred.pre_ifu_PC[5] tb.dut.riscv.br_pred.pre_ifu_PC[4] tb.dut.riscv.br_pred.pre_ifu_PC[3] tb.dut.riscv.br_pred.pre_ifu_PC[2] tb.dut.riscv.br_pred.pre_ifu_PC[1] tb.dut.riscv.br_pred.pre_ifu_PC[0]
+@28
+tb.dut.riscv.br_pred.pre_ifu_br_pred_taken
+@22
+tb.dut.riscv.br_pred.pre_ifu_br_pred_PC_next[31:0]
+@200
+-
+@28
+tb.dut.riscv.br_pred.alu_vld
+tb.dut.riscv.br_pred.alu_retired
+tb.dut.riscv.br_pred.alu_br
+@29
+tb.dut.riscv.br_pred.alu_br_miss
+@28
+tb.dut.riscv.br_pred.alu_br_taken
+tb.dut.riscv.br_pred.alu_br_match
+@22
+tb.dut.riscv.br_pred.alu_br_match_ndx[3:0]
+tb.dut.riscv.br_pred.alu_br_match_ndx[3:0]
+@1000200
+-BR PRED
+@200
+-
 @800200
 -IFU
 @28
 tb.dut.riscv.ifu.clk
 tb.dut.riscv.ifu.rst
+@200
+-
+@28
+tb.dut.riscv.ifu.alu_vld
+tb.dut.riscv.ifu.alu_retired
+tb.dut.riscv.ifu.alu_br_miss
+@22
+#{tb.dut.riscv.ifu.alu_PC_next[31:0]} tb.dut.riscv.ifu.alu_PC_next[31] tb.dut.riscv.ifu.alu_PC_next[30] tb.dut.riscv.ifu.alu_PC_next[29] tb.dut.riscv.ifu.alu_PC_next[28] tb.dut.riscv.ifu.alu_PC_next[27] tb.dut.riscv.ifu.alu_PC_next[26] tb.dut.riscv.ifu.alu_PC_next[25] tb.dut.riscv.ifu.alu_PC_next[24] tb.dut.riscv.ifu.alu_PC_next[23] tb.dut.riscv.ifu.alu_PC_next[22] tb.dut.riscv.ifu.alu_PC_next[21] tb.dut.riscv.ifu.alu_PC_next[20] tb.dut.riscv.ifu.alu_PC_next[19] tb.dut.riscv.ifu.alu_PC_next[18] tb.dut.riscv.ifu.alu_PC_next[17] tb.dut.riscv.ifu.alu_PC_next[16] tb.dut.riscv.ifu.alu_PC_next[15] tb.dut.riscv.ifu.alu_PC_next[14] tb.dut.riscv.ifu.alu_PC_next[13] tb.dut.riscv.ifu.alu_PC_next[12] tb.dut.riscv.ifu.alu_PC_next[11] tb.dut.riscv.ifu.alu_PC_next[10] tb.dut.riscv.ifu.alu_PC_next[9] tb.dut.riscv.ifu.alu_PC_next[8] tb.dut.riscv.ifu.alu_PC_next[7] tb.dut.riscv.ifu.alu_PC_next[6] tb.dut.riscv.ifu.alu_PC_next[5] tb.dut.riscv.ifu.alu_PC_next[4] tb.dut.riscv.ifu.alu_PC_next[3] tb.dut.riscv.ifu.alu_PC_next[2] tb.dut.riscv.ifu.alu_PC_next[1] tb.dut.riscv.ifu.alu_PC_next[0]
+@200
+-
+@28
+tb.dut.riscv.ifu.pre_ifu_vld
+@22
+tb.dut.riscv.ifu.pre_ifu_PC[31:0]
+tb.dut.riscv.ifu.pre_ifu_era[3:0]
+@28
+tb.dut.riscv.ifu.pre_ifu_br_pred_taken
+@22
+#{tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[31:0]} tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[31] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[30] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[29] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[28] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[27] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[26] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[25] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[24] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[23] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[22] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[21] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[20] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[19] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[18] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[17] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[16] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[15] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[14] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[13] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[12] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[11] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[10] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[9] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[8] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[7] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[6] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[5] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[4] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[3] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[2] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[1] tb.dut.riscv.ifu.pre_ifu_br_pred_PC_next[0]
 @200
 -
 @28
@@ -872,9 +975,6 @@ tb.dut.riscv.ifu.bus_inst_tga_i
 tb.dut.riscv.ifu.bus_inst_tgd_i
 @200
 -
-@22
-tb.dut.riscv.ifu.era[3:0]
-@200
 -
 @28
 tb.dut.riscv.ifu.ifu_buff_addr_clear
@@ -888,8 +988,6 @@ tb.dut.riscv.ifu.ifu_buff_addr_wrreq
 tb.dut.riscv.ifu.ifu_buff_addr_in[31:0]
 @28
 tb.dut.riscv.ifu.ifu_buff_addr_ack
-@22
-tb.dut.riscv.ifu.ifu_buff_addr_out[31:0]
 @200
 -
 @28
@@ -913,6 +1011,8 @@ tb.dut.riscv.ifu.ifu_vld
 @22
 tb.dut.riscv.ifu.ifu_inst[31:0]
 tb.dut.riscv.ifu.ifu_inst_PC[31:0]
+@28
+tb.dut.riscv.ifu.ifu_inst_br_taken
 @200
 -
 @28
@@ -932,11 +1032,17 @@ tb.dut.riscv.ifu.alu_retired
 -IFU
 @200
 -
-@c00200
+@800200
 -IDU
 @28
 tb.dut.riscv.idu.idu_vld
 tb.dut.riscv.idu.frozen
+tb.dut.riscv.idu.ifu_vld
+@22
+#{tb.dut.riscv.idu.ifu_inst[31:0]} tb.dut.riscv.idu.ifu_inst[31] tb.dut.riscv.idu.ifu_inst[30] tb.dut.riscv.idu.ifu_inst[29] tb.dut.riscv.idu.ifu_inst[28] tb.dut.riscv.idu.ifu_inst[27] tb.dut.riscv.idu.ifu_inst[26] tb.dut.riscv.idu.ifu_inst[25] tb.dut.riscv.idu.ifu_inst[24] tb.dut.riscv.idu.ifu_inst[23] tb.dut.riscv.idu.ifu_inst[22] tb.dut.riscv.idu.ifu_inst[21] tb.dut.riscv.idu.ifu_inst[20] tb.dut.riscv.idu.ifu_inst[19] tb.dut.riscv.idu.ifu_inst[18] tb.dut.riscv.idu.ifu_inst[17] tb.dut.riscv.idu.ifu_inst[16] tb.dut.riscv.idu.ifu_inst[15] tb.dut.riscv.idu.ifu_inst[14] tb.dut.riscv.idu.ifu_inst[13] tb.dut.riscv.idu.ifu_inst[12] tb.dut.riscv.idu.ifu_inst[11] tb.dut.riscv.idu.ifu_inst[10] tb.dut.riscv.idu.ifu_inst[9] tb.dut.riscv.idu.ifu_inst[8] tb.dut.riscv.idu.ifu_inst[7] tb.dut.riscv.idu.ifu_inst[6] tb.dut.riscv.idu.ifu_inst[5] tb.dut.riscv.idu.ifu_inst[4] tb.dut.riscv.idu.ifu_inst[3] tb.dut.riscv.idu.ifu_inst[2] tb.dut.riscv.idu.ifu_inst[1] tb.dut.riscv.idu.ifu_inst[0]
+#{tb.dut.riscv.idu.ifu_inst_PC[31:0]} tb.dut.riscv.idu.ifu_inst_PC[31] tb.dut.riscv.idu.ifu_inst_PC[30] tb.dut.riscv.idu.ifu_inst_PC[29] tb.dut.riscv.idu.ifu_inst_PC[28] tb.dut.riscv.idu.ifu_inst_PC[27] tb.dut.riscv.idu.ifu_inst_PC[26] tb.dut.riscv.idu.ifu_inst_PC[25] tb.dut.riscv.idu.ifu_inst_PC[24] tb.dut.riscv.idu.ifu_inst_PC[23] tb.dut.riscv.idu.ifu_inst_PC[22] tb.dut.riscv.idu.ifu_inst_PC[21] tb.dut.riscv.idu.ifu_inst_PC[20] tb.dut.riscv.idu.ifu_inst_PC[19] tb.dut.riscv.idu.ifu_inst_PC[18] tb.dut.riscv.idu.ifu_inst_PC[17] tb.dut.riscv.idu.ifu_inst_PC[16] tb.dut.riscv.idu.ifu_inst_PC[15] tb.dut.riscv.idu.ifu_inst_PC[14] tb.dut.riscv.idu.ifu_inst_PC[13] tb.dut.riscv.idu.ifu_inst_PC[12] tb.dut.riscv.idu.ifu_inst_PC[11] tb.dut.riscv.idu.ifu_inst_PC[10] tb.dut.riscv.idu.ifu_inst_PC[9] tb.dut.riscv.idu.ifu_inst_PC[8] tb.dut.riscv.idu.ifu_inst_PC[7] tb.dut.riscv.idu.ifu_inst_PC[6] tb.dut.riscv.idu.ifu_inst_PC[5] tb.dut.riscv.idu.ifu_inst_PC[4] tb.dut.riscv.idu.ifu_inst_PC[3] tb.dut.riscv.idu.ifu_inst_PC[2] tb.dut.riscv.idu.ifu_inst_PC[1] tb.dut.riscv.idu.ifu_inst_PC[0]
+@28
+tb.dut.riscv.idu.ifu_inst_br_taken
 tb.dut.riscv.idu.alu_vld
 tb.dut.riscv.idu.alu_retired
 tb.dut.riscv.idu.alu_br_miss
@@ -944,6 +1050,7 @@ tb.dut.riscv.idu.alu_br_miss
 tb.dut.riscv.idu.idu_inst[31:0]
 tb.dut.riscv.idu.idu_inst_PC[31:0]
 @28
+tb.dut.riscv.idu.idu_inst_br_taken
 tb.dut.riscv.idu.idu_decode_ADD
 tb.dut.riscv.idu.idu_decode_ADDI
 tb.dut.riscv.idu.idu_decode_AND
@@ -1016,7 +1123,7 @@ tb.dut.riscv.idu.idu_decode_rs2[4:0]
 tb.dut.riscv.idu.idu_decode_shamt[4:0]
 tb.dut.riscv.idu.idu_decode_succ[3:0]
 tb.dut.riscv.idu.idu_decode_uimm[4:0]
-@1401200
+@1000200
 -IDU
 @200
 -
@@ -1027,6 +1134,8 @@ tb.dut.riscv.alu.alu_vld
 tb.dut.riscv.alu.alu_retired
 tb.dut.riscv.alu.alu_mem_access
 tb.dut.riscv.alu.alu_freeze
+tb.dut.riscv.alu.alu_br
+tb.dut.riscv.alu.alu_br_taken
 tb.dut.riscv.alu.alu_br_miss
 @22
 tb.dut.riscv.alu.alu_inst[31:0]
