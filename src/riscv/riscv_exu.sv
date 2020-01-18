@@ -771,7 +771,8 @@ always_comb
   dpu_rd_hazard  = dpu_alu_rd_hazard  | dpu_mpu_rd_hazard  | dpu_dvu_rd_hazard  | dpu_lsu_rd_hazard  | dpu_csu_rd_hazard  | dpu_bru_rd_hazard  | dpu_exu_rd_hazard;
 
   dpu_hazard = dpu_rs1_hazard | dpu_rs2_hazard | dpu_rd_hazard;
-  dpu_freeze = dpu_vld & dpu_hazard;
+  dpu_freeze = (dpu_vld & dpu_hazard) |
+               (exu_vld & exu_freeze);
 
   dpu_alu_vld         = dpu_vld & ~dpu_freeze & ~(exu_vld & (exu_br_miss | exu_trap)) &
                         (dpu_LUI     |
@@ -916,9 +917,7 @@ always_ff @(posedge clk)
   dpu_REMU            <= dpu_REMU;
   dpu_TRAP            <= dpu_TRAP;      
 
-  //Capture IDU when IDU is valid and ALU is not valid or is retiring without
-  //branch miss or trap
-  //if((~alu_vld | (alu_vld & alu_retired & ~(alu_br_miss | alu_trap))) & idu_vld)
+  //Capture IDU when IDU is valid and DPU is not valid or frozen
   if(idu_vld & ~(dpu_vld & dpu_freeze))
     begin
     dpu_vld             <= '1;
@@ -1380,10 +1379,10 @@ always_comb
   rvfi_pc_rdata = exu_PC;
   rvfi_pc_wdata = exu_PC_next;
   rvfi_mem_addr = bus_addr;
-  rvfi_mem_rmask = bus_data_rd_mask;
-  rvfi_mem_wmask = bus_data_wr_mask;
-  rvfi_mem_rdata = exu_mem_rdata;
-  rvfi_mem_wdata = bus_data_wr;
+  rvfi_mem_rmask = {4{lsu_vld}} & bus_data_rd_mask;
+  rvfi_mem_wmask = {4{lsu_vld}} & bus_data_wr_mask;
+  rvfi_mem_rdata = {32{lsu_vld}} & exu_mem_rdata;
+  rvfi_mem_wdata = {32{lsu_vld}} & bus_data_wr;
 
   rvfi_csr_mcycle_rmask = csr_write ? '0 : csr_mask;
   rvfi_csr_mcycle_wmask = csr_write ? csr_mask : '0;
