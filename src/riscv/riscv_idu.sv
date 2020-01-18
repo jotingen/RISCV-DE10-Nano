@@ -186,11 +186,6 @@ always_ff @(posedge clk)
   if(~frozen)
     begin
     idu_vld <= ifu_vld;
-    //Throw away if branch missed or trapped
-    if(alu_vld & (alu_br_miss | alu_trap))
-      begin
-      idu_vld <= '0;
-      end
     idu_inst    <= ifu_inst;
     idu_inst_PC <= ifu_inst_PC;
     idu_inst_br_taken    <= ifu_inst_br_taken;
@@ -971,6 +966,12 @@ always_ff @(posedge clk)
     idu_decode_REMU    <= idu_decode_REMU   ;
     idu_decode_TRAP    <= idu_decode_TRAP   ;
     end
+
+    //Throw away if branch missed or trapped
+    if(alu_vld & (alu_br_miss | alu_trap))
+      begin
+      idu_vld <= '0;
+      end
 
   if(rst)
     begin
