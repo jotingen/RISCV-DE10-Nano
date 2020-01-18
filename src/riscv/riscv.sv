@@ -161,6 +161,10 @@ logic             idu_freeze;
 logic [31:0]      idu_inst_PC;
 logic             idu_inst_br_taken;
 logic [31:0]      idu_inst_br_pred_PC_next;
+
+logic             dpu_vld;
+logic             dpu_freeze;
+
 logic             alu_vld;
 logic             alu_retired;
 logic             alu_freeze;
@@ -356,7 +360,7 @@ riscv_ifu ifu (
 
   .alu_vld        (alu_vld),
   .alu_retired    (alu_retired),
-  .alu_freeze     (alu_freeze),
+  .alu_freeze     (alu_freeze | (dpu_vld & dpu_freeze)),
   .alu_br_miss    (alu_br_miss),
   .alu_trap       (alu_trap),
   .alu_PC_next    (alu_PC_next),
@@ -406,7 +410,7 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
                              
   .alu_vld        (alu_vld),
   .alu_retired    (alu_retired),
-  .alu_freeze     (alu_freeze),
+  .alu_freeze     (alu_freeze | (dpu_vld & dpu_freeze)),
   .alu_br_miss    (alu_br_miss),
   .alu_trap       (alu_trap),
 
@@ -489,8 +493,7 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
   .idu_decode_TRAP      (idu_decode_TRAP    )
 );
 
-assign o_membus_ack = '0;
-riscv_alu #(.M_EXT(M_EXT)) alu (
+riscv_exu #(.M_EXT(M_EXT)) exu (
   .clk            (clk     ),
   .rst            (rst     ),
 
@@ -528,16 +531,18 @@ riscv_alu #(.M_EXT(M_EXT)) alu (
   .rvfi_csr_minstret_wdata (rvfi_csr_minstret_wdata),
 `endif
                              
+  .dpu_vld        (dpu_vld),
+  .dpu_freeze     (dpu_freeze),
 
-  .alu_vld          (alu_vld),
-  .alu_retired    (alu_retired),
-  .alu_freeze     (alu_freeze),
-  .alu_br         (alu_br),
-  .alu_br_taken   (alu_br_taken),
-  .alu_br_miss      (alu_br_miss),
-  .alu_trap       (alu_trap),
-  .alu_PC         (alu_PC),
-  .alu_PC_next    (alu_PC_next),
+  .exu_vld          (alu_vld),
+  .exu_retired    (alu_retired),
+  .exu_freeze     (alu_freeze),
+  .exu_br         (alu_br),
+  .exu_br_taken   (alu_br_taken),
+  .exu_br_miss      (alu_br_miss),
+  .exu_trap       (alu_trap),
+  .exu_PC         (alu_PC),
+  .exu_PC_next    (alu_PC_next),
                                
   .idu_vld          (idu_vld),
   .idu_inst             (idu_inst    ),

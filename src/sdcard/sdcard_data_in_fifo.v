@@ -44,7 +44,9 @@ module sdcard_data_in_fifo (
 	wrclk,
 	wrreq,
 	q,
-	rdempty);
+	rdempty,
+	rdusedw,
+	wrusedw);
 
 	input	  aclr;
 	input	[0:0]  data;
@@ -54,6 +56,8 @@ module sdcard_data_in_fifo (
 	input	  wrreq;
 	output	[31:0]  q;
 	output	  rdempty;
+	output	[7:0]  rdusedw;
+	output	[12:0]  wrusedw;
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_off
 `endif
@@ -64,8 +68,12 @@ module sdcard_data_in_fifo (
 
 	wire [31:0] sub_wire0;
 	wire  sub_wire1;
+	wire [7:0] sub_wire2;
+	wire [12:0] sub_wire3;
 	wire [31:0] q = sub_wire0[31:0];
 	wire  rdempty = sub_wire1;
+	wire [7:0] rdusedw = sub_wire2[7:0];
+	wire [12:0] wrusedw = sub_wire3[12:0];
 
 	dcfifo_mixed_widths	dcfifo_mixed_widths_component (
 				.aclr (aclr),
@@ -76,20 +84,20 @@ module sdcard_data_in_fifo (
 				.wrreq (wrreq),
 				.q (sub_wire0),
 				.rdempty (sub_wire1),
+				.rdusedw (sub_wire2),
+				.wrusedw (sub_wire3),
 				.eccstatus (),
 				.rdfull (),
-				.rdusedw (),
 				.wrempty (),
-				.wrfull (),
-				.wrusedw ());
+				.wrfull ());
 	defparam
 		dcfifo_mixed_widths_component.intended_device_family = "Cyclone V",
-		dcfifo_mixed_widths_component.lpm_numwords = 4096,
+		dcfifo_mixed_widths_component.lpm_numwords = 8192,
 		dcfifo_mixed_widths_component.lpm_showahead = "ON",
 		dcfifo_mixed_widths_component.lpm_type = "dcfifo_mixed_widths",
 		dcfifo_mixed_widths_component.lpm_width = 1,
-		dcfifo_mixed_widths_component.lpm_widthu = 12,
-		dcfifo_mixed_widths_component.lpm_widthu_r = 7,
+		dcfifo_mixed_widths_component.lpm_widthu = 13,
+		dcfifo_mixed_widths_component.lpm_widthu_r = 8,
 		dcfifo_mixed_widths_component.lpm_width_r = 32,
 		dcfifo_mixed_widths_component.overflow_checking = "OFF",
 		dcfifo_mixed_widths_component.rdsync_delaypipe = 3,
@@ -111,7 +119,7 @@ endmodule
 // Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
 // Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "1"
 // Retrieval info: PRIVATE: Clock NUMERIC "4"
-// Retrieval info: PRIVATE: Depth NUMERIC "4096"
+// Retrieval info: PRIVATE: Depth NUMERIC "8192"
 // Retrieval info: PRIVATE: Empty NUMERIC "1"
 // Retrieval info: PRIVATE: Full NUMERIC "1"
 // Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone V"
@@ -131,20 +139,20 @@ endmodule
 // Retrieval info: PRIVATE: output_width NUMERIC "32"
 // Retrieval info: PRIVATE: rsEmpty NUMERIC "1"
 // Retrieval info: PRIVATE: rsFull NUMERIC "0"
-// Retrieval info: PRIVATE: rsUsedW NUMERIC "0"
+// Retrieval info: PRIVATE: rsUsedW NUMERIC "1"
 // Retrieval info: PRIVATE: sc_aclr NUMERIC "0"
 // Retrieval info: PRIVATE: sc_sclr NUMERIC "0"
 // Retrieval info: PRIVATE: wsEmpty NUMERIC "0"
 // Retrieval info: PRIVATE: wsFull NUMERIC "0"
-// Retrieval info: PRIVATE: wsUsedW NUMERIC "0"
+// Retrieval info: PRIVATE: wsUsedW NUMERIC "1"
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone V"
-// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "4096"
+// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "8192"
 // Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "ON"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "dcfifo_mixed_widths"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "1"
-// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "12"
-// Retrieval info: CONSTANT: LPM_WIDTHU_R NUMERIC "7"
+// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "13"
+// Retrieval info: CONSTANT: LPM_WIDTHU_R NUMERIC "8"
 // Retrieval info: CONSTANT: LPM_WIDTH_R NUMERIC "32"
 // Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "OFF"
 // Retrieval info: CONSTANT: RDSYNC_DELAYPIPE NUMERIC "3"
@@ -159,8 +167,10 @@ endmodule
 // Retrieval info: USED_PORT: rdclk 0 0 0 0 INPUT NODEFVAL "rdclk"
 // Retrieval info: USED_PORT: rdempty 0 0 0 0 OUTPUT NODEFVAL "rdempty"
 // Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL "rdreq"
+// Retrieval info: USED_PORT: rdusedw 0 0 8 0 OUTPUT NODEFVAL "rdusedw[7..0]"
 // Retrieval info: USED_PORT: wrclk 0 0 0 0 INPUT NODEFVAL "wrclk"
 // Retrieval info: USED_PORT: wrreq 0 0 0 0 INPUT NODEFVAL "wrreq"
+// Retrieval info: USED_PORT: wrusedw 0 0 13 0 OUTPUT NODEFVAL "wrusedw[12..0]"
 // Retrieval info: CONNECT: @aclr 0 0 0 0 aclr 0 0 0 0
 // Retrieval info: CONNECT: @data 0 0 1 0 data 0 0 1 0
 // Retrieval info: CONNECT: @rdclk 0 0 0 0 rdclk 0 0 0 0
@@ -169,6 +179,8 @@ endmodule
 // Retrieval info: CONNECT: @wrreq 0 0 0 0 wrreq 0 0 0 0
 // Retrieval info: CONNECT: q 0 0 32 0 @q 0 0 32 0
 // Retrieval info: CONNECT: rdempty 0 0 0 0 @rdempty 0 0 0 0
+// Retrieval info: CONNECT: rdusedw 0 0 8 0 @rdusedw 0 0 8 0
+// Retrieval info: CONNECT: wrusedw 0 0 13 0 @wrusedw 0 0 13 0
 // Retrieval info: GEN_FILE: TYPE_NORMAL sdcard_data_in_fifo.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL sdcard_data_in_fifo.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL sdcard_data_in_fifo.cmp FALSE

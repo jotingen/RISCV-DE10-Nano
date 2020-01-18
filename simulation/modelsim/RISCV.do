@@ -6,7 +6,8 @@ vcd add -r *
 
 #run 30 ms
 #run 20 ms
-run 2 ms
-#run 5 us
+#run 4 ms
+run 5 us
+#run 1 us
 
 exit
