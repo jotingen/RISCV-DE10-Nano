@@ -45,7 +45,7 @@ logic [63:0] cmd;
 logic [31:0] rspArrived;
 logic [47:0] rsp;
 logic             data_capture;
-logic [512*8+16-1:0] data;
+logic [16-1:0] data;
 logic [8:0] data_pending_timeout;
 logic [8:0] data_32b_out;
 
@@ -61,6 +61,32 @@ logic state_rsp_recieved;
 logic state_data_pending;
 logic state_data_recieving;
 logic state_data_recieved;
+
+logic        data_in_fifo_clr;
+logic        data_in_fifo_wrreq;
+logic        data_in_fifo_rdack;
+logic [31:0] data_in_fifo_data_out_rev;
+logic [31:0] data_in_fifo_data_out;
+logic        data_in_fifo_empty;
+
+//TODO this is 8k becaouse I dont want to deal with CRC, should probably deal and use 4k
+sdcard_data_in_fifo data_in_fifo (
+	.aclr    (data_in_fifo_clr),
+	.data    (MISO),
+	.rdclk   (clk),
+	.rdreq   (data_in_fifo_rdack),
+	.wrclk   (clk),
+	.wrreq   (data_in_fifo_wrreq),
+	.q       (data_in_fifo_data_out_rev),
+	.rdempty (data_in_fifo_empty)
+);
+always_comb
+  begin
+  for(int i = 0; i < 32; i++)
+    begin
+    data_in_fifo_data_out[i] = data_in_fifo_data_out_rev[31-i];
+    end
+  end
 
 always_comb
   begin
@@ -94,6 +120,10 @@ always_ff @(posedge clk)
   dataIn      <= dataIn;      
   dataArrived <= dataArrived; 
   dataOut     <= dataOut;     
+
+  data_in_fifo_clr   <= '0;
+  data_in_fifo_wrreq <= '0;
+  data_in_fifo_rdack <= '0;
 
   o_bus_ack   <= '0;
   o_bus_data  <= '0;   
@@ -180,6 +210,7 @@ always_ff @(posedge clk)
                    //Data
                    'h0007:  begin 
                             o_bus_ack             <= '1;
+                            data_in_fifo_rdack    <= '1;
                             if(data_32b_out < 'd129) 
                               begin
                               for(int i = 0; i < 8; i++)
@@ -191,13 +222,13 @@ always_ff @(posedge clk)
                                   end
                                 else
                                   begin
-                                  o_bus_data[i+24]     <= i_bus_data_rd_mask ? data[31-i] : '0; //Reverse bytes to compensate for stream
-                                  o_bus_data[i+16]     <= i_bus_data_rd_mask ? data[23-i] : '0; //Reverse bytes to compensate for stream
+                                  o_bus_data[i+24]     <= i_bus_data_rd_mask ? data_in_fifo_data_out_rev[31-i] : '0; //Reverse bytes to compensate for stream
+                                  o_bus_data[i+16]     <= i_bus_data_rd_mask ? data_in_fifo_data_out_rev[23-i] : '0; //Reverse bytes to compensate for stream
                                   end
-                                o_bus_data[i+8]      <= i_bus_data_rd_mask ? data[15-i] : '0; //Reverse bytes to compensate for stream
-                                o_bus_data[i+0]      <= i_bus_data_rd_mask ? data[7-i]  : '0; //Reverse bytes to compensate for stream
+                                o_bus_data[i+8]      <= i_bus_data_rd_mask ? data_in_fifo_data_out_rev[15-i] : '0; //Reverse bytes to compensate for stream
+                                o_bus_data[i+0]      <= i_bus_data_rd_mask ? data_in_fifo_data_out_rev[7-i]  : '0; //Reverse bytes to compensate for stream
                                 end
-                              data <= {data[31:0],data[512*8+16-1:32]};
+                              //data <= {data[31:0],data[512*8+16-1:32]};
                               data_32b_out <= data_32b_out+1;
                               end
                             state_idle <= '1;
@@ -303,53 +334,55 @@ always_ff @(posedge clk)
 			                  end
                       end
   state_data_pending : begin
-                      if(sck_put)
-                        begin
-                       data <= {MISO,data[512*8+16-1:1]};
-                       if(data_pending_timeout == '1)
+                       if(sck_put)
                          begin
-                           SPIDone     <= '1;
-                           state_idle <= '1;
-                           o_bus_ack  <= '1;
-                         end
-                       else if({MISO,data[512*8+16-1:512*8+16-1-6]} == 'h7F)
-                         begin
-                         bits <= 'd1;
-                         state_data_recieved <= '1;
-                         end
-                       else
-                         begin
-                         state_data_pending <= '1;
-                         data_pending_timeout <= data_pending_timeout + 'd1;
-                         end
-                        end
-                      else
-                        begin
-                        state_data_pending <= '1;
-			                  end
-                       end
-  state_data_recieved : begin
-                      if(sck_put)
-                        begin
-                        data <= {MISO,data[512*8+16-1:1]};
-                        if(bits == 512*8+16)
-                          begin
-                          CS <= '1;
-                          SPIDone     <= '1;
-                          dataArrived <= '1;  
-                          state_idle  <= '1;
-                          o_bus_ack   <= '1;
+                         data <= {MISO,data[16-1:1]};
+                         if(data_pending_timeout == '1)
+                           begin
+                             SPIDone     <= '1;
+                             state_idle <= '1;
+                             o_bus_ack  <= '1;
+                           end
+                         else if({MISO,data[16-1:16-1-6]} == 'h7F)
+                           begin
+                           data_in_fifo_clr   <= '1;
+                           bits <= 'd1;
+                           state_data_recieved <= '1;
+                           end
+                         else
+                           begin
+                           state_data_pending <= '1;
+                           data_pending_timeout <= data_pending_timeout + 'd1;
+                           end
                           end
                         else
                           begin
-                          bits <= bits + 'd1;
-                          state_data_recieved <= '1;
-                          end
+                          state_data_pending <= '1;
+			                    end
                         end
-                      else
-                        begin
-                        state_data_recieved <= '1;
-			end
+  state_data_recieved : begin
+                        if(sck_put)
+                          begin
+	                        data_in_fifo_wrreq <= '1;
+                          data <= {MISO,data[16-1:1]};
+                          if(bits == 512*8+16)
+                            begin
+                            CS <= '1;
+                            SPIDone     <= '1;
+                            dataArrived <= '1;  
+                            state_idle  <= '1;
+                            o_bus_ack   <= '1;
+                            end
+                          else
+                            begin
+                            bits <= bits + 'd1;
+                            state_data_recieved <= '1;
+                            end
+                          end
+                        else
+                          begin
+                          state_data_recieved <= '1;
+                     			end
                         end
   default :    begin
                state_idle <= '1;
@@ -380,6 +413,8 @@ always_ff @(posedge clk)
     dataIn      <= '0;
     dataArrived <= '0;
     dataOut     <= '0;
+
+    data_in_fifo_clr   <= '1;
     end
   end
 
