@@ -678,11 +678,11 @@ always_comb
                        ( dpu_rs1 == alu_rs1 |
                          dpu_rs1 == alu_rs2 |
                          dpu_rs1 == alu_rd  );
-  dpu_alu_rs2_hazard = alu_vld && dpu_rs1 != '0 &&
+  dpu_alu_rs2_hazard = alu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == alu_rs1 |
                          dpu_rs2 == alu_rs2 |
                          dpu_rs2 == alu_rd  );
-  dpu_alu_rd_hazard  = alu_vld && dpu_rs1 != '0 &&
+  dpu_alu_rd_hazard  = alu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == alu_rs1 |
                          dpu_rd  == alu_rs2 |
                          dpu_rd  == alu_rd  );
@@ -691,11 +691,11 @@ always_comb
                        ( dpu_rs1 == mpu_rs1 |
                          dpu_rs1 == mpu_rs2 |
                          dpu_rs1 == mpu_rd  );
-  dpu_mpu_rs2_hazard = mpu_vld && dpu_rs1 != '0 &&
+  dpu_mpu_rs2_hazard = mpu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == mpu_rs1 |
                          dpu_rs2 == mpu_rs2 |
                          dpu_rs2 == mpu_rd  );
-  dpu_mpu_rd_hazard  = mpu_vld && dpu_rs1 != '0 &&
+  dpu_mpu_rd_hazard  = mpu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == mpu_rs1 |
                          dpu_rd  == mpu_rs2 |
                          dpu_rd  == mpu_rd  );
@@ -704,11 +704,11 @@ always_comb
                        ( dpu_rs1 == dvu_rs1 |
                          dpu_rs1 == dvu_rs2 |
                          dpu_rs1 == dvu_rd  );
-  dpu_dvu_rs2_hazard = dvu_vld && dpu_rs1 != '0 &&
+  dpu_dvu_rs2_hazard = dvu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == dvu_rs1 |
                          dpu_rs2 == dvu_rs2 |
                          dpu_rs2 == dvu_rd  );
-  dpu_dvu_rd_hazard  = dvu_vld && dpu_rs1 != '0 &&
+  dpu_dvu_rd_hazard  = dvu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == dvu_rs1 |
                          dpu_rd  == dvu_rs2 |
                          dpu_rd  == dvu_rd  );
@@ -717,11 +717,11 @@ always_comb
                        ( dpu_rs1 == lsu_rs1 |
                          dpu_rs1 == lsu_rs2 |
                          dpu_rs1 == lsu_rd  );
-  dpu_lsu_rs2_hazard = lsu_vld && dpu_rs1 != '0 &&
+  dpu_lsu_rs2_hazard = lsu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == lsu_rs1 |
                          dpu_rs2 == lsu_rs2 |
                          dpu_rs2 == lsu_rd  );
-  dpu_lsu_rd_hazard  = lsu_vld && dpu_rs1 != '0 &&
+  dpu_lsu_rd_hazard  = lsu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == lsu_rs1 |
                          dpu_rd  == lsu_rs2 |
                          dpu_rd  == lsu_rd  );
@@ -730,11 +730,11 @@ always_comb
                        ( dpu_rs1 == csu_rs1 |
                          dpu_rs1 == csu_rs2 |
                          dpu_rs1 == csu_rd  );
-  dpu_csu_rs2_hazard = csu_vld && dpu_rs1 != '0 &&
+  dpu_csu_rs2_hazard = csu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == csu_rs1 |
                          dpu_rs2 == csu_rs2 |
                          dpu_rs2 == csu_rd  );
-  dpu_csu_rd_hazard  = csu_vld && dpu_rs1 != '0 &&
+  dpu_csu_rd_hazard  = csu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == csu_rs1 |
                          dpu_rd  == csu_rs2 |
                          dpu_rd  == csu_rd  );
@@ -743,11 +743,11 @@ always_comb
                        ( dpu_rs1 == bru_rs1 |
                          dpu_rs1 == bru_rs2 |
                          dpu_rs1 == bru_rd  );
-  dpu_bru_rs2_hazard = bru_vld && dpu_rs1 != '0 &&
+  dpu_bru_rs2_hazard = bru_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == bru_rs1 |
                          dpu_rs2 == bru_rs2 |
                          dpu_rs2 == bru_rd  );
-  dpu_bru_rd_hazard  = bru_vld && dpu_rs1 != '0 &&
+  dpu_bru_rd_hazard  = bru_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == bru_rs1 |
                          dpu_rd  == bru_rs2 |
                          dpu_rd  == bru_rd  );
@@ -757,11 +757,11 @@ always_comb
                        ( dpu_rs1 == exu_rs1 |
                          dpu_rs1 == exu_rs2 |
                          dpu_rs1 == exu_rd  );
-  dpu_exu_rs2_hazard = exu_vld && dpu_rs1 != '0 &&
+  dpu_exu_rs2_hazard = exu_vld && dpu_rs2 != '0 &&
                        ( dpu_rs2 == exu_rs1 |
                          dpu_rs2 == exu_rs2 |
                          dpu_rs2 == exu_rd  );
-  dpu_exu_rd_hazard  = exu_vld && dpu_rs1 != '0 &&
+  dpu_exu_rd_hazard  = exu_vld && dpu_rd  != '0 &&
                        ( dpu_rd  == exu_rs1 |
                          dpu_rd  == exu_rs2 |
                          dpu_rd  == exu_rd  );
