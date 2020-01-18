@@ -839,7 +839,14 @@ always_comb
 
 always_ff @(posedge clk)
   begin
-  dpu_vld             <= dpu_vld;
+  if(dpu_vld & dpu_freeze)
+    begin
+    dpu_vld           <= dpu_vld;
+    end
+  else
+    begin
+    dpu_vld           <= '0;
+    end
 
   dpu_br_taken        <= dpu_br_taken;
   dpu_br_pred_PC_next <= dpu_br_pred_PC_next;
