@@ -3,12 +3,12 @@ module riscv_ifu (
   input  logic             clk,
   input  logic             rst,
 
-  input  logic             alu_vld,
-  input  logic             alu_retired,
-  input  logic             alu_freeze,
-  input  logic             alu_br_miss,
-  input  logic             alu_trap,
-  input  logic [31:0]      alu_PC_next,
+  input  logic             exu_vld,
+  input  logic             exu_retired,
+  input  logic             exu_freeze,
+  input  logic             exu_br_miss,
+  input  logic             exu_trap,
+  input  logic [31:0]      exu_PC_next,
 
   input  logic             idu_vld,
   input  logic             idu_freeze,
@@ -148,7 +148,7 @@ always_comb
     begin
     pre_ifu_vld  = '1;
     end
-    if(~((alu_vld & alu_freeze)))
+    if(~((exu_vld & exu_freeze)))
       begin
       if(~ifu_buff_addr_empty & ~ifu_buff_data_empty &
          ~ifu_buff_addr_clear & ~ifu_buff_data_clear)
@@ -157,7 +157,7 @@ always_comb
         ifu_buff_data_ack = '1;
         end
       end
-  if(alu_vld & alu_br_miss)
+  if(exu_vld & exu_br_miss)
     begin
     ifu_buff_addr_ack = '0;
     ifu_buff_data_ack = '0;
@@ -229,7 +229,7 @@ always_ff @(posedge clk)
 
   //TODO put in bypass
   //If not frozen, send from first available buffer
-  if(~((alu_vld & alu_freeze)))
+  if(~((exu_vld & exu_freeze)))
     begin
     if(~ifu_buff_addr_empty & ~ifu_buff_data_empty &
        ~ifu_buff_addr_clear & ~ifu_buff_data_clear)
@@ -247,10 +247,10 @@ always_ff @(posedge clk)
     end
 
   //If we branch miss, throw it all away and re-request
-  if(alu_vld & alu_br_miss)
+  if(exu_vld & exu_br_miss)
     begin
     ifu_vld     <= '0;
-    pre_ifu_PC <= alu_PC_next;
+    pre_ifu_PC <= exu_PC_next;
     pre_ifu_era          <= pre_ifu_era + 'd1;
 
     ifu_buff_addr_clear <= '1;

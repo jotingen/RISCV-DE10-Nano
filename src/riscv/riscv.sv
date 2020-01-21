@@ -5,37 +5,37 @@ module riscv #(
   input  logic        rst,
 
 `ifdef RISCV_FORMAL
-  output reg          rvfi_valid,
-  output reg   [63:0] rvfi_order,
-  output reg   [31:0] rvfi_insn,
-  output reg          rvfi_trap,
-  output reg          rvfi_halt,
-  output reg          rvfi_intr,
-  output reg   [ 1:0] rvfi_mode,
-  output reg   [ 1:0] rvfi_ixl,
-  output reg   [ 4:0] rvfi_rs1_addr,
-  output reg   [ 4:0] rvfi_rs2_addr,
-  output reg   [31:0] rvfi_rs1_rdata,
-  output reg   [31:0] rvfi_rs2_rdata,
-  output reg   [ 4:0] rvfi_rd_addr,
-  output reg   [31:0] rvfi_rd_wdata,
-  output reg   [31:0] rvfi_pc_rdata,
-  output reg   [31:0] rvfi_pc_wdata,
-  output reg   [31:0] rvfi_mem_addr,
-  output reg   [ 3:0] rvfi_mem_rmask,
-  output reg   [ 3:0] rvfi_mem_wmask,
-  output reg   [31:0] rvfi_mem_rdata,
-  output reg   [31:0] rvfi_mem_wdata,
+  output reg   [5:0]       rvfi_valid,
+  output reg   [5:0][63:0] rvfi_order,
+  output reg   [5:0][31:0] rvfi_insn,
+  output reg   [5:0]       rvfi_trap,
+  output reg   [5:0]       rvfi_halt,
+  output reg   [5:0]       rvfi_intr,
+  output reg   [5:0][ 1:0] rvfi_mode,
+  output reg   [5:0][ 1:0] rvfi_ixl,
+  output reg   [5:0][ 4:0] rvfi_rs1_addr,
+  output reg   [5:0][ 4:0] rvfi_rs2_addr,
+  output reg   [5:0][31:0] rvfi_rs1_rdata,
+  output reg   [5:0][31:0] rvfi_rs2_rdata,
+  output reg   [5:0][ 4:0] rvfi_rd_addr,
+  output reg   [5:0][31:0] rvfi_rd_wdata,
+  output reg   [5:0][31:0] rvfi_pc_rdata,
+  output reg   [5:0][31:0] rvfi_pc_wdata,
+  output reg   [5:0][31:0] rvfi_mem_addr,
+  output reg   [5:0][ 3:0] rvfi_mem_rmask,
+  output reg   [5:0][ 3:0] rvfi_mem_wmask,
+  output reg   [5:0][31:0] rvfi_mem_rdata,
+  output reg   [5:0][31:0] rvfi_mem_wdata,
 
-  output reg   [63:0] rvfi_csr_mcycle_rmask,
-  output reg   [63:0] rvfi_csr_mcycle_wmask,
-  output reg   [63:0] rvfi_csr_mcycle_rdata,
-  output reg   [63:0] rvfi_csr_mcycle_wdata,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_rmask,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_wmask,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_rdata,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_wdata,
 
-  output reg   [63:0] rvfi_csr_minstret_rmask,
-  output reg   [63:0] rvfi_csr_minstret_wmask,
-  output reg   [63:0] rvfi_csr_minstret_rdata,
-  output reg   [63:0] rvfi_csr_minstret_wdata,
+  output reg   [5:0][63:0] rvfi_csr_minstret_rmask,
+  output reg   [5:0][63:0] rvfi_csr_minstret_wmask,
+  output reg   [5:0][63:0] rvfi_csr_minstret_rdata,
+  output reg   [5:0][63:0] rvfi_csr_minstret_wdata,
 `endif
 
   output logic [31:0]      bus_inst_adr_o,
@@ -165,16 +165,16 @@ logic [31:0]      idu_inst_br_pred_PC_next;
 logic             dpu_vld;
 logic             dpu_freeze;
 
-logic             alu_vld;
-logic             alu_retired;
-logic             alu_freeze;
-logic             alu_br;
-logic             alu_br_taken;
-logic [31:0]      alu_br_pred_PC_next;
-logic             alu_br_miss;
-logic [31:0]      alu_PC;
-logic [31:0]      alu_PC_next;
-logic             alu_trap;
+logic             exu_vld;
+logic             exu_retired;
+logic             exu_freeze;
+logic             exu_br;
+logic             exu_br_taken;
+logic [31:0]      exu_br_pred_PC_next;
+logic             exu_br_miss;
+logic [31:0]      exu_PC;
+logic [31:0]      exu_PC_next;
+logic             exu_trap;
 
 logic [31:0]      inst;
 logic  [3:0]      idu_decode_fm;
@@ -323,10 +323,10 @@ riscv_csr csrfile (
   .clk         (clk),
   .rst         (rst),
 
-  .alu_vld          (alu_vld),
-  .alu_retired    (alu_retired),
-  .alu_br         (alu_br),
-  .alu_br_miss    (alu_br_miss),
+  .alu_vld          (exu_vld),
+  .alu_retired    (exu_retired),
+  .alu_br         (exu_br),
+  .alu_br_miss    (exu_br_miss),
 
   .csr_req     (csr_req),   
   .csr_ack     (csr_ack),   
@@ -345,25 +345,25 @@ riscv_br_pred br_pred (
   .pre_ifu_br_pred_taken (pre_ifu_br_pred_taken),
   .pre_ifu_br_pred_PC_next  (pre_ifu_br_pred_PC_next), 
 
-  .alu_vld        (alu_vld),
-  .alu_retired    (alu_retired),
-  .alu_br         (alu_br),
-  .alu_br_taken   (alu_br_taken),
-  .alu_br_miss    (alu_br_miss),
-  .alu_PC         (alu_PC),
-  .alu_PC_next    (alu_PC_next)
+  .alu_vld        (exu_vld),
+  .alu_retired    (exu_retired),
+  .alu_br         (exu_br),
+  .alu_br_taken   (exu_br_taken),
+  .alu_br_miss    (exu_br_miss),
+  .alu_PC         (exu_PC),
+  .alu_PC_next    (exu_PC_next)
 );
 
 riscv_ifu ifu (
   .clk            (clk),
   .rst            (rst),
 
-  .alu_vld        (alu_vld),
-  .alu_retired    (alu_retired),
-  .alu_freeze     (alu_freeze | (dpu_vld & dpu_freeze)),
-  .alu_br_miss    (alu_br_miss),
-  .alu_trap       (alu_trap),
-  .alu_PC_next    (alu_PC_next),
+  .exu_vld        (exu_vld),
+  .exu_retired    (exu_retired),
+  .exu_freeze     (exu_freeze | (dpu_vld & dpu_freeze)),
+  .exu_br_miss    (exu_br_miss),
+  .exu_trap       (exu_trap),
+  .exu_PC_next    (exu_PC_next),
 
   .idu_vld   (idu_vld),
   .idu_freeze   (idu_freeze),
@@ -408,11 +408,11 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
   .ifu_inst_br_taken    (ifu_inst_br_taken),
   .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
                              
-  .alu_vld        (alu_vld),
-  .alu_retired    (alu_retired),
-  .alu_freeze     (alu_freeze | (dpu_vld & dpu_freeze)),
-  .alu_br_miss    (alu_br_miss),
-  .alu_trap       (alu_trap),
+  .alu_vld        (exu_vld),
+  .alu_retired    (exu_retired),
+  .alu_freeze     (exu_freeze | (dpu_vld & dpu_freeze)),
+  .alu_br_miss    (exu_br_miss),
+  .alu_trap       (exu_trap),
 
   .idu_vld   (idu_vld),
   .idu_freeze   (idu_freeze),
@@ -534,15 +534,15 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .dpu_vld        (dpu_vld),
   .dpu_freeze     (dpu_freeze),
 
-  .exu_vld          (alu_vld),
-  .exu_retired    (alu_retired),
-  .exu_freeze     (alu_freeze),
-  .exu_br         (alu_br),
-  .exu_br_taken   (alu_br_taken),
-  .exu_br_miss      (alu_br_miss),
-  .exu_trap       (alu_trap),
-  .exu_PC         (alu_PC),
-  .exu_PC_next    (alu_PC_next),
+  .exu_vld          (exu_vld),
+  .exu_retired    (exu_retired),
+  .exu_freeze     (exu_freeze),
+  .exu_br         (exu_br),
+  .exu_br_taken   (exu_br_taken),
+  .exu_br_miss      (exu_br_miss),
+  .exu_trap       (exu_trap),
+  .exu_PC         (exu_PC),
+  .exu_PC_next    (exu_PC_next),
                                
   .idu_vld          (idu_vld),
   .idu_inst             (idu_inst    ),

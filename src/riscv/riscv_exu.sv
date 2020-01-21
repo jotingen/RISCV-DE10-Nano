@@ -5,37 +5,37 @@ module riscv_exu #(
   input  logic        rst,
 
 `ifdef RISCV_FORMAL
-  output reg          rvfi_valid,
-  output reg   [63:0] rvfi_order,
-  output reg   [31:0] rvfi_insn,
-  output reg          rvfi_trap,
-  output reg          rvfi_halt,
-  output reg          rvfi_intr,
-  output reg   [ 1:0] rvfi_mode,
-  output reg   [ 1:0] rvfi_ixl,
-  output reg   [ 4:0] rvfi_rs1_addr,
-  output reg   [ 4:0] rvfi_rs2_addr,
-  output reg   [31:0] rvfi_rs1_rdata,
-  output reg   [31:0] rvfi_rs2_rdata,
-  output reg   [ 4:0] rvfi_rd_addr,
-  output reg   [31:0] rvfi_rd_wdata,
-  output reg   [31:0] rvfi_pc_rdata,
-  output reg   [31:0] rvfi_pc_wdata,
-  output reg   [31:0] rvfi_mem_addr,
-  output reg   [ 3:0] rvfi_mem_rmask,
-  output reg   [ 3:0] rvfi_mem_wmask,
-  output reg   [31:0] rvfi_mem_rdata,
-  output reg   [31:0] rvfi_mem_wdata,
+  output reg   [5:0]       rvfi_valid,
+  output reg   [5:0][63:0] rvfi_order,
+  output reg   [5:0][31:0] rvfi_insn,
+  output reg   [5:0]       rvfi_trap,
+  output reg   [5:0]       rvfi_halt,
+  output reg   [5:0]       rvfi_intr,
+  output reg   [5:0][ 1:0] rvfi_mode,
+  output reg   [5:0][ 1:0] rvfi_ixl,
+  output reg   [5:0][ 4:0] rvfi_rs1_addr,
+  output reg   [5:0][ 4:0] rvfi_rs2_addr,
+  output reg   [5:0][31:0] rvfi_rs1_rdata,
+  output reg   [5:0][31:0] rvfi_rs2_rdata,
+  output reg   [5:0][ 4:0] rvfi_rd_addr,
+  output reg   [5:0][31:0] rvfi_rd_wdata,
+  output reg   [5:0][31:0] rvfi_pc_rdata,
+  output reg   [5:0][31:0] rvfi_pc_wdata,
+  output reg   [5:0][31:0] rvfi_mem_addr,
+  output reg   [5:0][ 3:0] rvfi_mem_rmask,
+  output reg   [5:0][ 3:0] rvfi_mem_wmask,
+  output reg   [5:0][31:0] rvfi_mem_rdata,
+  output reg   [5:0][31:0] rvfi_mem_wdata,
 
-  output reg   [63:0] rvfi_csr_mcycle_rmask,
-  output reg   [63:0] rvfi_csr_mcycle_wmask,
-  output reg   [63:0] rvfi_csr_mcycle_rdata,
-  output reg   [63:0] rvfi_csr_mcycle_wdata,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_rmask,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_wmask,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_rdata,
+  output reg   [5:0][63:0] rvfi_csr_mcycle_wdata,
 
-  output reg   [63:0] rvfi_csr_minstret_rmask,
-  output reg   [63:0] rvfi_csr_minstret_wmask,
-  output reg   [63:0] rvfi_csr_minstret_rdata,
-  output reg   [63:0] rvfi_csr_minstret_wdata,
+  output reg   [5:0][63:0] rvfi_csr_minstret_rmask,
+  output reg   [5:0][63:0] rvfi_csr_minstret_wmask,
+  output reg   [5:0][63:0] rvfi_csr_minstret_rdata,
+  output reg   [5:0][63:0] rvfi_csr_minstret_wdata,
 `endif
 
   output logic        dpu_vld,
@@ -1182,37 +1182,185 @@ always_ff @(posedge clk)
   
 always_comb
   begin
-  rvfi_valid = exu_vld & exu_retired;// & ~exu_FENCE;
-  rvfi_order = order;
-  rvfi_insn = exu_inst;
-  rvfi_trap = exu_trap;
-  rvfi_halt = '0;
-  rvfi_intr = '0;
-  rvfi_mode = '0;
-  rvfi_ixl = '0;
-  rvfi_rs1_addr = exu_rs1;
-  rvfi_rs2_addr = exu_rs2;
-  rvfi_rs1_rdata = exu_rs1_data;
-  rvfi_rs2_rdata = exu_rs2_data;
-  rvfi_rd_addr = exu_rd;
-  rvfi_rd_wdata = exu_rd_data;
-  rvfi_pc_rdata = exu_PC;
-  rvfi_pc_wdata = exu_PC_next;
-  rvfi_mem_addr = bus_addr;
-  rvfi_mem_rmask = {4{lsu_vld}} & bus_data_rd_mask;
-  rvfi_mem_wmask = {4{lsu_vld}} & bus_data_wr_mask;
-  rvfi_mem_rdata = {32{lsu_vld}} & exu_mem_rdata;
-  rvfi_mem_wdata = {32{lsu_vld}} & bus_data_wr;
+  rvfi_valid[0]              = alu_vld;
+  rvfi_order[0]              = order;
+  rvfi_insn[0]               = alu_inst;
+  rvfi_trap[0]               = alu_trap;
+  rvfi_halt[0]               = '0;
+  rvfi_intr[0]               = '0;
+  rvfi_mode[0]               = '0;
+  rvfi_ixl[0]                = '0;
+  rvfi_rs1_addr[0]           = alu_rs1;
+  rvfi_rs2_addr[0]           = alu_rs2;
+  rvfi_rs1_rdata[0]          = alu_rs1_data;
+  rvfi_rs2_rdata[0]          = alu_rs2_data;
+  rvfi_rd_addr[0]            = alu_rd;
+  rvfi_rd_wdata[0]           = alu_rd_data;
+  rvfi_pc_rdata[0]           = alu_PC;
+  rvfi_pc_wdata[0]           = alu_PC_next;
+  rvfi_mem_addr[0]           = '0;
+  rvfi_mem_rmask[0]          = '0;
+  rvfi_mem_wmask[0]          = '0;
+  rvfi_mem_rdata[0]          = '0;
+  rvfi_mem_wdata[0]          = '0;
+  rvfi_csr_mcycle_rmask[0]   = '0;
+  rvfi_csr_mcycle_wmask[0]   = '0;
+  rvfi_csr_mcycle_rdata[0]   = '0;
+  rvfi_csr_mcycle_wdata[0]   = '0;
+  rvfi_csr_minstret_rmask[0] = '0;
+  rvfi_csr_minstret_wmask[0] = '0;
+  rvfi_csr_minstret_rdata[0] = '0;
+  rvfi_csr_minstret_wdata[0] = '0;
 
-  rvfi_csr_mcycle_rmask = csr_write ? '0 : csr_mask;
-  rvfi_csr_mcycle_wmask = csr_write ? csr_mask : '0;
-  rvfi_csr_mcycle_rdata = csr_data_rd; 
-  rvfi_csr_mcycle_wdata = csr_data_wr;
+  rvfi_valid[1]              = mpu_vld & mpu_retired;
+  rvfi_order[1]              = order;
+  rvfi_insn[1]               = mpu_inst;
+  rvfi_trap[1]               = mpu_trap;
+  rvfi_halt[1]               = '0;
+  rvfi_intr[1]               = '0;
+  rvfi_mode[1]               = '0;
+  rvfi_ixl[1]                = '0;
+  rvfi_rs1_addr[1]           = mpu_rs1;
+  rvfi_rs2_addr[1]           = mpu_rs2;
+  rvfi_rs1_rdata[1]          = mpu_rs1_data;
+  rvfi_rs2_rdata[1]          = mpu_rs2_data;
+  rvfi_rd_addr[1]            = mpu_rd;
+  rvfi_rd_wdata[1]           = mpu_rd_data;
+  rvfi_pc_rdata[1]           = mpu_PC;
+  rvfi_pc_wdata[1]           = mpu_PC_next;
+  rvfi_mem_addr[1]           = '0;
+  rvfi_mem_rmask[1]          = '0;
+  rvfi_mem_wmask[1]          = '0;
+  rvfi_mem_rdata[1]          = '0;
+  rvfi_mem_wdata[1]          = '0;
+  rvfi_csr_mcycle_rmask[1]   = '0;
+  rvfi_csr_mcycle_wmask[1]   = '0;
+  rvfi_csr_mcycle_rdata[1]   = '0;
+  rvfi_csr_mcycle_wdata[1]   = '0;
+  rvfi_csr_minstret_rmask[1] = '0;
+  rvfi_csr_minstret_wmask[1] = '0;
+  rvfi_csr_minstret_rdata[1] = '0;
+  rvfi_csr_minstret_wdata[1] = '0;
 
-  rvfi_csr_minstret_rmask = '0;
-  rvfi_csr_minstret_wmask = '0;
-  rvfi_csr_minstret_rdata = '0;
-  rvfi_csr_minstret_wdata = '0;
+  rvfi_valid[2]              = dvu_vld & dvu_retired;
+  rvfi_order[2]              = order;
+  rvfi_insn[2]               = dvu_inst;
+  rvfi_trap[2]               = dvu_trap;
+  rvfi_halt[2]               = '0;
+  rvfi_intr[2]               = '0;
+  rvfi_mode[2]               = '0;
+  rvfi_ixl[2]                = '0;
+  rvfi_rs1_addr[2]           = dvu_rs1;
+  rvfi_rs2_addr[2]           = dvu_rs2;
+  rvfi_rs1_rdata[2]          = dvu_rs1_data;
+  rvfi_rs2_rdata[2]          = dvu_rs2_data;
+  rvfi_rd_addr[2]            = dvu_rd;
+  rvfi_rd_wdata[2]           = dvu_rd_data;
+  rvfi_pc_rdata[2]           = dvu_PC;
+  rvfi_pc_wdata[2]           = dvu_PC_next;
+  rvfi_mem_addr[2]           = '0;
+  rvfi_mem_rmask[2]          = '0;
+  rvfi_mem_wmask[2]          = '0;
+  rvfi_mem_rdata[2]          = '0;
+  rvfi_mem_wdata[2]          = '0;
+  rvfi_csr_mcycle_rmask[2]   = '0;
+  rvfi_csr_mcycle_wmask[2]   = '0;
+  rvfi_csr_mcycle_rdata[2]   = '0;
+  rvfi_csr_mcycle_wdata[2]   = '0;
+  rvfi_csr_minstret_rmask[2] = '0;
+  rvfi_csr_minstret_wmask[2] = '0;
+  rvfi_csr_minstret_rdata[2] = '0;
+  rvfi_csr_minstret_wdata[2] = '0;
+
+  rvfi_valid[3]              = lsu_vld & lsu_retired;// & ~exu_FENCE;
+  rvfi_order[3]              = order;
+  rvfi_insn[3]               = lsu_inst;
+  rvfi_trap[3]               = lsu_trap;
+  rvfi_halt[3]               = '0;
+  rvfi_intr[3]               = '0;
+  rvfi_mode[3]               = '0;
+  rvfi_ixl[3]                = '0;
+  rvfi_rs1_addr[3]           = lsu_rs1;
+  rvfi_rs2_addr[3]           = lsu_rs2;
+  rvfi_rs1_rdata[3]          = lsu_rs1_data;
+  rvfi_rs2_rdata[3]          = lsu_rs2_data;
+  rvfi_rd_addr[3]            = lsu_rd;
+  rvfi_rd_wdata[3]           = lsu_rd_data;
+  rvfi_pc_rdata[3]           = lsu_PC;
+  rvfi_pc_wdata[3]           = lsu_PC_next;
+  rvfi_mem_addr[3]           = bus_addr;
+  rvfi_mem_rmask[3]          = {4{lsu_vld}} & bus_data_rd_mask;
+  rvfi_mem_wmask[3]          = {4{lsu_vld}} & bus_data_wr_mask;
+  rvfi_mem_rdata[3]          = {32{lsu_vld}} & lsu_mem_rdata;
+  rvfi_mem_wdata[3]          = {32{lsu_vld}} & bus_data_wr;
+  rvfi_csr_mcycle_rmask[3]   = '0;
+  rvfi_csr_mcycle_wmask[3]   = '0;
+  rvfi_csr_mcycle_rdata[3]   = '0;
+  rvfi_csr_mcycle_wdata[3]   = '0;
+  rvfi_csr_minstret_rmask[3] = '0;
+  rvfi_csr_minstret_wmask[3] = '0;
+  rvfi_csr_minstret_rdata[3] = '0;
+  rvfi_csr_minstret_wdata[3] = '0;
+
+  rvfi_valid[4]              = csu_vld & csu_retired;// & ~csu_FENCE;
+  rvfi_order[4]              = order;
+  rvfi_insn[4]               = csu_inst;
+  rvfi_trap[4]               = csu_trap;
+  rvfi_halt[4]               = '0;
+  rvfi_intr[4]               = '0;
+  rvfi_mode[4]               = '0;
+  rvfi_ixl[4]                = '0;
+  rvfi_rs1_addr[4]           = csu_rs1;
+  rvfi_rs2_addr[4]           = csu_rs2;
+  rvfi_rs1_rdata[4]          = csu_rs1_data;
+  rvfi_rs2_rdata[4]          = csu_rs2_data;
+  rvfi_rd_addr[4]            = csu_rd;
+  rvfi_rd_wdata[4]           = csu_rd_data;
+  rvfi_pc_rdata[4]           = csu_PC;
+  rvfi_pc_wdata[4]           = csu_PC_next;
+  rvfi_mem_addr[4]           = '0;
+  rvfi_mem_rmask[4]          = '0;
+  rvfi_mem_wmask[4]          = '0;
+  rvfi_mem_rdata[4]          = '0;
+  rvfi_mem_wdata[4]          = '0;
+  rvfi_csr_mcycle_rmask[4]   = csr_write ? '0 : csr_mask;
+  rvfi_csr_mcycle_wmask[4]   = csr_write ? csr_mask : '0;
+  rvfi_csr_mcycle_rdata[4]   = csr_data_rd; 
+  rvfi_csr_mcycle_wdata[4]   = csr_data_wr;
+  rvfi_csr_minstret_rmask[4] = '0;
+  rvfi_csr_minstret_wmask[4] = '0;
+  rvfi_csr_minstret_rdata[4] = '0;
+  rvfi_csr_minstret_wdata[4] = '0;
+
+  rvfi_valid[5]              = bru_vld;
+  rvfi_order[5]              = order;
+  rvfi_insn[5]               = bru_inst;
+  rvfi_trap[5]               = bru_trap;
+  rvfi_halt[5]               = '0;
+  rvfi_intr[5]               = '0;
+  rvfi_mode[5]               = '0;
+  rvfi_ixl[5]                = '0;
+  rvfi_rs1_addr[5]           = bru_rs1;
+  rvfi_rs2_addr[5]           = bru_rs2;
+  rvfi_rs1_rdata[5]          = bru_rs1_data;
+  rvfi_rs2_rdata[5]          = bru_rs2_data;
+  rvfi_rd_addr[5]            = bru_rd;
+  rvfi_rd_wdata[5]           = bru_rd_data;
+  rvfi_pc_rdata[5]           = bru_PC;
+  rvfi_pc_wdata[5]           = bru_PC_next;
+  rvfi_mem_addr[5]           = '0;
+  rvfi_mem_rmask[5]          = '0;
+  rvfi_mem_wmask[5]          = '0;
+  rvfi_mem_rdata[5]          = '0;
+  rvfi_mem_wdata[5]          = '0;
+  rvfi_csr_mcycle_rmask[5]   = '0;
+  rvfi_csr_mcycle_wmask[5]   = '0;
+  rvfi_csr_mcycle_rdata[5]   = '0;
+  rvfi_csr_mcycle_wdata[5]   = '0;
+  rvfi_csr_minstret_rmask[5] = '0;
+  rvfi_csr_minstret_wmask[5] = '0;
+  rvfi_csr_minstret_rdata[5] = '0;
+  rvfi_csr_minstret_wdata[5] = '0;
   end
 `endif
 endmodule
