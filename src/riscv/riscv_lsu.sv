@@ -6,6 +6,7 @@ module riscv_lsu(
 
   output logic        lsu_vld,
   output logic [31:0] lsu_inst,
+  output logic [63:0] lsu_order,
   output logic        lsu_retired,
   output logic        lsu_freeze,
   output logic        lsu_trap,
@@ -22,6 +23,7 @@ module riscv_lsu(
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
 
   input  logic  [3:0] dpu_fm,
@@ -110,6 +112,7 @@ always_ff @(posedge clk)
   lsu_trap       <= '0;   
 
   lsu_inst    <= lsu_inst;      
+  lsu_order   <= lsu_order;      
   lsu_fm      <= lsu_fm;        
   lsu_pred    <= lsu_pred;      
   lsu_succ    <= lsu_succ;      
@@ -141,6 +144,7 @@ always_ff @(posedge clk)
     begin
     lsu_vld     <= dpu_vld;
     lsu_inst    <= dpu_inst;      
+    lsu_order   <= dpu_order;      
     lsu_PC      <= dpu_PC;      
 
     lsu_retired <= '0;
@@ -482,6 +486,7 @@ always_ff @(posedge clk)
     bus_data_wr  <= '0 ;
 
     lsu_inst    <= '0;
+    lsu_order   <= '0;
     lsu_fm      <= '0;
     lsu_pred    <= '0;
     lsu_succ    <= '0;

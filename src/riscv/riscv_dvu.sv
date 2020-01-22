@@ -8,6 +8,7 @@ module riscv_dvu#(
 
   output logic        dvu_vld,
   output logic [31:0] dvu_inst,
+  output logic [63:0] dvu_order,
   output logic        dvu_retired,
   output logic        dvu_freeze,
   output logic        dvu_trap,
@@ -23,6 +24,7 @@ module riscv_dvu#(
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
 
   input  logic  [3:0] dpu_fm,
@@ -91,6 +93,7 @@ always_ff @(posedge clk)
   dvu_trap       <= '0;   
 
   dvu_inst    <= dvu_inst;      
+  dvu_order   <= dvu_order;      
   dvu_fm      <= dvu_fm;        
   dvu_pred    <= dvu_pred;      
   dvu_succ    <= dvu_succ;      
@@ -116,6 +119,7 @@ always_ff @(posedge clk)
     begin
     dvu_vld     <= '1;
     dvu_inst    <= dpu_inst;      
+    dvu_order   <= dpu_order;      
     dvu_PC      <= dpu_PC;      
 
     dvu_retired <= '0;
@@ -272,6 +276,7 @@ always_ff @(posedge clk)
     dvu_rd_data <= '0;
 
     dvu_inst    <= '0;
+    dvu_order   <= '0;
     dvu_fm      <= '0;
     dvu_pred    <= '0;
     dvu_succ    <= '0;

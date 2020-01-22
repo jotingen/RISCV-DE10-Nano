@@ -4,6 +4,7 @@ module riscv_ifu (
   input  logic             rst,
 
   input  logic             exu_vld,
+  input  logic [63:0]      exu_order_next,
   input  logic             exu_retired,
   input  logic             exu_freeze,
   input  logic             exu_br_miss,
@@ -19,6 +20,7 @@ module riscv_ifu (
 
   output logic             ifu_vld,
   output logic [31:0]      ifu_inst,
+  output logic [63:32]     ifu_inst_order,
   output logic [31:0]      ifu_inst_PC,
   output logic             ifu_inst_br_taken,
   output logic [31:0]      ifu_inst_br_pred_PC_next,
@@ -58,7 +60,11 @@ logic loaded;
 logic [3:0] pre_ifu_era;
 
 logic             pre_ifu_vld;
+logic [63:32]     pre_ifu_order;
 logic [31:0]      instbus_data;
+
+logic [63:32] ifu_buff_order_in;
+logic [63:32] ifu_buff_order_out;
 
 logic        ifu_buff_addr_wrreq;
 logic [31:0] ifu_buff_addr_in;
@@ -94,6 +100,28 @@ assign bus_inst_tga_o   = pre_ifu_br_pred_taken;
 assign bus_inst_tgd_o   = '0;
 assign bus_inst_tgc_o   = pre_ifu_era;
 
+ifu_buff ifu_buff_order_1 (
+  .clock ( clk ),
+  .data  ( ifu_buff_order_in[63:32] ),
+  .rdreq ( ifu_buff_addr_ack ),
+  .sclr  ( ifu_buff_addr_clear ),
+  .wrreq ( ifu_buff_addr_wrreq ),
+  .empty (  ),
+  .almost_full  (  ),
+  .q     ( ifu_buff_order_out[63:32] ),
+  .usedw (  )
+  );
+ifu_buff ifu_buff_order_0 (
+  .clock ( clk ),
+  .data  ( ifu_buff_order_in[31:0] ),
+  .rdreq ( ifu_buff_addr_ack ),
+  .sclr  ( ifu_buff_addr_clear ),
+  .wrreq ( ifu_buff_addr_wrreq ),
+  .empty (  ),
+  .almost_full  (  ),
+  .q     ( ifu_buff_order_out[31:0] ),
+  .usedw (  )
+  );
 ifu_buff ifu_buff_addr (
   .clock ( clk ),
   .data  ( ifu_buff_addr_in ),
@@ -176,12 +204,14 @@ always_ff @(posedge clk)
 
   ifu_vld           <= ifu_vld;   
   ifu_inst          <= ifu_inst;  
+  ifu_inst_order    <= ifu_inst_order;
   ifu_inst_PC       <= ifu_inst_PC;
   ifu_inst_br_taken <= ifu_inst_br_taken;
   ifu_inst_br_pred_PC_next <= ifu_inst_br_pred_PC_next;
 
   pre_ifu_era          <= pre_ifu_era;
 
+  ifu_buff_order_in    <= '0;
   ifu_buff_addr_in     <= '0;
   ifu_buff_addr_clear  <= '0;
   ifu_buff_addr_wrreq  <= '0;
@@ -200,14 +230,17 @@ always_ff @(posedge clk)
 
     if(pre_ifu_br_pred_taken)
       begin
-      pre_ifu_PC <= pre_ifu_br_pred_PC_next;
+      pre_ifu_order <= pre_ifu_order + 'd1; 
+      pre_ifu_PC    <= pre_ifu_br_pred_PC_next;
       end
     else
       begin
-      pre_ifu_PC <= pre_ifu_PC + 'd4;
+      pre_ifu_order <= pre_ifu_order + 'd1;
+      pre_ifu_PC    <= pre_ifu_PC + 'd4;
       end
 
     ifu_buff_addr_wrreq  <= '1;
+    ifu_buff_order_in    <= pre_ifu_order;
     ifu_buff_addr_in     <= pre_ifu_PC;
     ifu_buff_br_taken_in <= pre_ifu_br_pred_taken;
     if(pre_ifu_br_pred_taken)
@@ -236,6 +269,7 @@ always_ff @(posedge clk)
       begin
       ifu_vld           <= '1;
       ifu_inst          <= ifu_buff_data_out;
+      ifu_inst_order    <= ifu_buff_order_out;
       ifu_inst_PC       <= ifu_buff_addr_out;
       ifu_inst_br_taken <= ifu_buff_br_taken_out;
       ifu_inst_br_pred_PC_next <= ifu_buff_br_pred_PC_next_out;
@@ -250,6 +284,7 @@ always_ff @(posedge clk)
   if(exu_vld & exu_br_miss)
     begin
     ifu_vld     <= '0;
+    pre_ifu_order  <= exu_order_next;
     pre_ifu_PC <= exu_PC_next;
     pre_ifu_era          <= pre_ifu_era + 'd1;
 
@@ -259,7 +294,8 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
-    pre_ifu_PC  <= '0;
+    pre_ifu_order  <= '0;
+    pre_ifu_PC     <= '0;
 
     pre_ifu_era           <= '0;
 

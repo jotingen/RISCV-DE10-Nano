@@ -43,6 +43,8 @@ module riscv_exu #(
 
   output logic        exu_vld,
   output logic [31:0] exu_inst,
+  output logic [63:0] exu_order,
+  output logic [63:0] exu_order_next,
   output logic        exu_retired,
   output logic        exu_freeze,
   output logic        exu_br,
@@ -62,6 +64,7 @@ module riscv_exu #(
 
   input  logic        idu_vld,
   input  logic [31:0] idu_inst,
+  input  logic [63:0] idu_inst_order,
   input  logic [31:0] idu_inst_PC,
   input  logic        idu_inst_br_taken,
   input  logic [31:0] idu_inst_br_pred_PC_next,
@@ -223,6 +226,7 @@ module riscv_exu #(
 
 logic        alu_vld;
 logic [31:0] alu_inst;
+logic [63:0] alu_order;
 logic        alu_trap;
 logic [31:0] alu_PC;
 logic [31:0] alu_PC_next;
@@ -236,6 +240,7 @@ logic [31:0] alu_rd_data;
 
 logic        mpu_vld;
 logic [31:0] mpu_inst;
+logic [63:0] mpu_order;
 logic        mpu_retired;
 logic        mpu_freeze;
 logic        mpu_trap;
@@ -251,6 +256,7 @@ logic [31:0] mpu_rd_data;
 
 logic        dvu_vld;
 logic [31:0] dvu_inst;
+logic [63:0] dvu_order;
 logic        dvu_retired;
 logic        dvu_freeze;
 logic        dvu_trap;
@@ -266,6 +272,7 @@ logic [31:0] dvu_rd_data;
 
 logic        lsu_vld;
 logic [31:0] lsu_inst;
+logic [63:0] lsu_order;
 logic        lsu_retired;
 logic        lsu_freeze;
 logic        lsu_trap;
@@ -282,6 +289,7 @@ logic [31:0] lsu_mem_rdata;
 
 logic        csu_vld;
 logic [31:0] csu_inst;
+logic [63:0] csu_order;
 logic        csu_retired;
 logic        csu_freeze;
 logic        csu_trap;
@@ -297,6 +305,7 @@ logic [31:0] csu_rd_data;
 
 logic        bru_vld;
 logic [31:0] bru_inst;
+logic [63:0] bru_order;
 logic        bru_br;
 logic        bru_br_taken;
 logic        bru_br_miss;
@@ -328,6 +337,7 @@ logic [31:0] exu_br_pred_PC_next;
 logic        exu_mem_access;
 
 logic [31:0] dpu_inst;
+logic [63:0] dpu_order;
 logic  [3:0] dpu_fm;
 logic  [3:0] dpu_pred;
 logic  [3:0] dpu_succ;
@@ -407,6 +417,7 @@ logic dpu_TRAP;
 
 logic        wbu_vld;
 logic [31:0] wbu_inst;
+logic [63:0] wbu_order;
 logic        wbu_retired;
 logic        wbu_freeze;
 logic        wbu_br;
@@ -497,6 +508,7 @@ riscv_dpu dpu (
   .dpu_TRAP,
    
   .dpu_inst,
+  .dpu_order,
   .dpu_PC,
   .dpu_br_pred_PC_next,
   .dpu_fm,
@@ -529,6 +541,7 @@ riscv_dpu dpu (
    
   .idu_vld,
   .idu_inst,
+  .idu_inst_order,
   .idu_inst_PC,
   .idu_inst_br_taken,
   .idu_inst_br_pred_PC_next,
@@ -673,6 +686,7 @@ riscv_alu alu (
 
   .alu_vld          (alu_vld),
   .alu_inst             (alu_inst    ),
+  .alu_order            (alu_order   ),
   .alu_trap         (alu_trap),
   .alu_PC           (alu_PC),
   .alu_PC_next      (alu_PC_next),
@@ -686,6 +700,7 @@ riscv_alu alu (
                                  
   .dpu_vld          (dpu_alu_vld),
   .dpu_inst             (dpu_inst    ),
+  .dpu_order            (dpu_order   ),
   .dpu_PC          (dpu_PC),
 
   .dpu_fm               (dpu_fm      ),
@@ -739,6 +754,7 @@ riscv_mpu mpu (
 
   .mpu_vld          (mpu_vld),
   .mpu_inst         (mpu_inst    ),
+  .mpu_order        (mpu_order   ),
   .mpu_retired      (mpu_retired),
   .mpu_freeze       (mpu_freeze),
   .mpu_trap         (mpu_trap),
@@ -754,6 +770,7 @@ riscv_mpu mpu (
                                  
   .dpu_vld          (dpu_mpu_vld),
   .dpu_inst         (dpu_inst    ),
+  .dpu_order        (dpu_order   ),
   .dpu_PC           (dpu_PC),
 
   .dpu_fm               (dpu_fm      ),
@@ -785,6 +802,7 @@ riscv_dvu dvu (
 
   .dvu_vld          (dvu_vld),
   .dvu_inst         (dvu_inst    ),
+  .dvu_order        (dvu_order   ),
   .dvu_retired      (dvu_retired),
   .dvu_freeze       (dvu_freeze),
   .dvu_trap         (dvu_trap),
@@ -800,6 +818,7 @@ riscv_dvu dvu (
                                  
   .dpu_vld          (dpu_dvu_vld),
   .dpu_inst         (dpu_inst    ),
+  .dpu_order        (dpu_order   ),
   .dpu_PC           (dpu_PC),
 
   .dpu_fm               (dpu_fm      ),
@@ -831,6 +850,7 @@ riscv_lsu lsu (
 
   .lsu_vld          (lsu_vld),
   .lsu_inst         (lsu_inst    ),
+  .lsu_order        (lsu_order   ),
   .lsu_retired      (lsu_retired),
   .lsu_freeze       (lsu_freeze),
   .lsu_trap         (lsu_trap),
@@ -847,6 +867,7 @@ riscv_lsu lsu (
                                  
   .dpu_vld          (dpu_lsu_vld),
   .dpu_inst         (dpu_inst    ),
+  .dpu_order        (dpu_order   ),
   .dpu_PC           (dpu_PC),
 
   .dpu_fm               (dpu_fm      ),
@@ -891,6 +912,7 @@ riscv_csu csu (
 
   .csu_vld          (csu_vld),
   .csu_inst         (csu_inst    ),
+  .csu_order        (csu_order   ),
   .csu_retired      (csu_retired),
   .csu_freeze       (csu_freeze),
   .csu_trap         (csu_trap),
@@ -906,6 +928,7 @@ riscv_csu csu (
                                  
   .dpu_vld          (dpu_csu_vld),
   .dpu_inst         (dpu_inst    ),
+  .dpu_order        (dpu_order   ),
   .dpu_PC           (dpu_PC),
 
   .dpu_fm               (dpu_fm      ),
@@ -947,6 +970,7 @@ riscv_bru bru (
 
   .bru_vld          (bru_vld),
   .bru_inst             (bru_inst    ),
+  .bru_order            (bru_order   ),
   .bru_br           (bru_br),
   .bru_br_taken     (bru_br_taken),
   .bru_br_miss      (bru_br_miss),
@@ -963,6 +987,7 @@ riscv_bru bru (
                                  
   .dpu_vld              (dpu_bru_vld),
   .dpu_inst             (dpu_inst    ),
+  .dpu_order            (dpu_order   ),
   .dpu_PC               (dpu_PC),
   .dpu_br_taken         (dpu_br_taken),
   .dpu_br_pred_PC_next  (dpu_br_pred_PC_next),
@@ -1000,6 +1025,7 @@ riscv_bru bru (
 riscv_wbu wbu (
   .wbu_vld,
   .wbu_inst,
+  .wbu_order,
   .wbu_retired,
   .wbu_freeze,
   .wbu_br,
@@ -1053,6 +1079,7 @@ riscv_wbu wbu (
    
   .alu_vld,
   .alu_inst,
+  .alu_order,
   .alu_trap,
   .alu_PC,
   .alu_PC_next,
@@ -1066,6 +1093,7 @@ riscv_wbu wbu (
    
   .mpu_vld,
   .mpu_inst,
+  .mpu_order,
   .mpu_retired,
   .mpu_freeze,
   .mpu_trap,
@@ -1081,6 +1109,7 @@ riscv_wbu wbu (
    
   .dvu_vld,
   .dvu_inst,
+  .dvu_order,
   .dvu_retired,
   .dvu_freeze,
   .dvu_trap,
@@ -1096,6 +1125,7 @@ riscv_wbu wbu (
    
   .lsu_vld,
   .lsu_inst,
+  .lsu_order,
   .lsu_retired,
   .lsu_freeze,
   .lsu_trap,
@@ -1112,6 +1142,7 @@ riscv_wbu wbu (
    
   .csu_vld,
   .csu_inst,
+  .csu_order,
   .csu_retired,
   .csu_freeze,
   .csu_trap,
@@ -1127,6 +1158,7 @@ riscv_wbu wbu (
    
   .bru_vld,
   .bru_inst,
+  .bru_order,
   .bru_br,
   .bru_br_taken,
   .bru_br_miss,
@@ -1144,46 +1176,34 @@ riscv_wbu wbu (
 
 always_comb
   begin
-  exu_vld       = wbu_vld;      
-  exu_inst      = wbu_inst;     
-  exu_retired   = wbu_retired;  
-  exu_freeze    = wbu_freeze;   
-  exu_br        = wbu_br;       
-  exu_br_taken  = wbu_br_taken; 
-  exu_br_miss   = wbu_br_miss;  
-  exu_trap      = wbu_trap;     
-  exu_PC        = wbu_PC;       
-  exu_PC_next   = wbu_PC_next;  
-  exu_rs1       = wbu_rs1;      
-  exu_rs2       = wbu_rs2;      
-  exu_rs1_data  = wbu_rs1_data; 
-  exu_rs2_data  = wbu_rs2_data; 
-  exu_rd_wr     = wbu_rd_wr;    
-  exu_rd        = wbu_rd;       
-  exu_rd_data   = wbu_rd_data;  
-  exu_mem_rdata = wbu_mem_rdata;
+  exu_vld        = wbu_vld;      
+  exu_inst       = wbu_inst;     
+  exu_order      = wbu_order;     
+  exu_order_next = wbu_order + 'd1;     
+  exu_retired    = wbu_retired;  
+  exu_freeze     = wbu_freeze;   
+  exu_br         = wbu_br;       
+  exu_br_taken   = wbu_br_taken; 
+  exu_br_miss    = wbu_br_miss;  
+  exu_trap       = wbu_trap;     
+  exu_PC         = wbu_PC;       
+  exu_PC_next    = wbu_PC_next;  
+  exu_rs1        = wbu_rs1;      
+  exu_rs2        = wbu_rs2;      
+  exu_rs1_data   = wbu_rs1_data; 
+  exu_rs2_data   = wbu_rs2_data; 
+  exu_rd_wr      = wbu_rd_wr;    
+  exu_rd         = wbu_rd;       
+  exu_rd_data    = wbu_rd_data;  
+  exu_mem_rdata  = wbu_mem_rdata;
   end
 
 //RVFI interface
 `ifdef RISCV_FORMAL
-logic [63:0] order;
-always_ff @(posedge clk)
-  begin
-  order <= order;
-  if(exu_vld & exu_retired)
-    begin
-    order <= order + 1;
-    end
-  if(rst)
-    begin
-    order <= '0;
-    end
-  end
-  
 always_comb
   begin
   rvfi_valid[0]              = alu_vld;
-  rvfi_order[0]              = order;
+  rvfi_order[0]              = alu_order;
   rvfi_insn[0]               = alu_inst;
   rvfi_trap[0]               = alu_trap;
   rvfi_halt[0]               = '0;
@@ -1213,7 +1233,7 @@ always_comb
   rvfi_csr_minstret_wdata[0] = '0;
 
   rvfi_valid[1]              = mpu_vld & mpu_retired;
-  rvfi_order[1]              = order;
+  rvfi_order[1]              = mpu_order;
   rvfi_insn[1]               = mpu_inst;
   rvfi_trap[1]               = mpu_trap;
   rvfi_halt[1]               = '0;
@@ -1243,7 +1263,7 @@ always_comb
   rvfi_csr_minstret_wdata[1] = '0;
 
   rvfi_valid[2]              = dvu_vld & dvu_retired;
-  rvfi_order[2]              = order;
+  rvfi_order[2]              = dvu_order;
   rvfi_insn[2]               = dvu_inst;
   rvfi_trap[2]               = dvu_trap;
   rvfi_halt[2]               = '0;
@@ -1273,7 +1293,7 @@ always_comb
   rvfi_csr_minstret_wdata[2] = '0;
 
   rvfi_valid[3]              = lsu_vld & lsu_retired;// & ~exu_FENCE;
-  rvfi_order[3]              = order;
+  rvfi_order[3]              = lsu_order;
   rvfi_insn[3]               = lsu_inst;
   rvfi_trap[3]               = lsu_trap;
   rvfi_halt[3]               = '0;
@@ -1303,7 +1323,7 @@ always_comb
   rvfi_csr_minstret_wdata[3] = '0;
 
   rvfi_valid[4]              = csu_vld & csu_retired;// & ~csu_FENCE;
-  rvfi_order[4]              = order;
+  rvfi_order[4]              = csu_order;
   rvfi_insn[4]               = csu_inst;
   rvfi_trap[4]               = csu_trap;
   rvfi_halt[4]               = '0;
@@ -1333,7 +1353,7 @@ always_comb
   rvfi_csr_minstret_wdata[4] = '0;
 
   rvfi_valid[5]              = bru_vld;
-  rvfi_order[5]              = order;
+  rvfi_order[5]              = bru_order;
   rvfi_insn[5]               = bru_inst;
   rvfi_trap[5]               = bru_trap;
   rvfi_halt[5]               = '0;

@@ -8,6 +8,7 @@ module riscv_mpu#(
 
   output logic        mpu_vld,
   output logic [31:0] mpu_inst,
+  output logic [63:0] mpu_order,
   output logic        mpu_retired,
   output logic        mpu_freeze,
   output logic        mpu_trap,
@@ -23,6 +24,7 @@ module riscv_mpu#(
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
   
   input  logic  [3:0] dpu_fm,
@@ -87,6 +89,7 @@ always_ff @(posedge clk)
   mpu_trap       <= '0;   
 
   mpu_inst    <= mpu_inst;      
+  mpu_order   <= mpu_order;      
   mpu_fm      <= mpu_fm;        
   mpu_pred    <= mpu_pred;      
   mpu_succ    <= mpu_succ;      
@@ -112,6 +115,7 @@ always_ff @(posedge clk)
     begin
     mpu_vld     <= dpu_vld;
     mpu_inst    <= dpu_inst;      
+    mpu_order   <= dpu_order;      
     mpu_PC      <= dpu_PC;      
 
     mpu_retired <= '0;
@@ -270,6 +274,7 @@ always_ff @(posedge clk)
     mpu_rd_data <= '0;
 
     mpu_inst    <= '0;
+    mpu_order   <= '0;
     mpu_fm      <= '0;
     mpu_pred    <= '0;
     mpu_succ    <= '0;

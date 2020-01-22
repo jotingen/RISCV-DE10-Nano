@@ -6,6 +6,7 @@ module riscv_bru (
 
   output logic        bru_vld,
   output logic [31:0] bru_inst,
+  output logic [63:0] bru_order,
   output logic        bru_br,
   output logic        bru_br_taken,
   output logic        bru_br_miss,
@@ -22,6 +23,7 @@ module riscv_bru (
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
 
   input  logic        dpu_br_taken,
@@ -102,6 +104,7 @@ always_ff @(posedge clk)
   bru_trap       <= '0;   
 
   bru_inst    <= dpu_inst;      
+  bru_order   <= dpu_order;      
   bru_fm      <= dpu_fm;        
   bru_pred    <= dpu_pred;      
   bru_succ    <= dpu_succ;      
@@ -344,6 +347,7 @@ always_ff @(posedge clk)
     bru_rd_data <= '0;
 
     bru_inst    <= '0;
+    bru_order   <= '0;
     bru_fm      <= '0;
     bru_pred    <= '0;
     bru_succ    <= '0;

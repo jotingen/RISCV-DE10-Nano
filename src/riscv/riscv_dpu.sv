@@ -72,6 +72,7 @@ module riscv_dpu #(
   output logic        dpu_TRAP,
 
   output logic [31:0] dpu_inst,
+  output logic [63:0] dpu_order,
   output logic [31:0] dpu_PC,
   output logic [31:0] dpu_br_pred_PC_next,
   output logic  [3:0] dpu_fm,
@@ -104,6 +105,7 @@ module riscv_dpu #(
 
   input  logic        idu_vld,
   input  logic [31:0] idu_inst,
+  input  logic [63:0] idu_inst_order,
   input  logic [31:0] idu_inst_PC,
   input  logic        idu_inst_br_taken,
   input  logic [31:0] idu_inst_br_pred_PC_next,
@@ -547,6 +549,7 @@ always_ff @(posedge clk)
   dpu_br_pred_PC_next <= dpu_br_pred_PC_next;
 
   dpu_inst            <= dpu_inst;      
+  dpu_order           <= dpu_order;      
   dpu_fm              <= dpu_fm;        
   dpu_pred            <= dpu_pred;      
   dpu_succ            <= dpu_succ;      
@@ -625,6 +628,7 @@ always_ff @(posedge clk)
     dpu_br_taken        <= idu_inst_br_taken;
     dpu_br_pred_PC_next <= idu_inst_br_pred_PC_next;
     dpu_inst            <= idu_inst;      
+    dpu_order           <= idu_inst_order;      
     dpu_PC              <= idu_inst_PC;      
     dpu_fm              <= idu_decode_fm;        
     dpu_pred            <= idu_decode_pred;      

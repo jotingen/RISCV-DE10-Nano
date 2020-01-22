@@ -148,6 +148,7 @@ logic [31:0]       pre_ifu_br_pred_PC_next;
 
 logic             ifu_req;
 logic [31:0]      ifu_inst;
+logic [63:0]      ifu_inst_order;
 logic [31:0]      ifu_inst_PC;
 logic             ifu_inst_br_taken;
 logic [31:0]      ifu_inst_br_pred_PC_next;
@@ -158,6 +159,7 @@ logic             idu_done;
 logic             ifu_vld;
 logic             idu_vld;
 logic             idu_freeze;
+logic [63:0]      idu_inst_order;
 logic [31:0]      idu_inst_PC;
 logic             idu_inst_br_taken;
 logic [31:0]      idu_inst_br_pred_PC_next;
@@ -166,6 +168,7 @@ logic             dpu_vld;
 logic             dpu_freeze;
 
 logic             exu_vld;
+logic [63:0]      exu_order_next;
 logic             exu_retired;
 logic             exu_freeze;
 logic             exu_br;
@@ -359,6 +362,7 @@ riscv_ifu ifu (
   .rst            (rst),
 
   .exu_vld        (exu_vld),
+  .exu_order_next (exu_order_next),
   .exu_retired    (exu_retired),
   .exu_freeze     (exu_freeze | (dpu_vld & dpu_freeze)),
   .exu_br_miss    (exu_br_miss),
@@ -374,6 +378,7 @@ riscv_ifu ifu (
 
   .ifu_vld        (ifu_vld),
   .ifu_inst       (ifu_inst),
+  .ifu_inst_order       (ifu_inst_order),
   .ifu_inst_PC    (ifu_inst_PC),
   .ifu_inst_br_taken    (ifu_inst_br_taken),
   .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
@@ -404,6 +409,7 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
 
   .ifu_vld   (ifu_vld),
   .ifu_inst  (ifu_inst),
+  .ifu_inst_order       (ifu_inst_order),
   .ifu_inst_PC    (ifu_inst_PC),
   .ifu_inst_br_taken    (ifu_inst_br_taken),
   .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
@@ -417,6 +423,7 @@ riscv_idu #(.M_EXT(M_EXT)) idu (
   .idu_vld   (idu_vld),
   .idu_freeze   (idu_freeze),
   .idu_inst    (idu_inst),
+  .idu_inst_order       (idu_inst_order),
   .idu_inst_PC    (idu_inst_PC),
   .idu_inst_br_taken    (idu_inst_br_taken),
   .idu_inst_br_pred_PC_next    (idu_inst_br_pred_PC_next),
@@ -535,6 +542,7 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .dpu_freeze     (dpu_freeze),
 
   .exu_vld          (exu_vld),
+  .exu_order_next    (exu_order_next),
   .exu_retired    (exu_retired),
   .exu_freeze     (exu_freeze),
   .exu_br         (exu_br),
@@ -546,6 +554,7 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
                                
   .idu_vld          (idu_vld),
   .idu_inst             (idu_inst    ),
+  .idu_inst_order       (idu_inst_order),
   .idu_inst_PC    (idu_inst_PC),
   .idu_inst_br_taken    (idu_inst_br_taken),
   .idu_inst_br_pred_PC_next    (idu_inst_br_pred_PC_next),
