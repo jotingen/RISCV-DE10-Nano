@@ -273,6 +273,14 @@ initial
   KEY[0] = '1;
 //  ARDUINO_RESET_N = 0; 
   end 
+
+final
+  begin
+  $display("End of test");
+  $display("  %0d Instructions", {dut.riscv.csrfile.csr_C82,dut.riscv.csrfile.csr_C02});
+  $display("  %0.2f Instructions per Cycle",   1.0*({dut.riscv.csrfile.csr_C82,dut.riscv.csrfile.csr_C02})/({dut.riscv.csrfile.csr_C80,dut.riscv.csrfile.csr_C00}));
+  $display("  %0.2fM Instructions per Second", 1.0*({dut.riscv.csrfile.csr_C82,dut.riscv.csrfile.csr_C02})/({dut.riscv.csrfile.csr_C80,dut.riscv.csrfile.csr_C00})*50);
+  end
     
 always 
   begin
