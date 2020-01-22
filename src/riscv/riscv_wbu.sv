@@ -3,6 +3,7 @@ module riscv_wbu #(
 )  (              
   output logic        wbu_vld,
   output logic [31:0] wbu_inst,
+  output logic [63:0] wbu_order,
   output logic        wbu_retired,
   output logic        wbu_freeze,
   output logic        wbu_br,
@@ -56,6 +57,7 @@ module riscv_wbu #(
 
   input  logic        alu_vld,
   input  logic [31:0] alu_inst,
+  input  logic [63:0] alu_order,
   input  logic        alu_trap,
   input  logic [31:0] alu_PC,
   input  logic [31:0] alu_PC_next,
@@ -69,6 +71,7 @@ module riscv_wbu #(
            
   input  logic        mpu_vld,
   input  logic [31:0] mpu_inst,
+  input  logic [63:0] mpu_order,
   input  logic        mpu_retired,
   input  logic        mpu_freeze,
   input  logic        mpu_trap,
@@ -84,6 +87,7 @@ module riscv_wbu #(
            
   input  logic        dvu_vld,
   input  logic [31:0] dvu_inst,
+  input  logic [63:0] dvu_order,
   input  logic        dvu_retired,
   input  logic        dvu_freeze,
   input  logic        dvu_trap,
@@ -99,6 +103,7 @@ module riscv_wbu #(
            
   input  logic        lsu_vld,
   input  logic [31:0] lsu_inst,
+  input  logic [63:0] lsu_order,
   input  logic        lsu_retired,
   input  logic        lsu_freeze,
   input  logic        lsu_trap,
@@ -115,6 +120,7 @@ module riscv_wbu #(
            
   input  logic        csu_vld,
   input  logic [31:0] csu_inst,
+  input  logic [63:0] csu_order,
   input  logic        csu_retired,
   input  logic        csu_freeze,
   input  logic        csu_trap,
@@ -130,6 +136,7 @@ module riscv_wbu #(
            
   input  logic        bru_vld,
   input  logic [31:0] bru_inst,
+  input  logic [63:0] bru_order,
   input  logic        bru_br,
   input  logic        bru_br_taken,
   input  logic        bru_br_miss,
@@ -159,6 +166,12 @@ always_comb
                  ({32{lsu_vld}} & lsu_inst) |
                  ({32{csu_vld}} & csu_inst) |
                  ({32{bru_vld}} & bru_inst);                  
+  wbu_order    = ({64{alu_vld}} & alu_order) | 
+                 ({64{mpu_vld}} & mpu_order) |
+                 ({64{dvu_vld}} & dvu_order) |
+                 ({64{lsu_vld}} & lsu_order) |
+                 ({64{csu_vld}} & csu_order) |
+                 ({64{bru_vld}} & bru_order);                  
   wbu_retired  = alu_vld | 
                  (mpu_vld & mpu_retired)|
                  (dvu_vld & dvu_retired)|

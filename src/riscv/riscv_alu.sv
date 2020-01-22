@@ -6,6 +6,7 @@ module riscv_alu  (
 
   output logic        alu_vld,
   output logic [31:0] alu_inst,
+  output logic [63:0] alu_order,
   output logic        alu_trap,
   output logic [31:0] alu_PC,
   output logic [31:0] alu_PC_next,
@@ -19,6 +20,7 @@ module riscv_alu  (
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
 
   input  logic  [3:0] dpu_fm,
@@ -167,6 +169,7 @@ always_ff @(posedge clk)
   alu_trap       <= '0;   
 
   alu_inst    <= dpu_inst;      
+  alu_order   <= dpu_order;      
   alu_fm      <= dpu_fm;        
   alu_pred    <= dpu_pred;      
   alu_succ    <= dpu_succ;      
@@ -405,6 +408,7 @@ always_ff @(posedge clk)
     alu_rd_data <= '0;
 
     alu_inst    <= '0;
+    alu_order   <= '0;
     alu_fm      <= '0;
     alu_pred    <= '0;
     alu_succ    <= '0;

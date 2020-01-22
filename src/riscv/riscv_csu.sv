@@ -6,6 +6,7 @@ module riscv_csu (
 
   output logic        csu_vld,
   output logic [31:0] csu_inst,
+  output logic [63:0] csu_order,
   output logic        csu_retired,
   output logic        csu_freeze,
   output logic        csu_trap,
@@ -21,6 +22,7 @@ module riscv_csu (
 
   input  logic        dpu_vld,
   input  logic [31:0] dpu_inst,
+  input  logic [63:0] dpu_order,
   input  logic [31:0] dpu_PC,
 
   input  logic  [3:0] dpu_fm,
@@ -100,6 +102,7 @@ always_ff @(posedge clk)
   csu_trap       <= '0;   
 
   csu_inst    <= csu_inst;      
+  csu_order   <= csu_order;      
   csu_fm      <= csu_fm;        
   csu_pred    <= csu_pred;      
   csu_succ    <= csu_succ;      
@@ -128,6 +131,7 @@ always_ff @(posedge clk)
     begin
     csu_vld     <= dpu_vld;
     csu_inst    <= dpu_inst;      
+    csu_order   <= dpu_order;      
     csu_PC      <= dpu_PC;      
 
     csu_retired <= '0;
@@ -415,6 +419,7 @@ always_ff @(posedge clk)
     csr_data_wr  <= '0;
 
     csu_inst    <= '0;
+    csu_order   <= '0;
     csu_fm      <= '0;
     csu_pred    <= '0;
     csu_succ    <= '0;

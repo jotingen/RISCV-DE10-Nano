@@ -6,6 +6,7 @@ module riscv_idu #(
 
   input  logic        ifu_vld,
   input  logic [31:0] ifu_inst,
+  input  logic [63:0] ifu_inst_order,
   input  logic [31:0] ifu_inst_PC,
   input  logic        ifu_inst_br_taken,
   input  logic [31:0] ifu_inst_br_pred_PC_next,
@@ -19,6 +20,7 @@ module riscv_idu #(
   output logic        idu_vld,
   output logic        idu_freeze,
   output logic [31:0] idu_inst,
+  output logic [63:0] idu_inst_order,
   output logic [31:0] idu_inst_PC,
   output logic        idu_inst_br_taken,
   output logic [31:0] idu_inst_br_pred_PC_next,
@@ -187,6 +189,7 @@ always_ff @(posedge clk)
     begin
     idu_vld <= ifu_vld;
     idu_inst    <= ifu_inst;
+    idu_inst_order    <= ifu_inst_order;
     idu_inst_PC <= ifu_inst_PC;
     idu_inst_br_taken    <= ifu_inst_br_taken;
     idu_inst_br_pred_PC_next    <= ifu_inst_br_pred_PC_next;
@@ -892,6 +895,7 @@ always_ff @(posedge clk)
     idu_vld <= idu_vld;
     idu_freeze <= idu_freeze;
     idu_inst    <= idu_inst;
+    idu_inst_order    <= idu_inst_order;
     idu_inst_PC <= idu_inst_PC;
     idu_inst_br_taken    <= idu_inst_br_taken;
     idu_inst_br_pred_PC_next    <= idu_inst_br_pred_PC_next;
