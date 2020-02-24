@@ -8,14 +8,7 @@
 #define LED             (*((volatile unsigned int *) (0xC0000000)))
 
 // Function to reverse elements of an array
-void reverse(uint8_t arr[], int n) {
-	for (int low = 0, high = n - 1; low < high; low++, high--)
-	{
-		uint8_t temp = arr[low];
-		arr[low]     = arr[high];
-		arr[high]    = temp;
-	}
-}
+void reverse(uint8_t arr[], int n);
 
 void main(void) {
   static uint8_t sdcard_data[514];
@@ -31,7 +24,7 @@ void main(void) {
 
   LED = 0x00;
 
-  while(sector_index < 2) {
+  while(sector_index < 40) {
     sdcard_read(sdcard_data,512*sector_index);
 
     for(int i = 0; i < 512; i= i+4) {
@@ -47,8 +40,21 @@ void main(void) {
     LED++;
   }
 
+  reset_cycle();
+  reset_time();
+  reset_instret();
+
   ((void (*)(void))0x10000000)();
 
 }
 
 
+// Function to reverse elements of an array
+void reverse(uint8_t arr[], int n) {
+	for (int low = 0, high = n - 1; low < high; low++, high--)
+	{
+		uint8_t temp = arr[low];
+		arr[low]     = arr[high];
+		arr[high]    = temp;
+	}
+}
