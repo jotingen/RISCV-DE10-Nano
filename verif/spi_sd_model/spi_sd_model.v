@@ -615,7 +615,8 @@ initial
       serial_in1 = 46'h0;
       multi_st = 0;
       block_len = 0;
-      $readmemh("../../output/programs/apps/blinky/blinky_0.v", flash_mem);
+      $readmemh("../../output/programs/benchmarks/primes_0.v", flash_mem);
+      //$readmemh("../../output/programs/apps/blinky/blinky_0.v", flash_mem);
       //for (i = 0; i < MEM_SIZE - 1; i = i + 1) begin
       //   flash_mem[i] = i[7:0]+3;
       //end
