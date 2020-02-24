@@ -69,7 +69,7 @@ logic [31:0] data_in_fifo_data_out_rev;
 logic [31:0] data_in_fifo_data_out;
 logic        data_in_fifo_empty;
 
-//TODO this is 8k becaouse I dont want to deal with CRC, should probably deal and use 4k
+//TODO this is 8k because I dont want to deal with CRC, should probably deal and use 4k
 sdcard_data_in_fifo data_in_fifo (
 	.aclr    (data_in_fifo_clr),
 	.data    (MISO),
@@ -307,7 +307,7 @@ always_ff @(posedge clk)
                           begin
                           if(data_capture)
                             begin
-                            data <= '1;
+                            data <= '0;
                             data_pending_timeout <= '0;
                             data_32b_out<= '0;
                             rspArrived <= '1;  
