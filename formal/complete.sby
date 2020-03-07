@@ -16,10 +16,18 @@ verilog_defines -D RISCV_FORMAL_ALIGNED_MEM
 read_verilog -sv rvfi_macros.vh
 read_verilog -sv riscv.sv
 read_verilog -sv riscv_alu.sv
+read_verilog -sv riscv_br_pred.sv
+read_verilog -sv riscv_bru.sv
 read_verilog -sv riscv_csr.sv
+read_verilog -sv riscv_dpu.sv
+read_verilog -sv riscv_dvu.sv
+read_verilog -sv riscv_exu.sv
 read_verilog -sv riscv_idu.sv
 read_verilog -sv riscv_ifu.sv
+read_verilog -sv riscv_lsu.sv
+read_verilog -sv riscv_mpu.sv
 read_verilog -sv riscv_regfile.sv
+read_verilog -sv riscv_wbu.sv
 read_verilog -sv multiplier.v
 read_verilog -sv multiplier_unsigned.v
 read_verilog -sv multiplier_signed_unsigned.v
@@ -41,10 +49,18 @@ prep -nordff -top testbench
 complete.sv
 ../src/riscv/riscv.sv
 ../src/riscv/riscv_alu.sv
+../src/riscv/riscv_br_pred.sv
+../src/riscv/riscv_bru.sv
 ../src/riscv/riscv_csr.sv
+../src/riscv/riscv_dpu.sv
+../src/riscv/riscv_dvu.sv
+../src/riscv/riscv_exu.sv
 ../src/riscv/riscv_idu.sv
 ../src/riscv/riscv_ifu.sv
+../src/riscv/riscv_lsu.sv
+../src/riscv/riscv_mpu.sv
 ../src/riscv/riscv_regfile.sv
+../src/riscv/riscv_wbu.sv
 ../src/quartus/multiplier/multiplier.v
 ../src/quartus/multiplier_unsigned/multiplier_unsigned.v
 ../src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v

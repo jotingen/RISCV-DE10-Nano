@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Jan 23 03:58:33 2020
+[*] Sat Mar 07 03:36:55 2020
 [*]
-[dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim.vcd"
-[dumpfile_mtime] "Thu Jan 23 02:02:54 2020"
-[dumpfile_size] 1114950068
+[dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim_000.vcd"
+[dumpfile_mtime] "Sat Mar 07 03:36:30 2020"
+[dumpfile_size] 1526376350
 [savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 33762708
-[size] 2131 1211
+[timestart] 0
+[size] 2106 1211
 [pos] -1 -1
-*-8.517975 33763950 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.545309 2282000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.ddr3.
@@ -45,6 +45,7 @@ tb.dut.led.LED[7:0]
 @22
 tb.dut.led.LED[7:0]
 @24
+tb.dut.led.LED[7:0]
 tb.dut.riscv.csrfile.csr_C80[31:0]
 tb.dut.riscv.csrfile.csr_C00[31:0]
 tb.dut.riscv.csrfile.csr_C81[31:0]
@@ -343,7 +344,7 @@ tb.dut.shield.spi_arb.clk_settled
 -SPI Arb
 @200
 -
-@800200
+@c00200
 -SDCard
 @28
 tb.sd.rstn
@@ -507,11 +508,11 @@ tb.dut.shield.sdcard.CS
 tb.dut.shield.sdcard.SPIReq
 tb.dut.shield.sdcard.SPIAck
 tb.dut.shield.sdcard.SPIDone
-@1000200
+@1401200
 -SDCard
 @200
 -
-@800200
+@c00200
 -DDR3
 @28
 tb.dut.ddr3.clk
@@ -698,7 +699,7 @@ tb.dut.ddr3.ddr3_fifo_in.wrreq
 tb.dut.ddr3.o_membus_ack
 @22
 tb.dut.ddr3.o_membus_data[31:0]
-@1000200
+@1401200
 -DDR3
 @200
 -
@@ -918,7 +919,7 @@ tb.dut.riscv.br_pred.alu_br_match_ndx[3:0]
 -BR PRED
 @200
 -
-@800200
+@c00200
 -IFU
 @28
 tb.dut.riscv.ifu.clk
@@ -1090,11 +1091,11 @@ tb.dut.riscv.exu_freeze
 tb.dut.riscv.exu.exu_br_miss
 @200
 -
-@1000200
+@1401200
 -IFU
 @200
 -
-@800200
+@c00200
 -IDU
 @28
 tb.dut.riscv.idu.idu_vld
@@ -1102,9 +1103,7 @@ tb.dut.riscv.idu.frozen
 tb.dut.riscv.idu.ifu_vld
 @22
 #{tb.dut.riscv.idu.ifu_inst[31:0]} tb.dut.riscv.idu.ifu_inst[31] tb.dut.riscv.idu.ifu_inst[30] tb.dut.riscv.idu.ifu_inst[29] tb.dut.riscv.idu.ifu_inst[28] tb.dut.riscv.idu.ifu_inst[27] tb.dut.riscv.idu.ifu_inst[26] tb.dut.riscv.idu.ifu_inst[25] tb.dut.riscv.idu.ifu_inst[24] tb.dut.riscv.idu.ifu_inst[23] tb.dut.riscv.idu.ifu_inst[22] tb.dut.riscv.idu.ifu_inst[21] tb.dut.riscv.idu.ifu_inst[20] tb.dut.riscv.idu.ifu_inst[19] tb.dut.riscv.idu.ifu_inst[18] tb.dut.riscv.idu.ifu_inst[17] tb.dut.riscv.idu.ifu_inst[16] tb.dut.riscv.idu.ifu_inst[15] tb.dut.riscv.idu.ifu_inst[14] tb.dut.riscv.idu.ifu_inst[13] tb.dut.riscv.idu.ifu_inst[12] tb.dut.riscv.idu.ifu_inst[11] tb.dut.riscv.idu.ifu_inst[10] tb.dut.riscv.idu.ifu_inst[9] tb.dut.riscv.idu.ifu_inst[8] tb.dut.riscv.idu.ifu_inst[7] tb.dut.riscv.idu.ifu_inst[6] tb.dut.riscv.idu.ifu_inst[5] tb.dut.riscv.idu.ifu_inst[4] tb.dut.riscv.idu.ifu_inst[3] tb.dut.riscv.idu.ifu_inst[2] tb.dut.riscv.idu.ifu_inst[1] tb.dut.riscv.idu.ifu_inst[0]
-@23
 #{tb.dut.riscv.idu.ifu_inst_order[63:0]} tb.dut.riscv.idu.ifu_inst_order[63] tb.dut.riscv.idu.ifu_inst_order[62] tb.dut.riscv.idu.ifu_inst_order[61] tb.dut.riscv.idu.ifu_inst_order[60] tb.dut.riscv.idu.ifu_inst_order[59] tb.dut.riscv.idu.ifu_inst_order[58] tb.dut.riscv.idu.ifu_inst_order[57] tb.dut.riscv.idu.ifu_inst_order[56] tb.dut.riscv.idu.ifu_inst_order[55] tb.dut.riscv.idu.ifu_inst_order[54] tb.dut.riscv.idu.ifu_inst_order[53] tb.dut.riscv.idu.ifu_inst_order[52] tb.dut.riscv.idu.ifu_inst_order[51] tb.dut.riscv.idu.ifu_inst_order[50] tb.dut.riscv.idu.ifu_inst_order[49] tb.dut.riscv.idu.ifu_inst_order[48] tb.dut.riscv.idu.ifu_inst_order[47] tb.dut.riscv.idu.ifu_inst_order[46] tb.dut.riscv.idu.ifu_inst_order[45] tb.dut.riscv.idu.ifu_inst_order[44] tb.dut.riscv.idu.ifu_inst_order[43] tb.dut.riscv.idu.ifu_inst_order[42] tb.dut.riscv.idu.ifu_inst_order[41] tb.dut.riscv.idu.ifu_inst_order[40] tb.dut.riscv.idu.ifu_inst_order[39] tb.dut.riscv.idu.ifu_inst_order[38] tb.dut.riscv.idu.ifu_inst_order[37] tb.dut.riscv.idu.ifu_inst_order[36] tb.dut.riscv.idu.ifu_inst_order[35] tb.dut.riscv.idu.ifu_inst_order[34] tb.dut.riscv.idu.ifu_inst_order[33] tb.dut.riscv.idu.ifu_inst_order[32] tb.dut.riscv.idu.ifu_inst_order[31] tb.dut.riscv.idu.ifu_inst_order[30] tb.dut.riscv.idu.ifu_inst_order[29] tb.dut.riscv.idu.ifu_inst_order[28] tb.dut.riscv.idu.ifu_inst_order[27] tb.dut.riscv.idu.ifu_inst_order[26] tb.dut.riscv.idu.ifu_inst_order[25] tb.dut.riscv.idu.ifu_inst_order[24] tb.dut.riscv.idu.ifu_inst_order[23] tb.dut.riscv.idu.ifu_inst_order[22] tb.dut.riscv.idu.ifu_inst_order[21] tb.dut.riscv.idu.ifu_inst_order[20] tb.dut.riscv.idu.ifu_inst_order[19] tb.dut.riscv.idu.ifu_inst_order[18] tb.dut.riscv.idu.ifu_inst_order[17] tb.dut.riscv.idu.ifu_inst_order[16] tb.dut.riscv.idu.ifu_inst_order[15] tb.dut.riscv.idu.ifu_inst_order[14] tb.dut.riscv.idu.ifu_inst_order[13] tb.dut.riscv.idu.ifu_inst_order[12] tb.dut.riscv.idu.ifu_inst_order[11] tb.dut.riscv.idu.ifu_inst_order[10] tb.dut.riscv.idu.ifu_inst_order[9] tb.dut.riscv.idu.ifu_inst_order[8] tb.dut.riscv.idu.ifu_inst_order[7] tb.dut.riscv.idu.ifu_inst_order[6] tb.dut.riscv.idu.ifu_inst_order[5] tb.dut.riscv.idu.ifu_inst_order[4] tb.dut.riscv.idu.ifu_inst_order[3] tb.dut.riscv.idu.ifu_inst_order[2] tb.dut.riscv.idu.ifu_inst_order[1] tb.dut.riscv.idu.ifu_inst_order[0]
-@22
 #{tb.dut.riscv.idu.ifu_inst_PC[31:0]} tb.dut.riscv.idu.ifu_inst_PC[31] tb.dut.riscv.idu.ifu_inst_PC[30] tb.dut.riscv.idu.ifu_inst_PC[29] tb.dut.riscv.idu.ifu_inst_PC[28] tb.dut.riscv.idu.ifu_inst_PC[27] tb.dut.riscv.idu.ifu_inst_PC[26] tb.dut.riscv.idu.ifu_inst_PC[25] tb.dut.riscv.idu.ifu_inst_PC[24] tb.dut.riscv.idu.ifu_inst_PC[23] tb.dut.riscv.idu.ifu_inst_PC[22] tb.dut.riscv.idu.ifu_inst_PC[21] tb.dut.riscv.idu.ifu_inst_PC[20] tb.dut.riscv.idu.ifu_inst_PC[19] tb.dut.riscv.idu.ifu_inst_PC[18] tb.dut.riscv.idu.ifu_inst_PC[17] tb.dut.riscv.idu.ifu_inst_PC[16] tb.dut.riscv.idu.ifu_inst_PC[15] tb.dut.riscv.idu.ifu_inst_PC[14] tb.dut.riscv.idu.ifu_inst_PC[13] tb.dut.riscv.idu.ifu_inst_PC[12] tb.dut.riscv.idu.ifu_inst_PC[11] tb.dut.riscv.idu.ifu_inst_PC[10] tb.dut.riscv.idu.ifu_inst_PC[9] tb.dut.riscv.idu.ifu_inst_PC[8] tb.dut.riscv.idu.ifu_inst_PC[7] tb.dut.riscv.idu.ifu_inst_PC[6] tb.dut.riscv.idu.ifu_inst_PC[5] tb.dut.riscv.idu.ifu_inst_PC[4] tb.dut.riscv.idu.ifu_inst_PC[3] tb.dut.riscv.idu.ifu_inst_PC[2] tb.dut.riscv.idu.ifu_inst_PC[1] tb.dut.riscv.idu.ifu_inst_PC[0]
 @28
 tb.dut.riscv.idu.ifu_inst_br_taken
@@ -1188,7 +1187,7 @@ tb.dut.riscv.idu.idu_decode_rs2[4:0]
 tb.dut.riscv.idu.idu_decode_shamt[4:0]
 tb.dut.riscv.idu.idu_decode_succ[3:0]
 tb.dut.riscv.idu.idu_decode_uimm[4:0]
-@1000200
+@1401200
 -IDU
 @200
 -
@@ -1413,7 +1412,9 @@ tb.dut.riscv.exu.dpu.dpu_PC_next_PC_imm20[31:0]
 tb.dut.riscv.exu.dpu.dpu_PC_next_rs1_imm11[31:0]
 @28
 tb.dut.riscv.exu.dpu.dpu_REM
+@29
 tb.dut.riscv.exu.dpu.dpu_REMU
+@28
 tb.dut.riscv.exu.dpu.dpu_SB
 tb.dut.riscv.exu.dpu.dpu_SH
 tb.dut.riscv.exu.dpu.dpu_SLL

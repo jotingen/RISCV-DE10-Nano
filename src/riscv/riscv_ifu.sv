@@ -63,8 +63,8 @@ logic             pre_ifu_vld;
 logic [63:32]     pre_ifu_order;
 logic [31:0]      instbus_data;
 
-logic [63:32] ifu_buff_order_in;
-logic [63:32] ifu_buff_order_out;
+logic [63:0] ifu_buff_order_in;
+logic [63:0] ifu_buff_order_out;
 
 logic        ifu_buff_addr_wrreq;
 logic [31:0] ifu_buff_addr_in;

@@ -90,22 +90,20 @@ always_ff @(posedge clk)
 
 initial
   begin
-    //$readmemh("../../output/programs/bootloader/test_3.v", mem_array_3);
-    //$readmemh("../../output/programs/bootloader/test_2.v", mem_array_2);
-    //$readmemh("../../output/programs/bootloader/test_1.v", mem_array_1);
-    //$readmemh("../../output/programs/bootloader/test_0.v", mem_array_0);
     //$readmemh("../../output/programs/bootloader/bootloader_3.v", mem_array_3);
     //$readmemh("../../output/programs/bootloader/bootloader_2.v", mem_array_2);
     //$readmemh("../../output/programs/bootloader/bootloader_1.v", mem_array_1);
     //$readmemh("../../output/programs/bootloader/bootloader_0.v", mem_array_0);
-    $readmemh("../../output/programs/bootloader/bootloader_fast_3.v", mem_array_3);
-    $readmemh("../../output/programs/bootloader/bootloader_fast_2.v", mem_array_2);
-    $readmemh("../../output/programs/bootloader/bootloader_fast_1.v", mem_array_1);
-    $readmemh("../../output/programs/bootloader/bootloader_fast_0.v", mem_array_0);
-    //$readmemh("../../output/programs/test/display_test_3.v", mem_array_3);
-    //$readmemh("../../output/programs/test/display_test_2.v", mem_array_2);
-    //$readmemh("../../output/programs/test/display_test_1.v", mem_array_1);
-    //$readmemh("../../output/programs/test/display_test_0.v", mem_array_0);
+
+    //$readmemh("../../output/programs/bootloader/bootloader_fast_3.v", mem_array_3);
+    //$readmemh("../../output/programs/bootloader/bootloader_fast_2.v", mem_array_2);
+    //$readmemh("../../output/programs/bootloader/bootloader_fast_1.v", mem_array_1);
+    //$readmemh("../../output/programs/bootloader/bootloader_fast_0.v", mem_array_0);
+
+    $readmemh("../../output/programs/bootloader/bootloader_preloaded_3.v", mem_array_3);
+    $readmemh("../../output/programs/bootloader/bootloader_preloaded_2.v", mem_array_2);
+    $readmemh("../../output/programs/bootloader/bootloader_preloaded_1.v", mem_array_1);
+    $readmemh("../../output/programs/bootloader/bootloader_preloaded_0.v", mem_array_0);
   end
 
 endmodule

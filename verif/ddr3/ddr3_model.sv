@@ -33,12 +33,12 @@ always_ff @(posedge clk)
     begin
     ddr3_avl_ready <= '0;
     ddr3_avl_rdata_valid_stg1 <= '1;
-    ddr3_avl_rdata_stg1 <= ddr3[ddr3_avl_addr];
+    ddr3_avl_rdata_stg1 <= ddr3[ddr3_avl_addr[25:4]];
     end
   if(ddr3_avl_write_req) 
     begin
     ddr3_avl_ready <= '0;
-    ddr3[ddr3_avl_addr] <= ddr3_avl_wdata;
+    ddr3[ddr3_avl_addr[25:4]] <= ddr3_avl_wdata;
     end
 
   ddr3_avl_rdata_valid_stg2 <= ddr3_avl_rdata_valid_stg1;

@@ -255,6 +255,11 @@ riscv_rvfimon monitor (
 //    $readmemh("../../tests/timer_0.v", dut.mem.mem_array_0);
 //  end
 
+initial
+  begin
+  $readmemh("../../output/programs//benchmarks/primes.v", ddr3.ddr3);
+  end
+
 initial 
   begin 
   FPGA_CLK1_50 = 0; 
