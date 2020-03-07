@@ -43,9 +43,10 @@ init:
 	mkdir -p ../../output/programs/benchmarks/$(dir $@)
 	$(CC) $(CCFLAGS) -S -o ../../output/programs/benchmarks/$(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@) 
 	$(CC) $(CCFLAGS)    -o ../../output/programs/benchmarks/$(patsubst %.s,%.out,$@)  $(patsubst %.s,%.c,$@) $(addprefix ../../output/programs/lib/,$(LIB_OBJ)) ../../output/programs/benchmarks/riscv.o
-	$(RV_PREFIX)objcopy -O verilog                     ../../output/programs/benchmarks/$(patsubst %.s,%.out,$@) ../../output/programs/benchmarks/$(patsubst %.s,%_0.v,$@)
+	$(RV_PREFIX)objcopy -O verilog                     ../../output/programs/benchmarks/$(patsubst %.s,%.out,$@) ../../output/programs/benchmarks/$(patsubst %.s,%_0.v,$@) 
 	sed -i 's/@1/@0/' ../../output/programs/benchmarks/$(patsubst %.s,%_0.v,$@)
 	$(RV_PREFIX)objcopy -O binary                      ../../output/programs/benchmarks/$(patsubst %.s,%.out,$@) ../../output/programs/benchmarks/$(patsubst %.s,%.bin,$@)
+	xxd -e -c 4 ../../output/programs/benchmarks/$(patsubst %.s,%.bin,$@)  | awk '{print $$2;}' | paste -d' ' - - - - | sed 's/\s//g' | sed -e :a -e 's/^.\{1,31\}$$/&0/;ta' | fold -w8 | tac | paste -d' ' - - - - | tac | sed 's/\s//g' >  ../../output/programs/benchmarks/$(patsubst %.s,%.v,$@)
 
 .PHONY: clean
 clean: 
