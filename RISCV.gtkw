@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Mar 07 03:36:55 2020
+[*] Wed Mar 11 03:19:37 2020
 [*]
 [dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim_000.vcd"
-[dumpfile_mtime] "Sat Mar 07 03:36:30 2020"
-[dumpfile_size] 1526376350
+[dumpfile_mtime] "Wed Mar 11 03:16:27 2020"
+[dumpfile_size] 658150601
 [savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
 [timestart] 0
 [size] 2106 1211
 [pos] -1 -1
-*-19.545309 2282000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-20.549732 4804000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.ddr3.
@@ -26,7 +26,7 @@
 [sst_width] 290
 [signals_width] 457
 [sst_expanded] 1
-[sst_vpaned_height] 558
+[sst_vpaned_height] 542
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -765,6 +765,31 @@ tb.dut.shield.display.transmit.cooldown_cnt[20:0]
 -DISPLAY
 @200
 -
+@28
+tb.dut.GPIO_0_01
+tb.dut.GPIO_0_03
+>-1
+tb.dut.GPIO_0_05
+>0
+tb.dut.GPIO_0_07
+tb.dut.GPIO_0_09
+@22
+tb.dut.uart.baud_rate[31:0]
+@29
+tb.dut.uart.state_idle
+@28
+tb.dut.uart.state_sending
+@22
+tb.dut.uart.msg[11:0]
+tb.dut.uart.msg_bit[3:0]
+#{tb.dut.uart.i_bus_data[31:0]} tb.dut.uart.i_bus_data[31] tb.dut.uart.i_bus_data[30] tb.dut.uart.i_bus_data[29] tb.dut.uart.i_bus_data[28] tb.dut.uart.i_bus_data[27] tb.dut.uart.i_bus_data[26] tb.dut.uart.i_bus_data[25] tb.dut.uart.i_bus_data[24] tb.dut.uart.i_bus_data[23] tb.dut.uart.i_bus_data[22] tb.dut.uart.i_bus_data[21] tb.dut.uart.i_bus_data[20] tb.dut.uart.i_bus_data[19] tb.dut.uart.i_bus_data[18] tb.dut.uart.i_bus_data[17] tb.dut.uart.i_bus_data[16] tb.dut.uart.i_bus_data[15] tb.dut.uart.i_bus_data[14] tb.dut.uart.i_bus_data[13] tb.dut.uart.i_bus_data[12] tb.dut.uart.i_bus_data[11] tb.dut.uart.i_bus_data[10] tb.dut.uart.i_bus_data[9] tb.dut.uart.i_bus_data[8] tb.dut.uart.i_bus_data[7] tb.dut.uart.i_bus_data[6] tb.dut.uart.i_bus_data[5] tb.dut.uart.i_bus_data[4] tb.dut.uart.i_bus_data[3] tb.dut.uart.i_bus_data[2] tb.dut.uart.i_bus_data[1] tb.dut.uart.i_bus_data[0]
+@28
+tb.uart_state_idle
+tb.uart_state_something
+@22
+tb.uart_state_timer[3:0]
+@200
+-
 @800200
 -LED
 @22
@@ -1412,9 +1437,7 @@ tb.dut.riscv.exu.dpu.dpu_PC_next_PC_imm20[31:0]
 tb.dut.riscv.exu.dpu.dpu_PC_next_rs1_imm11[31:0]
 @28
 tb.dut.riscv.exu.dpu.dpu_REM
-@29
 tb.dut.riscv.exu.dpu.dpu_REMU
-@28
 tb.dut.riscv.exu.dpu.dpu_SB
 tb.dut.riscv.exu.dpu.dpu_SH
 tb.dut.riscv.exu.dpu.dpu_SLL
@@ -1517,6 +1540,7 @@ tb.dut.riscv.exu.lsu.lsu_vld
 tb.dut.riscv.exu.bru.bru_vld
 tb.dut.riscv.exu.exu_vld
 @22
+tb.dut.riscv.exu.exu_order[63:0]
 tb.dut.riscv.exu.exu_PC[31:0]
 tb.dut.riscv.exu.exu_PC_next[31:0]
 tb.dut.riscv.exu.exu_inst[31:0]
@@ -1563,15 +1587,14 @@ tb.dut.mem.o_membus_ack
 tb.dut.mem.o_membus_data[31:0]
 @200
 -
-@800022
-tb.dut.rvfi_valid[5:0]
-@28
-(0)tb.dut.rvfi_valid[5:0]
-(1)tb.dut.rvfi_valid[5:0]
-(2)tb.dut.rvfi_valid[5:0]
-(3)tb.dut.rvfi_valid[5:0]
-(4)tb.dut.rvfi_valid[5:0]
-(5)tb.dut.rvfi_valid[5:0]
+@800200
+-tb.dut.rvfi_valid
+@200
+-
+@c00200
+-tb.monitor.rob.valid
+@1401200
+-group_end
 @1001200
 -group_end
 [pattern_trace] 1
