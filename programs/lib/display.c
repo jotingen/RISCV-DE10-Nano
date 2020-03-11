@@ -263,9 +263,9 @@ void console_clear() {
 }
   
 void console_put_char(char c) {
-  if(c == '\n') {
-    UART = '\r';
-  }
+  //if(c == '\n') {
+  //  UART = '\r';
+  //}
   UART = c;
 
   if(c == '\n') {

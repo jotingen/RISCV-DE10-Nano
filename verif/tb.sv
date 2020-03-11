@@ -47,6 +47,82 @@ logic           HDMI_TX_HS;
 logic           HDMI_TX_INT;
 logic           HDMI_TX_VS;
 
+//////////// GPIO_0, GPIO connect to GPIO Default //////////
+logic           GPIO_0_00;
+logic           GPIO_0_01; //UART GND
+logic           GPIO_0_02;
+logic           GPIO_0_03; //UART RXD
+logic           GPIO_0_04;
+logic           GPIO_0_05; //UART TXD
+logic           GPIO_0_06;
+logic           GPIO_0_07; //UART CTS
+logic           GPIO_0_08;
+logic           GPIO_0_09; //UART RTS
+logic           GPIO_0_10;
+logic           GPIO_0_11;
+logic           GPIO_0_12;
+logic           GPIO_0_13;
+logic           GPIO_0_14;
+logic           GPIO_0_15;
+logic           GPIO_0_16;
+logic           GPIO_0_17;
+logic           GPIO_0_18;
+logic           GPIO_0_19;
+logic           GPIO_0_20;
+logic           GPIO_0_21;
+logic           GPIO_0_22;
+logic           GPIO_0_23;
+logic           GPIO_0_24;
+logic           GPIO_0_25;
+logic           GPIO_0_26;
+logic           GPIO_0_27;
+logic           GPIO_0_28;
+logic           GPIO_0_29;
+logic           GPIO_0_30;
+logic           GPIO_0_31;
+logic           GPIO_0_32;
+logic           GPIO_0_33;
+logic           GPIO_0_34;
+logic           GPIO_0_35;
+
+//////////// GPIO_1, GPIO connect to GPIO Default //////////
+logic           GPIO_1_00;
+logic           GPIO_1_01;
+logic           GPIO_1_02;
+logic           GPIO_1_03;
+logic           GPIO_1_04;
+logic           GPIO_1_05;
+logic           GPIO_1_06;
+logic           GPIO_1_07;
+logic           GPIO_1_08;
+logic           GPIO_1_09;
+logic           GPIO_1_10;
+logic           GPIO_1_11;
+logic           GPIO_1_12;
+logic           GPIO_1_13;
+logic           GPIO_1_14;
+logic           GPIO_1_15;
+logic           GPIO_1_16;
+logic           GPIO_1_17;
+logic           GPIO_1_18;
+logic           GPIO_1_19;
+logic           GPIO_1_20;
+logic           GPIO_1_21;
+logic           GPIO_1_22;
+logic           GPIO_1_23;
+logic           GPIO_1_24;
+logic           GPIO_1_25;
+logic           GPIO_1_26;
+logic           GPIO_1_27;
+logic           GPIO_1_28;
+logic           GPIO_1_29;
+logic           GPIO_1_30;
+logic           GPIO_1_31;
+logic           GPIO_1_32;
+logic           GPIO_1_33;
+logic           GPIO_1_34;
+logic           GPIO_1_35;
+
 /////////// SOC ///////////
 logic         ddr3_avl_ready;       
 logic [25:0]  ddr3_avl_addr;        
@@ -60,6 +136,7 @@ logic [8:0]   ddr3_avl_size;
 logic clk;
 logic rst;
 
+`ifdef RISCV_FORMAL
 logic [5:0]   rvfi_valid;
 logic [383:0] rvfi_order;
 logic [191:0] rvfi_insn;
@@ -90,6 +167,7 @@ logic [383:0] rvfi_csr_minstret_rmask;
 logic [383:0] rvfi_csr_minstret_wmask;
 logic [383:0] rvfi_csr_minstret_rdata;
 logic [383:0] rvfi_csr_minstret_wdata;
+`endif
 
 logic [15:0] errcode;
 
@@ -154,6 +232,82 @@ top dut (
 .HDMI_TX_INT,
 .HDMI_TX_VS,
 
+//////////// GPIO_0, GPIO connect to GPIO Default //////////
+.GPIO_0_00,
+.GPIO_0_01, //UART GND
+.GPIO_0_02,
+.GPIO_0_03, //UART RXD
+.GPIO_0_04,
+.GPIO_0_05, //UART TXD
+.GPIO_0_06,
+.GPIO_0_07, //UART CTS
+.GPIO_0_08,
+.GPIO_0_09, //UART RTS
+.GPIO_0_10,
+.GPIO_0_11,
+.GPIO_0_12,
+.GPIO_0_13,
+.GPIO_0_14,
+.GPIO_0_15,
+.GPIO_0_16,
+.GPIO_0_17,
+.GPIO_0_18,
+.GPIO_0_19,
+.GPIO_0_20,
+.GPIO_0_21,
+.GPIO_0_22,
+.GPIO_0_23,
+.GPIO_0_24,
+.GPIO_0_25,
+.GPIO_0_26,
+.GPIO_0_27,
+.GPIO_0_28,
+.GPIO_0_29,
+.GPIO_0_30,
+.GPIO_0_31,
+.GPIO_0_32,
+.GPIO_0_33,
+.GPIO_0_34,
+.GPIO_0_35,
+
+//////////// GPIO_1, GPIO connect to GPIO Default //////////
+.GPIO_1_00,
+.GPIO_1_01,
+.GPIO_1_02,
+.GPIO_1_03,
+.GPIO_1_04,
+.GPIO_1_05,
+.GPIO_1_06,
+.GPIO_1_07,
+.GPIO_1_08,
+.GPIO_1_09,
+.GPIO_1_10,
+.GPIO_1_11,
+.GPIO_1_12,
+.GPIO_1_13,
+.GPIO_1_14,
+.GPIO_1_15,
+.GPIO_1_16,
+.GPIO_1_17,
+.GPIO_1_18,
+.GPIO_1_19,
+.GPIO_1_20,
+.GPIO_1_21,
+.GPIO_1_22,
+.GPIO_1_23,
+.GPIO_1_24,
+.GPIO_1_25,
+.GPIO_1_26,
+.GPIO_1_27,
+.GPIO_1_28,
+.GPIO_1_29,
+.GPIO_1_30,
+.GPIO_1_31,
+.GPIO_1_32,
+.GPIO_1_33,
+.GPIO_1_34,
+.GPIO_1_35,
+
 /////////// SOC ///////////
 .ddr3_avl_ready,       
 .ddr3_avl_addr,        
@@ -162,8 +316,10 @@ top dut (
 .ddr3_avl_wdata,       
 .ddr3_avl_read_req,    
 .ddr3_avl_write_req,   
-.ddr3_avl_size,        
+.ddr3_avl_size        
 
+`ifdef RISCV_FORMAL
+                        ,
 .rvfi_valid             ,
 .rvfi_order             ,
 .rvfi_insn              ,
@@ -198,6 +354,7 @@ top dut (
 
 .clk,
 .rst
+`endif
 );
 
 ddr3_model ddr3 (
@@ -220,6 +377,7 @@ spi_sd_model sd (
   .miso  (MISO)
 );
 
+`ifdef RISCV_FORMAL
 riscv_rvfimon monitor (
   .clock(clk),
   .reset(rst),
@@ -246,6 +404,7 @@ riscv_rvfimon monitor (
   .rvfi_mem_extamo,
   .errcode
 );
+`endif
 
 //initial
 //  begin
@@ -301,157 +460,76 @@ always
   DDR3_CLK =  ! DDR3_CLK;
   end
 
-//final
-//  begin
-//  for(int addr = 0; addr < $size(dut.mem.mem_array_0); addr++)
-//    begin
-//    logic [31:0] data;
-//    typedef struct packed {
-//      logic  [6:0] funct7;
-//      logic  [4:0] rs2;
-//      logic  [4:0] rs1;
-//      logic  [2:0] funct3;
-//      logic  [4:0] rd;
-//      logic  [6:0] opcode;
-//    } inst_RType_s;
-//    typedef struct packed {
-//      logic [11:0] imm_11_0;
-//      logic  [4:0] rs1;
-//      logic  [2:0] funct3;
-//      logic  [4:0] rd;
-//      logic  [6:0] opcode;
-//    } inst_IType_s;
-//    typedef struct packed {
-//      logic  [6:0] imm_11_5;
-//      logic  [4:0] rs2;
-//      logic  [4:0] rs1;
-//      logic  [2:0] funct3;
-//      logic  [4:0] imm_4_0;
-//      logic  [6:0] opcode;
-//    } inst_SType_s;
-//    typedef struct packed {
-//      logic        imm_12;
-//      logic  [5:0] imm_10_5;
-//      logic  [4:0] rs2;
-//      logic  [4:0] rs1;
-//      logic  [2:0] funct3;
-//      logic  [3:0] imm_4_1;
-//      logic        imm_11;
-//      logic  [6:0] opcode;
-//    } inst_BType_s;
-//    typedef struct packed {
-//      logic [19:0] imm_31_12;
-//      logic  [4:0] rd;
-//      logic  [6:0] opcode;
-//    } inst_UType_s;
-//    typedef struct packed {
-//      logic        imm_20;
-//      logic  [9:0] imm_10_1;
-//      logic        imm_11;
-//      logic  [7:0] imm_19_12;
-//      logic  [4:0] rd;
-//      logic  [6:0] opcode;
-//    } inst_JType_s;
-//    inst_RType_s inst_R;
-//    inst_IType_s inst_I;
-//    inst_SType_s inst_S;
-//    inst_BType_s inst_B;
-//    inst_UType_s inst_U;
-//    inst_JType_s inst_J;
-//    string assembly;
-//     
-//    data = {dut.mem.mem_array_3[addr],
-//            dut.mem.mem_array_2[addr],
-//            dut.mem.mem_array_1[addr],
-//            dut.mem.mem_array_0[addr]};
-//
-//    inst_R  = data;
-//    inst_I  = data;
-//    inst_S  = data;
-//    inst_B  = data;
-//    inst_U  = data;
-//    inst_J  = data;
-//
-//    case (data[6:0])
-//      'b0110111 : assembly = $sformatf("%5s r%1d,0x%1x", "LUI", inst_U.rd, inst_U.imm_31_12);
-//      'b0010111 : assembly = $sformatf("%5s r%1d,0x%1x", "AUIPC", inst_U.rd, inst_U.imm_31_12);
-//      'b1101111 : assembly = $sformatf("%5s r%1d,0x%1x", "JAL", inst_J.rd, {inst_J.imm_20,inst_J.imm_19_12,inst_J.imm_11,inst_J.imm_10_1});
-//      'b1100111 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "JALR", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//      'b1100011 : begin 
-//                  case (inst_B.funct3)
-//                    'b000 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BEQ", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                    'b001 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BNE", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                    'b100 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BLT", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                    'b101 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BGE", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                    'b110 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BLTU", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                    'b111 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "BGEU", inst_B.rs1, inst_B.rs2, {inst_B.imm_12,inst_B.imm_11,inst_B.imm_10_5,inst_B.imm_4_1});
-//                  endcase
-//                  end
-//      'b0000011 : begin     
-//                  case (inst_I.funct3)
-//                    'b000 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "LB", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b001 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "LH", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b010 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "LW", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b100 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "LBU", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b101 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "LHU", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                  endcase
-//                  end
-//      'b0100011 : begin 
-//                  case (inst_S.funct3)
-//                    'b000 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "SB", inst_S.rs1, inst_S.rs2, {inst_S.imm_11_5, inst_S.imm_4_0});
-//                    'b001 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "SH", inst_S.rs1, inst_S.rs2, {inst_S.imm_11_5, inst_S.imm_4_0});
-//                    'b010 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "SW", inst_S.rs1, inst_S.rs2, {inst_S.imm_11_5, inst_S.imm_4_0});
-//                  endcase
-//                  end
-//      'b0010011 : begin 
-//                  case (inst_I.funct3)
-//                    'b000 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "ADDI", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b010 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "SLTI", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b011 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "SLTIU", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b100 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "XORI", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b110 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "ORI", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b111 : assembly = $sformatf("%5s r%1d,r%1d,0x%1x", "ANDI", inst_I.rd, inst_I.rs1, inst_I.imm_11_0);
-//                    'b001 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SLLI", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b101 : begin 
-//                            case (inst_R.funct7)
-//                              'b0000000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SRLI", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                              'b0100000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SRAI", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                            endcase
-//                            end
-//                  endcase
-//                  end
-//      'b0110011 : begin 
-//                  case (inst_R.funct3)
-//                    'b000 : begin 
-//                            case (inst_R.funct7)
-//                              'b0000000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "ADD", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                              'b0100000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SUB", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                            endcase
-//                            end
-//                    'b001 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SLL", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b010 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SLT", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b011 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SLTU", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b100 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "XOR", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b101 : begin 
-//                            case (inst_R.funct7)
-//                              'b0000000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SRL", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                              'b0100000 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "SRA", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                            endcase
-//                            end
-//                    'b110 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "OR", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                    'b111 : assembly = $sformatf("%5s r%1d,r%1d,r%1d", "AND", inst_R.rd, inst_R.rs1, inst_R.rs2);
-//                  endcase
-//                  end
-//      'b0001111 : assembly = $sformatf("%5s r%1d, %4b, %4b, %4b", "FENCE", inst_I.rd, inst_I.rs1, inst_I.imm_11_0[3:0], inst_I.imm_11_0[7:0], inst_I.imm_11_0[11:8]);
-//      'b1110011 : assembly = "ECALL TODO";
-//      'b1110011 : assembly = "EBREAK TODO";
-//      default   : assembly = "-----";
-//    endcase
-//
-//
-//    if(data !== 32'h00000000 & data !== 32'hxxxxxxxx)
-//      $display("(%6d)0x%08x: %08x %s", (addr)*4, (addr)*4, data, assembly);
-//    end                                               
-//  end                                                 
+logic uart_state_idle;
+logic uart_state_something;
+logic [3:0] uart_state_timer;
+logic [11:0] uart_buffer;
+initial
+  begin
+  uart_state_idle = '1;
+  uart_state_something  = '0;
+  uart_state_timer  = '0;
+  end
+always
+  begin
+  #120
+  uart_state_idle <=        '0;
+  uart_state_something  <=  '0;
+  uart_state_timer  <=            uart_state_timer;             
+  uart_buffer <= {uart_buffer[10:0],GPIO_0_05};
+  case('1)
+    uart_state_idle: begin
+                     if(GPIO_0_05 == '0)
+                       begin
+                       //$write(GPIO_0_05);
+                       uart_state_something <= '1;
+                       end 
+                     else
+                       begin
+                       uart_state_idle <= '1;
+                       end 
+                     end
+    uart_state_something: begin
+                     //$write(GPIO_0_05);
+                     if(uart_state_timer == 'd10)
+                       begin
+                       //$display("");
+                       //$display("%b",{uart_buffer[10:0],GPIO_0_05});
+                       //$display("%h",{uart_buffer[2],
+                       //               uart_buffer[3],
+                       //               uart_buffer[4],
+                       //               uart_buffer[5],
+                       //               uart_buffer[6],
+                       //               uart_buffer[7],
+                       //               uart_buffer[8],
+                       //               uart_buffer[9]});
+                       //$display("%c",{uart_buffer[2],
+                       //               uart_buffer[3],
+                       //               uart_buffer[4],
+                       //               uart_buffer[5],
+                       //               uart_buffer[6],
+                       //               uart_buffer[7],
+                       //               uart_buffer[8],
+                       //               uart_buffer[9]});
+                       $write("%c",{uart_buffer[2],
+                                    uart_buffer[3],
+                                    uart_buffer[4],
+                                    uart_buffer[5],
+                                    uart_buffer[6],
+                                    uart_buffer[7],
+                                    uart_buffer[8],
+                                    uart_buffer[9]});
+                       uart_state_timer <= '0;
+                       uart_state_idle <= '1;
+                       end 
+                     else
+                       begin
+                       uart_state_timer <= uart_state_timer + 1;
+                       uart_state_something <= '1;
+                       end 
+                     end
+  endcase
+  end
+//.GPIO_0_05, //UART TXD
 
 endmodule

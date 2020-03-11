@@ -100,6 +100,7 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
+    TXD <= '1;
     state_idle <= '1;
     state_sending <= '0;
     msg_bit <= '0;
