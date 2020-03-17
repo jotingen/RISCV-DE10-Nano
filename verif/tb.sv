@@ -2,6 +2,8 @@
 
 module tb ();
 
+`include "memory.vh"
+
 //////////// CLOCK //////////
 logic           FPGA_CLK1_50;
 logic           FPGA_CLK2_50;

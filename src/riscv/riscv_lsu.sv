@@ -211,7 +211,7 @@ always_ff @(posedge clk)
                    'b00: bus_data_rd_mask <= 'b0001;
                    'b01: bus_data_rd_mask <= 'b0010;
                    'b10: bus_data_rd_mask <= 'b0100;
-                   'b11: bus_data_rd_mask <= 'b1000;
+                   default: bus_data_rd_mask <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
@@ -229,7 +229,7 @@ always_ff @(posedge clk)
                    'b00: lsu_rd_data <= {{24{bus_data_rd[7]}},bus_data_rd[7:0]};
                    'b01: lsu_rd_data <= {{24{bus_data_rd[15]}},bus_data_rd[15:8]};
                    'b10: lsu_rd_data <= {{24{bus_data_rd[23]}},bus_data_rd[23:16]};
-                   'b11: lsu_rd_data <= {{24{bus_data_rd[31]}},bus_data_rd[31:24]};
+                   default: lsu_rd_data <= {{24{bus_data_rd[31]}},bus_data_rd[31:24]};
                  endcase
                  lsu_mem_rdata <= bus_data_rd;
                  lsu_PC_next <= lsu_PC+'d4;
@@ -248,7 +248,7 @@ always_ff @(posedge clk)
                    'b00: bus_data_rd_mask <= 'b0001;
                    'b01: bus_data_rd_mask <= 'b0010;
                    'b10: bus_data_rd_mask <= 'b0100;
-                   'b11: bus_data_rd_mask <= 'b1000;
+                   default: bus_data_rd_mask <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
@@ -266,7 +266,7 @@ always_ff @(posedge clk)
                    'b00: lsu_rd_data <= {{24{'0}},bus_data_rd[7:0]};
                    'b01: lsu_rd_data <= {{24{'0}},bus_data_rd[15:8]};
                    'b10: lsu_rd_data <= {{24{'0}},bus_data_rd[23:16]};
-                   'b11: lsu_rd_data <= {{24{'0}},bus_data_rd[31:24]};
+                   default: lsu_rd_data <= {{24{'0}},bus_data_rd[31:24]};
                  endcase
                  lsu_mem_rdata <= bus_data_rd;
                  lsu_PC_next <= lsu_PC+'d4;
@@ -283,7 +283,7 @@ always_ff @(posedge clk)
                  unique
                  case(addr[1])
                    'b0: bus_data_rd_mask <= 'b0011;
-                   'b1: bus_data_rd_mask <= 'b1100;
+                   default: bus_data_rd_mask <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
@@ -299,7 +299,7 @@ always_ff @(posedge clk)
                  unique
                  case(addr[1])
                    'b0: lsu_rd_data <= {{16{bus_data_rd[15]}},bus_data_rd[15:0]};
-                   'b1: lsu_rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
+                   default: lsu_rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
                  endcase
                  lsu_mem_rdata <= bus_data_rd;
                  lsu_PC_next <= lsu_PC+'d4;
@@ -316,7 +316,7 @@ always_ff @(posedge clk)
                  unique
                  case(addr[1])
                    'b0: bus_data_rd_mask <= 'b0011;
-                   'b1: bus_data_rd_mask <= 'b1100;
+                   default: bus_data_rd_mask <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
@@ -332,7 +332,7 @@ always_ff @(posedge clk)
                  unique
                  case(addr[1])
                    'b0: lsu_rd_data <= {{16{'0}},bus_data_rd[15:0]};
-                   'b1: lsu_rd_data <= {{16{'0}},bus_data_rd[31:16]};
+                   default: lsu_rd_data <= {{16{'0}},bus_data_rd[31:16]};
                  endcase
                  lsu_mem_rdata <= bus_data_rd;
                  lsu_PC_next <= lsu_PC+'d4;
@@ -375,14 +375,14 @@ always_ff @(posedge clk)
                    'b00: bus_data_wr  <= {{24{'0}},lsu_rs2_data[7:0]};
                    'b01: bus_data_wr  <= {{16{'0}},lsu_rs2_data[7:0],{8 {'0}}};
                    'b10: bus_data_wr  <= {{ 8{'0}},lsu_rs2_data[7:0],{16{'0}}};
-                   'b11: bus_data_wr  <= {         lsu_rs2_data[7:0],{24{'0}}};
+                   default: bus_data_wr  <= {         lsu_rs2_data[7:0],{24{'0}}};
                  endcase
                  unique
                  case(addr[1:0])
                    'b00: bus_data_wr_mask <= 'b0001;
                    'b01: bus_data_wr_mask <= 'b0010;
                    'b10: bus_data_wr_mask <= 'b0100;
-                   'b11: bus_data_wr_mask <= 'b1000;
+                   default: bus_data_wr_mask <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
@@ -407,12 +407,12 @@ always_ff @(posedge clk)
                  unique
                  case(addr[1])
                    'b0: bus_data_wr  <= {{16{'0}},lsu_rs2_data[15:0]};
-                   'b1: bus_data_wr  <= {         lsu_rs2_data[15:0],{16{'0}}};
+                   default: bus_data_wr  <= {         lsu_rs2_data[15:0],{16{'0}}};
                  endcase
                  unique
                  case(addr[1])
                    'b0: bus_data_wr_mask <= 'b0011;
-                   'b1: bus_data_wr_mask <= 'b1100;
+                   default: bus_data_wr_mask <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;

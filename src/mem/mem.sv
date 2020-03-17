@@ -100,10 +100,10 @@ initial
     //$readmemh("../../output/programs/bootloader/bootloader_fast_1.v", mem_array_1);
     //$readmemh("../../output/programs/bootloader/bootloader_fast_0.v", mem_array_0);
 
-    $readmemh("../../output/programs/bootloader/bootloader_preloaded_3.v", mem_array_3);
-    $readmemh("../../output/programs/bootloader/bootloader_preloaded_2.v", mem_array_2);
-    $readmemh("../../output/programs/bootloader/bootloader_preloaded_1.v", mem_array_1);
-    $readmemh("../../output/programs/bootloader/bootloader_preloaded_0.v", mem_array_0);
+    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_3.v", mem_array_3);
+    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_2.v", mem_array_2);
+    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_1.v", mem_array_1);
+    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_0.v", mem_array_0);
   end
 
 endmodule

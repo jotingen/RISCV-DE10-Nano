@@ -2,7 +2,9 @@ RV_PREFIX = riscv32-unknown-elf-#Prefix for our RISC-V tools (e.g. gcc and objdu
 CC = $(RV_PREFIX)gcc #Our compiler
 #CCFLAGS =  -Os -mno-fdiv -fno-unwind-tables -fno-asynchronous-unwind-tables -ffunction-sections -fdata-sections -Wl,--gc-sections,-u,main,-u,entry  -ffreestanding -nostartfiles  -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im #Flags telling GCC to compile without libraries (e.g. baremetal), to use a differen memory model so that we can put our code at 0x80000000 and to use the specified linker script.
 #CCFLAGS =  -Os -Wl,-gc-sections,-u,main,-u,entry -ffunction-sections -fdata-sections -ffreestanding -nostartfiles -nostdlib -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im #Flags telling GCC to compile without libraries (e.g. baremetal), to use a differen memory model so that we can put our code at 0x80000000 and to use the specified linker script.
-CCFLAGS =  -Os -mno-fdiv -ffreestanding -nostartfiles  -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im #Flags telling GCC to compile without libraries (e.g. baremetal), to use a differen memory model so that we can put our code at 0x80000000 and to use the specified linker script.
+CCFLAGS = -O2 -mno-fdiv -ffreestanding -nostartfiles  -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im #Flags telling GCC to compile without libraries (e.g. baremetal), to use a differen memory model so that we can put our code at 0x80000000 and to use the specified linker script.
+
+#Os caused some sort of issue with returning form functions back to x0
 
 
 rwildcard=$(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))            

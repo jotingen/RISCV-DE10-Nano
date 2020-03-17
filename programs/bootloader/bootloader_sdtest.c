@@ -84,131 +84,137 @@ void main(void) {
   uint32_t fat_sector_address;
   boot_sector_t * boot_sector;
 
-  display_pixel_t pixel;
-  uint16_t x_grid;
-  uint16_t y_grid;
+  //display_pixel_t pixel;
+  //uint16_t x_grid;
+  //uint16_t y_grid;
 
   //Set UART crazy fast for sims
   //set_uart_baud(921600);
   set_uart_baud(9216000);
   //set_uart_baud(921600);
 
-  console_clear();
-  display_on();
+  //console_clear();
+  //display_on();
   //display_write();
 
-  console_puts("Generating test image...\n");
-  for(uint16_t y = 0; y < display_height(); y++) {
-    for(uint16_t x = 0; x < display_width(); x++) {
-      x_grid = x/30;
-      y_grid = y/20;
-      if(x == 0 || x == display_width()-1 ||
-         y == 0 || y == display_height()-1) {
-        dispbuff_write_pixel(y,x,PXL_SILVER);
+  //console_puts("Generating test image...\n");
+  //for(uint16_t y = 0; y < display_height(); y++) {
+  //  for(uint16_t x = 0; x < display_width(); x++) {
+  //    x_grid = x/30;
+  //    y_grid = y/20;
+  //    if(x == 0 || x == display_width()-1 ||
+  //       y == 0 || y == display_height()-1) {
+  //      dispbuff_write_pixel(y,x,PXL_SILVER);
 
-      } else if(y_grid >=1  && y_grid <= 1 &&
-                x_grid >=1  && x_grid <= 2) {
-        dispbuff_write_pixel(y,x,PXL_RED);
-      } else if(y_grid >=1  && y_grid <= 1 &&
-                x_grid >=4  && x_grid <= 5) {
-        dispbuff_write_pixel(y,x,PXL_LIME);
-      } else if(y_grid >=1  && y_grid <= 1 &&
-                x_grid >=7  && x_grid <= 8) {
-        dispbuff_write_pixel(y,x,PXL_BLUE);
-      } else if(y_grid >=1  && y_grid <= 1 &&
-                x_grid >=11 && x_grid <= 14) {
-        dispbuff_write_pixel(y,x,PXL_SILVER);
+  //    } else if(y_grid >=1  && y_grid <= 1 &&
+  //              x_grid >=1  && x_grid <= 2) {
+  //      dispbuff_write_pixel(y,x,PXL_RED);
+  //    } else if(y_grid >=1  && y_grid <= 1 &&
+  //              x_grid >=4  && x_grid <= 5) {
+  //      dispbuff_write_pixel(y,x,PXL_LIME);
+  //    } else if(y_grid >=1  && y_grid <= 1 &&
+  //              x_grid >=7  && x_grid <= 8) {
+  //      dispbuff_write_pixel(y,x,PXL_BLUE);
+  //    } else if(y_grid >=1  && y_grid <= 1 &&
+  //              x_grid >=11 && x_grid <= 14) {
+  //      dispbuff_write_pixel(y,x,PXL_SILVER);
 
-      } else if(y_grid >=4  && y_grid <= 6 &&
-                x_grid >=1  && x_grid <= 3) {
-        dispbuff_write_pixel(y,x,PXL_NAVY);
-      } else if(y_grid >=4  && y_grid <= 6 &&
-                x_grid >=4  && x_grid <= 6) {
-        dispbuff_write_pixel(y,x,PXL_SILVER);
-      } else if(y_grid >=4  && y_grid <= 6 &&
-                x_grid >=7  && x_grid <= 9) {
-        dispbuff_write_pixel(y,x,PXL_PURPLE);
-      } else if(y_grid >=4  && y_grid <= 6 &&
-                x_grid >=10 && x_grid <= 14) {
-        dispbuff_write_pixel(y,x,PXL_GRAY);
+  //    } else if(y_grid >=4  && y_grid <= 6 &&
+  //              x_grid >=1  && x_grid <= 3) {
+  //      dispbuff_write_pixel(y,x,PXL_NAVY);
+  //    } else if(y_grid >=4  && y_grid <= 6 &&
+  //              x_grid >=4  && x_grid <= 6) {
+  //      dispbuff_write_pixel(y,x,PXL_SILVER);
+  //    } else if(y_grid >=4  && y_grid <= 6 &&
+  //              x_grid >=7  && x_grid <= 9) {
+  //      dispbuff_write_pixel(y,x,PXL_PURPLE);
+  //    } else if(y_grid >=4  && y_grid <= 6 &&
+  //              x_grid >=10 && x_grid <= 14) {
+  //      dispbuff_write_pixel(y,x,PXL_GRAY);
 
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=1  && x_grid <= 2) {
-        dispbuff_write_pixel(y,x,PXL_BLUE);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=3  && x_grid <= 4) {
-        dispbuff_write_pixel(y,x,PXL_BLACK);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=5  && x_grid <= 6) {
-        dispbuff_write_pixel(y,x,PXL_MAGENTA);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=7  && x_grid <= 8) {
-        dispbuff_write_pixel(y,x,PXL_BLACK);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=9  && x_grid <= 10) {
-        dispbuff_write_pixel(y,x,PXL_CYAN);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=11 && x_grid <= 12) {
-        dispbuff_write_pixel(y,x,PXL_BLACK);
-      } else if(y_grid >=7  && y_grid <= 7 &&
-                x_grid >=13 && x_grid <= 14) {
-        dispbuff_write_pixel(y,x,PXL_SILVER);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=1  && x_grid <= 2) {
+  //      dispbuff_write_pixel(y,x,PXL_BLUE);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=3  && x_grid <= 4) {
+  //      dispbuff_write_pixel(y,x,PXL_BLACK);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=5  && x_grid <= 6) {
+  //      dispbuff_write_pixel(y,x,PXL_MAGENTA);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=7  && x_grid <= 8) {
+  //      dispbuff_write_pixel(y,x,PXL_BLACK);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=9  && x_grid <= 10) {
+  //      dispbuff_write_pixel(y,x,PXL_CYAN);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=11 && x_grid <= 12) {
+  //      dispbuff_write_pixel(y,x,PXL_BLACK);
+  //    } else if(y_grid >=7  && y_grid <= 7 &&
+  //              x_grid >=13 && x_grid <= 14) {
+  //      dispbuff_write_pixel(y,x,PXL_SILVER);
 
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=1  && x_grid <= 2) {
-        dispbuff_write_pixel(y,x,PXL_SILVER);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=3  && x_grid <= 4) {
-        dispbuff_write_pixel(y,x,PXL_YELLOW);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=5  && x_grid <= 6) {
-        dispbuff_write_pixel(y,x,PXL_CYAN);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=7  && x_grid <= 8) {
-        dispbuff_write_pixel(y,x,PXL_GREEN);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=9  && x_grid <= 10) {
-        dispbuff_write_pixel(y,x,PXL_MAGENTA);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=11 && x_grid <= 12) {
-        dispbuff_write_pixel(y,x,PXL_RED);
-      } else if(y_grid >=8  && y_grid <= 14 &&
-                x_grid >=13 && x_grid <= 14) {
-        dispbuff_write_pixel(y,x,PXL_BLUE);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=1  && x_grid <= 2) {
+  //      dispbuff_write_pixel(y,x,PXL_SILVER);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=3  && x_grid <= 4) {
+  //      dispbuff_write_pixel(y,x,PXL_YELLOW);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=5  && x_grid <= 6) {
+  //      dispbuff_write_pixel(y,x,PXL_CYAN);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=7  && x_grid <= 8) {
+  //      dispbuff_write_pixel(y,x,PXL_GREEN);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=9  && x_grid <= 10) {
+  //      dispbuff_write_pixel(y,x,PXL_MAGENTA);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=11 && x_grid <= 12) {
+  //      dispbuff_write_pixel(y,x,PXL_RED);
+  //    } else if(y_grid >=8  && y_grid <= 14 &&
+  //              x_grid >=13 && x_grid <= 14) {
+  //      dispbuff_write_pixel(y,x,PXL_BLUE);
 
-      } else {
-        dispbuff_write_pixel(y,x,PXL_BLACK);
-      }
+  //    } else {
+  //      dispbuff_write_pixel(y,x,PXL_BLACK);
+  //    }
 
-    }
-  }
-  console_puts("Writing test image...\n");
-  display_write();
-  console_puts("Wrote test image...\n");
+  //  }
+  //}
+  //console_puts("Writing test image...\n");
+  //display_write();
+  //console_puts("Wrote test image...\n");
 
+  LED = 0xFF;
   console_puts("Booting DE10Nano RISCV Bootloader...\n\n");
-  display_write();
+  //display_write();
 
   console_puts("Initiating SDCard...");
-  display_write();
+  //display_write();
   sdcard_on();
   console_puts("done\n");
-  display_write();
+  //display_write();
 
   console_puts("Initiating Random Number Generator...");
-  display_write();
+  //display_write();
   rand_init();
   console_puts("done\n");
-  display_write();
+  //display_write();
 
+  LED=1;
   console_puts("Testing SDCard read of Sector 0...");
-  display_write();
+  //display_write();
+  LED=2;
   sdcard_read(sdcard_data,512*0);
+  LED=3;
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(sdcard_data[i]));
   }
+  LED=4;
   console_puts("\ndone\n");
-  display_write();
+  LED=5;
+  //display_write();
 
   console_puts("DDR3 Test");
   console_puts("Writing SDCard Sector 0 to DDR3...");
@@ -219,12 +225,12 @@ void main(void) {
   }
   console_puts("done\n");
   console_puts("Reading SDCard Sector 0 from DDR3...\n");
-  display_write();
+  //display_write();
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(ddr3[i] & 0xFF));
   }
   console_puts("\ndone\n");
-  display_write();
+  //display_write();
 
   console_puts("SDCard Master Boot Record Parse Test\n");
   sdcard_read(sdcard_data,512*0);
@@ -352,7 +358,7 @@ void main(void) {
   for(int i = 0; i < 2; i++) {console_puts(uint8_to_hex(master_boot_record->checksum[i]));}
   console_putc('\n');
 
-  display_write();
+  //display_write();
 
 
   console_puts("SDCard Partition 0 BootSector Parse Test\n");
@@ -485,7 +491,7 @@ void main(void) {
   for(int i = 0; i < 2  ; i++) {console_puts(uint8_to_hex(boot_sector->checksum                [i]));}
   console_putc('\n');
 
-  display_write();
+  //display_write();
 
 
   console_puts("SDCard Partition 0 FAT Parse Test\n");
@@ -505,7 +511,7 @@ void main(void) {
     console_puts(uint8_to_hex(sdcard_data[i]));
   }
   console_puts("\ndone\n");
-  display_write();
+  //display_write();
 
 
 
@@ -643,7 +649,7 @@ void main(void) {
   for(int i = 0; i < 2  ; i++) {console_puts(uint8_to_hex(boot_sector->checksum                [i]));}
   console_putc('\n');
 
-  display_write();
+  //display_write();
 
 
   console_puts("SDCard Partition 1 FAT Parse Test\n");
@@ -663,7 +669,7 @@ void main(void) {
     console_puts(uint8_to_hex(sdcard_data[i]));
   }
   console_puts("\ndone\n");
-  display_write();
+  //display_write();
 
 
 
@@ -797,7 +803,7 @@ void main(void) {
   for(int i = 0; i < 2  ; i++) {console_puts(uint8_to_hex(boot_sector->checksum                [i]));}
   console_putc('\n');
 
-  display_write();
+  //display_write();
 
 
   console_puts("SDCard Partition 2 FAT Parse Test\n");
@@ -817,7 +823,7 @@ void main(void) {
     console_puts(uint8_to_hex(sdcard_data[i]));
   }
   console_puts("\ndone\n");
-  display_write();
+  //display_write();
 
 
 
@@ -951,7 +957,7 @@ void main(void) {
   for(int i = 0; i < 2  ; i++) {console_puts(uint8_to_hex(boot_sector->checksum                [i]));}
   console_putc('\n');
 
-  display_write();
+  //display_write();
 
 
   console_puts("SDCard Partition 3 FAT Parse Test\n");
@@ -971,7 +977,7 @@ void main(void) {
     console_puts(uint8_to_hex(sdcard_data[i]));
   }
   console_puts("\ndone\n");
-  display_write();
+  //display_write();
 
   while(1);
 }

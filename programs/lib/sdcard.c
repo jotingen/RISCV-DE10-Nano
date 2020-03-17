@@ -5,6 +5,8 @@
 #include "sdcard.h"
 #include "display.h"
 
+#define LED             (*((volatile unsigned int *) (0xC0000000)))
+
 #define SDCARD_NOOP        (*((volatile uint32_t *) (0xC4000000)))
 #define SDCARD_CMD_SEND    (*((volatile uint32_t *) (0xC4000004)))
 #define SDCARD_CMD_LO      (*((volatile uint32_t *) (0xC4000008)))
@@ -357,6 +359,7 @@ void sdcard_rsp(uint8_t * arr, uint8_t bytes, uint64_t rsp) {
 }
 
 void     sdcard_read(uint8_t * data, uint32_t addr) {
+  LED = 0x11;
   uint64_t message;
   uint64_t rsp;
   uint8_t  rsp_arr[5];
@@ -380,6 +383,7 @@ void     sdcard_read(uint8_t * data, uint32_t addr) {
   //SD_printR1(rsp_arr[0]);
 
   for(int i = 0; i < 514; i = i+4) {
+    LED = i;
     uint32_t data_out = SDCARD_DATA_OUT;
     data[i+0] = data_out >> 0;
     data[i+1] = data_out >> 8;
@@ -393,6 +397,7 @@ void     sdcard_read(uint8_t * data, uint32_t addr) {
   //console_putc('\n');
   //console_puts("Read data captured\n");
   //display_write();
+  LED = 0x22;
   return;
 }
 
