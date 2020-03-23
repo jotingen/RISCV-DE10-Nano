@@ -37,3 +37,6 @@ greybox_tmp
 rtl_work
 
 *.vcd
+
+transcript
+vsim_stacktrace.vstf

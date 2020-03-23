@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Wed Mar 11 03:19:37 2020
+[*] Sat Mar 21 21:08:03 2020
 [*]
-[dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\output\modelsim\sim_000.vcd"
-[dumpfile_mtime] "Wed Mar 11 03:16:27 2020"
-[dumpfile_size] 658150601
+[dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\output\simulation\sdcard_boot\sim_000.vcd"
+[dumpfile_mtime] "Sat Mar 21 21:05:41 2020"
+[dumpfile_size] 205169683
 [savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\RISCV.gtkw"
-[timestart] 0
-[size] 2106 1211
+[timestart] 4691
+[size] 1848 1057
 [pos] -1 -1
-*-20.549732 4804000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.862555 6050 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [treeopen] tb.dut.ddr3.
@@ -26,7 +26,7 @@
 [sst_width] 290
 [signals_width] 457
 [sst_expanded] 1
-[sst_vpaned_height] 542
+[sst_vpaned_height] 351
 @28
 tb.FPGA_CLK1_50
 tb.FPGA_CLK2_50
@@ -512,7 +512,7 @@ tb.dut.shield.sdcard.SPIDone
 -SDCard
 @200
 -
-@c00200
+@800200
 -DDR3
 @28
 tb.dut.ddr3.clk
@@ -602,6 +602,122 @@ tb.dut.ddr3.i_membus_write
 @200
 -
 @28
+tb.dut.ddr3.mem_buffer_in_lru
+@22
+tb.dut.ddr3.mem_buffer_lru_entry[3:0]
+@28
+tb.dut.ddr3.mem_buffer_0_vld
+tb.dut.ddr3.mem_buffer_1_vld
+tb.dut.ddr3.mem_buffer_2_vld
+tb.dut.ddr3.mem_buffer_3_vld
+tb.dut.ddr3.mem_buffer_4_vld
+tb.dut.ddr3.mem_buffer_5_vld
+tb.dut.ddr3.mem_buffer_6_vld
+tb.dut.ddr3.mem_buffer_7_vld
+tb.dut.ddr3.mem_buffer_8_vld
+tb.dut.ddr3.mem_buffer_9_vld
+tb.dut.ddr3.mem_buffer_10_vld
+tb.dut.ddr3.mem_buffer_11_vld
+tb.dut.ddr3.mem_buffer_12_vld
+tb.dut.ddr3.mem_buffer_13_vld
+tb.dut.ddr3.mem_buffer_14_vld
+tb.dut.ddr3.mem_buffer_15_vld
+@c00200
+-Mem Buffer
+@22
+tb.dut.ddr3.mem_buffer_0_addr[25:4]
+tb.dut.ddr3.mem_buffer_0_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_0_vld
+@22
+tb.dut.ddr3.mem_buffer_1_addr[25:4]
+tb.dut.ddr3.mem_buffer_1_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_1_vld
+@22
+tb.dut.ddr3.mem_buffer_2_addr[25:4]
+tb.dut.ddr3.mem_buffer_2_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_2_vld
+@22
+tb.dut.ddr3.mem_buffer_3_addr[25:4]
+tb.dut.ddr3.mem_buffer_3_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_3_vld
+@22
+tb.dut.ddr3.mem_buffer_4_addr[25:4]
+tb.dut.ddr3.mem_buffer_4_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_4_vld
+@22
+tb.dut.ddr3.mem_buffer_5_addr[25:4]
+tb.dut.ddr3.mem_buffer_5_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_5_vld
+@22
+tb.dut.ddr3.mem_buffer_6_addr[25:4]
+tb.dut.ddr3.mem_buffer_6_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_6_vld
+@22
+tb.dut.ddr3.mem_buffer_7_addr[25:4]
+tb.dut.ddr3.mem_buffer_7_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_7_vld
+@22
+tb.dut.ddr3.mem_buffer_8_addr[25:4]
+tb.dut.ddr3.mem_buffer_8_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_8_vld
+@22
+tb.dut.ddr3.mem_buffer_9_addr[25:4]
+tb.dut.ddr3.mem_buffer_9_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_9_vld
+@22
+tb.dut.ddr3.mem_buffer_10_addr[25:4]
+tb.dut.ddr3.mem_buffer_10_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_10_vld
+@22
+tb.dut.ddr3.mem_buffer_11_addr[25:4]
+tb.dut.ddr3.mem_buffer_11_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_11_vld
+@22
+tb.dut.ddr3.mem_buffer_12_addr[25:4]
+tb.dut.ddr3.mem_buffer_12_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_12_vld
+@22
+tb.dut.ddr3.mem_buffer_13_addr[25:4]
+tb.dut.ddr3.mem_buffer_13_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_13_vld
+@22
+tb.dut.ddr3.mem_buffer_14_addr[25:4]
+tb.dut.ddr3.mem_buffer_14_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_14_vld
+@22
+tb.dut.ddr3.mem_buffer_15_addr[25:4]
+tb.dut.ddr3.mem_buffer_15_data[127:0]
+@28
+tb.dut.ddr3.mem_buffer_15_vld
+@1401200
+-Mem Buffer
+@200
+-
+@22
+tb.dut.ddr3.mem_lru.lru[3:0]
+@28
+tb.dut.ddr3.mem_lru.lru_new
+tb.dut.ddr3.mem_lru.lru_touch
+@22
+#{tb.dut.ddr3.mem_lru.lru_touched[3:0]} tb.dut.ddr3.mem_lru.lru_touched[3] tb.dut.ddr3.mem_lru.lru_touched[2] tb.dut.ddr3.mem_lru.lru_touched[1] tb.dut.ddr3.mem_lru.lru_touched[0]
+@200
+-
+@28
 tb.dut.ddr3.bus_inst_buff_almost_empty
 tb.dut.ddr3.bus_inst_ack_o
 tb.dut.ddr3.state_idle
@@ -611,6 +727,12 @@ tb.dut.ddr3.state_load_pending
 tb.dut.ddr3.state_update
 @22
 tb.dut.ddr3.flush_cnt[3:0]
+@28
+tb.dut.ddr3.state_inst
+tb.dut.ddr3.state_mem
+tb.dut.ddr3.state_load_0
+@29
+tb.dut.ddr3.state_load_1
 @200
 -
 @28
@@ -620,12 +742,6 @@ tb.dut.ddr3.inst_buffer_addr[25:4]
 tb.dut.ddr3.inst_buffer_data[127:0]
 @200
 -
-@28
-tb.dut.ddr3.mem_buffer_vld
-@22
-tb.dut.ddr3.mem_buffer_addr[25:4]
-tb.dut.ddr3.mem_buffer_data[127:0]
-@200
 -
 @28
 tb.dut.ddr3.ddr3_fifo_out_wrreq
@@ -699,7 +815,7 @@ tb.dut.ddr3.ddr3_fifo_in.wrreq
 tb.dut.ddr3.o_membus_ack
 @22
 tb.dut.ddr3.o_membus_data[31:0]
-@1401200
+@1000200
 -DDR3
 @200
 -
@@ -775,9 +891,8 @@ tb.dut.GPIO_0_07
 tb.dut.GPIO_0_09
 @22
 tb.dut.uart.baud_rate[31:0]
-@29
-tb.dut.uart.state_idle
 @28
+tb.dut.uart.state_idle
 tb.dut.uart.state_sending
 @22
 tb.dut.uart.msg[11:0]

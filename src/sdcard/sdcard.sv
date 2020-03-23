@@ -34,52 +34,53 @@ parameter R2_BITS  = 2*8;
 parameter R3_BITS  = 5*8;
 parameter R7_BITS  = 5*8;
 
-logic [15:0] sck_cnt;
-logic        sck_put;
+logic [15:0]   sck_cnt;
+logic          sck_put;
 
-logic  [12:0] bits;
-logic  [8:0]  rsp_bits;
-logic  [12:0] data_bits;
+logic  [12:0]  bits;
+logic  [8:0]   rsp_bits;
+logic  [12:0]  data_bits;
 
-logic [63:0] cmd;
-logic [31:0] rspArrived;
-logic [47:0] rsp;
-logic             data_capture;
+logic [63:0]   cmd;
+logic [31:0]   rspArrived;
+logic [47:0]   rsp;
+logic          data_capture;
 logic [16-1:0] data;
-logic [8:0] data_pending_timeout;
-logic [8:0] data_32b_out;
+logic [8:0]    data_pending_timeout;
+logic [8:0]    data_32b_out;
 
-logic [31:0] dataIn;
-logic [31:0] dataArrived;
-logic [31:0] dataOut;
+logic [31:0]   dataIn;
+logic [31:0]   dataArrived;
+logic [31:0]   dataOut;
 
-logic state_idle;
-logic state_spi_req;
-logic state_cmd_sending;
-logic state_rsp_pending;
-logic state_rsp_recieved;
-logic state_data_pending;
-logic state_data_recieving;
-logic state_data_recieved;
+logic          state_idle;
+logic          state_spi_req;
+logic          state_cmd_sending;
+logic          state_rsp_pending;
+logic          state_rsp_recieved;
+logic          state_data_pending;
+logic          state_data_recieving;
+logic          state_data_recieved;
 
-logic        data_in_fifo_clr;
-logic        data_in_fifo_wrreq;
-logic        data_in_fifo_rdack;
-logic [31:0] data_in_fifo_data_out_rev;
-logic [31:0] data_in_fifo_data_out;
-logic        data_in_fifo_empty;
+logic          data_in_fifo_clr;
+logic          data_in_fifo_wrreq;
+logic          data_in_fifo_rdack;
+logic [31:0]   data_in_fifo_data_out_rev;
+logic [31:0]   data_in_fifo_data_out;
+logic          data_in_fifo_empty;
 
 //TODO this is 8k because I dont want to deal with CRC, should probably deal and use 4k
 sdcard_data_in_fifo data_in_fifo (
-	.aclr    (data_in_fifo_clr),
-	.data    (MISO),
-	.rdclk   (clk),
-	.rdreq   (data_in_fifo_rdack),
-	.wrclk   (clk),
-	.wrreq   (data_in_fifo_wrreq),
-	.q       (data_in_fifo_data_out_rev),
-	.rdempty (data_in_fifo_empty)
+  .aclr    (data_in_fifo_clr),
+  .data    (MISO),
+  .rdclk   (clk),
+  .rdreq   (data_in_fifo_rdack),
+  .wrclk   (clk),
+  .wrreq   (data_in_fifo_wrreq),
+  .q       (data_in_fifo_data_out_rev),
+  .rdempty (data_in_fifo_empty)
 );
+
 always_comb
   begin
   for(int i = 0; i < 32; i++)
@@ -91,7 +92,7 @@ always_comb
 always_comb
   begin
   data_capture = cmd[63];
-  rsp_bits = cmd[62:56]*8;
+  rsp_bits     = cmd[62:56]*8;
   end
 
 always_ff @(posedge clk)
@@ -105,28 +106,28 @@ always_ff @(posedge clk)
   state_data_recieving <= '0;
   state_data_recieved  <= '0;
 
-  SPIDone  <= '0;
-  SPIReq   <= SPIReq;
-  CS       <= CS;
-  RS_DC    <= RS_DC;
-  MOSI     <= MOSI; 
+  SPIDone              <= '0;
+  SPIReq               <= SPIReq;
+  CS                   <= CS;
+  RS_DC                <= RS_DC;
+  MOSI                 <= MOSI; 
 
-  cmd         <= cmd;         
-  rspArrived  <= rspArrived;  
-  rsp         <= rsp;         
-  data        <= data;
-  data_32b_out<= data_32b_out;
-  data_pending_timeout<= data_pending_timeout;
-  dataIn      <= dataIn;      
-  dataArrived <= dataArrived; 
-  dataOut     <= dataOut;     
+  cmd                  <= cmd;         
+  rspArrived           <= rspArrived;  
+  rsp                  <= rsp;         
+  data                 <= data;
+  data_32b_out         <= data_32b_out;
+  data_pending_timeout <= data_pending_timeout;
+  dataIn               <= dataIn;      
+  dataArrived          <= dataArrived; 
+  dataOut              <= dataOut;     
 
-  data_in_fifo_clr   <= '0;
-  data_in_fifo_wrreq <= '0;
-  data_in_fifo_rdack <= '0;
+  data_in_fifo_clr     <= '0;
+  data_in_fifo_wrreq   <= '0;
+  data_in_fifo_rdack   <= '0;
 
-  o_bus_ack   <= '0;
-  o_bus_data  <= '0;   
+  o_bus_ack            <= '0;
+  o_bus_data           <= '0;   
 
   unique
   case (1'b1)
@@ -138,7 +139,7 @@ always_ff @(posedge clk)
                    //NoOp
                    'h0000:  begin
                             o_bus_ack             <= '1;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Cmd Send
                    'h0001:  begin 
@@ -164,7 +165,7 @@ always_ff @(posedge clk)
                             o_bus_data[23:16]     <= i_bus_data_rd_mask ? cmd[23:16] : '0;
                             o_bus_data[15:8]      <= i_bus_data_rd_mask ? cmd[15:8]  : '0;
                             o_bus_data[7:0]       <= i_bus_data_rd_mask ? cmd[7:0]   : '0;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Cmd Hi
                    'h0003:  begin 
@@ -180,7 +181,7 @@ always_ff @(posedge clk)
                             o_bus_data[23:16]     <= i_bus_data_rd_mask ? cmd[55:48]  : '0;
                             o_bus_data[15:8]      <= i_bus_data_rd_mask ? cmd[47:40]  : '0;
                             o_bus_data[7:0]       <= i_bus_data_rd_mask ? cmd[39:32]  : '0;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Rsp  Arrived
                    'h0004:  begin 
@@ -189,7 +190,7 @@ always_ff @(posedge clk)
                             o_bus_data[23:16]     <= i_bus_data_rd_mask ? rspArrived[23:16] : '0;
                             o_bus_data[15:8]      <= i_bus_data_rd_mask ? rspArrived[15:8]  : '0;
                             o_bus_data[7:0]       <= i_bus_data_rd_mask ? rspArrived[7:0]   : '0;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Rsp Lo
                    'h0005:  begin 
@@ -198,14 +199,14 @@ always_ff @(posedge clk)
                             o_bus_data[23:16]     <= i_bus_data_rd_mask ? rsp[23:16] : '0;
                             o_bus_data[15:8]      <= i_bus_data_rd_mask ? rsp[15:8]  : '0;
                             o_bus_data[7:0]       <= i_bus_data_rd_mask ? rsp[7:0]   : '0;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Rsp Hi
                    'h0006:  begin 
                             o_bus_ack             <= '1;
                             o_bus_data[15:8]      <= i_bus_data_rd_mask ? rsp[47:40]  : '0;
                             o_bus_data[7:0]       <= i_bus_data_rd_mask ? rsp[39:32]  : '0;
-                            state_idle <= '1;
+                            state_idle            <= '1;
                             end
                    //Data
                    'h0007:  begin 

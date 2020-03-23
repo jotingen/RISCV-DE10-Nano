@@ -216,21 +216,21 @@ void main(void) {
   LED=5;
   //display_write();
 
-  console_puts("DDR3 Test");
-  console_puts("Writing SDCard Sector 0 to DDR3...");
-  for(int i = 0; i < 514; i++) {
-    uint32_t word = 0;
-    word = word | sdcard_data[i];
-    ddr3[i] = word;
-  }
-  console_puts("done\n");
-  console_puts("Reading SDCard Sector 0 from DDR3...\n");
-  //display_write();
-  for(int i = 0; i < 514; i++) {
-    console_puts(uint8_to_hex(ddr3[i] & 0xFF));
-  }
-  console_puts("\ndone\n");
-  //display_write();
+  //console_puts("DDR3 Test");
+  //console_puts("Writing SDCard Sector 0 to DDR3...");
+  //for(int i = 0; i < 514; i++) {
+  //  uint32_t word = 0;
+  //  word = word | sdcard_data[i];
+  //  ddr3[i] = word;
+  //}
+  //console_puts("done\n");
+  //console_puts("Reading SDCard Sector 0 from DDR3...\n");
+  ////display_write();
+  //for(int i = 0; i < 514; i++) {
+  //  console_puts(uint8_to_hex(ddr3[i] & 0xFF));
+  //}
+  //console_puts("\ndone\n");
+  ////display_write();
 
   console_puts("SDCard Master Boot Record Parse Test\n");
   sdcard_read(sdcard_data,512*0);
