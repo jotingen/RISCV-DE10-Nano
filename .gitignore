@@ -40,3 +40,5 @@ rtl_work
 
 transcript
 vsim_stacktrace.vstf
+/verif/sdcard.iso
+*.orig
