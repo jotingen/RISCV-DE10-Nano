@@ -24,6 +24,7 @@ logic [15:0][3:0]  br_pred_take;
 logic [15:0][31:0] br_pred_PC;
 logic [15:0][31:0] br_pred_PC_taken;
 
+`ifdef SIM
 logic        br_pred_0_vld;
 logic [3:0]  br_pred_0_take;
 logic [31:0] br_pred_0_PC;
@@ -103,6 +104,7 @@ logic        br_pred_15_vld;
 logic [3:0]  br_pred_15_take;
 logic [31:0] br_pred_15_PC;
 logic [31:0] br_pred_15_PC_taken;
+`endif
 
 logic [3:0]        lru;
 logic [0:0]        lru0;
@@ -118,6 +120,7 @@ logic [1:0]        lru1_new_next;
 logic [3:0]        lru2_new_next;
 logic [7:0]        lru3_new_next;
 
+`ifdef SIM
 assign br_pred_0_vld       = br_pred_vld[0];      
 assign br_pred_0_take      = br_pred_take[0];     
 assign br_pred_0_PC        = br_pred_PC[0];       
@@ -197,6 +200,7 @@ assign br_pred_15_vld      = br_pred_vld[15];
 assign br_pred_15_take     = br_pred_take[15];    
 assign br_pred_15_PC       = br_pred_PC[15];      
 assign br_pred_15_PC_taken = br_pred_PC_taken[15];
+`endif
 
 always_comb
   begin

@@ -555,6 +555,7 @@ logic           sdcard_mmc_bus_ack;
 logic [31:0]    sdcard_mmc_bus_data;
 
 `ifndef SIM
+logic         DDR3_CLK;  //100MHz
 logic         ddr3_avl_ready;                  //          	 .avl.waitrequest
 logic [25:0]  ddr3_avl_addr;                   //             .address
 logic         ddr3_avl_rdata_valid;            //             .readdatavalid
@@ -593,6 +594,7 @@ assign HDMI_TX_CLK = '0;
 assign HDMI_TX_DE  = '0;
 assign HDMI_TX_D   = '0;
 assign HDMI_TX_HS  = '0;
+assign HDMI_TX_VS  = '0;
 
 riscv #(.M_EXT(1)) riscv (
   .clk         (clk),

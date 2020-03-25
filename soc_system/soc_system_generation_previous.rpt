@@ -1,33 +1,14 @@
 Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --block-symbol-file --output-directory=D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --block-symbol-file --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
 Progress: Loading RISCV-DE10-Nano/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 18.1]
+Progress: Adding clk_50 [clock_source 19.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
-Progress: Reading input file
-Progress: Adding address_span_extender_0 [altera_address_span_extender 16.0]
-Warning: address_span_extender_0: Used altera_address_span_extender 18.1 (instead of 16.0)
-Progress: Parameterizing module address_span_extender_0
-Progress: Adding clk_50 [clock_source 16.0]
-Warning: clk_50: Used clock_source 18.1 (instead of 16.0)
-Progress: Parameterizing module clk_50
-Progress: Adding clock_bridge_0 [altera_clock_bridge 16.0]
-Warning: clock_bridge_0: Used altera_clock_bridge 18.1 (instead of 16.0)
-Progress: Parameterizing module clock_bridge_0
-Progress: Adding hps [altera_hps 16.0]
-Warning: hps: Used altera_hps 18.1 (instead of 16.0)
-Progress: Parameterizing module hps
-Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
-Progress: Parameterizing module hps_reset_manager_0
-Progress: Building connections
-Progress: Parameterizing connections
-Progress: Validating
-Progress: Done reading input file
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 18.1]
+Progress: Adding pll [altera_pll 19.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
@@ -43,16 +24,16 @@ Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --synthesis=VERILOG --output-directory=D:\Users\James\NextCloud\Quartus\RISCV-DE10-Nano\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --synthesis=VERILOG --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
 Progress: Loading RISCV-DE10-Nano/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 18.1]
+Progress: Adding clk_50 [clock_source 19.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 18.1]
+Progress: Adding pll [altera_pll 19.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
@@ -92,10 +73,79 @@ Info: hps_f2h_sdram0_data_burst_adapter: "mm_interconnect_0" instantiated altera
 Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
 Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
 Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
-Info: Reusing file D:/Users/James/NextCloud/Quartus/RISCV-DE10-Nano/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: Reusing file C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
 Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Error during execution of "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt": child process exited abnormally
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Execution of command "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt" failed
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Command 'dos2unix' not found.  Please install with:
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: sudo apt install dos2unix
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: child process exited abnormally
+Error: border: Error during execution of script generate_hps_sdram.tcl: seq: add_fileset_file: No such file C:/Users/jotin/AppData/Local/Temp/alt8346_8653961875605725264.dir/0004_seq_gen/hps_AC_ROM.hex
+Error: border: Error during execution of script generate_hps_sdram.tcl: Generation stopped, 3 or more modules remaining
+Error: border: Execution of script generate_hps_sdram.tcl failed
+Error: border: 2020.03.24.23:41:47 Info:
+Error: border: ********************************************************************************************************************
+Error: border: 
+Error: border: Use qsys-generate for a simpler command-line interface for generating IP.
+Error: border: 
+Error: border: Run ip-generate with switch --remove-qsys-generate-warning to prevent this notice from appearing in subsequent runs.
+Error: border: 
+Error: border: ********************************************************************************************************************
+Error: border: 2020.03.24.23:41:51 Warning: Ignored parameter assignment device=5CSEBA6U23I7
+Error: border: 2020.03.24.23:41:51 Warning: Ignored parameter assignment extended_family_support=true
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram: 'Quick' simulation modes are NOT timing accurate. Some simulation memory models may issue warnings or errors
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.seq: This module has no ports or interfaces
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.p0: p0.scc must be exported, or connected to a matching conduit.
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.as: as.afi_init_cal_req must be exported, or connected to a matching conduit.
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.as: as.tracking must be exported, or connected to a matching conduit.
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.c0: c0.status must be exported, or connected to a matching conduit.
+Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.p0: p0.avl must be connected to an Avalon-MM master
+Error: border: 2020.03.24.23:41:58 Info: hps_sdram: Generating altera_mem_if_hps_emif "hps_sdram" for QUARTUS_SYNTH
+Error: border: 2020.03.24.23:42:00 Info: pll: "hps_sdram" instantiated altera_mem_if_hps_pll "pll"
+Error: border: 2020.03.24.23:42:00 Info: p0: Generating clock pair generator
+Error: border: 2020.03.24.23:42:02 Info: p0: Generating hps_sdram_p0_altdqdqs
+Error: border: 2020.03.24.23:42:10 Info: p0:
+Error: border: 2020.03.24.23:42:10 Info: p0: *****************************
+Error: border: 2020.03.24.23:42:10 Info: p0:
+Error: border: 2020.03.24.23:42:10 Info: p0: Remember to run the hps_sdram_p0_pin_assignments.tcl
+Error: border: 2020.03.24.23:42:10 Info: p0: script after running Synthesis and before Fitting.
+Error: border: 2020.03.24.23:42:10 Info: p0:
+Error: border: 2020.03.24.23:42:10 Info: p0: *****************************
+Error: border: 2020.03.24.23:42:10 Info: p0:
+Error: border: 2020.03.24.23:42:10 Info: p0: "hps_sdram" instantiated altera_mem_if_ddr3_hard_phy_core "p0"
+Error: border: 2020.03.24.23:42:10 Error: seq: Error during execution of "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt": child process exited abnormally
+Error: border: 2020.03.24.23:42:10 Error: seq: Execution of command "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt" failed
+Error: border: 2020.03.24.23:42:10 Error: seq: Command 'dos2unix' not found.  Please install with:
+Error: border: 2020.03.24.23:42:10 Error: seq: sudo apt install dos2unix
+Error: border: 2020.03.24.23:42:10 Error: seq: child process exited abnormally
+Error: border: 2020.03.24.23:42:10 Error: seq: add_fileset_file: No such file C:/Users/jotin/AppData/Local/Temp/alt8346_8653961875605725264.dir/0004_seq_gen/hps_AC_ROM.hex
+Error: border: while executing
+Error: border: "add_fileset_file $file_name [::alt_mem_if::util::hwtcl_utils::get_file_type $file_name 0] PATH $file_pathname"
+Error: border: ("foreach" body line 4)
+Error: border: invoked from within
+Error: border: "foreach file_pathname $return_files_sw {
+Error: border: 		_dprint 1 "Preparing to add $file_pathname"
+Error: border: 		set file_name [file tail $file_pathname]
+Error: border: 		add_fileset_file $..."
+Error: border: (procedure "generate_sw" line 18)
+Error: border: invoked from within
+Error: border: "generate_sw $name $fileset"
+Error: border: ("if" then script line 4)
+Error: border: invoked from within
+Error: border: "if {[string compare -nocase $fileset QUARTUS_SYNTH] == 0} {
+Error: border: 		set top_level_file "altera_mem_if_hhp_qseq_synth_top.v"
+Error: border: 		add_fileset_file $top_level_fi..."
+Error: border: (procedure "generate_files" line 4)
+Error: border: invoked from within
+Error: border: "generate_files $name QUARTUS_SYNTH"
+Error: border: (procedure "generate_synth" line 3)
+Error: border: invoked from within
+Error: border: "generate_synth altera_mem_if_hhp_qseq_synth_top"
+Error: border: 2020.03.24.23:42:10 Info: seq: "hps_sdram" instantiated altera_mem_if_hhp_ddr3_qseq "seq"
+Error: border: 2020.03.24.23:42:10 Error: Generation stopped, 3 or more modules remaining
+Error: border: 2020.03.24.23:42:10 Info: hps_sdram: Done "hps_sdram" with 7 modules, 33 files
 Info: border: "hps_io" instantiated altera_interface_generator "border"
-Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
-Info: soc_system: Done "soc_system" with 24 modules, 83 files
-Info: qsys-generate succeeded.
+Error: Generation stopped, 1 or more modules remaining
+Info: soc_system: Done "soc_system" with 24 modules, 74 files
+Error: qsys-generate failed with exit code 1: 70 Errors, 3 Warnings
 Info: Finished: Create HDL design files for synthesis

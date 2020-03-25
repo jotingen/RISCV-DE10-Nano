@@ -315,7 +315,7 @@
    type="avalon"
    dir="end" />
  <interface name="memory" internal="ddr3.memory" type="conduit" dir="end" />
- <module name="clk_50" kind="clock_source" version="18.1" enabled="1">
+ <module name="clk_50" kind="clock_source" version="19.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
@@ -339,7 +339,7 @@
    kind="hps_reset_manager"
    version="1.0"
    enabled="0" />
- <module name="pll" kind="altera_pll" version="18.1" enabled="1">
+ <module name="pll" kind="altera_pll" version="19.1" enabled="1">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device" value="5CSEBA6U23I7" />
@@ -542,12 +542,12 @@
   <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
   <parameter name="gui_use_locked" value="false" />
  </module>
- <connection kind="clock" version="18.1" start="clk_50.clk" end="ddr3.clk" />
- <connection kind="clock" version="18.1" start="clk_50.clk" end="pll.refclk" />
- <connection kind="reset" version="18.1" start="clk_50.clk_reset" end="pll.reset" />
+ <connection kind="clock" version="19.1" start="clk_50.clk" end="ddr3.clk" />
+ <connection kind="clock" version="19.1" start="clk_50.clk" end="pll.refclk" />
+ <connection kind="reset" version="19.1" start="clk_50.clk_reset" end="pll.reset" />
  <connection
    kind="reset"
-   version="18.1"
+   version="19.1"
    start="ddr3.h2f_reset"
    end="clk_50.clk_in_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />

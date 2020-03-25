@@ -282,7 +282,8 @@ lru_16 mem_lru (
   );
 always_comb
   begin
-  mem_buffer_in_lru = '0;
+  mem_buffer_in_lru         = '0;
+  mem_buffer_lru_entry_next = '0;
   for(int i = 0; i < 16; i++)
     begin
     if(mem_buffer_vld[i] &&
@@ -428,8 +429,8 @@ always_ff @(posedge clk)
                      begin
                      ddr3_fifo_out_wrreq <= '1;
                      mem_buffer_vld <= '0;
-                     ddr3_fifo_out_data  <= mem_buffer_data;
-                     ddr3_fifo_out_addr  <= {mem_buffer_addr[25:4],4'b0000};
+                     ddr3_fifo_out_data  <= mem_buffer_data[mem_buffer_lru_entry];
+                     ddr3_fifo_out_addr  <= {mem_buffer_addr[mem_buffer_lru_entry][25:4],4'b0000};
                      flush_cnt <= flush_cnt+1;
                      state_flush <= '1;
                      end

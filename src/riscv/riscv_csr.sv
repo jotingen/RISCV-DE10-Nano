@@ -94,7 +94,7 @@ always_ff @(posedge clk)
     begin
     csr_ack <= '1;
     unique
-    case (csr_addr)
+    casex (csr_addr)
       'hC00: begin
              csr_data_rd <= csr_C00;
              end
@@ -134,7 +134,7 @@ always_ff @(posedge clk)
     begin
     csr_ack <= '1;
     unique
-    case (csr_addr)
+    casex (csr_addr)
       'hC00: begin
              csr_C00 <= (csr_C00     & ~csr_mask) | 
                         (csr_data_wr & ~csr_mask);

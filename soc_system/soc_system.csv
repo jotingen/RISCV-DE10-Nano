@@ -1,12 +1,12 @@
-# system info soc_system on 2019.11.20.23:30:21
+# system info soc_system on 2020.03.24.23:31:08
 system_info:
 name,value
 DEVICE,5CSEBA6U23I7
 DEVICE_FAMILY,Cyclone V
-GENERATION_ID,1574310577
+GENERATION_ID,1585107022
 #
 #
-# Files generated for soc_system on 2019.11.20.23:30:21
+# Files generated for soc_system on 2020.03.24.23:31:08
 files:
 filepath,kind,attributes,module,is_top
 simulation/soc_system.v,VERILOG,,soc_system,true
