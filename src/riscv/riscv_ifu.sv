@@ -20,7 +20,7 @@ module riscv_ifu (
 
   output logic             ifu_vld,
   output logic [31:0]      ifu_inst,
-  output logic [63:32]     ifu_inst_order,
+  output logic [63:0]      ifu_inst_order,
   output logic [31:0]      ifu_inst_PC,
   output logic             ifu_inst_br_taken,
   output logic [31:0]      ifu_inst_br_pred_PC_next,
@@ -60,7 +60,7 @@ logic loaded;
 logic [3:0] pre_ifu_era;
 
 logic             pre_ifu_vld;
-logic [63:32]     pre_ifu_order;
+logic [63:0]      pre_ifu_order;
 logic [31:0]      instbus_data;
 
 logic [63:0] ifu_buff_order_in;

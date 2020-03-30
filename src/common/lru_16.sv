@@ -4,7 +4,6 @@ module lru_16 (
 
   input  logic              lru_touch,
   input  logic [3:0]        lru_touched,
-  input  logic              lru_new,
 
   output logic [3:0]        lru
 );
@@ -19,10 +18,6 @@ logic [0:0]        lru0_touch_next;
 logic [1:0]        lru1_touch_next;
 logic [3:0]        lru2_touch_next;
 logic [7:0]        lru3_touch_next;
-logic [0:0]        lru0_new_next;
-logic [1:0]        lru1_new_next;
-logic [3:0]        lru2_new_next;
-logic [7:0]        lru3_new_next;
 
 always_comb
   begin
@@ -37,7 +32,7 @@ always_comb
     'b0_?0_???1_??????0?: begin
                           mru = 'd13;
                           end
-    'b0_?0_????_??????1?: begin
+    'b0_?0_???1_??????1?: begin
                           mru = 'd12;
                           end
     'b0_?1_??0?_?????0??: begin
@@ -64,139 +59,71 @@ always_comb
     'b1_0?_?1??_??1?????: begin
                           mru = 'd4;
                           end
-    'b1_?1_0???_?0??????: begin
+    'b1_1?_0???_?0??????: begin
                           mru = 'd3;
                           end
-    'b1_?1_0???_?1??????: begin
+    'b1_1?_0???_?1??????: begin
                           mru = 'd2;
                           end
-    'b1_?1_1???_0???????: begin
+    'b1_1?_1???_0???????: begin
                           mru = 'd1;
                           end
-    'b1_?1_1???_1???????: begin
+    'b1_1?_1???_1???????: begin
                           mru = 'd0;
                           end
   endcase
   end
 always_comb
   begin
-  lru0_new_next = lru0;
-  lru1_new_next = lru1;
-  lru2_new_next = lru2;
-  lru3_new_next = lru3;
   lru = '0;
   casex ({lru0,lru1,lru2,lru3})
     'b0_?0_???0_???????0: begin
                           lru = 'd0;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[0] = ~lru2[0];
-                          lru3_new_next[0] = ~lru3[0];
                           end
     'b0_?0_???0_???????1: begin
                           lru = 'd1;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[0] = ~lru2[0];
-                          lru3_new_next[0] = ~lru3[0];
                           end
     'b0_?0_???1_??????0?: begin
                           lru = 'd2;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[0] = ~lru2[0];
-                          lru3_new_next[1] = ~lru3[1];
                           end
     'b0_?0_???1_??????1?: begin
                           lru = 'd3;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[0] = ~lru2[0];
-                          lru3_new_next[1] = ~lru3[1];
                           end
     'b0_?1_??0?_?????0??: begin
                           lru = 'd4;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[1] = ~lru2[1];
-                          lru3_new_next[2] = ~lru3[2];
                           end
     'b0_?1_??0?_?????1??: begin
                           lru = 'd5;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[1] = ~lru2[1];
-                          lru3_new_next[2] = ~lru3[2];
                           end
     'b0_?1_??1?_????0???: begin
                           lru = 'd6;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[1] = ~lru2[1];
-                          lru3_new_next[3] = ~lru3[3];
                           end
     'b0_?1_??1?_????1???: begin
                           lru = 'd7;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[0] = ~lru1[0];
-                          lru2_new_next[1] = ~lru2[1];
-                          lru3_new_next[3] = ~lru3[3];
                           end
     'b1_0?_?0??_???0????: begin
                           lru = 'd8;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[2] = ~lru2[2];
-                          lru3_new_next[4] = ~lru3[4];
                           end
     'b1_0?_?0??_???1????: begin
                           lru = 'd9;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[2] = ~lru2[2];
-                          lru3_new_next[4] = ~lru3[4];
                           end
     'b1_0?_?1??_??0?????: begin
                           lru = 'd10;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[2] = ~lru2[2];
-                          lru3_new_next[5] = ~lru3[5];
                           end
     'b1_0?_?1??_??1?????: begin
                           lru = 'd11;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[2] = ~lru2[2];
-                          lru3_new_next[5] = ~lru3[5];
                           end
     'b1_1?_0???_?0??????: begin
                           lru = 'd12;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[3] = ~lru2[3];
-                          lru3_new_next[6] = ~lru3[6];
                           end
     'b1_1?_0???_?1??????: begin
                           lru = 'd13;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[3] = ~lru2[3];
-                          lru3_new_next[6] = ~lru3[6];
                           end
     'b1_1?_1???_0???????: begin
                           lru = 'd14;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[3] = ~lru2[3];
-                          lru3_new_next[7] = ~lru3[7];
                           end
     'b1_1?_1???_1???????: begin
                           lru = 'd15;
-                          lru0_new_next[0] = ~lru0[0];
-                          lru1_new_next[1] = ~lru1[1];
-                          lru2_new_next[3] = ~lru2[3];
-                          lru3_new_next[7] = ~lru3[7];
                           end
   endcase
   end
@@ -319,13 +246,6 @@ always_ff @(posedge clk)
     lru1 <= lru1_touch_next;
     lru2 <= lru2_touch_next;
     lru3 <= lru3_touch_next;
-    end
-  else if(lru_new)
-    begin
-    lru0 <= lru0_new_next;
-    lru1 <= lru1_new_next;
-    lru2 <= lru2_new_next;
-    lru3 <= lru3_new_next;
     end
   else
     begin

@@ -86,7 +86,6 @@ logic [15:0]        mem_buffer_vld;
 logic [15:0][25:4]  mem_buffer_addr;
 logic [15:0][127:0] mem_buffer_data;
 logic               mem_buffer_in_lru;
-logic               mem_buffer_lru_new;
 logic               mem_buffer_lru_touch;
 logic [3:0]         mem_buffer_lru;
 logic [3:0]         mem_buffer_lru_entry_next;
@@ -276,7 +275,6 @@ lru_16 mem_lru (
   .lru_touch   (mem_buffer_lru_touch),
   .lru_touched (mem_buffer_lru_entry),
 
-  .lru_new     (mem_buffer_lru_new),
   
   .lru         (mem_buffer_lru)
   );
@@ -317,7 +315,6 @@ always_ff @(posedge clk)
   mem_buffer_addr     <= mem_buffer_addr;
   mem_buffer_data     <= mem_buffer_data;
   mem_buffer_lru_entry<= mem_buffer_lru_entry;
-  mem_buffer_lru_new  <= '0;
   mem_buffer_lru_touch  <= '0;
 
   bus_inst_ack_o      <= '0;
@@ -350,7 +347,7 @@ always_ff @(posedge clk)
     end
 
 
-  case (1'b1)
+  casex (1'b1)
     state_idle: begin
                 if((arb_mem  & membus_req_stgd) |
                    (arb_inst & membus_req_stgd & ~bus_inst_req_stgd))
@@ -383,7 +380,6 @@ always_ff @(posedge clk)
                   else
                     begin
                     state_load <= '1;
-                    //mem_buffer_lru_new <= '1;
                     mem_buffer_lru_touch <= '1;
                     mem_buffer_lru_entry<= mem_buffer_lru;
                     for(int i = 0; i < 16; i++)
@@ -644,7 +640,7 @@ always_ff @(posedge ddr3_clk)
   ddr3_fifo_out_rdack <= '0;
   ddr3_fifo_in_wrreq  <= '0;
 
-  case(1'b1)
+  casex(1'b1)
 		ddr3_state_idle: begin
 										 if(~ddr3_fifo_out_rdempty)
 											 begin
