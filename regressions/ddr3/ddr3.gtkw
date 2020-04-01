@@ -1,0 +1,27 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Thu Apr 02 09:02:53 2020
+[*]
+[dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\sim.vcd"
+[dumpfile_mtime] "Thu Apr 02 09:01:25 2020"
+[dumpfile_size] 369847
+[savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\ddr3.gtkw"
+[timestart] 0
+[size] 1857 1057
+[pos] -139 -139
+*-7.024542 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testrunner.
+[treeopen] testrunner.__ts.
+[treeopen] testrunner.__ts.ddr3_ut.
+[treeopen] testrunner.__ts.ddr3_ut.my_ddr3.
+[sst_width] 197
+[signals_width] 94
+[sst_expanded] 1
+[sst_vpaned_height] 314
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.clk
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_clk
+@29
+testrunner.__ts.ddr3_ut.my_ddr3.rst
+[pattern_trace] 1
+[pattern_trace] 0

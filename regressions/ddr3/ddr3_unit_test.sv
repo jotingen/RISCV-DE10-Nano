@@ -1,5 +1,8 @@
 `include "svunit_defines.svh"
 
+`include "clk_and_reset.svh"
+`include "ddr3_clk_and_reset.svh"
+
 `include "../../src/de10nano/ddr3/ddr3.sv"
 `include "../../src/common/lru_16.sv"
 
@@ -13,9 +16,8 @@ module ddr3_unit_test;
   string name = "ddr3_ut";
   svunit_testcase svunit_ut;
 
-  logic           clk;
-  logic           ddr3_clk;
-  logic           rst;
+  `CLK_RESET_FIXTURE(20000,10)
+  `DDR3_CLK_RESET_FIXTURE(3000,10)
 
   logic           ddr3_avl_ready;       
   logic [25:0]    ddr3_avl_addr;        
@@ -92,6 +94,51 @@ module ddr3_unit_test;
 
   endtask
 
+  initial
+    begin
+    ddr3_avl_ready       = '0;
+    ddr3_avl_rdata_valid = '0;
+    ddr3_avl_rdata       = '0;
+
+    bus_inst_adr_i  = '0;
+    bus_inst_data_i = '0;
+    bus_inst_we_i   = '0;
+    bus_inst_sel_i  = '0;
+    bus_inst_stb_i  = '0;
+    bus_inst_cyc_i  = '0;
+    bus_inst_tga_i  = '0;
+    bus_inst_tgd_i  = '0;
+    bus_inst_tgc_i  = '0;
+
+    i_membus_req          = '0;
+    i_membus_write        = '0;
+    i_membus_addr         = '0;
+    i_membus_data         = '0;
+    i_membus_data_rd_mask = '0;
+    i_membus_data_wr_mask = '0;
+    end
+
+  initial
+    begin
+    forever
+      begin
+      step();
+      end
+    end
+
+  initial
+    begin
+    forever
+      begin
+      ddr3_step();
+      end
+    end
+
+  initial
+    begin
+    $dumpfile("sim.vcd");
+    $dumpvars;
+    end
 
   //===================================
   // All tests are defined between the
@@ -110,6 +157,8 @@ module ddr3_unit_test;
 
   `SVTEST(TEST)
   $display("TEST");
+  reset();
+  step(100);
   `SVTEST_END
 
 
