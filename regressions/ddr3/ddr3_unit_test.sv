@@ -96,26 +96,37 @@ module ddr3_unit_test;
 
   initial
     begin
-    ddr3_avl_ready       = '0;
-    ddr3_avl_rdata_valid = '0;
-    ddr3_avl_rdata       = '0;
+    forever
+      begin
+      ddr3_step();
+      ddr3_avl_ready       = '0;
+      ddr3_avl_rdata_valid = '0;
+      ddr3_avl_rdata       = '0;
+      end
+    end
 
-    bus_inst_adr_i  = '0;
-    bus_inst_data_i = '0;
-    bus_inst_we_i   = '0;
-    bus_inst_sel_i  = '0;
-    bus_inst_stb_i  = '0;
-    bus_inst_cyc_i  = '0;
-    bus_inst_tga_i  = '0;
-    bus_inst_tgd_i  = '0;
-    bus_inst_tgc_i  = '0;
+  initial
+    begin
+    forever
+      begin
+      step();
+      bus_inst_adr_i  = '0;
+      bus_inst_data_i = '0;
+      bus_inst_we_i   = '0;
+      bus_inst_sel_i  = '0;
+      bus_inst_stb_i  = '0;
+      bus_inst_cyc_i  = '0;
+      bus_inst_tga_i  = '0;
+      bus_inst_tgd_i  = '0;
+      bus_inst_tgc_i  = '0;
 
-    i_membus_req          = '0;
-    i_membus_write        = '0;
-    i_membus_addr         = '0;
-    i_membus_data         = '0;
-    i_membus_data_rd_mask = '0;
-    i_membus_data_wr_mask = '0;
+      i_membus_req          = '0;
+      i_membus_write        = '0;
+      i_membus_addr         = '0;
+      i_membus_data         = '0;
+      i_membus_data_rd_mask = '0;
+      i_membus_data_wr_mask = '0;
+      end
     end
 
   initial
@@ -158,6 +169,13 @@ module ddr3_unit_test;
   `SVTEST(TEST)
   $display("TEST");
   reset();
+  step(100);
+  for(int i = 0; i < 25; i++)
+    begin
+    bus_inst_cyc_i = '1;
+    bus_inst_stb_i = '1;
+    step();
+    end
   step(100);
   `SVTEST_END
 

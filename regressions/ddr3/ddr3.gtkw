@@ -1,27 +1,72 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Apr 02 09:02:53 2020
+[*] Thu Apr 02 09:34:14 2020
 [*]
 [dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\sim.vcd"
-[dumpfile_mtime] "Thu Apr 02 09:01:25 2020"
-[dumpfile_size] 369847
+[dumpfile_mtime] "Thu Apr 02 09:33:24 2020"
+[dumpfile_size] 507472
 [savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\ddr3.gtkw"
-[timestart] 0
+[timestart] 2323000
 [size] 1857 1057
-[pos] -139 -139
-*-7.024542 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -1 -1
+*-19.351002 4440000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testrunner.
 [treeopen] testrunner.__ts.
 [treeopen] testrunner.__ts.ddr3_ut.
 [treeopen] testrunner.__ts.ddr3_ut.my_ddr3.
-[sst_width] 197
-[signals_width] 94
+[sst_width] 345
+[signals_width] 222
 [sst_expanded] 1
 [sst_vpaned_height] 314
 @28
 testrunner.__ts.ddr3_ut.my_ddr3.clk
 testrunner.__ts.ddr3_ut.my_ddr3.ddr3_clk
-@29
 testrunner.__ts.ddr3_ut.my_ddr3.rst
+@200
+-
+@22
+#{testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[31:0]} testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[31] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[30] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[29] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[28] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[27] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[26] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[25] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[24] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[23] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[22] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[21] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[20] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[19] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[18] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[17] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[16] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[15] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[14] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[13] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[12] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[11] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[10] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[9] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[8] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[7] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[6] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[5] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[4] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[3] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[2] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[1] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_i[0]
+#{testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[31:0]} testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[31] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[30] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[29] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[28] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[27] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[26] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[25] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[24] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[23] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[22] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[21] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[20] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[19] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[18] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[17] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[16] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[15] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[14] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[13] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[12] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[11] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[10] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[9] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[8] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[7] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[6] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[5] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[4] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[3] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[2] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[1] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_i[0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_we_i
+@22
+#{testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_i[3:0]} testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_i[3] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_i[2] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_i[1] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_i[0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_stb_i
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_cyc_i
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tga_i
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgd_i
+@22
+#{testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_i[3:0]} testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_i[3] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_i[2] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_i[1] testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_i[0]
+@200
+-
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_ack_o
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_stall_o
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_err_o
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_rty_o
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_o[31:0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tga_o
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgd_o
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_o[3:0]
+@200
+-
+@29
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_buff_empty
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_stgd[31:0]
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_data_stgd[31:0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_we_stgd
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_stgd[3:0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tga_stgd
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgd_stgd
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
