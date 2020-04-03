@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Thu Apr 02 09:34:14 2020
+[*] Thu Apr 02 09:41:57 2020
 [*]
 [dumpfile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\sim.vcd"
 [dumpfile_mtime] "Thu Apr 02 09:33:24 2020"
 [dumpfile_size] 507472
 [savefile] "C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\regressions\ddr3\ddr3.gtkw"
-[timestart] 2323000
+[timestart] 4402400
 [size] 1857 1057
 [pos] -1 -1
-*-19.351002 4440000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-16.351002 4662000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testrunner.
 [treeopen] testrunner.__ts.
 [treeopen] testrunner.__ts.ddr3_ut.
@@ -54,7 +54,7 @@ testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgd_o
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_o[3:0]
 @200
 -
-@29
+@28
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_buff_empty
 @22
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_adr_stgd[31:0]
@@ -66,7 +66,31 @@ testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_sel_stgd[3:0]
 @28
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tga_stgd
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgd_stgd
-@22
+@c00022
 testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
+@28
+(0)testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
+(1)testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
+(2)testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
+(3)testrunner.__ts.ddr3_ut.my_ddr3.bus_inst_tgc_stgd[3:0]
+@1401200
+-group_end
+@200
+-
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_addr[25:0]
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_wdata[127:0]
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_read_req
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_write_req
+@22
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_size[8:0]
+@200
+-
+@28
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_ready
+testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata_valid
+@23
+#{testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[127:0]} testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[127] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[126] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[125] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[124] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[123] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[122] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[121] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[120] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[119] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[118] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[117] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[116] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[115] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[114] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[113] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[112] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[111] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[110] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[109] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[108] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[107] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[106] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[105] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[104] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[103] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[102] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[101] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[100] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[99] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[98] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[97] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[96] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[95] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[94] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[93] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[92] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[91] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[90] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[89] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[88] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[87] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[86] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[85] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[84] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[83] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[82] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[81] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[80] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[79] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[78] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[77] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[76] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[75] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[74] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[73] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[72] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[71] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[70] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[69] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[68] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[67] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[66] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[65] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[64] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[63] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[62] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[61] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[60] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[59] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[58] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[57] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[56] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[55] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[54] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[53] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[52] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[51] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[50] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[49] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[48] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[47] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[46] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[45] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[44] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[43] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[42] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[41] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[40] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[39] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[38] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[37] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[36] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[35] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[34] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[33] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[32] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[31] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[30] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[29] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[28] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[27] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[26] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[25] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[24] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[23] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[22] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[21] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[20] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[19] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[18] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[17] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[16] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[15] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[14] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[13] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[12] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[11] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[10] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[9] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[8] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[7] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[6] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[5] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[4] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[3] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[2] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[1] testrunner.__ts.ddr3_ut.my_ddr3.ddr3_avl_rdata[0]
 [pattern_trace] 1
 [pattern_trace] 0

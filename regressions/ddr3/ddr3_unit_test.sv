@@ -57,6 +57,83 @@ module ddr3_unit_test;
   logic           o_membus_ack;
   logic [31:0]    o_membus_data;
 
+  logic [127:0] ddr3_mem[2**25-1:0];
+
+  initial
+  begin
+    foreach(ddr3_mem[i])
+    begin
+      ddr3_mem[i] = {$random(),$random(),$random(),$random()};
+    end
+  end
+
+  //DDR3 Monitor
+  logic [9:0][25:0]    ddr3_avl_addr_dly;        
+  logic [9:0][127:0]   ddr3_avl_wdata_dly;       
+  logic [9:0]          ddr3_avl_read_req_dly;    
+  logic [9:0]          ddr3_avl_write_req_dly;   
+  logic [9:0][8:0]     ddr3_avl_size_dly;
+  logic [25:0]    ddr3_avl_addr_stgd;        
+  logic [127:0]   ddr3_avl_wdata_stgd;       
+  logic           ddr3_avl_read_req_stgd;    
+  logic           ddr3_avl_write_req_stgd;   
+  logic [8:0]     ddr3_avl_size_stgd;
+  always_ff @(posedge ddr3_clk)
+  begin
+    ddr3_avl_addr_dly[0]      <= ddr3_avl_addr;        
+    ddr3_avl_wdata_dly[0]     <= ddr3_avl_wdata;       
+    ddr3_avl_read_req_dly[0]  <= ddr3_avl_read_req;    
+    ddr3_avl_write_req_dly[0] <= ddr3_avl_write_req;   
+    ddr3_avl_size_dly[0]      <= ddr3_avl_size;
+    for(int i = 1; i < 10; i++)
+    begin
+      ddr3_avl_addr_dly[i]      <= ddr3_avl_addr_dly[i-1];        
+      ddr3_avl_wdata_dly[i]     <= ddr3_avl_wdata_dly[i-1];       
+      ddr3_avl_read_req_dly[i]  <= ddr3_avl_read_req_dly[i-1];    
+      ddr3_avl_write_req_dly[i] <= ddr3_avl_write_req_dly[i-1];   
+      ddr3_avl_size_dly[i]      <= ddr3_avl_size_dly[i-1];
+    end
+    ddr3_avl_addr_stgd      <= ddr3_avl_addr_dly[9];        
+    ddr3_avl_wdata_stgd     <= ddr3_avl_wdata_dly[9];       
+    ddr3_avl_read_req_stgd  <= ddr3_avl_read_req_dly[9];    
+    ddr3_avl_write_req_stgd <= ddr3_avl_write_req_dly[9];   
+    ddr3_avl_size_stgd      <= ddr3_avl_size_dly[9];
+    if(rst)
+    begin
+      ddr3_avl_addr_dly       <= '0;
+      ddr3_avl_wdata_dly      <= '0;
+      ddr3_avl_read_req_dly   <= '0;
+      ddr3_avl_write_req_dly  <= '0;
+      ddr3_avl_size_dly       <= '0;
+      ddr3_avl_addr_stgd      <= '0;
+      ddr3_avl_wdata_stgd     <= '0;
+      ddr3_avl_read_req_stgd  <= '0;
+      ddr3_avl_write_req_stgd <= '0;
+      ddr3_avl_size_stgd      <= '0;
+    end
+  end
+
+
+  initial
+  begin
+    forever
+    begin
+      #0
+      if(ddr3_avl_read_req_stgd)
+      begin
+        $display("READ");
+        ddr3_avl_rdata_valid = '1;
+        ddr3_avl_rdata = ddr3_mem[ddr3_avl_addr_stgd];
+      end
+      if(ddr3_avl_write_req_stgd)
+      begin
+        $display("WRITE");
+        ddr3_mem[ddr3_avl_addr_stgd] = ddr3_avl_wdata_stgd;
+      end
+      ddr3_step();
+    end
+  end
+  
   //===================================
   // This is the UUT that we're 
   // running the Unit Tests on
@@ -174,6 +251,7 @@ module ddr3_unit_test;
     begin
     bus_inst_cyc_i = '1;
     bus_inst_stb_i = '1;
+      bus_inst_adr_i = $random() & 32'h01FF_FFFC;//i * 4;
     step();
     end
   step(100);
