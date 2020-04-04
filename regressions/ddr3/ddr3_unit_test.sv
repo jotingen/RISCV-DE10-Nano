@@ -10,14 +10,19 @@
 `include "../../src/quartus/wishbone_buff/wishbone_buff.v"
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/altera_mf.v"
 
+`include "ddr3_mem.sv"
+`include "ddr3_wishbone_driver.sv"
+`include "ddr3_wishbone_monitor.sv"
+
 module ddr3_unit_test;
   import svunit_pkg::svunit_testcase;
 
   string name = "ddr3_ut";
   svunit_testcase svunit_ut;
 
-  `CLK_RESET_FIXTURE(20000,10)
-  `DDR3_CLK_RESET_FIXTURE(3000,10)
+
+  `CLK_RESET_FIXTURE(20,10)
+  `DDR3_CLK_RESET_FIXTURE(3,10)
 
   logic           ddr3_avl_ready;       
   logic [25:0]    ddr3_avl_addr;        
@@ -57,14 +62,24 @@ module ddr3_unit_test;
   logic           o_membus_ack;
   logic [31:0]    o_membus_data;
 
-  logic [127:0] ddr3_mem[2**25-1:0];
+  ddr3_mem dut_mem;
+  ddr3_mem test_mem;
+
+  ddr3_wishbone_driver bus_inst_driver;
+  ddr3_wishbone_monitor bus_inst_monitor;
 
   initial
   begin
-    foreach(ddr3_mem[i])
-    begin
-      ddr3_mem[i] = {$random(),$random(),$random(),$random()};
-    end
+    dut_mem  = new();
+    test_mem = new dut_mem;
+    dut_mem.name  = "dut_mem";
+    test_mem.name = "test_mem";
+
+    bus_inst_driver = new();
+    bus_inst_driver.name = "bus_inst";
+
+    bus_inst_monitor = new();
+    bus_inst_monitor.name = "bus_inst";
   end
 
   //DDR3 Monitor
@@ -78,6 +93,7 @@ module ddr3_unit_test;
   logic           ddr3_avl_read_req_stgd;    
   logic           ddr3_avl_write_req_stgd;   
   logic [8:0]     ddr3_avl_size_stgd;
+
   always_ff @(posedge ddr3_clk)
   begin
     ddr3_avl_addr_dly[0]      <= ddr3_avl_addr;        
@@ -121,16 +137,42 @@ module ddr3_unit_test;
       #0
       if(ddr3_avl_read_req_stgd)
       begin
-        $display("READ");
         ddr3_avl_rdata_valid = '1;
-        ddr3_avl_rdata = ddr3_mem[ddr3_avl_addr_stgd];
+        ddr3_avl_rdata = dut_mem.read(ddr3_avl_addr_stgd);
       end
       if(ddr3_avl_write_req_stgd)
       begin
-        $display("WRITE");
-        ddr3_mem[ddr3_avl_addr_stgd] = ddr3_avl_wdata_stgd;
+        dut_mem.write(ddr3_avl_addr_stgd, ddr3_avl_wdata_stgd, 'hF);
       end
       ddr3_step();
+    end
+  end
+
+  //Monitors
+  initial
+  begin
+    forever
+    begin
+      nextSamplePoint();
+      bus_inst_monitor.monitor(bus_inst_adr_i,
+                               bus_inst_data_i,
+                               bus_inst_we_i,
+                               bus_inst_sel_i,
+                               bus_inst_stb_i,
+                               bus_inst_cyc_i,
+                               bus_inst_tga_i,
+                               bus_inst_tgd_i,
+                               bus_inst_tgc_i,
+                               
+                               bus_inst_ack_o,
+                               bus_inst_stall_o,
+                               bus_inst_err_o,
+                               bus_inst_rty_o,
+                               bus_inst_data_o,
+                               bus_inst_tga_o,
+                               bus_inst_tgd_o,
+                               bus_inst_tgc_o);
+      step();
     end
   end
   
@@ -182,27 +224,22 @@ module ddr3_unit_test;
       end
     end
 
+  //Wishbone Driver
   initial
     begin
     forever
       begin
+      bus_inst_driver.drive(bus_inst_adr_i,
+                            bus_inst_data_i,
+                            bus_inst_we_i,
+                            bus_inst_sel_i,
+                            bus_inst_stb_i,
+                            bus_inst_cyc_i,
+                            bus_inst_tga_i,
+                            bus_inst_tgd_i,
+                            bus_inst_tgc_i,
+                            bus_inst_stall_o);
       step();
-      bus_inst_adr_i  = '0;
-      bus_inst_data_i = '0;
-      bus_inst_we_i   = '0;
-      bus_inst_sel_i  = '0;
-      bus_inst_stb_i  = '0;
-      bus_inst_cyc_i  = '0;
-      bus_inst_tga_i  = '0;
-      bus_inst_tgd_i  = '0;
-      bus_inst_tgc_i  = '0;
-
-      i_membus_req          = '0;
-      i_membus_write        = '0;
-      i_membus_addr         = '0;
-      i_membus_data         = '0;
-      i_membus_data_rd_mask = '0;
-      i_membus_data_wr_mask = '0;
       end
     end
 
@@ -246,14 +283,26 @@ module ddr3_unit_test;
   `SVTEST(TEST)
   $display("TEST");
   reset();
-  step(100);
-  for(int i = 0; i < 25; i++)
-    begin
-    bus_inst_cyc_i = '1;
-    bus_inst_stb_i = '1;
-      bus_inst_adr_i = $random() & 32'h01FF_FFFC;//i * 4;
+  step(10);
+  for(int i = 0; i < 'h7F; i++)
+  begin
+    bus_inst_driver.read($urandom_range(511,0)<<2);
+    //bus_inst_driver.write(i<<2, {32{i[2]^i[0]}});
+    //bus_inst_cyc_i = '1;
+    //bus_inst_stb_i = '1;
+    //bus_inst_we_i  = '1;
+    //bus_inst_adr_i = i * 4;//$random() & 32'h01FF_FFFC;//i * 4;
+    //bus_inst_data_i = {32{i[2]^i[0]}};//$random() & 32'h01FF_FFFC;//i * 4;
+    //test_mem.write(bus_inst_adr_i>>4,bus_inst_data_i,{(bus_inst_adr_i>>2)&'h3==3,
+    //                                                  (bus_inst_adr_i>>2)&'h3==2,
+    //                                                  (bus_inst_adr_i>>2)&'h3==1,
+    //                                                  (bus_inst_adr_i>>2)&'h3==0});
+    //step();
+  end
+  while(bus_inst_driver.requests_queued())
+  begin
     step();
-    end
+  end
   step(100);
   `SVTEST_END
 
