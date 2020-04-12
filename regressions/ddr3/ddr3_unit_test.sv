@@ -327,7 +327,7 @@ module ddr3_unit_test;
   initial
     begin
     $dumpfile("sim.vcd");
-    $dumpvars;
+    $dumpvars(100, my_ddr3);
     end
 
   //===================================
