@@ -95,4 +95,12 @@ This one has been the most tricky. For this I have to interface with the ARM chi
 |'hC400_001C | Data In|
 |'hC400_0020 | Data Out|
 
+## DDR3 Caching
 
+Starting work on using better caches for DDR3 access.
+
+Emulting a ~25 cycle access time, with 500 instruction and memory ops
+
+| Inst | Mem | Inst+Mem | Config |
+|--|--|--|--|
+|26.3cyc/op|33.6cyc/op|29.8cyc/op| 1 entry for inst, 16 entry lru for mem|

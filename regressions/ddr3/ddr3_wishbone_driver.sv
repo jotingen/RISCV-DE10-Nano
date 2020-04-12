@@ -1,6 +1,7 @@
 class ddr3_wishbone_driver;
   string name = "ddr3_wishbone_driver";
 
+  logic verbose = '0;
   logic        we[$];
   logic [31:0] adr[$];
   logic [31:0] data[$];
@@ -29,7 +30,7 @@ class ddr3_wishbone_driver;
                  ref logic           tgd_i,
                  ref logic  [3:0]    tgc_i,
                      logic           stall_o);
-    //$display("  [%s]: Entries Remaining: %d",name, we.size());
+    //if(verbose) $display("  [%s]: Entries Remaining: %d",name, we.size());
     if(requests_queued() && !stall_o && $urandom_range(10,0)>1)
     begin
       adr_i = adr.pop_front();

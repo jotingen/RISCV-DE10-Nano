@@ -31,6 +31,25 @@ module ddr3 (
   output logic           bus_inst_tgd_o,
   output logic  [3:0]    bus_inst_tgc_o,
 
+  input  logic [31:0]    bus_mem_adr_i,
+  input  logic [31:0]    bus_mem_data_i,
+  input  logic           bus_mem_we_i,
+  input  logic  [3:0]    bus_mem_sel_i,
+  input  logic           bus_mem_stb_i,
+  input  logic           bus_mem_cyc_i,
+  input  logic           bus_mem_tga_i,
+  input  logic           bus_mem_tgd_i,
+  input  logic  [3:0]    bus_mem_tgc_i,
+
+  output logic           bus_mem_ack_o,
+  output logic           bus_mem_stall_o,
+  output logic           bus_mem_err_o,
+  output logic           bus_mem_rty_o,
+  output logic [31:0]    bus_mem_data_o,
+  output logic           bus_mem_tga_o,
+  output logic           bus_mem_tgd_o,
+  output logic  [3:0]    bus_mem_tgc_o,
+
   input  logic           i_membus_req,
   input  logic           i_membus_write,
   input  logic [31:0]    i_membus_addr,
@@ -56,12 +75,26 @@ logic  [3:0]  bus_inst_tgc_stgd;
 
 logic         bus_inst_rd_ack;
 
-logic         membus_req_stgd;
-logic         membus_write_stgd;
-logic [31:0]  membus_addr_stgd;
-logic [31:0]  membus_data_stgd;
-logic  [3:0]  membus_data_rd_mask_stgd;
-logic  [3:0]  membus_data_wr_mask_stgd;
+logic         bus_mem_buff_almost_empty;
+logic         bus_mem_buff_empty;
+
+logic         bus_mem_req_stgd;
+logic [31:0]  bus_mem_adr_stgd;
+logic [31:0]  bus_mem_data_stgd;
+logic         bus_mem_we_stgd;
+logic  [3:0]  bus_mem_sel_stgd;
+logic         bus_mem_tga_stgd;
+logic         bus_mem_tgd_stgd;
+logic  [3:0]  bus_mem_tgc_stgd;
+
+logic         bus_mem_rd_ack;
+
+//logic         membus_req_stgd;
+//logic         membus_write_stgd;
+//logic [31:0]  membus_addr_stgd;
+//logic [31:0]  membus_data_stgd;
+//logic  [3:0]  membus_data_rd_mask_stgd;
+//logic  [3:0]  membus_data_wr_mask_stgd;
 
 logic         arb_inst;
 logic         arb_mem;
@@ -268,6 +301,33 @@ wishbone_buff	bus_inst_buff (
 	.usedw        (  )
 	);
 
+assign bus_mem_req_stgd = ~bus_mem_buff_empty; 
+wishbone_buff	bus_mem_buff (
+	.clock        ( clk ),
+	.data         ( {bus_mem_adr_i,
+                         bus_mem_data_i,
+                         bus_mem_we_i,
+                         bus_mem_sel_i,
+                         bus_mem_tga_i,
+                         bus_mem_tgd_i,
+                         bus_mem_tgc_i} ),
+	.rdreq        ( bus_mem_rd_ack ),
+	.sclr         ( rst ),
+	.wrreq        ( bus_mem_cyc_i & bus_mem_stb_i & ~bus_mem_stall_o ),
+	.almost_empty ( bus_mem_buff_almost_empty ),
+	.almost_full  ( bus_mem_stall_o ),
+	.empty        ( bus_mem_buff_empty ),
+	.full         (  ),
+	.q            ( {bus_mem_adr_stgd,
+                         bus_mem_data_stgd,
+                         bus_mem_we_stgd,
+                         bus_mem_sel_stgd,
+                         bus_mem_tga_stgd,
+                         bus_mem_tgd_stgd,
+                         bus_mem_tgc_stgd} ),
+	.usedw        (  )
+	);
+
 lru_16 mem_lru (
   .clk,
   .rst,
@@ -284,8 +344,8 @@ always_comb
   mem_buffer_lru_entry_next = '0;
   for(int i = 0; i < 16; i++)
     begin
-    if(mem_buffer_vld[i] &&
-       mem_buffer_addr[i][25:4] == membus_addr_stgd[25:4])
+    if(!bus_mem_buff_empty &&
+       mem_buffer_addr[i][25:4] == bus_mem_adr_stgd[25:4])
       begin
       mem_buffer_in_lru         = '1;
       mem_buffer_lru_entry_next =  i;
@@ -327,8 +387,18 @@ always_ff @(posedge clk)
 
   bus_inst_rd_ack     <= '0;
 
-  o_membus_ack        <= '0;    
-  o_membus_data       <= membus_data_stgd;   
+  //o_membus_ack        <= '0;    
+  //o_membus_data       <= membus_data_stgd;   
+
+  bus_mem_ack_o      <= '0;
+  bus_mem_err_o      <= '0;
+  bus_mem_rty_o      <= '0;
+  bus_mem_data_o     <= '0;
+  bus_mem_tga_o      <= '0;
+  bus_mem_tgd_o      <= '0;
+  bus_mem_tgc_o      <= '0;
+
+  bus_mem_rd_ack     <= '0;
 
   ddr3_fifo_out_wrreq <= '0;
   ddr3_fifo_out_rdreq <= '0;
@@ -338,19 +408,19 @@ always_ff @(posedge clk)
 
   if(i_membus_req)
     begin
-    membus_req_stgd          <= i_membus_req;
-    membus_write_stgd        <= i_membus_write;
-    membus_addr_stgd         <= i_membus_addr;
-    membus_data_stgd         <= i_membus_data;
-    membus_data_rd_mask_stgd <= i_membus_data_rd_mask;
-    membus_data_wr_mask_stgd <= i_membus_data_wr_mask;
+    //membus_req_stgd          <= i_membus_req;
+    //membus_write_stgd        <= i_membus_write;
+    //membus_addr_stgd         <= i_membus_addr;
+    //membus_data_stgd         <= i_membus_data;
+    //membus_data_rd_mask_stgd <= i_membus_data_rd_mask;
+    //membus_data_wr_mask_stgd <= i_membus_data_wr_mask;
     end
 
 
   casex (1'b1)
     state_idle: begin
-                if((arb_mem  & membus_req_stgd) |
-                   (arb_inst & membus_req_stgd & ~bus_inst_req_stgd))
+                if((arb_mem  & bus_mem_req_stgd ) |
+                   (arb_inst & bus_mem_req_stgd  & ~bus_inst_req_stgd))
                   begin
                   arb_inst <= '1;
                   arb_mem  <= '0;
@@ -362,38 +432,32 @@ always_ff @(posedge clk)
                     mem_buffer_lru_touch <= '1;
                     mem_buffer_lru_entry<= mem_buffer_lru_entry_next;
                     end
-                  //else
-                  //  begin
-                  //  state_flush <= '1;
-                  //  end
-                  //if(mem_buffer_vld)
-                  //  begin
-                  //  if(mem_buffer_addr[25:4] == membus_addr_stgd[25:4])
-                  //    begin
-                  //    state_update <= '1;
-                  //    end
-                  //  else
-                  //    begin
-                  //    state_flush <= '1;
-                  //    end
-                  //  end
                   else
                     begin
-                    state_load <= '1;
+                    logic [3:0] lru_entry;
                     mem_buffer_lru_touch <= '1;
-                    mem_buffer_lru_entry<= mem_buffer_lru;
+                    lru_entry = mem_buffer_lru;
                     for(int i = 0; i < 16; i++)
                       begin
                       if(~mem_buffer_vld[i])
                         begin
-                        mem_buffer_lru_entry <= i;
+                        lru_entry = i;
                         break;
                         end
                       end
+                    mem_buffer_lru_entry <= lru_entry;
+                    if(mem_buffer_vld[lru_entry])
+                      begin
+                      state_flush <= '1;
+                      end
+                    else
+                      begin
+                      state_load <= '1;
+                      end
                     end
                   end
-                else if((arb_inst & bus_inst_req_stgd & ~bus_inst_buff_almost_empty) |
-                        (arb_mem  & bus_inst_req_stgd & ~bus_inst_buff_almost_empty & ~membus_req_stgd))
+                else if((arb_inst & bus_inst_req_stgd ) |
+                        (arb_mem  & bus_inst_req_stgd  & ~bus_mem_req_stgd))
                   begin
                   arb_inst <= '0;
                   arb_mem  <= '1;
@@ -424,9 +488,9 @@ always_ff @(posedge clk)
                    if(flush_cnt == 0)
                      begin
                      ddr3_fifo_out_wrreq <= '1;
-                     mem_buffer_vld <= '0;
+                     mem_buffer_vld[mem_buffer_lru_entry] <= '0;
                      ddr3_fifo_out_data  <= mem_buffer_data[mem_buffer_lru_entry];
-                     ddr3_fifo_out_addr  <= {mem_buffer_addr[mem_buffer_lru_entry][25:4],4'b0000};
+                     ddr3_fifo_out_addr  <= mem_buffer_addr[mem_buffer_lru_entry][25:4];
                      flush_cnt <= flush_cnt+1;
                      state_flush <= '1;
                      end
@@ -445,14 +509,14 @@ always_ff @(posedge clk)
                   ddr3_fifo_out_rdreq <= '1;
                   if(state_inst)
                     begin
-                    ddr3_fifo_out_addr  <= {bus_inst_adr_stgd[25:4],4'b0000};
+                    ddr3_fifo_out_addr  <= bus_inst_adr_stgd[29:4];
                     inst_buffer_addr    <= bus_inst_adr_stgd[25:4];
                     end
                   if(state_mem)
                     begin
-                    ddr3_fifo_out_addr  <= {membus_addr_stgd[25:4],4'b0000};
+                    ddr3_fifo_out_addr  <= bus_mem_adr_stgd[29:4];
                     mem_buffer_vld[mem_buffer_lru_entry]  <= '0;
-                    mem_buffer_addr[mem_buffer_lru_entry]     <= membus_addr_stgd[25:4];
+                    mem_buffer_addr[mem_buffer_lru_entry]     <= bus_mem_adr_stgd[25:4];
                     end
                   state_load_pending    <= '1;
                   end
@@ -514,63 +578,70 @@ always_ff @(posedge clk)
                       end
                     if(state_mem)
                       begin
-                      membus_req_stgd <= '0;
-                      o_membus_ack   <= '1;    
-                      if(membus_write_stgd)
+                      //membus_req_stgd <= '0;
+                      //o_membus_ack   <= '1;    
+
+		      bus_mem_rd_ack <= '1;
+                      bus_mem_ack_o  <= '1;
+
+                      if(bus_mem_we_stgd)
                         begin
-                        case(membus_addr_stgd[3:2])
+                        case(bus_mem_adr_stgd[3:2])
                           2'b00: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][31:24]   <= membus_data_wr_mask_stgd[3] ? membus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][31:24]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][23:16]   <= membus_data_wr_mask_stgd[2] ? membus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][23:16]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][15:8]    <= membus_data_wr_mask_stgd[1] ? membus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][15:8]   ;
-                                 mem_buffer_data[mem_buffer_lru_entry][7:0]     <= membus_data_wr_mask_stgd[0] ? membus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][7:0]    ;
+                                 mem_buffer_data[mem_buffer_lru_entry][31:24]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][31:24]  ;
+                                 mem_buffer_data[mem_buffer_lru_entry][23:16]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][23:16]  ;
+                                 mem_buffer_data[mem_buffer_lru_entry][15:8]    <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][15:8]   ;
+                                 mem_buffer_data[mem_buffer_lru_entry][7:0]     <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][7:0]    ;
                                  end
                           2'b01: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][63:56]   <= membus_data_wr_mask_stgd[3] ? membus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][63:56];
-                                 mem_buffer_data[mem_buffer_lru_entry][55:48]   <= membus_data_wr_mask_stgd[2] ? membus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][55:48];
-                                 mem_buffer_data[mem_buffer_lru_entry][47:40]   <= membus_data_wr_mask_stgd[1] ? membus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][47:40];
-                                 mem_buffer_data[mem_buffer_lru_entry][39:32]   <= membus_data_wr_mask_stgd[0] ? membus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][39:32];
+                                 mem_buffer_data[mem_buffer_lru_entry][63:56]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][63:56];
+                                 mem_buffer_data[mem_buffer_lru_entry][55:48]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][55:48];
+                                 mem_buffer_data[mem_buffer_lru_entry][47:40]   <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][47:40];
+                                 mem_buffer_data[mem_buffer_lru_entry][39:32]   <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][39:32];
                                  end
                           2'b10: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][95:88]   <= membus_data_wr_mask_stgd[3] ? membus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][95:88];
-                                 mem_buffer_data[mem_buffer_lru_entry][87:80]   <= membus_data_wr_mask_stgd[2] ? membus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][87:80];
-                                 mem_buffer_data[mem_buffer_lru_entry][79:72]   <= membus_data_wr_mask_stgd[1] ? membus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][79:72];
-                                 mem_buffer_data[mem_buffer_lru_entry][71:64]   <= membus_data_wr_mask_stgd[0] ? membus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][71:64];
+                                 mem_buffer_data[mem_buffer_lru_entry][95:88]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][95:88];
+                                 mem_buffer_data[mem_buffer_lru_entry][87:80]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][87:80];
+                                 mem_buffer_data[mem_buffer_lru_entry][79:72]   <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][79:72];
+                                 mem_buffer_data[mem_buffer_lru_entry][71:64]   <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][71:64];
                                  end
                           2'b11: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][127:120] <= membus_data_wr_mask_stgd[3] ? membus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][127:120];
-                                 mem_buffer_data[mem_buffer_lru_entry][119:112] <= membus_data_wr_mask_stgd[2] ? membus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][119:112];
-                                 mem_buffer_data[mem_buffer_lru_entry][111:104] <= membus_data_wr_mask_stgd[1] ? membus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][111:104];
-                                 mem_buffer_data[mem_buffer_lru_entry][103:96]  <= membus_data_wr_mask_stgd[0] ? membus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][103:96] ;
+                                 mem_buffer_data[mem_buffer_lru_entry][127:120] <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][127:120];
+                                 mem_buffer_data[mem_buffer_lru_entry][119:112] <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][119:112];
+                                 mem_buffer_data[mem_buffer_lru_entry][111:104] <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][111:104];
+                                 mem_buffer_data[mem_buffer_lru_entry][103:96]  <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][103:96] ;
                                  end
                         endcase
                         end
-                      case(membus_addr_stgd[3:2])
+                      case(bus_mem_adr_stgd[3:2])
                         2'b00: begin
-                               o_membus_data[31:24] <= membus_data_rd_mask_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][31:24]   : '0;   
-                               o_membus_data[23:16] <= membus_data_rd_mask_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][23:16]   : '0;   
-                               o_membus_data[15:8]  <= membus_data_rd_mask_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][15:8]    : '0;   
-                               o_membus_data[7:0]   <= membus_data_rd_mask_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][7:0]     : '0;   
+                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][31:24]   : '0;   
+                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][23:16]   : '0;   
+                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][15:8]    : '0;   
+                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][7:0]     : '0;   
                                end
                         2'b01: begin
-                               o_membus_data[31:24] <= membus_data_rd_mask_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][63:56]   : '0;   
-                               o_membus_data[23:16] <= membus_data_rd_mask_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][55:48]   : '0;   
-                               o_membus_data[15:8]  <= membus_data_rd_mask_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][47:40]   : '0;   
-                               o_membus_data[7:0]   <= membus_data_rd_mask_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][39:32]   : '0;   
+                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][63:56]   : '0;   
+                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][55:48]   : '0;   
+                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][47:40]   : '0;   
+                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][39:32]   : '0;   
                                end
                         2'b10: begin
-                               o_membus_data[31:24] <= membus_data_rd_mask_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][95:88]   : '0;   
-                               o_membus_data[23:16] <= membus_data_rd_mask_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][87:80]   : '0;   
-                               o_membus_data[15:8]  <= membus_data_rd_mask_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][79:72]   : '0;   
-                               o_membus_data[7:0]   <= membus_data_rd_mask_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][71:64]   : '0;   
+                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][95:88]   : '0;   
+                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][87:80]   : '0;   
+                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][79:72]   : '0;   
+                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][71:64]   : '0;   
                                end
                         2'b11: begin
-                               o_membus_data[31:24] <= membus_data_rd_mask_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][127:120] : '0;   
-                               o_membus_data[23:16] <= membus_data_rd_mask_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][119:112] : '0;   
-                               o_membus_data[15:8]  <= membus_data_rd_mask_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][111:104] : '0;   
-                               o_membus_data[7:0]   <= membus_data_rd_mask_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][103:96]  : '0;   
+                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][127:120] : '0;   
+                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][119:112] : '0;   
+                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][111:104] : '0;   
+                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][103:96]  : '0;   
                                end
                       endcase
+                      bus_mem_tga_o <= bus_mem_tga_stgd;
+                      bus_mem_tgd_o <= bus_mem_tgd_stgd;
+                      bus_mem_tgc_o <= bus_mem_tgc_stgd;
                       end
                   state_load_0 <= '1;
                   end
@@ -584,12 +655,12 @@ always_ff @(posedge clk)
  
     if(rst) 
       begin
-      membus_req_stgd          <= '0;
-      membus_write_stgd        <= '0;
-      membus_addr_stgd         <= '0;
-      membus_data_stgd         <= '0;
-      membus_data_rd_mask_stgd <= '0;
-      membus_data_wr_mask_stgd <= '0;
+      //membus_req_stgd          <= '0;
+      //membus_write_stgd        <= '0;
+      //membus_addr_stgd         <= '0;
+      //membus_data_stgd         <= '0;
+      //membus_data_rd_mask_stgd <= '0;
+      //membus_data_wr_mask_stgd <= '0;
 
       arb_inst            <= '0;
       arb_mem             <= '1;
@@ -641,19 +712,19 @@ always_ff @(posedge ddr3_clk)
   ddr3_fifo_in_wrreq  <= '0;
 
   casex(1'b1)
-		ddr3_state_idle: begin
-										 if(~ddr3_fifo_out_rdempty)
-											 begin
-											 ddr3_fifo_out_rdack <= '1;
+    ddr3_state_idle: begin
+                     if(~ddr3_fifo_out_rdempty)
+                       begin
+                       ddr3_fifo_out_rdack <= '1;
                        ddr3_avl_read_req   <= ddr3_fifo_out_rdreq_q;  
                        ddr3_avl_write_req  <= ddr3_fifo_out_wrreq_q;  
                        ddr3_avl_addr       <= ddr3_fifo_out_addr_q;
                        ddr3_avl_wdata      <= ddr3_fifo_out_wdata_q; 
-											 ddr3_cnt <= '0;
-											 ddr3_state_pulse <= '1;
-											 end
-										 else
-										   begin
+                       ddr3_cnt            <= '0;
+                       ddr3_state_pulse    <= '1;
+                       end
+                     else
+                       begin
                        ddr3_state_idle <= '1;
                        end
                      end
@@ -681,7 +752,7 @@ always_ff @(posedge ddr3_clk)
    ddr3_state_recieve: begin
                        if(ddr3_avl_rdata_valid)
                          begin
-                         if(ddr3_cnt == 2)
+                         if(ddr3_cnt == 1)
                            begin
                            ddr3_fifo_in_wrreq <= '1;
                            ddr3_state_idle <= '1;
