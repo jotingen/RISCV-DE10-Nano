@@ -4,6 +4,7 @@
 `include "ddr3_clk_and_reset.svh"
 
 `include "../../src/de10nano/ddr3/ddr3.sv"
+`include "../../src/de10nano/ddr3/ddr3_cache.sv"
 `include "../../src/common/lru_16.sv"
 
 `include "../../src/de10nano/ddr3/ddr3_fifo.v"
@@ -259,10 +260,8 @@ module ddr3_unit_test;
     svunit_ut.setup();
     /* Place Setup Code Here */
     fork
-      begin
       reset();
       ddr3_reset();
-      end
     join
 
   endtask
@@ -327,6 +326,7 @@ module ddr3_unit_test;
   initial
     begin
     $dumpfile("sim.vcd");
+    //$dumpvars();
     $dumpvars(100, my_ddr3);
     end
 

@@ -48,145 +48,14 @@ module ddr3 (
   output logic [31:0]    bus_mem_data_o,
   output logic           bus_mem_tga_o,
   output logic           bus_mem_tgd_o,
-  output logic  [3:0]    bus_mem_tgc_o,
-
-  input  logic           i_membus_req,
-  input  logic           i_membus_write,
-  input  logic [31:0]    i_membus_addr,
-  input  logic [31:0]    i_membus_data,
-  input  logic  [3:0]    i_membus_data_rd_mask,
-  input  logic  [3:0]    i_membus_data_wr_mask,
-
-  output logic           o_membus_ack,
-  output logic [31:0]    o_membus_data
+  output logic  [3:0]    bus_mem_tgc_o
 );
-
-logic         bus_inst_buff_almost_empty;
-logic         bus_inst_buff_empty;
-
-logic         bus_inst_req_stgd;
-logic [31:0]  bus_inst_adr_stgd;
-logic [31:0]  bus_inst_data_stgd;
-logic         bus_inst_we_stgd;
-logic  [3:0]  bus_inst_sel_stgd;
-logic         bus_inst_tga_stgd;
-logic         bus_inst_tgd_stgd;
-logic  [3:0]  bus_inst_tgc_stgd;
-
-logic         bus_inst_rd_ack;
-
-logic         bus_mem_buff_almost_empty;
-logic         bus_mem_buff_empty;
-
-logic         bus_mem_req_stgd;
-logic [31:0]  bus_mem_adr_stgd;
-logic [31:0]  bus_mem_data_stgd;
-logic         bus_mem_we_stgd;
-logic  [3:0]  bus_mem_sel_stgd;
-logic         bus_mem_tga_stgd;
-logic         bus_mem_tgd_stgd;
-logic  [3:0]  bus_mem_tgc_stgd;
-
-logic         bus_mem_rd_ack;
-
-//logic         membus_req_stgd;
-//logic         membus_write_stgd;
-//logic [31:0]  membus_addr_stgd;
-//logic [31:0]  membus_data_stgd;
-//logic  [3:0]  membus_data_rd_mask_stgd;
-//logic  [3:0]  membus_data_wr_mask_stgd;
-
-logic         arb_inst;
-logic         arb_mem;
 
 logic         state_inst;
 logic         state_mem;
 logic         state_idle;
-logic         state_flush;
-logic         state_load;
-logic         state_load_pending;
-logic         state_update;
-logic         state_load_0;
-logic         state_load_1;
-
-logic [3:0]   flush_cnt;
-
-logic         inst_buffer_vld;
-logic [25:4]  inst_buffer_addr;
-logic [127:0] inst_buffer_data;
-
-logic [15:0]        mem_buffer_vld;
-logic [15:0][25:4]  mem_buffer_addr;
-logic [15:0][127:0] mem_buffer_data;
-logic               mem_buffer_in_lru;
-logic               mem_buffer_lru_touch;
-logic [3:0]         mem_buffer_lru;
-logic [3:0]         mem_buffer_lru_entry_next;
-logic [3:0]         mem_buffer_lru_entry;
-
-logic         mem_buffer_0_vld;
-logic [25:4]  mem_buffer_0_addr;
-logic [127:0] mem_buffer_0_data;
-
-logic         mem_buffer_1_vld;
-logic [25:4]  mem_buffer_1_addr;
-logic [127:0] mem_buffer_1_data;
-
-logic         mem_buffer_2_vld;
-logic [25:4]  mem_buffer_2_addr;
-logic [127:0] mem_buffer_2_data;
-
-logic         mem_buffer_3_vld;
-logic [25:4]  mem_buffer_3_addr;
-logic [127:0] mem_buffer_3_data;
-
-logic         mem_buffer_4_vld;
-logic [25:4]  mem_buffer_4_addr;
-logic [127:0] mem_buffer_4_data;
-
-logic         mem_buffer_5_vld;
-logic [25:4]  mem_buffer_5_addr;
-logic [127:0] mem_buffer_5_data;
-
-logic         mem_buffer_6_vld;
-logic [25:4]  mem_buffer_6_addr;
-logic [127:0] mem_buffer_6_data;
-
-logic         mem_buffer_7_vld;
-logic [25:4]  mem_buffer_7_addr;
-logic [127:0] mem_buffer_7_data;
-
-logic         mem_buffer_8_vld;
-logic [25:4]  mem_buffer_8_addr;
-logic [127:0] mem_buffer_8_data;
-
-logic         mem_buffer_9_vld;
-logic [25:4]  mem_buffer_9_addr;
-logic [127:0] mem_buffer_9_data;
-
-logic         mem_buffer_10_vld;
-logic [25:4]  mem_buffer_10_addr;
-logic [127:0] mem_buffer_10_data;
-
-logic         mem_buffer_11_vld;
-logic [25:4]  mem_buffer_11_addr;
-logic [127:0] mem_buffer_11_data;
-
-logic         mem_buffer_12_vld;
-logic [25:4]  mem_buffer_12_addr;
-logic [127:0] mem_buffer_12_data;
-
-logic         mem_buffer_13_vld;
-logic [25:4]  mem_buffer_13_addr;
-logic [127:0] mem_buffer_13_data;
-
-logic         mem_buffer_14_vld;
-logic [25:4]  mem_buffer_14_addr;
-logic [127:0] mem_buffer_14_data;
-
-logic         mem_buffer_15_vld;
-logic [25:4]  mem_buffer_15_addr;
-logic [127:0] mem_buffer_15_data;
+logic         state_req;
+logic         state_rsp;
 
 logic         ddr3_fifo_out_wrreq;
 logic         ddr3_fifo_out_rdreq;
@@ -210,483 +79,313 @@ logic         ddr3_fifo_in_wrreq;
 logic [189:0] ddr3_fifo_in_q;
 logic         ddr3_fifo_in_empty;
 
-assign mem_buffer_0_vld       = mem_buffer_vld[0];      
-assign mem_buffer_0_addr      = mem_buffer_addr[0];     
-assign mem_buffer_0_data      = mem_buffer_data[0];       
+logic [31:0]  dst_inst_adr_i;
+logic [127:0] dst_inst_data_i;
+logic         dst_inst_we_i;
+logic  [3:0]  dst_inst_sel_i;
+logic         dst_inst_stb_i;
+logic         dst_inst_cyc_i;
+logic         dst_inst_tga_i;
+logic         dst_inst_tgd_i;
+logic  [3:0]  dst_inst_tgc_i;
 
-assign mem_buffer_1_vld       = mem_buffer_vld[1];     
-assign mem_buffer_1_addr      = mem_buffer_addr[1];    
-assign mem_buffer_1_data      = mem_buffer_data[1];      
+logic         dst_inst_ack_o;
+logic         dst_inst_stall_o;
+logic         dst_inst_err_o;
+logic         dst_inst_rty_o;
+logic [127:0] dst_inst_data_o;
+logic         dst_inst_tga_o;
+logic         dst_inst_tgd_o;
+logic  [3:0]  dst_inst_tgc_o;
 
-assign mem_buffer_2_vld       = mem_buffer_vld[2];     
-assign mem_buffer_2_addr      = mem_buffer_addr[2];    
-assign mem_buffer_2_data      = mem_buffer_data[2];      
+logic [31:0]  dst_mem_adr_i;
+logic [127:0] dst_mem_data_i;
+logic         dst_mem_we_i;
+logic  [3:0]  dst_mem_sel_i;
+logic         dst_mem_stb_i;
+logic         dst_mem_cyc_i;
+logic         dst_mem_tga_i;
+logic         dst_mem_tgd_i;
+logic  [3:0]  dst_mem_tgc_i;
 
-assign mem_buffer_3_vld       = mem_buffer_vld[3];     
-assign mem_buffer_3_addr      = mem_buffer_addr[3];    
-assign mem_buffer_3_data      = mem_buffer_data[3];      
+logic         dst_mem_ack_o;
+logic         dst_mem_stall_o;
+logic         dst_mem_err_o;
+logic         dst_mem_rty_o;
+logic [127:0] dst_mem_data_o;
+logic         dst_mem_tga_o;
+logic         dst_mem_tgd_o;
+logic  [3:0]  dst_mem_tgc_o;
 
-assign mem_buffer_4_vld       = mem_buffer_vld[4];     
-assign mem_buffer_4_addr      = mem_buffer_addr[4];    
-assign mem_buffer_4_data      = mem_buffer_data[4];      
+ddr3_cache inst_cache (
+  .clk                    (clk),                       
+  .rst                    (rst),                       
+                                                     
+  .bus_adr_i              (bus_inst_adr_i),                 
+  .bus_data_i             (bus_inst_data_i),                
+  .bus_we_i               (bus_inst_we_i),                  
+  .bus_sel_i              (bus_inst_sel_i),                 
+  .bus_stb_i              (bus_inst_stb_i),                 
+  .bus_cyc_i              (bus_inst_cyc_i),                 
+  .bus_tga_i              (bus_inst_tga_i),                 
+  .bus_tgd_i              (bus_inst_tgd_i),                 
+  .bus_tgc_i              (bus_inst_tgc_i),                 
+                                                     
+  .bus_ack_o              (bus_inst_ack_o),
+  .bus_stall_o            (bus_inst_stall_o),
+  .bus_err_o              (bus_inst_err_o),
+  .bus_rty_o              (bus_inst_rty_o),
+  .bus_data_o             (bus_inst_data_o),
+  .bus_tga_o              (bus_inst_tga_o),
+  .bus_tgd_o              (bus_inst_tgd_o),
+  .bus_tgc_o              (bus_inst_tgc_o),
 
-assign mem_buffer_5_vld       = mem_buffer_vld[5];     
-assign mem_buffer_5_addr      = mem_buffer_addr[5];    
-assign mem_buffer_5_data      = mem_buffer_data[5];      
+  .dst_adr_i              (dst_inst_adr_i), 
+  .dst_data_i             (dst_inst_data_i),
+  .dst_we_i               (dst_inst_we_i),  
+  .dst_sel_i              (dst_inst_sel_i), 
+  .dst_stb_i              (dst_inst_stb_i), 
+  .dst_cyc_i              (dst_inst_cyc_i), 
+  .dst_tga_i              (dst_inst_tga_i), 
+  .dst_tgd_i              (dst_inst_tgd_i), 
+  .dst_tgc_i              (dst_inst_tgc_i), 
+                                 
+  .dst_ack_o              (dst_inst_ack_o  ),
+  .dst_stall_o            (dst_inst_stall_o),
+  .dst_err_o              (dst_inst_err_o  ),
+  .dst_rty_o              (dst_inst_rty_o  ),
+  .dst_data_o             (dst_inst_data_o ),
+  .dst_tga_o              (dst_inst_tga_o  ),
+  .dst_tgd_o              (dst_inst_tgd_o  ),
+  .dst_tgc_o              (dst_inst_tgc_o  )
+);
 
-assign mem_buffer_6_vld       = mem_buffer_vld[6];     
-assign mem_buffer_6_addr      = mem_buffer_addr[6];    
-assign mem_buffer_6_data      = mem_buffer_data[6];      
+ddr3_cache mem_cache (
+  .clk                    (clk),                       
+  .rst                    (rst),                       
+                                                     
+  .bus_adr_i              (bus_mem_adr_i),                 
+  .bus_data_i             (bus_mem_data_i),                
+  .bus_we_i               (bus_mem_we_i),                  
+  .bus_sel_i              (bus_mem_sel_i),                 
+  .bus_stb_i              (bus_mem_stb_i),                 
+  .bus_cyc_i              (bus_mem_cyc_i),                 
+  .bus_tga_i              (bus_mem_tga_i),                 
+  .bus_tgd_i              (bus_mem_tgd_i),                 
+  .bus_tgc_i              (bus_mem_tgc_i),                 
+                                                     
+  .bus_ack_o              (bus_mem_ack_o),  
+  .bus_stall_o            (bus_mem_stall_o),
+  .bus_err_o              (bus_mem_err_o),  
+  .bus_rty_o              (bus_mem_rty_o),  
+  .bus_data_o             (bus_mem_data_o), 
+  .bus_tga_o              (bus_mem_tga_o),  
+  .bus_tgd_o              (bus_mem_tgd_o),  
+  .bus_tgc_o              (bus_mem_tgc_o),  
 
-assign mem_buffer_7_vld       = mem_buffer_vld[7];     
-assign mem_buffer_7_addr      = mem_buffer_addr[7];    
-assign mem_buffer_7_data      = mem_buffer_data[7];      
+  .dst_adr_i              (dst_mem_adr_i), 
+  .dst_data_i             (dst_mem_data_i),
+  .dst_we_i               (dst_mem_we_i),  
+  .dst_sel_i              (dst_mem_sel_i), 
+  .dst_stb_i              (dst_mem_stb_i), 
+  .dst_cyc_i              (dst_mem_cyc_i), 
+  .dst_tga_i              (dst_mem_tga_i), 
+  .dst_tgd_i              (dst_mem_tgd_i), 
+  .dst_tgc_i              (dst_mem_tgc_i), 
+                                 
+  .dst_ack_o              (dst_mem_ack_o  ),
+  .dst_stall_o            (dst_mem_stall_o),
+  .dst_err_o              (dst_mem_err_o  ),
+  .dst_rty_o              (dst_mem_rty_o  ),
+  .dst_data_o             (dst_mem_data_o ),
+  .dst_tga_o              (dst_mem_tga_o  ),
+  .dst_tgd_o              (dst_mem_tgd_o  ),
+  .dst_tgc_o              (dst_mem_tgc_o  ) 
+);
 
-assign mem_buffer_8_vld       = mem_buffer_vld[8];     
-assign mem_buffer_8_addr      = mem_buffer_addr[8];    
-assign mem_buffer_8_data      = mem_buffer_data[8];      
 
-assign mem_buffer_9_vld       = mem_buffer_vld[9];     
-assign mem_buffer_9_addr      = mem_buffer_addr[9];    
-assign mem_buffer_9_data      = mem_buffer_data[9];      
-
-assign mem_buffer_10_vld      = mem_buffer_vld[10];     
-assign mem_buffer_10_addr     = mem_buffer_addr[10];    
-assign mem_buffer_10_data     = mem_buffer_data[10];      
-
-assign mem_buffer_11_vld      = mem_buffer_vld[11];     
-assign mem_buffer_11_addr     = mem_buffer_addr[11];    
-assign mem_buffer_11_data     = mem_buffer_data[11];      
-
-assign mem_buffer_12_vld      = mem_buffer_vld[12];     
-assign mem_buffer_12_addr     = mem_buffer_addr[12];    
-assign mem_buffer_12_data     = mem_buffer_data[12];      
-
-assign mem_buffer_13_vld      = mem_buffer_vld[13];     
-assign mem_buffer_13_addr     = mem_buffer_addr[13];    
-assign mem_buffer_13_data     = mem_buffer_data[13];      
-
-assign mem_buffer_14_vld      = mem_buffer_vld[14];     
-assign mem_buffer_14_addr     = mem_buffer_addr[14];    
-assign mem_buffer_14_data     = mem_buffer_data[14];      
-
-assign mem_buffer_15_vld      = mem_buffer_vld[15];     
-assign mem_buffer_15_addr     = mem_buffer_addr[15];    
-assign mem_buffer_15_data     = mem_buffer_data[15];      
-
-assign bus_inst_req_stgd = ~bus_inst_buff_empty; 
-wishbone_buff	bus_inst_buff (
-	.clock        ( clk ),
-	.data         ( {bus_inst_adr_i,
-                         bus_inst_data_i,
-                         bus_inst_we_i,
-                         bus_inst_sel_i,
-                         bus_inst_tga_i,
-                         bus_inst_tgd_i,
-                         bus_inst_tgc_i} ),
-	.rdreq        ( bus_inst_rd_ack ),
-	.sclr         ( rst ),
-	.wrreq        ( bus_inst_cyc_i & bus_inst_stb_i & ~bus_inst_stall_o ),
-	.almost_empty ( bus_inst_buff_almost_empty ),
-	.almost_full  ( bus_inst_stall_o ),
-	.empty        ( bus_inst_buff_empty ),
-	.full         (  ),
-	.q            ( {bus_inst_adr_stgd,
-                         bus_inst_data_stgd,
-                         bus_inst_we_stgd,
-                         bus_inst_sel_stgd,
-                         bus_inst_tga_stgd,
-                         bus_inst_tgd_stgd,
-                         bus_inst_tgc_stgd} ),
-	.usedw        (  )
-	);
-
-assign bus_mem_req_stgd = ~bus_mem_buff_empty; 
-wishbone_buff	bus_mem_buff (
-	.clock        ( clk ),
-	.data         ( {bus_mem_adr_i,
-                         bus_mem_data_i,
-                         bus_mem_we_i,
-                         bus_mem_sel_i,
-                         bus_mem_tga_i,
-                         bus_mem_tgd_i,
-                         bus_mem_tgc_i} ),
-	.rdreq        ( bus_mem_rd_ack ),
-	.sclr         ( rst ),
-	.wrreq        ( bus_mem_cyc_i & bus_mem_stb_i & ~bus_mem_stall_o ),
-	.almost_empty ( bus_mem_buff_almost_empty ),
-	.almost_full  ( bus_mem_stall_o ),
-	.empty        ( bus_mem_buff_empty ),
-	.full         (  ),
-	.q            ( {bus_mem_adr_stgd,
-                         bus_mem_data_stgd,
-                         bus_mem_we_stgd,
-                         bus_mem_sel_stgd,
-                         bus_mem_tga_stgd,
-                         bus_mem_tgd_stgd,
-                         bus_mem_tgc_stgd} ),
-	.usedw        (  )
-	);
-
-lru_16 mem_lru (
-  .clk,
-  .rst,
-  
-  .lru_touch   (mem_buffer_lru_touch),
-  .lru_touched (mem_buffer_lru_entry),
-
-  
-  .lru         (mem_buffer_lru)
-  );
-always_comb
-  begin
-  mem_buffer_in_lru         = '0;
-  mem_buffer_lru_entry_next = '0;
-  for(int i = 0; i < 16; i++)
-    begin
-    if(!bus_mem_buff_empty &&
-       mem_buffer_addr[i][25:4] == bus_mem_adr_stgd[25:4])
-      begin
-      mem_buffer_in_lru         = '1;
-      mem_buffer_lru_entry_next =  i;
-      end
-    end
-  end
+logic [31:0]  dst_adr_i;
+logic [127:0] dst_data_i;
+logic         dst_we_i;
+logic  [3:0]  dst_sel_i;
+logic         dst_tga_i;
+logic         dst_tgd_i;
+logic  [3:0]  dst_tgc_i;
 
 always_ff @(posedge clk)
-  begin
-  arb_inst            <= arb_inst;
-  arb_mem             <= arb_mem; 
-      
-  state_idle          <= '0;
-  state_flush         <= '0;
-  state_load          <= '0;
-  state_load_pending  <= '0;
-  state_update        <= '0;
-  state_load_0        <= '0;
-  state_load_1        <= '0;
+begin
+  state_inst <= state_inst;
+  state_mem  <= state_mem;
+  state_idle <= '0;
+  state_req  <= '0;
+  state_rsp  <= '0;
 
-  flush_cnt           <= flush_cnt;
+  dst_adr_i  <= dst_adr_i;
+  dst_data_i <= dst_data_i;
+  dst_we_i   <= dst_we_i;
+  dst_sel_i  <= dst_sel_i;
+  dst_tga_i  <= dst_tga_i;
+  dst_tgd_i  <= dst_tgd_i;
+  dst_tgc_i  <= dst_tgc_i;
 
-  inst_buffer_vld     <= inst_buffer_vld; 
-  inst_buffer_addr    <= inst_buffer_addr;
-  inst_buffer_data    <= inst_buffer_data;
-  mem_buffer_vld      <= mem_buffer_vld; 
-  mem_buffer_addr     <= mem_buffer_addr;
-  mem_buffer_data     <= mem_buffer_data;
-  mem_buffer_lru_entry<= mem_buffer_lru_entry;
-  mem_buffer_lru_touch  <= '0;
+  dst_inst_ack_o   <= '0;
+  dst_inst_stall_o <= '1;
+  dst_inst_err_o   <= '0;
+  dst_inst_rty_o   <= '0;
+  dst_inst_data_o  <= '0;
+  dst_inst_tga_o   <= '0;
+  dst_inst_tgd_o   <= '0;
+  dst_inst_tgc_o   <= '0;
 
-  bus_inst_ack_o      <= '0;
-  bus_inst_err_o      <= '0;
-  bus_inst_rty_o      <= '0;
-  bus_inst_data_o     <= '0;
-  bus_inst_tga_o      <= '0;
-  bus_inst_tgd_o      <= '0;
-  bus_inst_tgc_o      <= '0;
-
-  bus_inst_rd_ack     <= '0;
-
-  //o_membus_ack        <= '0;    
-  //o_membus_data       <= membus_data_stgd;   
-
-  bus_mem_ack_o      <= '0;
-  bus_mem_err_o      <= '0;
-  bus_mem_rty_o      <= '0;
-  bus_mem_data_o     <= '0;
-  bus_mem_tga_o      <= '0;
-  bus_mem_tgd_o      <= '0;
-  bus_mem_tgc_o      <= '0;
-
-  bus_mem_rd_ack     <= '0;
+  dst_mem_ack_o   <= '0;
+  dst_mem_stall_o <= '1;
+  dst_mem_err_o   <= '0;
+  dst_mem_rty_o   <= '0;
+  dst_mem_data_o  <= '0;
+  dst_mem_tga_o   <= '0;
+  dst_mem_tgd_o   <= '0;
+  dst_mem_tgc_o   <= '0;
 
   ddr3_fifo_out_wrreq <= '0;
   ddr3_fifo_out_rdreq <= '0;
   ddr3_fifo_out_data  <= ddr3_fifo_out_data;
   ddr3_fifo_out_addr  <= ddr3_fifo_out_addr;
   ddr3_fifo_in_rdack  <= '0;
-
-  if(i_membus_req)
-    begin
-    //membus_req_stgd          <= i_membus_req;
-    //membus_write_stgd        <= i_membus_write;
-    //membus_addr_stgd         <= i_membus_addr;
-    //membus_data_stgd         <= i_membus_data;
-    //membus_data_rd_mask_stgd <= i_membus_data_rd_mask;
-    //membus_data_wr_mask_stgd <= i_membus_data_wr_mask;
-    end
-
-
+ 
   casex (1'b1)
     state_idle: begin
-                if((arb_mem  & bus_mem_req_stgd ) |
-                   (arb_inst & bus_mem_req_stgd  & ~bus_inst_req_stgd))
+                if(state_inst)
                   begin
-                  arb_inst <= '1;
-                  arb_mem  <= '0;
-                  state_inst <= '0;
-                  state_mem  <= '1;
-                  if(mem_buffer_in_lru)
+                  if(dst_inst_stb_i)
                     begin
-                    state_update <= '1;
-                    mem_buffer_lru_touch <= '1;
-                    mem_buffer_lru_entry<= mem_buffer_lru_entry_next;
+                    dst_adr_i  <= dst_inst_adr_i;
+                    dst_data_i <= dst_inst_data_i;
+                    dst_we_i   <= dst_inst_we_i;
+                    dst_sel_i  <= dst_inst_sel_i;
+                    dst_tga_i  <= dst_inst_tga_i;
+                    dst_tgd_i  <= dst_inst_tgd_i;
+                    dst_tgc_i  <= dst_inst_tgc_i;
+                    state_req <= '1;
                     end
                   else
                     begin
-                    logic [3:0] lru_entry;
-                    mem_buffer_lru_touch <= '1;
-                    lru_entry = mem_buffer_lru;
-                    for(int i = 0; i < 16; i++)
-                      begin
-                      if(~mem_buffer_vld[i])
-                        begin
-                        lru_entry = i;
-                        break;
-                        end
-                      end
-                    mem_buffer_lru_entry <= lru_entry;
-                    if(mem_buffer_vld[lru_entry])
-                      begin
-                      state_flush <= '1;
-                      end
-                    else
-                      begin
-                      state_load <= '1;
-                      end
-                    end
-                  end
-                else if((arb_inst & bus_inst_req_stgd ) |
-                        (arb_mem  & bus_inst_req_stgd  & ~bus_mem_req_stgd))
-                  begin
-                  arb_inst <= '0;
-                  arb_mem  <= '1;
-                  state_inst <= '1;
-                  state_mem  <= '0;
-                  if(inst_buffer_vld)
-                    begin
-                    if(inst_buffer_addr[25:4] == bus_inst_adr_stgd[25:4])
-                      begin
-                      state_update <= '1;
-                      end
-                    else
-                      begin
-                      state_load <= '1; //Instructions never write
-                      end
-                    end
-                  else
-                    begin
-                    state_load <= '1;
-                    end
-                  end
-                else
-                  begin
-                  state_idle <= '1;
-                  end
-                end
-      state_flush: begin             
-                   if(flush_cnt == 0)
-                     begin
-                     ddr3_fifo_out_wrreq <= '1;
-                     mem_buffer_vld[mem_buffer_lru_entry] <= '0;
-                     ddr3_fifo_out_data  <= mem_buffer_data[mem_buffer_lru_entry];
-                     ddr3_fifo_out_addr  <= mem_buffer_addr[mem_buffer_lru_entry][25:4];
-                     flush_cnt <= flush_cnt+1;
-                     state_flush <= '1;
-                     end
-                   else if(flush_cnt == 4'b1111)
-                     begin
-                     flush_cnt <= flush_cnt+1;
-                     state_load <= '1;
-                     end
-                   else
-                     begin
-                     flush_cnt <= flush_cnt+1;
-                     state_flush <= '1;
-                     end
-                   end
-      state_load: begin             
-                  ddr3_fifo_out_rdreq <= '1;
-                  if(state_inst)
-                    begin
-                    ddr3_fifo_out_addr  <= bus_inst_adr_stgd[29:4];
-                    inst_buffer_addr    <= bus_inst_adr_stgd[25:4];
-                    end
-                  if(state_mem)
-                    begin
-                    ddr3_fifo_out_addr  <= bus_mem_adr_stgd[29:4];
-                    mem_buffer_vld[mem_buffer_lru_entry]  <= '0;
-                    mem_buffer_addr[mem_buffer_lru_entry]     <= bus_mem_adr_stgd[25:4];
-                    end
-                  state_load_pending    <= '1;
-                  end
-      state_load_pending: begin             
-                          if(~ddr3_fifo_in_empty)
-                            begin
-                            ddr3_fifo_in_rdack <= '1;   
-                            if(state_inst)
-                              begin
-                              inst_buffer_vld <= '1;
-                              inst_buffer_data <= ddr3_fifo_in_q[127:0];
-                              end
-                            if(state_mem)
-                              begin
-                              mem_buffer_vld[mem_buffer_lru_entry]  <= '1;
-                              mem_buffer_data[mem_buffer_lru_entry] <= ddr3_fifo_in_q[127:0];
-                              end
-                            state_update <= '1;
-                            end
-                          else
-                            begin
-                            state_load_pending <= '1;
-                            end
-                          end
-      state_update: begin             
-                    if(state_inst)
-                      begin
-		      bus_inst_rd_ack <= '1;
-                      bus_inst_ack_o  <= '1;
-                      case(bus_inst_adr_stgd[3:2])
-                        2'b00: begin
-                               bus_inst_data_o[31:24] <= inst_buffer_data[31:24]  ;   
-                               bus_inst_data_o[23:16] <= inst_buffer_data[23:16]  ;   
-                               bus_inst_data_o[15:8]  <= inst_buffer_data[15:8]   ;   
-                               bus_inst_data_o[7:0]   <= inst_buffer_data[7:0]    ;   
-                               end
-                        2'b01: begin
-                               bus_inst_data_o[31:24] <= inst_buffer_data[63:56]  ;   
-                               bus_inst_data_o[23:16] <= inst_buffer_data[55:48]  ;   
-                               bus_inst_data_o[15:8]  <= inst_buffer_data[47:40]  ;   
-                               bus_inst_data_o[7:0]   <= inst_buffer_data[39:32]  ;   
-                               end
-                        2'b10: begin
-                               bus_inst_data_o[31:24] <= inst_buffer_data[95:88]  ;   
-                               bus_inst_data_o[23:16] <= inst_buffer_data[87:80]  ;   
-                               bus_inst_data_o[15:8]  <= inst_buffer_data[79:72]  ;   
-                               bus_inst_data_o[7:0]   <= inst_buffer_data[71:64]  ;   
-                               end
-                        2'b11: begin
-                               bus_inst_data_o[31:24] <= inst_buffer_data[127:120];   
-                               bus_inst_data_o[23:16] <= inst_buffer_data[119:112];   
-                               bus_inst_data_o[15:8]  <= inst_buffer_data[111:104];   
-                               bus_inst_data_o[7:0]   <= inst_buffer_data[103:96] ;   
-                               end
-                      endcase
-                      bus_inst_tga_o <= bus_inst_tga_stgd;
-                      bus_inst_tgd_o <= bus_inst_tgd_stgd;
-                      bus_inst_tgc_o <= bus_inst_tgc_stgd;
-                      end
-                    if(state_mem)
-                      begin
-                      //membus_req_stgd <= '0;
-                      //o_membus_ack   <= '1;    
-
-		      bus_mem_rd_ack <= '1;
-                      bus_mem_ack_o  <= '1;
-
-                      if(bus_mem_we_stgd)
-                        begin
-                        case(bus_mem_adr_stgd[3:2])
-                          2'b00: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][31:24]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][31:24]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][23:16]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][23:16]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][15:8]    <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][15:8]   ;
-                                 mem_buffer_data[mem_buffer_lru_entry][7:0]     <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][7:0]    ;
-                                 end
-                          2'b01: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][63:56]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][63:56];
-                                 mem_buffer_data[mem_buffer_lru_entry][55:48]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][55:48];
-                                 mem_buffer_data[mem_buffer_lru_entry][47:40]   <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][47:40];
-                                 mem_buffer_data[mem_buffer_lru_entry][39:32]   <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][39:32];
-                                 end
-                          2'b10: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][95:88]   <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][95:88];
-                                 mem_buffer_data[mem_buffer_lru_entry][87:80]   <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][87:80];
-                                 mem_buffer_data[mem_buffer_lru_entry][79:72]   <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][79:72];
-                                 mem_buffer_data[mem_buffer_lru_entry][71:64]   <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][71:64];
-                                 end
-                          2'b11: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][127:120] <= bus_mem_sel_stgd[3] ? bus_mem_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][127:120];
-                                 mem_buffer_data[mem_buffer_lru_entry][119:112] <= bus_mem_sel_stgd[2] ? bus_mem_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][119:112];
-                                 mem_buffer_data[mem_buffer_lru_entry][111:104] <= bus_mem_sel_stgd[1] ? bus_mem_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][111:104];
-                                 mem_buffer_data[mem_buffer_lru_entry][103:96]  <= bus_mem_sel_stgd[0] ? bus_mem_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][103:96] ;
-                                 end
-                        endcase
-                        end
-                      case(bus_mem_adr_stgd[3:2])
-                        2'b00: begin
-                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][31:24]   : '0;   
-                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][23:16]   : '0;   
-                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][15:8]    : '0;   
-                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][7:0]     : '0;   
-                               end
-                        2'b01: begin
-                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][63:56]   : '0;   
-                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][55:48]   : '0;   
-                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][47:40]   : '0;   
-                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][39:32]   : '0;   
-                               end
-                        2'b10: begin
-                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][95:88]   : '0;   
-                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][87:80]   : '0;   
-                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][79:72]   : '0;   
-                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][71:64]   : '0;   
-                               end
-                        2'b11: begin
-                               bus_mem_data_o[31:24] <= bus_mem_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][127:120] : '0;   
-                               bus_mem_data_o[23:16] <= bus_mem_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][119:112] : '0;   
-                               bus_mem_data_o[15:8]  <= bus_mem_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][111:104] : '0;   
-                               bus_mem_data_o[7:0]   <= bus_mem_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][103:96]  : '0;   
-                               end
-                      endcase
-                      bus_mem_tga_o <= bus_mem_tga_stgd;
-                      bus_mem_tgd_o <= bus_mem_tgd_stgd;
-                      bus_mem_tgc_o <= bus_mem_tgc_stgd;
-                      end
-                  state_load_0 <= '1;
-                  end
-      state_load_0: begin             
-                    state_load_1 <= '1;
-                    end
-      state_load_1: begin             
+                    dst_mem_stall_o <= '0;
+                    state_inst <= '0;
+                    state_mem  <= '1;
                     state_idle <= '1;
                     end
-      endcase
- 
-    if(rst) 
-      begin
-      //membus_req_stgd          <= '0;
-      //membus_write_stgd        <= '0;
-      //membus_addr_stgd         <= '0;
-      //membus_data_stgd         <= '0;
-      //membus_data_rd_mask_stgd <= '0;
-      //membus_data_wr_mask_stgd <= '0;
+                  end
+                if(state_mem)
+                  begin
+                  if(dst_mem_stb_i)
+                    begin
+                    dst_adr_i  <= dst_mem_adr_i;
+                    dst_data_i <= dst_mem_data_i;
+                    dst_we_i   <= dst_mem_we_i;
+                    dst_sel_i  <= dst_mem_sel_i;
+                    dst_tga_i  <= dst_mem_tga_i;
+                    dst_tgd_i  <= dst_mem_tgd_i;
+                    dst_tgc_i  <= dst_mem_tgc_i;
+                    state_req <= '1;
+                    end
+                  else
+                    begin
+                    dst_inst_stall_o <= '0;
+                    state_inst <= '1;
+                    state_mem  <= '0;
+                    state_idle <= '1;
+                    end
+                  end
+                end
+    state_req: begin
+               ddr3_fifo_out_wrreq <= dst_we_i;
+               ddr3_fifo_out_rdreq <= ~dst_we_i;
+               ddr3_fifo_out_data  <= dst_data_i;
+               ddr3_fifo_out_addr  <= dst_adr_i[29:4];
 
-      arb_inst            <= '0;
-      arb_mem             <= '1;
-      
-      state_inst          <= '0;
-      state_mem           <= '1;
-      state_idle          <= '1;
-      state_flush         <= '0;
-      state_load          <= '0;
-      state_load_pending  <= '0;
-      state_update        <= '0;
+               if(dst_we_i)
+                 begin
+                 state_inst <= ~state_inst;
+                 state_mem  <= ~state_mem;
+                 state_idle <= '1;
+                 end
+               else
+                 begin
+                 state_rsp <= '1;
+                 end
+               end
+    state_rsp: begin
+               if(~ddr3_fifo_in_empty )
+                 begin
+                 ddr3_fifo_in_rdack  <= '1;
 
-      flush_cnt <= '0;
+                 if(state_inst)
+                   begin
+                   dst_inst_ack_o  <= '1;
+                   dst_inst_err_o  <= '0;
+                   dst_inst_rty_o  <= '0;
+                   dst_inst_data_o <= ddr3_fifo_in_q[127:0];
+                   dst_inst_tga_o  <= dst_tga_i;
+                   dst_inst_tgd_o  <= dst_tgd_i;
+                   dst_inst_tgc_o  <= dst_tgc_i;
+                   end
 
-      inst_buffer_vld  <= '0;
-      inst_buffer_addr <= '0;
-      inst_buffer_data <= '0;
+                 if(state_mem)
+                   begin
+                   dst_mem_ack_o  <= '1;
+                   dst_mem_err_o  <= '0;
+                   dst_mem_rty_o  <= '0;
+                   dst_mem_data_o <= ddr3_fifo_in_q[127:0];
+                   dst_mem_tga_o  <= dst_tga_i;
+                   dst_mem_tgd_o  <= dst_tgd_i;
+                   dst_mem_tgc_o  <= dst_tgc_i;
+                   end
 
-      mem_buffer_vld  <= '0;
-      mem_buffer_addr <= '0;
-      mem_buffer_data <= '0;
+                 if(state_inst)
+                   begin
+                   dst_mem_stall_o <= '0;
+                   state_inst <= '0;
+                   state_mem  <= '1;
+                   end
+                 if(state_mem)
+                   begin
+                   dst_inst_stall_o <= '0;
+                   state_inst <= '1;
+                   state_mem  <= '0;
+                   end
+                 state_idle <= '1;
+                 end
+               else
+                 begin
+                 state_rsp <= '1;
+                 end
+               end
+               
+  endcase
 
-      ddr3_fifo_out_wrreq <= '0;
-      ddr3_fifo_out_rdreq <= '0;
-      end
+  if(rst) 
+  begin
+    state_inst <= '1;
+    state_mem  <= '0;
+
+    state_idle   <= '1;
+    state_req <= '0;
+    state_rsp <= '0;
+
+    ddr3_fifo_out_wrreq <= '0;
+    ddr3_fifo_out_rdreq <= '0;
+
+    ddr3_fifo_in_rdack  <= '0;
   end
+end
+
+
+
+
+
+
+
+
 
 logic ddr3_state_idle;
 logic ddr3_state_pulse;
