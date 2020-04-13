@@ -61,15 +61,15 @@ logic         state_load;
 logic         state_load_pending;
 logic         state_update;
 
-logic [15:0]        mem_buffer_vld;
-logic [15:0][25:4]  mem_buffer_addr;
-logic [15:0]        mem_buffer_dirty;
-logic [15:0][127:0] mem_buffer_data;
+logic [31:0]        mem_buffer_vld;
+logic [31:0][25:4]  mem_buffer_addr;
+logic [31:0]        mem_buffer_dirty;
+logic [31:0][127:0] mem_buffer_data;
 logic               mem_buffer_in_lru;
 logic               mem_buffer_lru_touch;
-logic [3:0]         mem_buffer_lru;
-logic [3:0]         mem_buffer_lru_entry_next;
-logic [3:0]         mem_buffer_lru_entry;
+logic [4:0]         mem_buffer_lru;
+logic [4:0]         mem_buffer_lru_entry_next;
+logic [4:0]         mem_buffer_lru_entry;
 
 logic         mem_buffer_0_vld;
 logic [25:4]  mem_buffer_0_addr;
@@ -258,7 +258,7 @@ wishbone_buff	bus_buff (
 	.usedw        (  )
 	);
 
-lru_16 mem_lru (
+lru_32 mem_lru (
   .clk,
   .rst,
   
@@ -272,7 +272,7 @@ always_comb
   begin
   mem_buffer_in_lru         = '0;
   mem_buffer_lru_entry_next = '0;
-  for(int i = 0; i < 16; i++)
+  for(int i = 0; i < 32; i++)
     begin
     if(!bus_buff_empty &&
        mem_buffer_vld[i] &&
@@ -336,10 +336,10 @@ begin
                     end
                   else
                     begin
-                    logic [3:0] lru_entry;
+                    logic [4:0] lru_entry;
                     mem_buffer_lru_touch <= '1;
                     lru_entry = mem_buffer_lru;
-                    for(int i = 0; i < 16; i++)
+                    for(int i = 0; i < 32; i++)
                       begin
                       if(~mem_buffer_vld[i])
                         begin

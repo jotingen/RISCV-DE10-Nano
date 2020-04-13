@@ -5,6 +5,7 @@
 
 `include "../../src/de10nano/ddr3/ddr3.sv"
 `include "../../src/de10nano/ddr3/ddr3_cache.sv"
+`include "../../src/common/lru_32.sv"
 `include "../../src/common/lru_16.sv"
 
 `include "../../src/de10nano/ddr3/ddr3_fifo.v"

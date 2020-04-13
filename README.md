@@ -106,3 +106,4 @@ Emulting a ~25 cycle access time, with 500 instruction and memory ops
 |26.3cyc/op|33.6cyc/op|29.8cyc/op| 1 entry for inst, 16 entry lru for mem|
 |22.8cyc/op|25.4cyc/op|20.8cyc/op| Cache extracted from DDR3 and modularized. Inst cache matched to mem. Mem interface ported to wishbone.
 |21.5cyc/op|25.2cyc/op|19.9cyc/op| Add dirty bit to skip writebacks
+|20.8cyc/op|21.5cyc/op|17.5cyc/op| Grow from 16-entry to 32-entry (256B to 512B)

@@ -138,100 +138,100 @@ always_comb
     begin
     casex(lru_touched)
       'd0:  begin
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '1; //~lru1[0];
-            lru2_touch_next[0] = '1; //~lru2[0];
-            lru3_touch_next[0] = '1; //~lru3[0];
-            end                           
-      'd1:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '1; //~lru1[0];
-            lru2_touch_next[0] = '1; //~lru2[0];
-            lru3_touch_next[0] = '0; //~lru3[0];
-            end                           
-      'd2:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '1; //~lru1[0];
-            lru2_touch_next[0] = '0; //~lru2[0];
-            lru3_touch_next[1] = '1; //~lru3[1];
-            end                           
-      'd3:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '1; //~lru1[0];
-            lru2_touch_next[0] = '0; //~lru2[0];
-            lru3_touch_next[1] = '0; //~lru3[1];
-            end                           
-      'd4:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '0; //~lru1[0];
-            lru2_touch_next[1] = '1; //~lru2[1];
-            lru3_touch_next[2] = '1; //~lru3[2];
-            end                           
-      'd5:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '0; //~lru1[0];
-            lru2_touch_next[1] = '1; //~lru2[1];
-            lru3_touch_next[2] = '0; //~lru3[2];
-            end                           
-      'd6:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '0; //~lru1[0];
-            lru2_touch_next[1] = '0; //~lru2[1];
-            lru3_touch_next[3] = '1; //~lru3[3];
-            end                           
-      'd7:  begin                         
-            lru0_touch_next[0] = '1; //~lru0[0];
-            lru1_touch_next[0] = '0; //~lru1[0];
-            lru2_touch_next[1] = '0; //~lru2[1];
-            lru3_touch_next[3] = '0; //~lru3[3];
-            end                           
-      'd8:  begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '1; //~lru1[1];
-            lru2_touch_next[2] = '1; //~lru2[2];
-            lru3_touch_next[4] = '1; //~lru3[4];
-            end                           
-      'd9:  begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '1; //~lru1[1];
-            lru2_touch_next[2] = '1; //~lru2[2];
-            lru3_touch_next[4] = '0; //~lru3[4];
-            end                           
-      'd10: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '1; //~lru1[1];
-            lru2_touch_next[2] = '0; //~lru2[2];
-            lru3_touch_next[5] = '1; //~lru3[5];
-            end                           
-      'd11: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '1; //~lru1[1];
-            lru2_touch_next[2] = '0; //~lru2[2];
-            lru3_touch_next[5] = '0; //~lru3[5];
-            end                           
-      'd12: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '0; //~lru1[1];
-            lru2_touch_next[3] = '1; //~lru2[3];
-            lru3_touch_next[6] = '1; //~lru3[6];
-            end                           
-      'd13: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '0; //~lru1[1];
-            lru2_touch_next[3] = '1; //~lru2[3];
-            lru3_touch_next[6] = '0; //~lru3[6];
-            end                           
-      'd14: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '0; //~lru1[1];
-            lru2_touch_next[3] = '0; //~lru2[3];
-            lru3_touch_next[7] = '1; //~lru3[7];
-            end                           
-      'd15: begin                         
-            lru0_touch_next[0] = '0; //~lru0[0];
-            lru1_touch_next[1] = '0; //~lru1[1];
-            lru2_touch_next[3] = '0; //~lru2[3];
-            lru3_touch_next[7] = '0; //~lru3[7];
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '1; 
+            lru2_touch_next[0] = '1; 
+            lru3_touch_next[0] = '1; 
+            end                      
+      'd1:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '1; 
+            lru2_touch_next[0] = '1; 
+            lru3_touch_next[0] = '0; 
+            end                      
+      'd2:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '1; 
+            lru2_touch_next[0] = '0; 
+            lru3_touch_next[1] = '1; 
+            end                      
+      'd3:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '1; 
+            lru2_touch_next[0] = '0; 
+            lru3_touch_next[1] = '0; 
+            end                      
+      'd4:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '0; 
+            lru2_touch_next[1] = '1; 
+            lru3_touch_next[2] = '1; 
+            end                      
+      'd5:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '0; 
+            lru2_touch_next[1] = '1; 
+            lru3_touch_next[2] = '0; 
+            end                      
+      'd6:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '0; 
+            lru2_touch_next[1] = '0; 
+            lru3_touch_next[3] = '1; 
+            end                      
+      'd7:  begin                    
+            lru0_touch_next[0] = '1; 
+            lru1_touch_next[0] = '0; 
+            lru2_touch_next[1] = '0; 
+            lru3_touch_next[3] = '0; 
+            end                      
+      'd8:  begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '1; 
+            lru2_touch_next[2] = '1; 
+            lru3_touch_next[4] = '1; 
+            end                      
+      'd9:  begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '1; 
+            lru2_touch_next[2] = '1; 
+            lru3_touch_next[4] = '0; 
+            end                      
+      'd10: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '1; 
+            lru2_touch_next[2] = '0; 
+            lru3_touch_next[5] = '1; 
+            end                      
+      'd11: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '1; 
+            lru2_touch_next[2] = '0; 
+            lru3_touch_next[5] = '0; 
+            end                      
+      'd12: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '0; 
+            lru2_touch_next[3] = '1; 
+            lru3_touch_next[6] = '1; 
+            end                      
+      'd13: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '0; 
+            lru2_touch_next[3] = '1; 
+            lru3_touch_next[6] = '0; 
+            end                      
+      'd14: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '0; 
+            lru2_touch_next[3] = '0; 
+            lru3_touch_next[7] = '1; 
+            end                      
+      'd15: begin                    
+            lru0_touch_next[0] = '0; 
+            lru1_touch_next[1] = '0; 
+            lru2_touch_next[3] = '0; 
+            lru3_touch_next[7] = '0; 
             end
     endcase
   end
