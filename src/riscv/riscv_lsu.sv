@@ -52,14 +52,24 @@ module riscv_lsu(
   input  logic dpu_SH,
   input  logic dpu_SW,
 
-  output logic             bus_req,
-  input  logic             bus_ack,
-  output logic             bus_write,
-  output logic [31:0]      bus_addr,
-  output logic  [3:0]      bus_data_rd_mask,
-  output logic [31:0]      bus_data_wr,
-  output logic  [3:0]      bus_data_wr_mask,
-  input  logic [31:0]      bus_data_rd
+  output logic [31:0]      bus_data_adr_o,
+  output logic [31:0]      bus_data_data_o,
+  output logic             bus_data_we_o,
+  output logic  [3:0]      bus_data_sel_o,
+  output logic             bus_data_stb_o,
+  output logic             bus_data_cyc_o,
+  output logic             bus_data_tga_o,
+  output logic             bus_data_tgd_o,
+  output logic  [3:0]      bus_data_tgc_o,
+
+  input  logic             bus_data_ack_i,
+  input  logic             bus_data_stall_i,
+  input  logic             bus_data_err_i,
+  input  logic             bus_data_rty_i,
+  input  logic [31:0]      bus_data_data_i,
+  input  logic             bus_data_tga_i,
+  input  logic             bus_data_tgd_i,
+  input  logic  [3:0]      bus_data_tgc_i
 
 );
 
@@ -100,12 +110,15 @@ always_ff @(posedge clk)
   lsu_rd_wr  <= '0;
   lsu_rd_data <= lsu_rd_data;
 
-  bus_req   <= '0;
-  bus_write <= bus_write;
-  bus_addr  <= bus_addr;
-  bus_data_wr  <= bus_data_wr;
-  bus_data_rd_mask <= bus_data_rd_mask;
-  bus_data_wr_mask <= bus_data_wr_mask;
+  bus_data_stb_o  <= '0;
+  bus_data_cyc_o  <= '0;
+  bus_data_adr_o  <= bus_data_adr_o;
+  bus_data_data_o <= bus_data_data_o;
+  bus_data_we_o   <= bus_data_we_o; 
+  bus_data_sel_o  <= bus_data_sel_o;
+  bus_data_tga_o  <= bus_data_tga_o;
+  bus_data_tgd_o  <= bus_data_tgd_o;
+  bus_data_tgc_o  <= bus_data_tgc_o;
 
   lsu_rs2_data   <= lsu_rs2_data;  
   lsu_rs1_data   <= lsu_rs1_data;  
@@ -176,12 +189,15 @@ always_ff @(posedge clk)
     lsu_rs1_data<= dpu_rs1_data;      
     lsu_rs2_data<= dpu_rs2_data;      
 
-    bus_req   <= '0;
-    bus_write <= '0;
-    bus_addr  <= '0;
-    bus_data_wr  <= '0;
-    bus_data_rd_mask <= '0;
-    bus_data_wr_mask <= '0;
+    bus_data_stb_o  <= '0;
+    bus_data_cyc_o  <= '0;
+    bus_data_adr_o  <= '0;
+    bus_data_data_o <= '0;
+    bus_data_we_o   <= '0;
+    bus_data_sel_o  <= '0;
+    bus_data_tga_o  <= '0;
+    bus_data_tgd_o  <= '0;
+    bus_data_tgc_o  <= '0;
     end
   //Else turn off if retiring
   else if(lsu_vld & lsu_retired)
@@ -201,22 +217,23 @@ always_ff @(posedge clk)
       lsu_LB : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '0;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o   <= '1;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0]  <= '0;
                  unique
                  case(addr[1:0])
-                   'b00: bus_data_rd_mask <= 'b0001;
-                   'b01: bus_data_rd_mask <= 'b0010;
-                   'b10: bus_data_rd_mask <= 'b0100;
-                   default: bus_data_rd_mask <= 'b1000;
+                   'b00: bus_data_sel_o <= 'b0001;
+                   'b01: bus_data_sel_o <= 'b0010;
+                   'b10: bus_data_sel_o <= 'b0100;
+                   default: bus_data_sel_o <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, lsu_rs1, lsu_rs1_data, {{20{lsu_imm[11]}},lsu_imm[11:0]}, lsu_rd);
                  lsu_retired <= '1;
@@ -226,34 +243,35 @@ always_ff @(posedge clk)
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
                  unique
                  case(addr[1:0])
-                   'b00: lsu_rd_data <= {{24{bus_data_rd[7]}},bus_data_rd[7:0]};
-                   'b01: lsu_rd_data <= {{24{bus_data_rd[15]}},bus_data_rd[15:8]};
-                   'b10: lsu_rd_data <= {{24{bus_data_rd[23]}},bus_data_rd[23:16]};
-                   default: lsu_rd_data <= {{24{bus_data_rd[31]}},bus_data_rd[31:24]};
+                   'b00: lsu_rd_data <= {{24{bus_data_data_i[7]}},bus_data_data_i[7:0]};
+                   'b01: lsu_rd_data <= {{24{bus_data_data_i[15]}},bus_data_data_i[15:8]};
+                   'b10: lsu_rd_data <= {{24{bus_data_data_i[23]}},bus_data_data_i[23:16]};
+                   default: lsu_rd_data <= {{24{bus_data_data_i[31]}},bus_data_data_i[31:24]};
                  endcase
-                 lsu_mem_rdata <= bus_data_rd;
+                 lsu_mem_rdata <= bus_data_data_i;
                  lsu_PC_next <= lsu_PC+'d4;
                  end
                end
       lsu_LBU : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '0;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '0;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
                  unique
                  case(addr[1:0])
-                   'b00: bus_data_rd_mask <= 'b0001;
-                   'b01: bus_data_rd_mask <= 'b0010;
-                   'b10: bus_data_rd_mask <= 'b0100;
-                   default: bus_data_rd_mask <= 'b1000;
+                   'b00: bus_data_sel_o <= 'b0001;
+                   'b01: bus_data_sel_o <= 'b0010;
+                   'b10: bus_data_sel_o <= 'b0100;
+                   default: bus_data_sel_o <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, lsu_rs1, lsu_rs1_data, {{20{lsu_imm[11]}},lsu_imm[11:0]}, lsu_rd);
                  lsu_retired <= '1;
@@ -263,32 +281,33 @@ always_ff @(posedge clk)
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
                  unique
                  case(addr[1:0])
-                   'b00: lsu_rd_data <= {{24{'0}},bus_data_rd[7:0]};
-                   'b01: lsu_rd_data <= {{24{'0}},bus_data_rd[15:8]};
-                   'b10: lsu_rd_data <= {{24{'0}},bus_data_rd[23:16]};
-                   default: lsu_rd_data <= {{24{'0}},bus_data_rd[31:24]};
+                   'b00: lsu_rd_data <= {{24{'0}},bus_data_data_i[7:0]};
+                   'b01: lsu_rd_data <= {{24{'0}},bus_data_data_i[15:8]};
+                   'b10: lsu_rd_data <= {{24{'0}},bus_data_data_i[23:16]};
+                   default: lsu_rd_data <= {{24{'0}},bus_data_data_i[31:24]};
                  endcase
-                 lsu_mem_rdata <= bus_data_rd;
+                 lsu_mem_rdata <= bus_data_data_i;
                  lsu_PC_next <= lsu_PC+'d4;
                  end
                end
       lsu_LH : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '0;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '0;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
                  unique
                  case(addr[1])
-                   'b0: bus_data_rd_mask <= 'b0011;
-                   default: bus_data_rd_mask <= 'b1100;
+                   'b0: bus_data_sel_o <= 'b0011;
+                   default: bus_data_sel_o <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, lsu_rs1, lsu_rs1_data, {{20{lsu_imm[11]}},lsu_imm[11:0]}, lsu_rd);
                  lsu_retired <= '1;
@@ -298,30 +317,31 @@ always_ff @(posedge clk)
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
                  unique
                  case(addr[1])
-                   'b0: lsu_rd_data <= {{16{bus_data_rd[15]}},bus_data_rd[15:0]};
-                   default: lsu_rd_data <= {{16{bus_data_rd[31]}},bus_data_rd[31:16]};
+                   'b0: lsu_rd_data <= {{16{bus_data_data_i[15]}},bus_data_data_i[15:0]};
+                   default: lsu_rd_data <= {{16{bus_data_data_i[31]}},bus_data_data_i[31:16]};
                  endcase
-                 lsu_mem_rdata <= bus_data_rd;
+                 lsu_mem_rdata <= bus_data_data_i;
                  lsu_PC_next <= lsu_PC+'d4;
                  end
                end
       lsu_LHU : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '0;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '0;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
                  unique
                  case(addr[1])
-                   'b0: bus_data_rd_mask <= 'b0011;
-                   default: bus_data_rd_mask <= 'b1100;
+                   'b0: bus_data_sel_o <= 'b0011;
+                   default: bus_data_sel_o <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, lsu_rs1, lsu_rs1_data, {{20{lsu_imm[11]}},lsu_imm[11:0]}, lsu_rd);
                  lsu_retired <= '1;
@@ -331,63 +351,65 @@ always_ff @(posedge clk)
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
                  unique
                  case(addr[1])
-                   'b0: lsu_rd_data <= {{16{'0}},bus_data_rd[15:0]};
-                   default: lsu_rd_data <= {{16{'0}},bus_data_rd[31:16]};
+                   'b0: lsu_rd_data <= {{16{'0}},bus_data_data_i[15:0]};
+                   default: lsu_rd_data <= {{16{'0}},bus_data_data_i[31:16]};
                  endcase
-                 lsu_mem_rdata <= bus_data_rd;
+                 lsu_mem_rdata <= bus_data_data_i;
                  lsu_PC_next <= lsu_PC+'d4;
                  end
                end
       lsu_LW : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '0;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '0;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
-                 bus_data_rd_mask <= 'b1111;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
+                 bus_data_sel_o <= 'b1111;
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X imm=%08X rd=(%d)", "LW", PC, lsu_rs1, lsu_rs1_data, {{20{lsu_imm[11]}},lsu_imm[11:0]}, lsu_rd);
                  lsu_retired <= '1;
                 lsu_freeze <= '0;
                  lsu_mem_access <= '0;
                  lsu_rd_wr <= '1;
-                 lsu_rd_data <= bus_data_rd;
-                 lsu_mem_rdata <= bus_data_rd;
+                 lsu_rd_data <= bus_data_data_i;
+                 lsu_mem_rdata <= bus_data_data_i;
                  lsu_PC_next <= lsu_PC+'d4;
                  end
                end
       lsu_SB : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '1;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '1;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
                  unique
                  case(addr[1:0])
-                   'b00: bus_data_wr  <= {{24{'0}},lsu_rs2_data[7:0]};
-                   'b01: bus_data_wr  <= {{16{'0}},lsu_rs2_data[7:0],{8 {'0}}};
-                   'b10: bus_data_wr  <= {{ 8{'0}},lsu_rs2_data[7:0],{16{'0}}};
-                   default: bus_data_wr  <= {         lsu_rs2_data[7:0],{24{'0}}};
+                   'b00: bus_data_data_o  <= {{24{'0}},lsu_rs2_data[7:0]};
+                   'b01: bus_data_data_o  <= {{16{'0}},lsu_rs2_data[7:0],{8 {'0}}};
+                   'b10: bus_data_data_o  <= {{ 8{'0}},lsu_rs2_data[7:0],{16{'0}}};
+                   default: bus_data_data_o  <= {         lsu_rs2_data[7:0],{24{'0}}};
                  endcase
                  unique
                  case(addr[1:0])
-                   'b00: bus_data_wr_mask <= 'b0001;
-                   'b01: bus_data_wr_mask <= 'b0010;
-                   'b10: bus_data_wr_mask <= 'b0100;
-                   default: bus_data_wr_mask <= 'b1000;
+                   'b00: bus_data_sel_o <= 'b0001;
+                   'b01: bus_data_sel_o <= 'b0010;
+                   'b10: bus_data_sel_o <= 'b0100;
+                   default: bus_data_sel_o <= 'b1000;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, lsu_rs1, lsu_rs1_data, lsu_rs2, lsu_rs2_data, {{20{lsu_imm[11]}},lsu_imm[11:0]});
                  lsu_retired <= '1;
@@ -399,25 +421,26 @@ always_ff @(posedge clk)
       lsu_SH : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '1;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '1;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
                  unique
                  case(addr[1])
-                   'b0: bus_data_wr  <= {{16{'0}},lsu_rs2_data[15:0]};
-                   default: bus_data_wr  <= {         lsu_rs2_data[15:0],{16{'0}}};
+                   'b0: bus_data_data_o  <= {{16{'0}},lsu_rs2_data[15:0]};
+                   default: bus_data_data_o  <= {         lsu_rs2_data[15:0],{16{'0}}};
                  endcase
                  unique
                  case(addr[1])
-                   'b0: bus_data_wr_mask <= 'b0011;
-                   default: bus_data_wr_mask <= 'b1100;
+                   'b0: bus_data_sel_o <= 'b0011;
+                   default: bus_data_sel_o <= 'b1100;
                  endcase
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, lsu_rs1, lsu_rs1_data, lsu_rs2, lsu_rs2_data, {{20{lsu_imm[11]}},lsu_imm[11:0]});
                  lsu_retired <= '1;
@@ -429,17 +452,18 @@ always_ff @(posedge clk)
       lsu_SW : begin
                if(~lsu_mem_access)
                  begin
-                 bus_req   <= '1;
-                 bus_write <= '1;
+                 bus_data_stb_o  <= '1;
+                 bus_data_cyc_o  <= '1;
+                 bus_data_we_o <= '1;
                  addr  = lsu_rs1_data + { {20{lsu_imm[11]}}, lsu_imm[11:0]};
-                 bus_addr  <= addr;
-                 bus_addr[1:0] <= '0;
-                 bus_data_wr  <= lsu_rs2_data;
-                 bus_data_wr_mask <= 'b1111;
+                 bus_data_adr_o  <= addr;
+                 bus_data_adr_o[1:0] <= '0;
+                 bus_data_data_o  <= lsu_rs2_data;
+                 bus_data_sel_o <= 'b1111;
                  lsu_freeze <= '1;
                  lsu_mem_access <= '1;
                  end
-               else if(bus_ack)
+               else if(bus_data_ack_i)
                  begin
                  //$display("%-5s PC=%08X rs1=(%d)%08X rs2=(%d)%08X imm=%08X ", "SW", PC, lsu_rs1, lsu_rs1_data, lsu_rs2, lsu_rs2_data, {{20{lsu_imm[11]}},lsu_imm[11:0]});
                  lsu_retired <= '1;
@@ -480,10 +504,11 @@ always_ff @(posedge clk)
     lsu_rd_wr  <= '0;
     lsu_rd_data <= '0;
 
-    bus_req   <= '0;
-    bus_write <= '0;
-    bus_addr  <= '0;
-    bus_data_wr  <= '0 ;
+    bus_data_stb_o  <= '0;
+    bus_data_cyc_o  <= '0;
+    bus_data_we_o <= '0;
+    bus_data_adr_o  <= '0;
+    bus_data_data_o  <= '0 ;
 
     lsu_inst    <= '0;
     lsu_order   <= '0;

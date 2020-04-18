@@ -213,14 +213,24 @@ module riscv_exu #(
   output logic [31:0]      csr_data_wr,
   input  logic [31:0]      csr_data_rd,
 
-  output logic             bus_req,
-  input  logic             bus_ack,
-  output logic             bus_write,
-  output logic [31:0]      bus_addr,
-  output logic  [3:0]      bus_data_rd_mask,
-  output logic [31:0]      bus_data_wr,
-  output logic  [3:0]      bus_data_wr_mask,
-  input  logic [31:0]      bus_data_rd
+  output logic [31:0]      bus_data_adr_o,
+  output logic [31:0]      bus_data_data_o,
+  output logic             bus_data_we_o,
+  output logic  [3:0]      bus_data_sel_o,
+  output logic             bus_data_stb_o,
+  output logic             bus_data_cyc_o,
+  output logic             bus_data_tga_o,
+  output logic             bus_data_tgd_o,
+  output logic  [3:0]      bus_data_tgc_o,
+
+  input  logic             bus_data_ack_i,
+  input  logic             bus_data_stall_i,
+  input  logic             bus_data_err_i,
+  input  logic             bus_data_rty_i,
+  input  logic [31:0]      bus_data_data_i,
+  input  logic             bus_data_tga_i,
+  input  logic             bus_data_tgd_i,
+  input  logic  [3:0]      bus_data_tgc_i
 );
 
 
@@ -896,14 +906,24 @@ riscv_lsu lsu (
   .dpu_SH               (dpu_SH      ),
   .dpu_SW               (dpu_SW      ),
 
-  .bus_req              (bus_req         ),
-  .bus_ack              (bus_ack         ),
-  .bus_write            (bus_write       ),
-  .bus_addr             (bus_addr        ),
-  .bus_data_rd_mask     (bus_data_rd_mask),
-  .bus_data_wr          (bus_data_wr     ),
-  .bus_data_wr_mask     (bus_data_wr_mask),
-  .bus_data_rd          (bus_data_rd     )
+  .bus_data_adr_o            (bus_data_adr_o),
+  .bus_data_data_o           (bus_data_data_o),
+  .bus_data_we_o             (bus_data_we_o),
+  .bus_data_sel_o            (bus_data_sel_o),
+  .bus_data_stb_o            (bus_data_stb_o),
+  .bus_data_cyc_o            (bus_data_cyc_o),
+  .bus_data_tga_o            (bus_data_tga_o),
+  .bus_data_tgd_o            (bus_data_tgd_o),
+  .bus_data_tgc_o            (bus_data_tgc_o),
+
+  .bus_data_ack_i            (bus_data_ack_i),
+  .bus_data_stall_i          (bus_data_stall_i),
+  .bus_data_err_i            (bus_data_err_i),
+  .bus_data_rty_i            (bus_data_rty_i),
+  .bus_data_data_i           (bus_data_data_i),
+  .bus_data_tga_i            (bus_data_tga_i),
+  .bus_data_tgd_i            (bus_data_tgd_i),
+  .bus_data_tgc_i            (bus_data_tgc_i)
 );
 
 riscv_csu csu (

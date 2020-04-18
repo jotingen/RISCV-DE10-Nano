@@ -57,15 +57,24 @@ module riscv #(
   input  logic             bus_inst_tgd_i,
   input  logic  [3:0]      bus_inst_tgc_i,
 
-  input  logic        i_membus_ack,
-  input  logic [31:0] i_membus_data,
+  output logic [31:0]      bus_data_adr_o,
+  output logic [31:0]      bus_data_data_o,
+  output logic             bus_data_we_o,
+  output logic  [3:0]      bus_data_sel_o,
+  output logic             bus_data_stb_o,
+  output logic             bus_data_cyc_o,
+  output logic             bus_data_tga_o,
+  output logic             bus_data_tgd_o,
+  output logic  [3:0]      bus_data_tgc_o,
 
-  output logic        o_membus_req,
-  output logic        o_membus_write,
-  output logic [31:0] o_membus_addr,
-  output logic [31:0] o_membus_data,
-  output logic  [3:0] o_membus_data_rd_mask,
-  output logic  [3:0] o_membus_data_wr_mask
+  input  logic             bus_data_ack_i,
+  input  logic             bus_data_stall_i,
+  input  logic             bus_data_err_i,
+  input  logic             bus_data_rty_i,
+  input  logic [31:0]      bus_data_data_i,
+  input  logic             bus_data_tga_i,
+  input  logic             bus_data_tgd_i,
+  input  logic  [3:0]      bus_data_tgc_i
 );
 
 logic              csr_req;
@@ -703,14 +712,24 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .csr_data_wr      (csr_data_wr),
   .csr_data_rd      (csr_data_rd),
 
-  .bus_req          (o_membus_req),   
-  .bus_ack          (i_membus_ack),   
-  .bus_write        (o_membus_write), 
-  .bus_addr         (o_membus_addr),  
-  .bus_data_wr      (o_membus_data),
-  .bus_data_rd      (i_membus_data),
-  .bus_data_rd_mask (o_membus_data_rd_mask),
-  .bus_data_wr_mask (o_membus_data_wr_mask)
+  .bus_data_adr_o   (bus_data_adr_o),
+  .bus_data_data_o  (bus_data_data_o),
+  .bus_data_we_o    (bus_data_we_o),
+  .bus_data_sel_o   (bus_data_sel_o),
+  .bus_data_stb_o   (bus_data_stb_o),
+  .bus_data_cyc_o   (bus_data_cyc_o),
+  .bus_data_tga_o   (bus_data_tga_o),
+  .bus_data_tgd_o   (bus_data_tgd_o),
+  .bus_data_tgc_o   (bus_data_tgc_o),
+
+  .bus_data_ack_i   (bus_data_ack_i),
+  .bus_data_stall_i (bus_data_stall_i),
+  .bus_data_err_i   (bus_data_err_i),
+  .bus_data_rty_i   (bus_data_rty_i),
+  .bus_data_data_i  (bus_data_data_i),
+  .bus_data_tga_i   (bus_data_tga_i),
+  .bus_data_tgd_i   (bus_data_tgd_i),
+  .bus_data_tgc_i   (bus_data_tgc_i)
 );
 
 endmodule

@@ -241,6 +241,7 @@ module sim_unit_test;
   // This is the UUT that we're 
   // running the Unit Tests on
   //===================================
+  assign KEY[0] = rst_n; //Physical board's reset pin shorted
   top de10nano(
     .FPGA_CLK1_50 (clk),
     .FPGA_CLK2_50 (clk),
@@ -452,6 +453,10 @@ module sim_unit_test;
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(TEST)
+  $readmemh("../../output/programs/bootloader/bootloader_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/bootloader/bootloader_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/bootloader/bootloader_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/bootloader/bootloader_0.v", de10nano.mem.mem_array_0);
   step(100);
   `SVTEST_END
 

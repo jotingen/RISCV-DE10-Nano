@@ -633,15 +633,25 @@ riscv #(.M_EXT(1)) riscv (
   .bus_inst_tgd_i   (mmc_riscv_inst_tgd), 
   .bus_inst_tgc_i   (mmc_riscv_inst_tgc), 
 
-  .i_membus_ack   (mmc_riscv_bus_ack),   
-  .i_membus_data  (mmc_riscv_bus_data),
+  .bus_data_adr_o   (riscv_mmc_data_adr), 
+  .bus_data_data_o  (riscv_mmc_data_data),
+  .bus_data_we_o    (riscv_mmc_data_we),  
+  .bus_data_sel_o   (riscv_mmc_data_sel), 
+  .bus_data_stb_o   (riscv_mmc_data_stb), 
+  .bus_data_cyc_o   (riscv_mmc_data_cyc), 
+  .bus_data_tga_o   (riscv_mmc_data_tga), 
+  .bus_data_tgd_o   (riscv_mmc_data_tgd), 
+  .bus_data_tgc_o   (riscv_mmc_data_tgc), 
+                                     
+  .bus_data_ack_i   (mmc_riscv_data_ack), 
+  .bus_data_stall_i (mmc_riscv_data_stall),
+  .bus_data_err_i   (mmc_riscv_data_err), 
+  .bus_data_rty_i   (mmc_riscv_data_rty), 
+  .bus_data_data_i  (mmc_riscv_data_data), 
+  .bus_data_tga_i   (mmc_riscv_data_tga), 
+  .bus_data_tgd_i   (mmc_riscv_data_tgd), 
+  .bus_data_tgc_i   (mmc_riscv_data_tgc) 
 
-  .o_membus_req   (riscv_mmc_bus_req),   
-  .o_membus_write (riscv_mmc_bus_write), 
-  .o_membus_addr  (riscv_mmc_bus_addr),  
-  .o_membus_data  (riscv_mmc_bus_data),
-  .o_membus_data_rd_mask  (riscv_mmc_bus_data_rd_mask),
-  .o_membus_data_wr_mask  (riscv_mmc_bus_data_wr_mask)
 
 `ifdef RISCV_FORMAL
   ,
@@ -980,15 +990,24 @@ mem mem (
   .bus_inst_tgd_o         (mem_mmc_inst_tgd),  
   .bus_inst_tgc_o         (mem_mmc_inst_tgc),  
 
-  .i_membus_req           (mmc_mem_bus_req),   
-  .i_membus_write         (mmc_mem_bus_write), 
-  .i_membus_addr          (mmc_mem_bus_addr),  
-  .i_membus_data          (mmc_mem_bus_data),
-  .i_membus_data_rd_mask  (mmc_mem_bus_data_rd_mask),
-  .i_membus_data_wr_mask  (mmc_mem_bus_data_wr_mask),
-
-  .o_membus_ack           (mem_mmc_bus_ack),   
-  .o_membus_data          (mem_mmc_bus_data)
+  .bus_data_adr_i         (mmc_mem_data_adr),  
+  .bus_data_data_i        (mmc_mem_data_data), 
+  .bus_data_we_i          (mmc_mem_data_we),   
+  .bus_data_sel_i         (mmc_mem_data_sel),  
+  .bus_data_stb_i         (mmc_mem_data_stb),  
+  .bus_data_cyc_i         (mmc_mem_data_cyc),  
+  .bus_data_tga_i         (mmc_mem_data_tga),  
+  .bus_data_tgd_i         (mmc_mem_data_tgd),  
+  .bus_data_tgc_i         (mmc_mem_data_tgc),  
+                                                  
+  .bus_data_ack_o         (mem_mmc_data_ack),  
+  .bus_data_stall_o       (mem_mmc_data_stall),
+  .bus_data_err_o         (mem_mmc_data_err),  
+  .bus_data_rty_o         (mem_mmc_data_rty),  
+  .bus_data_data_o        (mem_mmc_data_data),  
+  .bus_data_tga_o         (mem_mmc_data_tga),  
+  .bus_data_tgd_o         (mem_mmc_data_tgd),  
+  .bus_data_tgc_o         (mem_mmc_data_tgc)
 );
 
 ddr3 ddr3 (
