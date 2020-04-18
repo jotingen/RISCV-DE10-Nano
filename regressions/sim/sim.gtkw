@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Fri Apr 17 23:06:25 2020
+[*] Sat Apr 18 02:18:39 2020
 [*]
 [dumpfile] "/mnt/c/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/regressions/sim/sim.vcd"
-[dumpfile_mtime] "Fri Apr 17 23:02:08 2020"
-[dumpfile_size] 1548932
+[dumpfile_mtime] "Sat Apr 18 02:10:09 2020"
+[dumpfile_size] 1631770
 [savefile] "/mnt/c/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/regressions/sim/sim.gtkw"
 [timestart] 0
 [size] 1852 1057
 [pos] -1 -1
-*-10.278163 680 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.278163 3040 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testrunner.
 [treeopen] testrunner.__ts.
 [treeopen] testrunner.__ts.sim_ut.
@@ -23,6 +23,10 @@
 testrunner.__ts.sim_ut.de10nano.FPGA_CLK1_50
 testrunner.__ts.sim_ut.de10nano.DDR3_CLK
 testrunner.__ts.sim_ut.de10nano.ARDUINO_RESET_N
+@200
+-
+@23
+testrunner.__ts.sim_ut.de10nano.LED[7:0]
 @200
 -
 @28
@@ -88,6 +92,25 @@ testrunner.__ts.sim_ut.de10nano.mmc_riscv_data_tga
 testrunner.__ts.sim_ut.de10nano.mmc_riscv_data_tgd
 @22
 testrunner.__ts.sim_ut.de10nano.mmc_riscv_data_tgc[3:0]
+@200
+-
+@800200
+-MMC_DATA
+@22
+testrunner.__ts.sim_ut.de10nano.mmc_data.DDR3_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.KEYS_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.LED_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.MEM_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.SDCARD_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.UART_ADDR_LO[31:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.ddr3_stb_cnt[15:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.keys_stb_cnt[15:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.led_stb_cnt[15:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.mem_stb_cnt[15:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+testrunner.__ts.sim_ut.de10nano.mmc_data.uart_stb_cnt[15:0]
+@1000200
+-MMC_DATA
 @200
 -
 @800200
@@ -172,12 +195,73 @@ testrunner.__ts.sim_ut.de10nano.mem.bus_data_data_o[31:0]
 @28
 testrunner.__ts.sim_ut.de10nano.mem.bus_data_tga_o
 testrunner.__ts.sim_ut.de10nano.mem.bus_data_tgd_o
-@23
+@22
 testrunner.__ts.sim_ut.de10nano.mem.bus_data_tgc_o[3:0]
 @1000200
 -MEM
 @200
 -
+@800200
+-DDR3
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_cyc_i
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_stb_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[31:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[31] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[30] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[29] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[28] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[27] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[26] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[25] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[24] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[23] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[22] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[21] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[20] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[19] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[18] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[17] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[16] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[15] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[14] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[13] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[12] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[11] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[10] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[9] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[8] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[7] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[6] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[5] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[4] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_adr_i[0]
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_sel_i[3:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_sel_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_sel_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_sel_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_sel_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_we_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[31:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[31] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[30] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[29] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[28] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[27] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[26] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[25] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[24] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[23] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[22] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[21] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[20] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[19] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[18] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[17] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[16] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[15] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[14] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[13] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[12] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[11] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[10] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[9] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[8] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[7] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[6] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[5] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[4] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tga_i
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgd_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_i[3:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_stall_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_ack_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_err_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_rty_o
+@22
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_data_o[31:0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tga_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgd_o
+@22
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_inst_tgc_o[3:0]
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_cyc_i
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_stb_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[31:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[31] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[30] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[29] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[28] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[27] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[26] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[25] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[24] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[23] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[22] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[21] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[20] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[19] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[18] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[17] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[16] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[15] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[14] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[13] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[12] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[11] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[10] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[9] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[8] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[7] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[6] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[5] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[4] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_adr_i[0]
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_sel_i[3:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_sel_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_sel_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_sel_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_sel_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_we_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[31:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[31] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[30] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[29] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[28] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[27] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[26] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[25] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[24] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[23] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[22] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[21] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[20] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[19] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[18] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[17] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[16] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[15] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[14] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[13] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[12] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[11] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[10] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[9] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[8] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[7] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[6] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[5] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[4] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tga_i
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgd_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_i[3:0]} testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_i[3] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_i[2] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_i[1] testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_stall_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_ack_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_err_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_rty_o
+@22
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_data_o[31:0]
+@28
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tga_o
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgd_o
+@22
+testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_o[3:0]
+@1000200
+-DDR3
+@200
 -
 @28
 testrunner.__ts.sim_ut.de10nano.riscv.ifu.ifu_buff_addr_empty

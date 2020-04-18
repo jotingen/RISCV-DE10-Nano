@@ -1070,15 +1070,24 @@ led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
 
   .LED         (LED),
 
-  .i_bus_req           (mmc_led_bus_req),   
-  .i_bus_write         (mmc_led_bus_write), 
-  .i_bus_addr          (mmc_led_bus_addr),  
-  .i_bus_data          (mmc_led_bus_data),
-  .i_bus_data_rd_mask  (mmc_led_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (mmc_led_bus_data_wr_mask),
-
-  .o_bus_ack           (led_mmc_bus_ack),   
-  .o_bus_data          (led_mmc_bus_data)
+  .bus_adr_i                 (mmc_led_data_adr),  
+  .bus_data_i                (mmc_led_data_data), 
+  .bus_we_i                  (mmc_led_data_we),   
+  .bus_sel_i                 (mmc_led_data_sel),  
+  .bus_stb_i                 (mmc_led_data_stb),  
+  .bus_cyc_i                 (mmc_led_data_cyc),  
+  .bus_tga_i                 (mmc_led_data_tga),  
+  .bus_tgd_i                 (mmc_led_data_tgd),  
+  .bus_tgc_i                 (mmc_led_data_tgc),  
+                                                          
+  .bus_ack_o                 (led_mmc_data_ack),    
+  .bus_stall_o               (led_mmc_data_stall),  
+  .bus_err_o                 (led_mmc_data_err),    
+  .bus_rty_o                 (led_mmc_data_rty),    
+  .bus_data_o                (led_mmc_data_data),   
+  .bus_tga_o                 (led_mmc_data_tga),    
+  .bus_tgd_o                 (led_mmc_data_tgd),    
+  .bus_tgc_o                 (led_mmc_data_tgc)    
 );
 
 keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (

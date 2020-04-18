@@ -59,6 +59,9 @@
 `include "../../src/waveshare/ILI9486/fifo.v"
 `include "../../src/waveshare/waveshare_tft_touch_shield.sv"
 
+`include "../../verif/spi_sd_model/spi_sd_model.v"
+`include "../../verif/ddr3/ddr3_model.sv"
+
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/altera_mf.v"
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/220model.v"
 
@@ -392,6 +395,26 @@ module sim_unit_test;
     .ddr3_avl_size
   );    
 
+ddr3_model ddr3 (
+  .clk                  (DDR3_CLK),
+  .ddr3_avl_ready       (ddr3_avl_ready),       
+  .ddr3_avl_addr        (ddr3_avl_addr),        
+  .ddr3_avl_rdata_valid (ddr3_avl_rdata_valid), 
+  .ddr3_avl_rdata       (ddr3_avl_rdata),       
+  .ddr3_avl_wdata       (ddr3_avl_wdata),       
+  .ddr3_avl_read_req    (ddr3_avl_read_req),    
+  .ddr3_avl_write_req   (ddr3_avl_write_req),   
+  .ddr3_avl_size        (ddr3_avl_size)        
+);
+
+spi_sd_model sd (
+  .rstn  (ARDUINO_RESET_N),
+  .ncs   (SD_CS),
+  .sclk  (SCLK),
+  .mosi  (MOSI),
+  .miso  (MISO)
+);
+
 
   //===================================
   // Build
@@ -453,10 +476,11 @@ module sim_unit_test;
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(TEST)
-  $readmemh("../../output/programs/bootloader/bootloader_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/bootloader/bootloader_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/bootloader/bootloader_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/bootloader/bootloader_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../output/programs/bootloader/bootloader_fast_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/bootloader/bootloader_fast_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/bootloader/bootloader_fast_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/bootloader/bootloader_fast_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../output/programs//benchmarks/primes.v", ddr3.ddr3);
   step(100);
   `SVTEST_END
 
