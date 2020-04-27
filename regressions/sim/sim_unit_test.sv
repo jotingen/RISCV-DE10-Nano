@@ -72,7 +72,7 @@
 module sim_unit_test;
   import svunit_pkg::svunit_testcase;
 
-  string name = "ddr3_ut";
+  string name = "sim";
   svunit_testcase svunit_ut;
 
 
@@ -199,22 +199,13 @@ module sim_unit_test;
   logic           GPIO_1_35;
 
   //////////// ARDUINO //////////
-  logic           ARDUINO_IO_00;
-  logic           ARDUINO_IO_01;
-  logic           ARDUINO_IO_02;
-  logic           ARDUINO_IO_03;
-  logic           ARDUINO_IO_04;
-  logic           ARDUINO_IO_05;
-  logic           ARDUINO_IO_06;
-  logic           ARDUINO_IO_07;
-  logic           ARDUINO_IO_08;
-  logic           ARDUINO_IO_09;
-  logic           ARDUINO_IO_10;
-  logic           ARDUINO_IO_11;
-  logic           ARDUINO_IO_12;
-  logic           ARDUINO_IO_13;
-  logic           ARDUINO_IO_14;
-  logic           ARDUINO_IO_15;
+  logic           SD_CS; 
+  logic           LCD_DC;
+  logic           LCD_CS;
+  logic           MOSI;  
+  logic           MISO;  
+  logic           SCK;   
+  logic           GND;   
 
   //////////// HDMI //////////
   wire            HDMI_I2C_SCL;
@@ -230,7 +221,6 @@ module sim_unit_test;
   logic           HDMI_TX_INT;
   logic           HDMI_TX_VS;
 
-  logic           DDR3_CLK;  //100MHz
   logic           ddr3_avl_ready;       
   logic [25:0]    ddr3_avl_addr;        
   logic           ddr3_avl_rdata_valid; 
@@ -352,23 +342,22 @@ module sim_unit_test;
     .GPIO_1_34,
     .GPIO_1_35,
     
-    .ARDUINO_IO_00,
-    .ARDUINO_IO_01,
-    .ARDUINO_IO_02,
-    .ARDUINO_IO_03,
-    .ARDUINO_IO_04,
-    .ARDUINO_IO_05,
-    .ARDUINO_IO_06,
-    .ARDUINO_IO_07,
-    .ARDUINO_IO_08,
-    .ARDUINO_IO_09,
-    .ARDUINO_IO_10,
-    .ARDUINO_IO_11,
-    .ARDUINO_IO_12,
-    .ARDUINO_IO_13,
-    .ARDUINO_IO_14,
-    .ARDUINO_IO_15,
-    
+    .ARDUINO_IO_00 (),
+    .ARDUINO_IO_01 (),
+    .ARDUINO_IO_02 (),
+    .ARDUINO_IO_03 (),
+    .ARDUINO_IO_04 (TP_CS),
+    .ARDUINO_IO_05 (SD_CS),
+    .ARDUINO_IO_06 (),
+    .ARDUINO_IO_07 (LCD_DC),
+    .ARDUINO_IO_08 (LCD_RST),
+    .ARDUINO_IO_09 (LCD_BL),
+    .ARDUINO_IO_10 (LCD_CS),
+    .ARDUINO_IO_11 (MOSI),
+    .ARDUINO_IO_12 (MISO),
+    .ARDUINO_IO_13 (SCLK),
+    .ARDUINO_IO_14 (GND),
+    .ARDUINO_IO_15 (),
     .ARDUINO_RESET_N (rst_n),
     
     .HDMI_I2C_SCL,
@@ -396,7 +385,7 @@ module sim_unit_test;
   );    
 
 ddr3_model ddr3 (
-  .clk                  (DDR3_CLK),
+  .clk                  (ddr3_clk),
   .ddr3_avl_ready       (ddr3_avl_ready),       
   .ddr3_avl_addr        (ddr3_avl_addr),        
   .ddr3_avl_rdata_valid (ddr3_avl_rdata_valid), 
@@ -408,13 +397,83 @@ ddr3_model ddr3 (
 );
 
 spi_sd_model sd (
-  .rstn  (ARDUINO_RESET_N),
+  .rstn  (rst_n),
   .ncs   (SD_CS),
   .sclk  (SCLK),
   .mosi  (MOSI),
   .miso  (MISO)
 );
 
+logic uart_state_idle;
+logic uart_state_something;
+logic [3:0] uart_state_timer;
+logic [11:0] uart_buffer;
+initial
+  begin
+  uart_state_idle = '1;
+  uart_state_something  = '0;
+  uart_state_timer  = '0;
+  end
+always
+  begin
+  #120
+  uart_state_idle <=        '0;
+  uart_state_something  <=  '0;
+  uart_state_timer  <=            uart_state_timer;             
+  uart_buffer <= {uart_buffer[10:0],GPIO_0_05};
+  case('1)
+    uart_state_idle: begin
+                     if(GPIO_0_05 == '0)
+                       begin
+                       //$write(GPIO_0_05);
+                       uart_state_something <= '1;
+                       end 
+                     else
+                       begin
+                       uart_state_idle <= '1;
+                       end 
+                     end
+    uart_state_something: begin
+                     //$write(GPIO_0_05);
+                     if(uart_state_timer == 'd10)
+                       begin
+                       //$display("");
+                       //$display("%b",{uart_buffer[10:0],GPIO_0_05});
+                       //$display("%h",{uart_buffer[2],
+                       //               uart_buffer[3],
+                       //               uart_buffer[4],
+                       //               uart_buffer[5],
+                       //               uart_buffer[6],
+                       //               uart_buffer[7],
+                       //               uart_buffer[8],
+                       //               uart_buffer[9]});
+                       //$display("%c",{uart_buffer[2],
+                       //               uart_buffer[3],
+                       //               uart_buffer[4],
+                       //               uart_buffer[5],
+                       //               uart_buffer[6],
+                       //               uart_buffer[7],
+                       //               uart_buffer[8],
+                       //               uart_buffer[9]});
+                       $write("%c",{uart_buffer[2],
+                                    uart_buffer[3],
+                                    uart_buffer[4],
+                                    uart_buffer[5],
+                                    uart_buffer[6],
+                                    uart_buffer[7],
+                                    uart_buffer[8],
+                                    uart_buffer[9]});
+                       uart_state_timer <= '0;
+                       uart_state_idle <= '1;
+                       end 
+                     else
+                       begin
+                       uart_state_timer <= uart_state_timer + 1;
+                       uart_state_something <= '1;
+                       end 
+                     end
+  endcase
+  end
 
   //===================================
   // Build
@@ -452,12 +511,12 @@ spi_sd_model sd (
   endtask
 
 
-  initial
-    begin
-    $dumpfile("sim.vcd");
-    //$dumpvars();
-    $dumpvars(100, de10nano);
-    end
+  //initial
+  //  begin
+  //  $dumpfile("sim.vcd");
+  //  //$dumpvars();
+  //  $dumpvars(100, de10nano);
+  //  end
 
   //===================================
   // All tests are defined between the
@@ -476,12 +535,13 @@ spi_sd_model sd (
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(TEST)
-  $readmemh("../../output/programs/bootloader/bootloader_fast_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/bootloader/bootloader_fast_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/bootloader/bootloader_fast_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/bootloader/bootloader_fast_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../output/programs//benchmarks/primes.v", ddr3.ddr3);
-  step(100);
+  $readmemh("../../output/programs/bootloader/bootloader_sdtest_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
+  //$readmemh("../../output/programs//benchmarks/primes.v", ddr3.ddr3);
+  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
+  step(100000);
   `SVTEST_END
 
 

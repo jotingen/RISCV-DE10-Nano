@@ -155,7 +155,7 @@ if ($simulator eq "modelsim" or $simulator eq "riviera") {
   if (!grep(/(^| )(-gui|-c|-i)( |$)/, @simargs)) {
     push @simargs, "-c";
   }
-  $cmd .= qq! @compileargs; vsim @simargs -lib work -do "run -all; quit" -l $logfile testrunner!;
+  $cmd .= qq! @compileargs; vsim @simargs -lib work -do "log -r /*; run -all; quit" -l $logfile testrunner!;
 } else {
   $cmd .= " @compileargs @simargs -top testrunner";
 }
