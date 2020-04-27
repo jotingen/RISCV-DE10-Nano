@@ -1,31 +1,32 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Sat Apr 18 02:18:39 2020
+[*] Sun Apr 19 03:48:22 2020
 [*]
 [dumpfile] "/mnt/c/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/regressions/sim/sim.vcd"
-[dumpfile_mtime] "Sat Apr 18 02:10:09 2020"
-[dumpfile_size] 1631770
+[dumpfile_mtime] "Sun Apr 19 03:48:21 2020"
+[dumpfile_size] 174656000
 [savefile] "/mnt/c/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/regressions/sim/sim.gtkw"
 [timestart] 0
 [size] 1852 1057
 [pos] -1 -1
-*-10.278163 3040 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-18.629889 739120 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testrunner.
 [treeopen] testrunner.__ts.
 [treeopen] testrunner.__ts.sim_ut.
 [treeopen] testrunner.__ts.sim_ut.de10nano.
 [treeopen] testrunner.__ts.sim_ut.de10nano.riscv.
+[treeopen] testrunner.__ts.sim_ut.de10nano.shield.
 [sst_width] 270
 [signals_width] 313
 [sst_expanded] 1
-[sst_vpaned_height] 312
+[sst_vpaned_height] 466
 @28
 testrunner.__ts.sim_ut.de10nano.FPGA_CLK1_50
 testrunner.__ts.sim_ut.de10nano.DDR3_CLK
 testrunner.__ts.sim_ut.de10nano.ARDUINO_RESET_N
 @200
 -
-@23
+@22
 testrunner.__ts.sim_ut.de10nano.LED[7:0]
 @200
 -
@@ -107,7 +108,28 @@ testrunner.__ts.sim_ut.de10nano.mmc_data.ddr3_stb_cnt[15:0]
 testrunner.__ts.sim_ut.de10nano.mmc_data.keys_stb_cnt[15:0]
 testrunner.__ts.sim_ut.de10nano.mmc_data.led_stb_cnt[15:0]
 testrunner.__ts.sim_ut.de10nano.mmc_data.mem_stb_cnt[15:0]
+@c00022
 testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+@28
+(0)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(1)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(2)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(3)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(4)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(5)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(6)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(7)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(8)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(9)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(10)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(11)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(12)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(13)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(14)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+(15)testrunner.__ts.sim_ut.de10nano.mmc_data.sdcard_stb_cnt[15:0]
+@1401200
+-group_end
+@22
 testrunner.__ts.sim_ut.de10nano.mmc_data.uart_stb_cnt[15:0]
 @1000200
 -MMC_DATA
@@ -262,6 +284,101 @@ testrunner.__ts.sim_ut.de10nano.ddr3.bus_mem_tgc_o[3:0]
 @1000200
 -DDR3
 @200
+-
+@800200
+-SDCARD
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_cyc_i
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_stb_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[31:0]} testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[31] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[30] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[29] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[28] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[27] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[26] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[25] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[24] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[23] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[22] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[21] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[20] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[19] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[18] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[17] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[16] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[15] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[14] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[13] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[12] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[11] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[10] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[9] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[8] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[7] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[6] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[5] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[4] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[3] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[2] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[1] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_adr_i[0]
+#{testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_sel_i[3:0]} testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_sel_i[3] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_sel_i[2] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_sel_i[1] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_sel_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_we_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[31:0]} testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[31] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[30] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[29] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[28] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[27] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[26] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[25] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[24] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[23] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[22] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[21] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[20] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[19] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[18] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[17] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[16] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[15] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[14] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[13] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[12] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[11] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[10] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[9] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[8] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[7] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[6] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[5] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[4] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[3] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[2] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[1] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tga_i
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgd_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_i[3:0]} testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_i[3] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_i[2] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_i[1] testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_i[0]
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_stall_o
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.SCK
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.CS
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.MOSI
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.MISO
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_ack_o
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_err_o
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_rty_o
+@22
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_data_o[31:0]
+@28
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tga_o
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgd_o
+@22
+testrunner.__ts.sim_ut.de10nano.shield.sdcard.bus_tgc_o[3:0]
+@1000200
+-SDCARD
+@200
+-
+@800200
+-UART
+@28
+testrunner.__ts.sim_ut.de10nano.uart.CTS
+testrunner.__ts.sim_ut.de10nano.uart.GND
+testrunner.__ts.sim_ut.de10nano.uart.RTS
+testrunner.__ts.sim_ut.de10nano.uart.RXD
+testrunner.__ts.sim_ut.de10nano.uart.TXD
+@22
+testrunner.__ts.sim_ut.de10nano.uart.baud_rate[31:0]
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_cyc_i
+testrunner.__ts.sim_ut.de10nano.uart.bus_stb_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[31:0]} testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[31] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[30] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[29] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[28] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[27] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[26] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[25] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[24] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[23] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[22] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[21] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[20] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[19] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[18] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[17] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[16] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[15] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[14] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[13] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[12] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[11] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[10] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[9] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[8] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[7] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[6] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[5] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[4] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[3] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[2] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[1] testrunner.__ts.sim_ut.de10nano.uart.bus_adr_i[0]
+#{testrunner.__ts.sim_ut.de10nano.uart.bus_sel_i[3:0]} testrunner.__ts.sim_ut.de10nano.uart.bus_sel_i[3] testrunner.__ts.sim_ut.de10nano.uart.bus_sel_i[2] testrunner.__ts.sim_ut.de10nano.uart.bus_sel_i[1] testrunner.__ts.sim_ut.de10nano.uart.bus_sel_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_we_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[31:0]} testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[31] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[30] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[29] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[28] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[27] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[26] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[25] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[24] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[23] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[22] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[21] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[20] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[19] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[18] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[17] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[16] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[15] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[14] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[13] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[12] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[11] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[10] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[9] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[8] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[7] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[6] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[5] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[4] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[3] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[2] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[1] testrunner.__ts.sim_ut.de10nano.uart.bus_data_i[0]
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_tga_i
+testrunner.__ts.sim_ut.de10nano.uart.bus_tgd_i
+@22
+#{testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_i[3:0]} testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_i[3] testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_i[2] testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_i[1] testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_i[0]
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_stall_o
+@200
+-
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_ack_o
+testrunner.__ts.sim_ut.de10nano.uart.bus_err_o
+testrunner.__ts.sim_ut.de10nano.uart.bus_rty_o
+@22
+testrunner.__ts.sim_ut.de10nano.uart.bus_data_o[31:0]
+@28
+testrunner.__ts.sim_ut.de10nano.uart.bus_tga_o
+@29
+testrunner.__ts.sim_ut.de10nano.uart.bus_tgd_o
+@22
+testrunner.__ts.sim_ut.de10nano.uart.bus_tgc_o[3:0]
+@1000200
+-UART
+@200
+-
 -
 @28
 testrunner.__ts.sim_ut.de10nano.riscv.ifu.ifu_buff_addr_empty

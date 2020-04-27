@@ -1117,15 +1117,24 @@ uart uart (
   .CTS (GPIO_0_09),
   .RTS (GPIO_0_07),
 
-  .i_bus_req           (mmc_uart_bus_req),   
-  .i_bus_write         (mmc_uart_bus_write), 
-  .i_bus_addr          (mmc_uart_bus_addr),  
-  .i_bus_data          (mmc_uart_bus_data),
-  .i_bus_data_rd_mask  (mmc_uart_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (mmc_uart_bus_data_wr_mask),
-
-  .o_bus_ack           (uart_mmc_bus_ack),   
-  .o_bus_data          (uart_mmc_bus_data)
+  .bus_adr_i                 (mmc_uart_data_adr),  
+  .bus_data_i                (mmc_uart_data_data), 
+  .bus_we_i                  (mmc_uart_data_we),   
+  .bus_sel_i                 (mmc_uart_data_sel),  
+  .bus_stb_i                 (mmc_uart_data_stb),  
+  .bus_cyc_i                 (mmc_uart_data_cyc),  
+  .bus_tga_i                 (mmc_uart_data_tga),  
+  .bus_tgd_i                 (mmc_uart_data_tgd),  
+  .bus_tgc_i                 (mmc_uart_data_tgc),  
+                                                          
+  .bus_ack_o                 (uart_mmc_data_ack),    
+  .bus_stall_o               (uart_mmc_data_stall),  
+  .bus_err_o                 (uart_mmc_data_err),    
+  .bus_rty_o                 (uart_mmc_data_rty),    
+  .bus_data_o                (uart_mmc_data_data),   
+  .bus_tga_o                 (uart_mmc_data_tga),    
+  .bus_tgd_o                 (uart_mmc_data_tgd),    
+  .bus_tgc_o                 (uart_mmc_data_tgc)    
 );
 
 waveshare_tft_touch_shield shield (
@@ -1197,15 +1206,24 @@ waveshare_tft_touch_shield shield (
   .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
   .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
                                                                  
-  .mmc_sdcard_bus_req          (mmc_sdcard_bus_req         ),
-  .mmc_sdcard_bus_write        (mmc_sdcard_bus_write       ),
-  .mmc_sdcard_bus_addr         (mmc_sdcard_bus_addr        ),
-  .mmc_sdcard_bus_data         (mmc_sdcard_bus_data        ),
-  .mmc_sdcard_bus_data_rd_mask (mmc_sdcard_bus_data_rd_mask),
-  .mmc_sdcard_bus_data_wr_mask (mmc_sdcard_bus_data_wr_mask),
-                                                                 
-  .sdcard_mmc_bus_ack          (sdcard_mmc_bus_ack         ),
-  .sdcard_mmc_bus_data         (sdcard_mmc_bus_data        )
+  .sdcard_bus_adr_i                 (mmc_sdcard_data_adr),  
+  .sdcard_bus_data_i                (mmc_sdcard_data_data), 
+  .sdcard_bus_we_i                  (mmc_sdcard_data_we),   
+  .sdcard_bus_sel_i                 (mmc_sdcard_data_sel),  
+  .sdcard_bus_stb_i                 (mmc_sdcard_data_stb),  
+  .sdcard_bus_cyc_i                 (mmc_sdcard_data_cyc),  
+  .sdcard_bus_tga_i                 (mmc_sdcard_data_tga),  
+  .sdcard_bus_tgd_i                 (mmc_sdcard_data_tgd),  
+  .sdcard_bus_tgc_i                 (mmc_sdcard_data_tgc),  
+                                                          
+  .sdcard_bus_ack_o                 (sdcard_mmc_data_ack),    
+  .sdcard_bus_stall_o               (sdcard_mmc_data_stall),  
+  .sdcard_bus_err_o                 (sdcard_mmc_data_err),    
+  .sdcard_bus_rty_o                 (sdcard_mmc_data_rty),    
+  .sdcard_bus_data_o                (sdcard_mmc_data_data),   
+  .sdcard_bus_tga_o                 (sdcard_mmc_data_tga),    
+  .sdcard_bus_tgd_o                 (sdcard_mmc_data_tgd),    
+  .sdcard_bus_tgc_o                 (sdcard_mmc_data_tgc)    
 );
 
 `ifndef SIM

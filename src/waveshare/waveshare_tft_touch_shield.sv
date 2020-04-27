@@ -44,15 +44,24 @@ output logic           arst,
   output logic           dispbuff_mmc_bus_ack,
   output logic [31:0]    dispbuff_mmc_bus_data,
 
-  input  logic           mmc_sdcard_bus_req,
-  input  logic           mmc_sdcard_bus_write,
-  input  logic [31:0]    mmc_sdcard_bus_addr,
-  input  logic [31:0]    mmc_sdcard_bus_data,
-  input  logic  [3:0]    mmc_sdcard_bus_data_rd_mask,
-  input  logic  [3:0]    mmc_sdcard_bus_data_wr_mask,
+  input  logic [31:0]    sdcard_bus_adr_i,
+  input  logic [31:0]    sdcard_bus_data_i,
+  input  logic           sdcard_bus_we_i,
+  input  logic  [3:0]    sdcard_bus_sel_i,
+  input  logic           sdcard_bus_stb_i,
+  input  logic           sdcard_bus_cyc_i,
+  input  logic           sdcard_bus_tga_i,
+  input  logic           sdcard_bus_tgd_i,
+  input  logic  [3:0]    sdcard_bus_tgc_i,
 
-  output logic           sdcard_mmc_bus_ack,
-  output logic [31:0]    sdcard_mmc_bus_data,
+  output logic           sdcard_bus_ack_o,
+  output logic           sdcard_bus_stall_o,
+  output logic           sdcard_bus_err_o,
+  output logic           sdcard_bus_rty_o,
+  output logic [31:0]    sdcard_bus_data_o,
+  output logic           sdcard_bus_tga_o,
+  output logic           sdcard_bus_tgd_o,
+  output logic  [3:0]    sdcard_bus_tgc_o,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -248,15 +257,24 @@ sdcard sdcard (
   .MOSI  (sdcard_MOSI),
   .MISO  (MISO),
 
-  .i_bus_req           (mmc_sdcard_bus_req),   
-  .i_bus_write         (mmc_sdcard_bus_write), 
-  .i_bus_addr          (mmc_sdcard_bus_addr),  
-  .i_bus_data          (mmc_sdcard_bus_data),
-  .i_bus_data_rd_mask  (mmc_sdcard_bus_data_rd_mask) ,
-  .i_bus_data_wr_mask  (mmc_sdcard_bus_data_wr_mask),
-
-  .o_bus_ack           (sdcard_mmc_bus_ack),   
-  .o_bus_data          (sdcard_mmc_bus_data)
+  .bus_adr_i                 (sdcard_bus_adr_i),  
+  .bus_data_i                (sdcard_bus_data_i), 
+  .bus_we_i                  (sdcard_bus_we_i),   
+  .bus_sel_i                 (sdcard_bus_sel_i),  
+  .bus_stb_i                 (sdcard_bus_stb_i),  
+  .bus_cyc_i                 (sdcard_bus_cyc_i),  
+  .bus_tga_i                 (sdcard_bus_tga_i),  
+  .bus_tgd_i                 (sdcard_bus_tgd_i),  
+  .bus_tgc_i                 (sdcard_bus_tgc_i),  
+                                                          
+  .bus_ack_o                 (sdcard_bus_ack_o),    
+  .bus_stall_o               (sdcard_bus_stall_o),  
+  .bus_err_o                 (sdcard_bus_err_o),    
+  .bus_rty_o                 (sdcard_bus_rty_o),    
+  .bus_data_o                (sdcard_bus_data_o),   
+  .bus_tga_o                 (sdcard_bus_tga_o),    
+  .bus_tgd_o                 (sdcard_bus_tgd_o),    
+  .bus_tgc_o                 (sdcard_bus_tgc_o)    
 );
 
 spi_arb spi_arb (

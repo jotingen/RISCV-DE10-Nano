@@ -8,15 +8,24 @@ module uart (
   input  logic CTS,
   output logic RTS,
 
-  input  logic           i_bus_req,
-  input  logic           i_bus_write,
-  input  logic [31:0]    i_bus_addr,
-  input  logic [31:0]    i_bus_data,
-  input  logic  [3:0]    i_bus_data_rd_mask,
-  input  logic  [3:0]    i_bus_data_wr_mask,
+  input  logic [31:0]    bus_adr_i,
+  input  logic [31:0]    bus_data_i,
+  input  logic           bus_we_i,
+  input  logic  [3:0]    bus_sel_i,
+  input  logic           bus_stb_i,
+  input  logic           bus_cyc_i,
+  input  logic           bus_tga_i,
+  input  logic           bus_tgd_i,
+  input  logic  [3:0]    bus_tgc_i,
 
-  output logic           o_bus_ack,
-  output logic [31:0]    o_bus_data
+  output logic           bus_ack_o,
+  output logic           bus_stall_o,
+  output logic           bus_err_o,
+  output logic           bus_rty_o,
+  output logic [31:0]    bus_data_o,
+  output logic           bus_tga_o,
+  output logic           bus_tgd_o,
+  output logic  [3:0]    bus_tgc_o
 );
 
 logic [12:0] clk_cnt;
@@ -37,8 +46,14 @@ always_ff @(posedge clk)
   state_idle    <= '0;
   state_sending <= '0;
 
-  o_bus_ack   <= '0;    
-  o_bus_data  <= i_bus_data;   
+  bus_ack_o   <= '0;   
+  bus_stall_o <= '0; //bus_stall_o; 
+  bus_err_o   <= '0; //bus_err_o;   
+  bus_rty_o   <= '0; //bus_rty_o;   
+  bus_data_o  <= '0; //bus_data_o;  
+  bus_tga_o   <= '0; //bus_tga_o;   
+  bus_tgd_o   <= '0; //bus_tgd_o;   
+  bus_tgc_o   <= '0; //bus_tgc_o;   
 
   msg_bit <= msg_bit;
   clk_cnt <= clk_cnt;
@@ -46,30 +61,34 @@ always_ff @(posedge clk)
 
   TXD <= TXD;
 
-  if(i_bus_req)
+  if(bus_stb_i & bus_cyc_i)
     begin
-    case (i_bus_addr[31:2])
+    case (bus_adr_i[31:2])
       'd0:     begin
                state_sending <= '1;
                msg <= {2'b11,
-                       ^i_bus_data[7:0],
-                       i_bus_data[7:0],
+                       ^bus_data_i[7:0],
+                       bus_data_i[7:0],
                        1'b0};
-               o_bus_data <= '0;
-               o_bus_data <= '0;
+               bus_data_o <= '0;
+               bus_data_o <= '0;
                end
       'd1:     begin
                state_idle    <= '1;
-               baud_rate <= i_bus_data;
-               o_bus_ack <= '1;
-               o_bus_data <= '0;
+               baud_rate <= bus_data_i;
+               bus_ack_o <= '1;
+               bus_data_o <= '0;
                end
       default: begin
                state_idle    <= '1;
-               o_bus_ack <= '1;
-               o_bus_data <= '0;
+               bus_ack_o <= '1;
+               bus_data_o <= '0;
                end
     endcase
+    end
+  else
+    begin
+    state_idle    <= '1;
     end
 
 
@@ -83,7 +102,7 @@ always_ff @(posedge clk)
       clk_cnt   <= '0;
       if(msg_bit == 'd11)
         begin
-        o_bus_ack <= '1;
+        bus_ack_o <= '1;
         msg_bit <= '0;
         state_idle <= '1;
         end
