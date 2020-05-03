@@ -1,3 +1,5 @@
+import wishbone_pkg::*;
+
 module top (
 
 //////////// CLOCK //////////
@@ -301,271 +303,47 @@ output logic           HDMI_TX_VS
   logic rst;
 `endif
 
-logic [31:0]      riscv_mmc_inst_adr;
-logic [31:0]      riscv_mmc_inst_data;
-logic             riscv_mmc_inst_we;
-logic  [3:0]      riscv_mmc_inst_sel;
-logic             riscv_mmc_inst_stb;
-logic             riscv_mmc_inst_cyc;
-logic             riscv_mmc_inst_tga;
-logic             riscv_mmc_inst_tgd;
-logic  [3:0]      riscv_mmc_inst_tgc;
+wishbone_pkg::bus_req_t riscv_mmc_inst;
+wishbone_pkg::bus_rsp_t mmc_riscv_inst;
 
-logic             mmc_riscv_inst_ack;
-logic             mmc_riscv_inst_stall;
-logic             mmc_riscv_inst_err;
-logic             mmc_riscv_inst_rty;
-logic [31:0]      mmc_riscv_inst_data;
-logic             mmc_riscv_inst_tga;
-logic             mmc_riscv_inst_tgd;
-logic  [3:0]      mmc_riscv_inst_tgc;
+wishbone_pkg::bus_req_t mmc_mem_inst;
+wishbone_pkg::bus_rsp_t mem_mmc_inst;
 
-logic [31:0]      mmc_mem_inst_adr;
-logic [31:0]      mmc_mem_inst_data;
-logic             mmc_mem_inst_we;
-logic  [3:0]      mmc_mem_inst_sel;
-logic             mmc_mem_inst_stb;
-logic             mmc_mem_inst_cyc;
-logic             mmc_mem_inst_tga;
-logic             mmc_mem_inst_tgd;
-logic  [3:0]      mmc_mem_inst_tgc;
+wishbone_pkg::bus_req_t mmc_ddr3_inst;
+wishbone_pkg::bus_rsp_t ddr3_mmc_inst;
 
-logic             mem_mmc_inst_ack;
-logic             mem_mmc_inst_stall;
-logic             mem_mmc_inst_err;
-logic             mem_mmc_inst_rty;
-logic [31:0]      mem_mmc_inst_data;
-logic             mem_mmc_inst_tga;
-logic             mem_mmc_inst_tgd;
-logic  [3:0]      mem_mmc_inst_tgc;
+wishbone_pkg::bus_req_t mmc_led_inst;
+wishbone_pkg::bus_rsp_t led_mmc_inst;
 
-logic [31:0]      mmc_ddr3_inst_adr;
-logic [31:0]      mmc_ddr3_inst_data;
-logic             mmc_ddr3_inst_we;
-logic  [3:0]      mmc_ddr3_inst_sel;
-logic             mmc_ddr3_inst_stb;
-logic             mmc_ddr3_inst_cyc;
-logic             mmc_ddr3_inst_tga;
-logic             mmc_ddr3_inst_tgd;
-logic  [3:0]      mmc_ddr3_inst_tgc;
+wishbone_pkg::bus_req_t mmc_keys_inst;
+wishbone_pkg::bus_rsp_t keys_mmc_inst;
 
-logic             ddr3_mmc_inst_ack;
-logic             ddr3_mmc_inst_stall;
-logic             ddr3_mmc_inst_err;
-logic             ddr3_mmc_inst_rty;
-logic [31:0]      ddr3_mmc_inst_data;
-logic             ddr3_mmc_inst_tga;
-logic             ddr3_mmc_inst_tgd;
-logic  [3:0]      ddr3_mmc_inst_tgc;
+wishbone_pkg::bus_req_t mmc_uart_inst;
+wishbone_pkg::bus_rsp_t uart_mmc_inst;
 
-logic [31:0]      mmc_led_inst_adr;
-logic [31:0]      mmc_led_inst_data;
-logic             mmc_led_inst_we;
-logic  [3:0]      mmc_led_inst_sel;
-logic             mmc_led_inst_stb;
-logic             mmc_led_inst_cyc;
-logic             mmc_led_inst_tga;
-logic             mmc_led_inst_tgd;
-logic  [3:0]      mmc_led_inst_tgc;
+wishbone_pkg::bus_req_t mmc_sdcard_inst;
+wishbone_pkg::bus_rsp_t sdcard_mmc_inst;
 
-logic             led_mmc_inst_ack;
-logic             led_mmc_inst_stall;
-logic             led_mmc_inst_err;
-logic             led_mmc_inst_rty;
-logic [31:0]      led_mmc_inst_data;
-logic             led_mmc_inst_tga;
-logic             led_mmc_inst_tgd;
-logic  [3:0]      led_mmc_inst_tgc;
+wishbone_pkg::bus_req_t riscv_mmc_data;
+wishbone_pkg::bus_rsp_t mmc_riscv_data;
 
-logic [31:0]      mmc_keys_inst_adr;
-logic [31:0]      mmc_keys_inst_data;
-logic             mmc_keys_inst_we;
-logic  [3:0]      mmc_keys_inst_sel;
-logic             mmc_keys_inst_stb;
-logic             mmc_keys_inst_cyc;
-logic             mmc_keys_inst_tga;
-logic             mmc_keys_inst_tgd;
-logic  [3:0]      mmc_keys_inst_tgc;
+wishbone_pkg::bus_req_t mmc_mem_data;
+wishbone_pkg::bus_rsp_t mem_mmc_data;
 
-logic             keys_mmc_inst_ack;
-logic             keys_mmc_inst_stall;
-logic             keys_mmc_inst_err;
-logic             keys_mmc_inst_rty;
-logic [31:0]      keys_mmc_inst_data;
-logic             keys_mmc_inst_tga;
-logic             keys_mmc_inst_tgd;
-logic  [3:0]      keys_mmc_inst_tgc;
+wishbone_pkg::bus_req_t mmc_ddr3_data;
+wishbone_pkg::bus_rsp_t ddr3_mmc_data;
 
-logic [31:0]      mmc_uart_inst_adr;
-logic [31:0]      mmc_uart_inst_data;
-logic             mmc_uart_inst_we;
-logic  [3:0]      mmc_uart_inst_sel;
-logic             mmc_uart_inst_stb;
-logic             mmc_uart_inst_cyc;
-logic             mmc_uart_inst_tga;
-logic             mmc_uart_inst_tgd;
-logic  [3:0]      mmc_uart_inst_tgc;
+wishbone_pkg::bus_req_t mmc_led_data;
+wishbone_pkg::bus_rsp_t led_mmc_data;
 
-logic             uart_mmc_inst_ack;
-logic             uart_mmc_inst_stall;
-logic             uart_mmc_inst_err;
-logic             uart_mmc_inst_rty;
-logic [31:0]      uart_mmc_inst_data;
-logic             uart_mmc_inst_tga;
-logic             uart_mmc_inst_tgd;
-logic  [3:0]      uart_mmc_inst_tgc;
+wishbone_pkg::bus_req_t mmc_keys_data;
+wishbone_pkg::bus_rsp_t keys_mmc_data;
 
-logic [31:0]      mmc_sdcard_inst_adr;
-logic [31:0]      mmc_sdcard_inst_data;
-logic             mmc_sdcard_inst_we;
-logic  [3:0]      mmc_sdcard_inst_sel;
-logic             mmc_sdcard_inst_stb;
-logic             mmc_sdcard_inst_cyc;
-logic             mmc_sdcard_inst_tga;
-logic             mmc_sdcard_inst_tgd;
-logic  [3:0]      mmc_sdcard_inst_tgc;
+wishbone_pkg::bus_req_t mmc_uart_data;
+wishbone_pkg::bus_rsp_t uart_mmc_data;
 
-logic             sdcard_mmc_inst_ack;
-logic             sdcard_mmc_inst_stall;
-logic             sdcard_mmc_inst_err;
-logic             sdcard_mmc_inst_rty;
-logic [31:0]      sdcard_mmc_inst_data;
-logic             sdcard_mmc_inst_tga;
-logic             sdcard_mmc_inst_tgd;
-logic  [3:0]      sdcard_mmc_inst_tgc;
-
-logic [31:0]      riscv_mmc_data_adr;
-logic [31:0]      riscv_mmc_data_data;
-logic             riscv_mmc_data_we;
-logic  [3:0]      riscv_mmc_data_sel;
-logic             riscv_mmc_data_stb;
-logic             riscv_mmc_data_cyc;
-logic             riscv_mmc_data_tga;
-logic             riscv_mmc_data_tgd;
-logic  [3:0]      riscv_mmc_data_tgc;
-
-logic             mmc_riscv_data_ack;
-logic             mmc_riscv_data_stall;
-logic             mmc_riscv_data_err;
-logic             mmc_riscv_data_rty;
-logic [31:0]      mmc_riscv_data_data;
-logic             mmc_riscv_data_tga;
-logic             mmc_riscv_data_tgd;
-logic  [3:0]      mmc_riscv_data_tgc;
-
-logic [31:0]      mmc_mem_data_adr;
-logic [31:0]      mmc_mem_data_data;
-logic             mmc_mem_data_we;
-logic  [3:0]      mmc_mem_data_sel;
-logic             mmc_mem_data_stb;
-logic             mmc_mem_data_cyc;
-logic             mmc_mem_data_tga;
-logic             mmc_mem_data_tgd;
-logic  [3:0]      mmc_mem_data_tgc;
-
-logic             mem_mmc_data_ack;
-logic             mem_mmc_data_stall;
-logic             mem_mmc_data_err;
-logic             mem_mmc_data_rty;
-logic [31:0]      mem_mmc_data_data;
-logic             mem_mmc_data_tga;
-logic             mem_mmc_data_tgd;
-logic  [3:0]      mem_mmc_data_tgc;
-
-logic [31:0]      mmc_ddr3_data_adr;
-logic [31:0]      mmc_ddr3_data_data;
-logic             mmc_ddr3_data_we;
-logic  [3:0]      mmc_ddr3_data_sel;
-logic             mmc_ddr3_data_stb;
-logic             mmc_ddr3_data_cyc;
-logic             mmc_ddr3_data_tga;
-logic             mmc_ddr3_data_tgd;
-logic  [3:0]      mmc_ddr3_data_tgc;
-
-logic             ddr3_mmc_data_ack;
-logic             ddr3_mmc_data_stall;
-logic             ddr3_mmc_data_err;
-logic             ddr3_mmc_data_rty;
-logic [31:0]      ddr3_mmc_data_data;
-logic             ddr3_mmc_data_tga;
-logic             ddr3_mmc_data_tgd;
-logic  [3:0]      ddr3_mmc_data_tgc;
-
-logic [31:0]      mmc_led_data_adr;
-logic [31:0]      mmc_led_data_data;
-logic             mmc_led_data_we;
-logic  [3:0]      mmc_led_data_sel;
-logic             mmc_led_data_stb;
-logic             mmc_led_data_cyc;
-logic             mmc_led_data_tga;
-logic             mmc_led_data_tgd;
-logic  [3:0]      mmc_led_data_tgc;
-
-logic             led_mmc_data_ack;
-logic             led_mmc_data_stall;
-logic             led_mmc_data_err;
-logic             led_mmc_data_rty;
-logic [31:0]      led_mmc_data_data;
-logic             led_mmc_data_tga;
-logic             led_mmc_data_tgd;
-logic  [3:0]      led_mmc_data_tgc;
-
-logic [31:0]      mmc_keys_data_adr;
-logic [31:0]      mmc_keys_data_data;
-logic             mmc_keys_data_we;
-logic  [3:0]      mmc_keys_data_sel;
-logic             mmc_keys_data_stb;
-logic             mmc_keys_data_cyc;
-logic             mmc_keys_data_tga;
-logic             mmc_keys_data_tgd;
-logic  [3:0]      mmc_keys_data_tgc;
-
-logic             keys_mmc_data_ack;
-logic             keys_mmc_data_stall;
-logic             keys_mmc_data_err;
-logic             keys_mmc_data_rty;
-logic [31:0]      keys_mmc_data_data;
-logic             keys_mmc_data_tga;
-logic             keys_mmc_data_tgd;
-logic  [3:0]      keys_mmc_data_tgc;
-
-logic [31:0]      mmc_uart_data_adr;
-logic [31:0]      mmc_uart_data_data;
-logic             mmc_uart_data_we;
-logic  [3:0]      mmc_uart_data_sel;
-logic             mmc_uart_data_stb;
-logic             mmc_uart_data_cyc;
-logic             mmc_uart_data_tga;
-logic             mmc_uart_data_tgd;
-logic  [3:0]      mmc_uart_data_tgc;
-
-logic             uart_mmc_data_ack;
-logic             uart_mmc_data_stall;
-logic             uart_mmc_data_err;
-logic             uart_mmc_data_rty;
-logic [31:0]      uart_mmc_data_data;
-logic             uart_mmc_data_tga;
-logic             uart_mmc_data_tgd;
-logic  [3:0]      uart_mmc_data_tgc;
-
-logic [31:0]      mmc_sdcard_data_adr;
-logic [31:0]      mmc_sdcard_data_data;
-logic             mmc_sdcard_data_we;
-logic  [3:0]      mmc_sdcard_data_sel;
-logic             mmc_sdcard_data_stb;
-logic             mmc_sdcard_data_cyc;
-logic             mmc_sdcard_data_tga;
-logic             mmc_sdcard_data_tgd;
-logic  [3:0]      mmc_sdcard_data_tgc;
-
-logic             sdcard_mmc_data_ack;
-logic             sdcard_mmc_data_stall;
-logic             sdcard_mmc_data_err;
-logic             sdcard_mmc_data_rty;
-logic [31:0]      sdcard_mmc_data_data;
-logic             sdcard_mmc_data_tga;
-logic             sdcard_mmc_data_tgd;
-logic  [3:0]      sdcard_mmc_data_tgc;
+wishbone_pkg::bus_req_t mmc_sdcard_data;
+wishbone_pkg::bus_rsp_t sdcard_mmc_data;
 
 
 `ifndef SIM
@@ -614,44 +392,11 @@ riscv #(.M_EXT(1)) riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .bus_inst_adr_o   (riscv_mmc_inst_adr), 
-  .bus_inst_data_o  (riscv_mmc_inst_data),
-  .bus_inst_we_o    (riscv_mmc_inst_we),  
-  .bus_inst_sel_o   (riscv_mmc_inst_sel), 
-  .bus_inst_stb_o   (riscv_mmc_inst_stb), 
-  .bus_inst_cyc_o   (riscv_mmc_inst_cyc), 
-  .bus_inst_tga_o   (riscv_mmc_inst_tga), 
-  .bus_inst_tgd_o   (riscv_mmc_inst_tgd), 
-  .bus_inst_tgc_o   (riscv_mmc_inst_tgc), 
-                                     
-  .bus_inst_ack_i   (mmc_riscv_inst_ack), 
-  .bus_inst_stall_i (mmc_riscv_inst_stall),
-  .bus_inst_err_i   (mmc_riscv_inst_err), 
-  .bus_inst_rty_i   (mmc_riscv_inst_rty), 
-  .bus_inst_data_i  (mmc_riscv_inst_data), 
-  .bus_inst_tga_i   (mmc_riscv_inst_tga), 
-  .bus_inst_tgd_i   (mmc_riscv_inst_tgd), 
-  .bus_inst_tgc_i   (mmc_riscv_inst_tgc), 
+  .bus_inst_o  (riscv_mmc_inst), 
+  .bus_inst_i  (mmc_riscv_inst), 
 
-  .bus_data_adr_o   (riscv_mmc_data_adr), 
-  .bus_data_data_o  (riscv_mmc_data_data),
-  .bus_data_we_o    (riscv_mmc_data_we),  
-  .bus_data_sel_o   (riscv_mmc_data_sel), 
-  .bus_data_stb_o   (riscv_mmc_data_stb), 
-  .bus_data_cyc_o   (riscv_mmc_data_cyc), 
-  .bus_data_tga_o   (riscv_mmc_data_tga), 
-  .bus_data_tgd_o   (riscv_mmc_data_tgd), 
-  .bus_data_tgc_o   (riscv_mmc_data_tgc), 
-                                     
-  .bus_data_ack_i   (mmc_riscv_data_ack), 
-  .bus_data_stall_i (mmc_riscv_data_stall),
-  .bus_data_err_i   (mmc_riscv_data_err), 
-  .bus_data_rty_i   (mmc_riscv_data_rty), 
-  .bus_data_data_i  (mmc_riscv_data_data), 
-  .bus_data_tga_i   (mmc_riscv_data_tga), 
-  .bus_data_tgd_i   (mmc_riscv_data_tgd), 
-  .bus_data_tgc_i   (mmc_riscv_data_tgc) 
-
+  .bus_data_o  (riscv_mmc_data), 
+  .bus_data_i  (mmc_riscv_data) 
 
 `ifdef RISCV_FORMAL
   ,
@@ -693,321 +438,63 @@ mmc_wb mmc_inst (
   .clk         (clk),
   .rst         (rst),
   
-  .riscv_mmc_adr_i               (riscv_mmc_inst_adr),  
-  .riscv_mmc_data_i              (riscv_mmc_inst_data), 
-  .riscv_mmc_we_i                (riscv_mmc_inst_we),   
-  .riscv_mmc_sel_i               (riscv_mmc_inst_sel),  
-  .riscv_mmc_stb_i               (riscv_mmc_inst_stb),  
-  .riscv_mmc_cyc_i               (riscv_mmc_inst_cyc),  
-  .riscv_mmc_tga_i               (riscv_mmc_inst_tga),  
-  .riscv_mmc_tgd_i               (riscv_mmc_inst_tgd),  
-  .riscv_mmc_tgc_i               (riscv_mmc_inst_tgc),  
-                                                        
-  .mmc_riscv_ack_o               (mmc_riscv_inst_ack),  
-  .mmc_riscv_stall_o             (mmc_riscv_inst_stall),
-  .mmc_riscv_err_o               (mmc_riscv_inst_err),  
-  .mmc_riscv_rty_o               (mmc_riscv_inst_rty),  
-  .mmc_riscv_data_o              (mmc_riscv_inst_data),  
-  .mmc_riscv_tga_o               (mmc_riscv_inst_tga),  
-  .mmc_riscv_tgd_o               (mmc_riscv_inst_tgd),  
-  .mmc_riscv_tgc_o               (mmc_riscv_inst_tgc),  
+  .riscv_mmc_i  (riscv_mmc_inst),
+  .mmc_riscv_o  (mmc_riscv_inst),
 
-  .mmc_mem_adr_o                 (mmc_mem_inst_adr),  
-  .mmc_mem_data_o                (mmc_mem_inst_data), 
-  .mmc_mem_we_o                  (mmc_mem_inst_we),   
-  .mmc_mem_sel_o                 (mmc_mem_inst_sel),  
-  .mmc_mem_stb_o                 (mmc_mem_inst_stb),  
-  .mmc_mem_cyc_o                 (mmc_mem_inst_cyc),  
-  .mmc_mem_tga_o                 (mmc_mem_inst_tga),  
-  .mmc_mem_tgd_o                 (mmc_mem_inst_tgd),  
-  .mmc_mem_tgc_o                 (mmc_mem_inst_tgc),  
-                                                          
-  .mem_mmc_ack_i                 (mem_mmc_inst_ack),  
-  .mem_mmc_stall_i               (mem_mmc_inst_stall),
-  .mem_mmc_err_i                 (mem_mmc_inst_err),  
-  .mem_mmc_rty_i                 (mem_mmc_inst_rty),  
-  .mem_mmc_data_i                (mem_mmc_inst_data),  
-  .mem_mmc_tga_i                 (mem_mmc_inst_tga),  
-  .mem_mmc_tgd_i                 (mem_mmc_inst_tgd),  
-  .mem_mmc_tgc_i                 (mem_mmc_inst_tgc), 
+  .mmc_mem_o    (mmc_mem_inst),
+  .mem_mmc_i    (mem_mmc_inst),
 
-  .mmc_ddr3_adr_o                (mmc_ddr3_inst_adr),  
-  .mmc_ddr3_data_o               (mmc_ddr3_inst_data), 
-  .mmc_ddr3_we_o                 (mmc_ddr3_inst_we),   
-  .mmc_ddr3_sel_o                (mmc_ddr3_inst_sel),  
-  .mmc_ddr3_stb_o                (mmc_ddr3_inst_stb),  
-  .mmc_ddr3_cyc_o                (mmc_ddr3_inst_cyc),  
-  .mmc_ddr3_tga_o                (mmc_ddr3_inst_tga),  
-  .mmc_ddr3_tgd_o                (mmc_ddr3_inst_tgd),  
-  .mmc_ddr3_tgc_o                (mmc_ddr3_inst_tgc),  
-                                                         
-  .ddr3_mmc_ack_i                (ddr3_mmc_inst_ack),  
-  .ddr3_mmc_stall_i              (ddr3_mmc_inst_stall),
-  .ddr3_mmc_err_i                (ddr3_mmc_inst_err),  
-  .ddr3_mmc_rty_i                (ddr3_mmc_inst_rty),  
-  .ddr3_mmc_data_i               (ddr3_mmc_inst_data),  
-  .ddr3_mmc_tga_i                (ddr3_mmc_inst_tga),  
-  .ddr3_mmc_tgd_i                (ddr3_mmc_inst_tgd),  
-  .ddr3_mmc_tgc_i                (ddr3_mmc_inst_tgc), 
+  .mmc_ddr3_o   (mmc_ddr3_inst),
+  .ddr3_mmc_i   (ddr3_mmc_inst),
 
-  .mmc_led_adr_o                 (mmc_led_inst_adr),  
-  .mmc_led_data_o                (mmc_led_inst_data), 
-  .mmc_led_we_o                  (mmc_led_inst_we),   
-  .mmc_led_sel_o                 (mmc_led_inst_sel),  
-  .mmc_led_stb_o                 (mmc_led_inst_stb),  
-  .mmc_led_cyc_o                 (mmc_led_inst_cyc),  
-  .mmc_led_tga_o                 (mmc_led_inst_tga),  
-  .mmc_led_tgd_o                 (mmc_led_inst_tgd),  
-  .mmc_led_tgc_o                 (mmc_led_inst_tgc),  
-                                                          
-  .led_mmc_ack_i                 ('0),  
-  .led_mmc_stall_i               ('0),
-  .led_mmc_err_i                 (mmc_led_inst_cyc & mmc_led_inst_stb),  
-  .led_mmc_rty_i                 ('0),  
-  .led_mmc_data_i                ('0),  
-  .led_mmc_tga_i                 (mmc_led_inst_tga),  
-  .led_mmc_tgd_i                 (mmc_led_inst_tgd),  
-  .led_mmc_tgc_i                 (mmc_led_inst_tgc), 
+  .mmc_led_o    (mmc_led_inst),
+  .led_mmc_i    (led_mmc_inst),
 
-  .mmc_keys_adr_o                (mmc_keys_inst_adr),  
-  .mmc_keys_data_o               (mmc_keys_inst_data), 
-  .mmc_keys_we_o                 (mmc_keys_inst_we),   
-  .mmc_keys_sel_o                (mmc_keys_inst_sel),  
-  .mmc_keys_stb_o                (mmc_keys_inst_stb),  
-  .mmc_keys_cyc_o                (mmc_keys_inst_cyc),  
-  .mmc_keys_tga_o                (mmc_keys_inst_tga),  
-  .mmc_keys_tgd_o                (mmc_keys_inst_tgd),  
-  .mmc_keys_tgc_o                (mmc_keys_inst_tgc),  
-                                                         
-  .keys_mmc_ack_i                ('0),  
-  .keys_mmc_stall_i              ('0),
-  .keys_mmc_err_i                (mmc_keys_inst_cyc & mmc_keys_inst_stb),  
-  .keys_mmc_rty_i                ('0),  
-  .keys_mmc_data_i               ('0),  
-  .keys_mmc_tga_i                (mmc_keys_inst_tga),  
-  .keys_mmc_tgd_i                (mmc_keys_inst_tgd),  
-  .keys_mmc_tgc_i                (mmc_keys_inst_tgc), 
+  .mmc_keys_o   (mmc_keys_inst),
+  .keys_mmc_i   (keys_mmc_inst),
 
-  .mmc_uart_adr_o                (mmc_uart_inst_adr),  
-  .mmc_uart_data_o               (mmc_uart_inst_data), 
-  .mmc_uart_we_o                 (mmc_uart_inst_we),   
-  .mmc_uart_sel_o                (mmc_uart_inst_sel),  
-  .mmc_uart_stb_o                (mmc_uart_inst_stb),  
-  .mmc_uart_cyc_o                (mmc_uart_inst_cyc),  
-  .mmc_uart_tga_o                (mmc_uart_inst_tga),  
-  .mmc_uart_tgd_o                (mmc_uart_inst_tgd),  
-  .mmc_uart_tgc_o                (mmc_uart_inst_tgc),  
-                                                         
-  .uart_mmc_ack_i                ('0),  
-  .uart_mmc_stall_i              ('0),
-  .uart_mmc_err_i                (mmc_uart_inst_cyc & mmc_uart_inst_stb),  
-  .uart_mmc_rty_i                ('0),  
-  .uart_mmc_data_i               ('0),  
-  .uart_mmc_tga_i                (mmc_uart_inst_tga),  
-  .uart_mmc_tgd_i                (mmc_uart_inst_tgd),  
-  .uart_mmc_tgc_i                (mmc_uart_inst_tgc), 
+  .mmc_uart_o   (mmc_uart_inst),
+  .uart_mmc_i   (uart_mmc_inst),
 
-  .mmc_sdcard_adr_o              (mmc_sdcard_inst_adr),  
-  .mmc_sdcard_data_o             (mmc_sdcard_inst_data), 
-  .mmc_sdcard_we_o               (mmc_sdcard_inst_we),   
-  .mmc_sdcard_sel_o              (mmc_sdcard_inst_sel),  
-  .mmc_sdcard_stb_o              (mmc_sdcard_inst_stb),  
-  .mmc_sdcard_cyc_o              (mmc_sdcard_inst_cyc),  
-  .mmc_sdcard_tga_o              (mmc_sdcard_inst_tga),  
-  .mmc_sdcard_tgd_o              (mmc_sdcard_inst_tgd),  
-  .mmc_sdcard_tgc_o              (mmc_sdcard_inst_tgc),  
-                                                       
-  .sdcard_mmc_ack_i              ('0),  
-  .sdcard_mmc_stall_i            ('0),
-  .sdcard_mmc_err_i              (mmc_sdcard_inst_cyc & mmc_sdcard_inst_stb),  
-  .sdcard_mmc_rty_i              ('0),  
-  .sdcard_mmc_data_i             ('0),  
-  .sdcard_mmc_tga_i              (mmc_sdcard_inst_tga),  
-  .sdcard_mmc_tgd_i              (mmc_sdcard_inst_tgd),  
-  .sdcard_mmc_tgc_i              (mmc_sdcard_inst_tgc) 
-
+  .mmc_sdcard_o (mmc_sdcard_inst),
+  .sdcard_mmc_i (sdcard_mmc_inst)
 );
 
 mmc_wb mmc_data (
   .clk         (clk),
   .rst         (rst),
   
-  .riscv_mmc_adr_i               (riscv_mmc_data_adr),  
-  .riscv_mmc_data_i              (riscv_mmc_data_data), 
-  .riscv_mmc_we_i                (riscv_mmc_data_we),   
-  .riscv_mmc_sel_i               (riscv_mmc_data_sel),  
-  .riscv_mmc_stb_i               (riscv_mmc_data_stb),  
-  .riscv_mmc_cyc_i               (riscv_mmc_data_cyc),  
-  .riscv_mmc_tga_i               (riscv_mmc_data_tga),  
-  .riscv_mmc_tgd_i               (riscv_mmc_data_tgd),  
-  .riscv_mmc_tgc_i               (riscv_mmc_data_tgc),  
-                                                        
-  .mmc_riscv_ack_o               (mmc_riscv_data_ack),  
-  .mmc_riscv_stall_o             (mmc_riscv_data_stall),
-  .mmc_riscv_err_o               (mmc_riscv_data_err),  
-  .mmc_riscv_rty_o               (mmc_riscv_data_rty),  
-  .mmc_riscv_data_o              (mmc_riscv_data_data),  
-  .mmc_riscv_tga_o               (mmc_riscv_data_tga),  
-  .mmc_riscv_tgd_o               (mmc_riscv_data_tgd),  
-  .mmc_riscv_tgc_o               (mmc_riscv_data_tgc),  
+  .riscv_mmc_i  (riscv_mmc_data),
+  .mmc_riscv_o  (mmc_riscv_data),
 
-  .mmc_mem_adr_o                 (mmc_mem_data_adr),  
-  .mmc_mem_data_o                (mmc_mem_data_data), 
-  .mmc_mem_we_o                  (mmc_mem_data_we),   
-  .mmc_mem_sel_o                 (mmc_mem_data_sel),  
-  .mmc_mem_stb_o                 (mmc_mem_data_stb),  
-  .mmc_mem_cyc_o                 (mmc_mem_data_cyc),  
-  .mmc_mem_tga_o                 (mmc_mem_data_tga),  
-  .mmc_mem_tgd_o                 (mmc_mem_data_tgd),  
-  .mmc_mem_tgc_o                 (mmc_mem_data_tgc),  
-                                                          
-  .mem_mmc_ack_i                 (mem_mmc_data_ack),  
-  .mem_mmc_stall_i               (mem_mmc_data_stall),
-  .mem_mmc_err_i                 (mem_mmc_data_err),  
-  .mem_mmc_rty_i                 (mem_mmc_data_rty),  
-  .mem_mmc_data_i                (mem_mmc_data_data),  
-  .mem_mmc_tga_i                 (mem_mmc_data_tga),  
-  .mem_mmc_tgd_i                 (mem_mmc_data_tgd),  
-  .mem_mmc_tgc_i                 (mem_mmc_data_tgc), 
+  .mmc_mem_o    (mmc_mem_data),
+  .mem_mmc_i    (mem_mmc_data),
 
-  .mmc_ddr3_adr_o                (mmc_ddr3_data_adr),  
-  .mmc_ddr3_data_o               (mmc_ddr3_data_data), 
-  .mmc_ddr3_we_o                 (mmc_ddr3_data_we),   
-  .mmc_ddr3_sel_o                (mmc_ddr3_data_sel),  
-  .mmc_ddr3_stb_o                (mmc_ddr3_data_stb),  
-  .mmc_ddr3_cyc_o                (mmc_ddr3_data_cyc),  
-  .mmc_ddr3_tga_o                (mmc_ddr3_data_tga),  
-  .mmc_ddr3_tgd_o                (mmc_ddr3_data_tgd),  
-  .mmc_ddr3_tgc_o                (mmc_ddr3_data_tgc),  
-                                                         
-  .ddr3_mmc_ack_i                (ddr3_mmc_data_ack),  
-  .ddr3_mmc_stall_i              (ddr3_mmc_data_stall),
-  .ddr3_mmc_err_i                (ddr3_mmc_data_err),  
-  .ddr3_mmc_rty_i                (ddr3_mmc_data_rty),  
-  .ddr3_mmc_data_i               (ddr3_mmc_data_data),  
-  .ddr3_mmc_tga_i                (ddr3_mmc_data_tga),  
-  .ddr3_mmc_tgd_i                (ddr3_mmc_data_tgd),  
-  .ddr3_mmc_tgc_i                (ddr3_mmc_data_tgc), 
+  .mmc_ddr3_o   (mmc_ddr3_data),
+  .ddr3_mmc_i   (ddr3_mmc_data),
 
-  .mmc_led_adr_o                 (mmc_led_data_adr),  
-  .mmc_led_data_o                (mmc_led_data_data), 
-  .mmc_led_we_o                  (mmc_led_data_we),   
-  .mmc_led_sel_o                 (mmc_led_data_sel),  
-  .mmc_led_stb_o                 (mmc_led_data_stb),  
-  .mmc_led_cyc_o                 (mmc_led_data_cyc),  
-  .mmc_led_tga_o                 (mmc_led_data_tga),  
-  .mmc_led_tgd_o                 (mmc_led_data_tgd),  
-  .mmc_led_tgc_o                 (mmc_led_data_tgc),  
-                                                          
-  .led_mmc_ack_i                 (led_mmc_data_ack),    
-  .led_mmc_stall_i               (led_mmc_data_stall),  
-  .led_mmc_err_i                 (led_mmc_data_err),    
-  .led_mmc_rty_i                 (led_mmc_data_rty),    
-  .led_mmc_data_i                (led_mmc_data_data),   
-  .led_mmc_tga_i                 (led_mmc_data_tga),    
-  .led_mmc_tgd_i                 (led_mmc_data_tgd),    
-  .led_mmc_tgc_i                 (led_mmc_data_tgc),    
+  .mmc_led_o    (mmc_led_data),
+  .led_mmc_i    (led_mmc_data),
 
-  .mmc_keys_adr_o                (mmc_keys_data_adr),  
-  .mmc_keys_data_o               (mmc_keys_data_data), 
-  .mmc_keys_we_o                 (mmc_keys_data_we),   
-  .mmc_keys_sel_o                (mmc_keys_data_sel),  
-  .mmc_keys_stb_o                (mmc_keys_data_stb),  
-  .mmc_keys_cyc_o                (mmc_keys_data_cyc),  
-  .mmc_keys_tga_o                (mmc_keys_data_tga),  
-  .mmc_keys_tgd_o                (mmc_keys_data_tgd),  
-  .mmc_keys_tgc_o                (mmc_keys_data_tgc),  
-                                                        
-  .keys_mmc_ack_i                (keys_mmc_data_ack),    
-  .keys_mmc_stall_i              (keys_mmc_data_stall),  
-  .keys_mmc_err_i                (keys_mmc_data_err),    
-  .keys_mmc_rty_i                (keys_mmc_data_rty),    
-  .keys_mmc_data_i               (keys_mmc_data_data),   
-  .keys_mmc_tga_i                (keys_mmc_data_tga),    
-  .keys_mmc_tgd_i                (keys_mmc_data_tgd),    
-  .keys_mmc_tgc_i                (keys_mmc_data_tgc),    
+  .mmc_keys_o   (mmc_keys_data),
+  .keys_mmc_i   (keys_mmc_data),
 
-  .mmc_uart_adr_o                (mmc_uart_data_adr),  
-  .mmc_uart_data_o               (mmc_uart_data_data), 
-  .mmc_uart_we_o                 (mmc_uart_data_we),   
-  .mmc_uart_sel_o                (mmc_uart_data_sel),  
-  .mmc_uart_stb_o                (mmc_uart_data_stb),  
-  .mmc_uart_cyc_o                (mmc_uart_data_cyc),  
-  .mmc_uart_tga_o                (mmc_uart_data_tga),  
-  .mmc_uart_tgd_o                (mmc_uart_data_tgd),  
-  .mmc_uart_tgc_o                (mmc_uart_data_tgc),  
-                                                        
-  .uart_mmc_ack_i                (uart_mmc_data_ack),    
-  .uart_mmc_stall_i              (uart_mmc_data_stall),  
-  .uart_mmc_err_i                (uart_mmc_data_err),    
-  .uart_mmc_rty_i                (uart_mmc_data_rty),    
-  .uart_mmc_data_i               (uart_mmc_data_data),   
-  .uart_mmc_tga_i                (uart_mmc_data_tga),    
-  .uart_mmc_tgd_i                (uart_mmc_data_tgd),    
-  .uart_mmc_tgc_i                (uart_mmc_data_tgc),    
+  .mmc_uart_o   (mmc_uart_data),
+  .uart_mmc_i   (uart_mmc_data),
 
-  .mmc_sdcard_adr_o              (mmc_sdcard_data_adr),  
-  .mmc_sdcard_data_o             (mmc_sdcard_data_data), 
-  .mmc_sdcard_we_o               (mmc_sdcard_data_we),   
-  .mmc_sdcard_sel_o              (mmc_sdcard_data_sel),  
-  .mmc_sdcard_stb_o              (mmc_sdcard_data_stb),  
-  .mmc_sdcard_cyc_o              (mmc_sdcard_data_cyc),  
-  .mmc_sdcard_tga_o              (mmc_sdcard_data_tga),  
-  .mmc_sdcard_tgd_o              (mmc_sdcard_data_tgd),  
-  .mmc_sdcard_tgc_o              (mmc_sdcard_data_tgc),  
-                                                       
-  .sdcard_mmc_ack_i              (sdcard_mmc_data_ack),  
-  .sdcard_mmc_stall_i            (sdcard_mmc_data_stall),
-  .sdcard_mmc_err_i              (sdcard_mmc_data_err),   
-  .sdcard_mmc_rty_i              (sdcard_mmc_data_rty),  
-  .sdcard_mmc_data_i             (sdcard_mmc_data_data), 
-  .sdcard_mmc_tga_i              (sdcard_mmc_data_tga),  
-  .sdcard_mmc_tgd_i              (sdcard_mmc_data_tgd),  
-  .sdcard_mmc_tgc_i              (sdcard_mmc_data_tgc)   
-
+  .mmc_sdcard_o (mmc_sdcard_data),
+  .sdcard_mmc_i (sdcard_mmc_data)
 );
 
 mem mem (
   .clk         (clk),
   .rst         (rst),
 
-  .bus_inst_adr_i         (mmc_mem_inst_adr),  
-  .bus_inst_data_i        (mmc_mem_inst_data), 
-  .bus_inst_we_i          (mmc_mem_inst_we),   
-  .bus_inst_sel_i         (mmc_mem_inst_sel),  
-  .bus_inst_stb_i         (mmc_mem_inst_stb),  
-  .bus_inst_cyc_i         (mmc_mem_inst_cyc),  
-  .bus_inst_tga_i         (mmc_mem_inst_tga),  
-  .bus_inst_tgd_i         (mmc_mem_inst_tgd),  
-  .bus_inst_tgc_i         (mmc_mem_inst_tgc),  
-                                                  
-  .bus_inst_ack_o         (mem_mmc_inst_ack),  
-  .bus_inst_stall_o       (mem_mmc_inst_stall),
-  .bus_inst_err_o         (mem_mmc_inst_err),  
-  .bus_inst_rty_o         (mem_mmc_inst_rty),  
-  .bus_inst_data_o        (mem_mmc_inst_data),  
-  .bus_inst_tga_o         (mem_mmc_inst_tga),  
-  .bus_inst_tgd_o         (mem_mmc_inst_tgd),  
-  .bus_inst_tgc_o         (mem_mmc_inst_tgc),  
+  .bus_inst_i                (mmc_mem_inst),
+  .bus_inst_o                (mem_mmc_inst),   
 
-  .bus_data_adr_i         (mmc_mem_data_adr),  
-  .bus_data_data_i        (mmc_mem_data_data), 
-  .bus_data_we_i          (mmc_mem_data_we),   
-  .bus_data_sel_i         (mmc_mem_data_sel),  
-  .bus_data_stb_i         (mmc_mem_data_stb),  
-  .bus_data_cyc_i         (mmc_mem_data_cyc),  
-  .bus_data_tga_i         (mmc_mem_data_tga),  
-  .bus_data_tgd_i         (mmc_mem_data_tgd),  
-  .bus_data_tgc_i         (mmc_mem_data_tgc),  
-                                                  
-  .bus_data_ack_o         (mem_mmc_data_ack),  
-  .bus_data_stall_o       (mem_mmc_data_stall),
-  .bus_data_err_o         (mem_mmc_data_err),  
-  .bus_data_rty_o         (mem_mmc_data_rty),  
-  .bus_data_data_o        (mem_mmc_data_data),  
-  .bus_data_tga_o         (mem_mmc_data_tga),  
-  .bus_data_tgd_o         (mem_mmc_data_tgd),  
-  .bus_data_tgc_o         (mem_mmc_data_tgc)
+  .bus_data_i                (mmc_mem_data),
+  .bus_data_o                (mem_mmc_data)
 );
 
 ddr3 ddr3 (
@@ -1024,44 +511,11 @@ ddr3 ddr3 (
   .ddr3_avl_write_req     (ddr3_avl_write_req),   
   .ddr3_avl_size          (ddr3_avl_size),         
 
-  .bus_inst_adr_i         (mmc_ddr3_inst_adr),  
-  .bus_inst_data_i        (mmc_ddr3_inst_data), 
-  .bus_inst_we_i          (mmc_ddr3_inst_we),   
-  .bus_inst_sel_i         (mmc_ddr3_inst_sel),  
-  .bus_inst_stb_i         (mmc_ddr3_inst_stb),  
-  .bus_inst_cyc_i         (mmc_ddr3_inst_cyc),  
-  .bus_inst_tga_i         (mmc_ddr3_inst_tga),  
-  .bus_inst_tgd_i         (mmc_ddr3_inst_tgd),  
-  .bus_inst_tgc_i         (mmc_ddr3_inst_tgc),  
-                                                  
-  .bus_inst_ack_o         (ddr3_mmc_inst_ack),  
-  .bus_inst_stall_o       (ddr3_mmc_inst_stall),
-  .bus_inst_err_o         (ddr3_mmc_inst_err),  
-  .bus_inst_rty_o         (ddr3_mmc_inst_rty),  
-  .bus_inst_data_o        (ddr3_mmc_inst_data),  
-  .bus_inst_tga_o         (ddr3_mmc_inst_tga),  
-  .bus_inst_tgd_o         (ddr3_mmc_inst_tgd),  
-  .bus_inst_tgc_o         (ddr3_mmc_inst_tgc),  
+  .bus_inst_i                (mmc_ddr3_inst),
+  .bus_inst_o                (ddr3_mmc_inst),   
 
-  .bus_mem_adr_i         (mmc_ddr3_data_adr),  
-  .bus_mem_data_i        (mmc_ddr3_data_data), 
-  .bus_mem_we_i          (mmc_ddr3_data_we),   
-  .bus_mem_sel_i         (mmc_ddr3_data_sel),  
-  .bus_mem_stb_i         (mmc_ddr3_data_stb),  
-  .bus_mem_cyc_i         (mmc_ddr3_data_cyc),  
-  .bus_mem_tga_i         (mmc_ddr3_data_tga),  
-  .bus_mem_tgd_i         (mmc_ddr3_data_tgd),  
-  .bus_mem_tgc_i         (mmc_ddr3_data_tgc),  
-                                                  
-  .bus_mem_ack_o         (ddr3_mmc_data_ack),  
-  .bus_mem_stall_o       (ddr3_mmc_data_stall),
-  .bus_mem_err_o         (ddr3_mmc_data_err),  
-  .bus_mem_rty_o         (ddr3_mmc_data_rty),  
-  .bus_mem_data_o        (ddr3_mmc_data_data),  
-  .bus_mem_tga_o         (ddr3_mmc_data_tga),  
-  .bus_mem_tgd_o         (ddr3_mmc_data_tgd),  
-  .bus_mem_tgc_o         (ddr3_mmc_data_tgc)  
-
+  .bus_data_i                (mmc_ddr3_data),
+  .bus_data_o                (ddr3_mmc_data)
 );
 
 led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
@@ -1070,24 +524,8 @@ led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
 
   .LED         (LED),
 
-  .bus_adr_i                 (mmc_led_data_adr),  
-  .bus_data_i                (mmc_led_data_data), 
-  .bus_we_i                  (mmc_led_data_we),   
-  .bus_sel_i                 (mmc_led_data_sel),  
-  .bus_stb_i                 (mmc_led_data_stb),  
-  .bus_cyc_i                 (mmc_led_data_cyc),  
-  .bus_tga_i                 (mmc_led_data_tga),  
-  .bus_tgd_i                 (mmc_led_data_tgd),  
-  .bus_tgc_i                 (mmc_led_data_tgc),  
-                                                          
-  .bus_ack_o                 (led_mmc_data_ack),    
-  .bus_stall_o               (led_mmc_data_stall),  
-  .bus_err_o                 (led_mmc_data_err),    
-  .bus_rty_o                 (led_mmc_data_rty),    
-  .bus_data_o                (led_mmc_data_data),   
-  .bus_tga_o                 (led_mmc_data_tga),    
-  .bus_tgd_o                 (led_mmc_data_tgd),    
-  .bus_tgc_o                 (led_mmc_data_tgc)    
+  .bus_data_i                (mmc_led_data),
+  .bus_data_o                (led_mmc_data)    
 );
 
 keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
@@ -1096,15 +534,8 @@ keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
 
   .KEY         (KEY),
 
-  .i_bus_req           (mmc_keys_bus_req),   
-  .i_bus_write         (mmc_keys_bus_write), 
-  .i_bus_addr          (mmc_keys_bus_addr),  
-  .i_bus_data          (mmc_keys_bus_data),
-  .i_bus_data_rd_mask  (mmc_keys_bus_data_rd_mask),
-  .i_bus_data_wr_mask  (mmc_keys_bus_data_wr_mask),
-
-  .o_bus_ack           (keys_mmc_bus_ack),   
-  .o_bus_data          (keys_mmc_bus_data)
+  .bus_data_i                (mmc_keys_data),
+  .bus_data_o                (keys_mmc_data)    
 );
 
 uart uart (
@@ -1117,24 +548,8 @@ uart uart (
   .CTS (GPIO_0_09),
   .RTS (GPIO_0_07),
 
-  .bus_adr_i                 (mmc_uart_data_adr),  
-  .bus_data_i                (mmc_uart_data_data), 
-  .bus_we_i                  (mmc_uart_data_we),   
-  .bus_sel_i                 (mmc_uart_data_sel),  
-  .bus_stb_i                 (mmc_uart_data_stb),  
-  .bus_cyc_i                 (mmc_uart_data_cyc),  
-  .bus_tga_i                 (mmc_uart_data_tga),  
-  .bus_tgd_i                 (mmc_uart_data_tgd),  
-  .bus_tgc_i                 (mmc_uart_data_tgc),  
-                                                          
-  .bus_ack_o                 (uart_mmc_data_ack),    
-  .bus_stall_o               (uart_mmc_data_stall),  
-  .bus_err_o                 (uart_mmc_data_err),    
-  .bus_rty_o                 (uart_mmc_data_rty),    
-  .bus_data_o                (uart_mmc_data_data),   
-  .bus_tga_o                 (uart_mmc_data_tga),    
-  .bus_tgd_o                 (uart_mmc_data_tgd),    
-  .bus_tgc_o                 (uart_mmc_data_tgc)    
+  .bus_data_i                (mmc_uart_data),
+  .bus_data_o                (uart_mmc_data)    
 );
 
 waveshare_tft_touch_shield shield (
@@ -1206,24 +621,24 @@ waveshare_tft_touch_shield shield (
   .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
   .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
                                                                  
-  .sdcard_bus_adr_i                 (mmc_sdcard_data_adr),  
-  .sdcard_bus_data_i                (mmc_sdcard_data_data), 
-  .sdcard_bus_we_i                  (mmc_sdcard_data_we),   
-  .sdcard_bus_sel_i                 (mmc_sdcard_data_sel),  
-  .sdcard_bus_stb_i                 (mmc_sdcard_data_stb),  
-  .sdcard_bus_cyc_i                 (mmc_sdcard_data_cyc),  
-  .sdcard_bus_tga_i                 (mmc_sdcard_data_tga),  
-  .sdcard_bus_tgd_i                 (mmc_sdcard_data_tgd),  
-  .sdcard_bus_tgc_i                 (mmc_sdcard_data_tgc),  
+  .sdcard_bus_adr_i                 (mmc_sdcard_data.Adr),  
+  .sdcard_bus_data_i                (mmc_sdcard_data.Data), 
+  .sdcard_bus_we_i                  (mmc_sdcard_data.We),   
+  .sdcard_bus_sel_i                 (mmc_sdcard_data.Sel),  
+  .sdcard_bus_stb_i                 (mmc_sdcard_data.Stb),  
+  .sdcard_bus_cyc_i                 (mmc_sdcard_data.Cyc),  
+  .sdcard_bus_tga_i                 (mmc_sdcard_data.Tga),  
+  .sdcard_bus_tgd_i                 (mmc_sdcard_data.Tgd),  
+  .sdcard_bus_tgc_i                 (mmc_sdcard_data.Tgc),  
                                                           
-  .sdcard_bus_ack_o                 (sdcard_mmc_data_ack),    
-  .sdcard_bus_stall_o               (sdcard_mmc_data_stall),  
-  .sdcard_bus_err_o                 (sdcard_mmc_data_err),    
-  .sdcard_bus_rty_o                 (sdcard_mmc_data_rty),    
-  .sdcard_bus_data_o                (sdcard_mmc_data_data),   
-  .sdcard_bus_tga_o                 (sdcard_mmc_data_tga),    
-  .sdcard_bus_tgd_o                 (sdcard_mmc_data_tgd),    
-  .sdcard_bus_tgc_o                 (sdcard_mmc_data_tgc)    
+  .sdcard_bus_ack_o                 (sdcard_mmc_data.Ack),    
+  .sdcard_bus_stall_o               (sdcard_mmc_data.Stall),  
+  .sdcard_bus_err_o                 (sdcard_mmc_data.Err),    
+  .sdcard_bus_rty_o                 (sdcard_mmc_data.Rty),    
+  .sdcard_bus_data_o                (sdcard_mmc_data.Data),   
+  .sdcard_bus_tga_o                 (sdcard_mmc_data.Tga),    
+  .sdcard_bus_tgd_o                 (sdcard_mmc_data.Tgd),    
+  .sdcard_bus_tgc_o                 (sdcard_mmc_data.Tgc)    
 );
 
 `ifndef SIM

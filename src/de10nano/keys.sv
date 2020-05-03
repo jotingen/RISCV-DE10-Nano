@@ -1,3 +1,5 @@
+import wishbone_pkg::*;
+
 module keys #(
   parameter integer      SIZE = 2,
   parameter logic [31:0] ADDR_BASE = 32'h00000000
@@ -7,15 +9,8 @@ module keys #(
 
   input  logic  [1:0]    KEY,
 
-  input  logic           i_bus_req,
-  input  logic           i_bus_write,
-  input  logic [31:0]    i_bus_addr,
-  input  logic [31:0]    i_bus_data,
-  input  logic  [3:0]    i_bus_data_rd_mask,
-  input  logic  [3:0]    i_bus_data_wr_mask,
-
-  output logic           o_bus_ack,
-  output logic [31:0]    o_bus_data
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 logic  [1:0]    BUTTON;
@@ -33,25 +28,26 @@ always_ff @(posedge clk)
 
 always_ff @(posedge clk)
   begin
-  o_bus_ack   <= '0;    
-  o_bus_data  <= i_bus_data;   
+  bus_data_o.Ack   <= '0;    
+  bus_data_o.Data  <= bus_data_i.Data;   
 
-  if(i_bus_req &
-     i_bus_addr >= ADDR_BASE &
-     i_bus_addr <= ADDR_BASE + 2**SIZE - 1)
+  if(bus_data_i.Cyc &
+     bus_data_i.Stb &
+     bus_data_i.Adr >= ADDR_BASE &
+     bus_data_i.Adr <= ADDR_BASE + 2**SIZE - 1)
     begin
-    o_bus_ack <= '1;
-    case (i_bus_addr[SIZE+2:2] - ADDR_BASE[SIZE+2:2])
+    bus_data_o.Ack <= '1;
+    case (bus_data_i.Adr[SIZE+2:2] - ADDR_BASE[SIZE+2:2])
       'd0:     begin
-               o_bus_data <= '0;
-               o_bus_data <= BUTTON[0];
+               bus_data_o.Data <= '0;
+               bus_data_o.Data <= BUTTON[0];
                end
       'd1:     begin
-               o_bus_data <= '0;
-               o_bus_data <= BUTTON[1];
+               bus_data_o.Data <= '0;
+               bus_data_o.Data <= BUTTON[1];
                end
       default: begin
-               o_bus_data <= '0;
+               bus_data_o.Data <= '0;
                end
     endcase
     end

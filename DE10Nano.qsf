@@ -949,6 +949,8 @@ set_global_assignment -name PRE_MAPPING_RESYNTHESIS ON
 set_global_assignment -name OPTIMIZE_POWER_DURING_FITTING OFF
 set_global_assignment -name ALM_REGISTER_PACKING_EFFORT LOW
 
+
+set_global_assignment -name SEARCH_PATH src/wishbone
 set_global_assignment -name SEARCH_PATH src/common
 set_global_assignment -name SEARCH_PATH src/quartus/pll_riscv
 set_global_assignment -name SEARCH_PATH src/waveshare/ili9486
@@ -972,7 +974,7 @@ set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
 set_global_assignment -name SEARCH_PATH src/riscv
 set_global_assignment -name SEARCH_PATH src/sdcard
 set_global_assignment -name SEARCH_PATH src/shield
-
+set_global_assignment -name SYSTEMVERILOG_FILE src/wishbone/wishbone_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/common/lru_32.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/common/lru_16.sv
 set_global_assignment -name SDC_FILE DE10Nano.sdc

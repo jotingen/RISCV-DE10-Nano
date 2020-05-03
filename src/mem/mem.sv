@@ -1,44 +1,14 @@
+import wishbone_pkg::*;
+
 module mem (
   input  logic           clk,
   input  logic           rst,
 
-  input  logic [31:0]    bus_inst_adr_i,
-  input  logic [31:0]    bus_inst_data_i,
-  input  logic           bus_inst_we_i,
-  input  logic  [3:0]    bus_inst_sel_i,
-  input  logic           bus_inst_stb_i,
-  input  logic           bus_inst_cyc_i,
-  input  logic           bus_inst_tga_i,
-  input  logic           bus_inst_tgd_i,
-  input  logic  [3:0]    bus_inst_tgc_i,
+  input  wishbone_pkg::bus_req_t bus_inst_i,
+  output wishbone_pkg::bus_rsp_t bus_inst_o,
 
-  output logic           bus_inst_ack_o,
-  output logic           bus_inst_stall_o,
-  output logic           bus_inst_err_o,
-  output logic           bus_inst_rty_o,
-  output logic [31:0]    bus_inst_data_o,
-  output logic           bus_inst_tga_o,
-  output logic           bus_inst_tgd_o,
-  output logic  [3:0]    bus_inst_tgc_o,
-
-  input  logic [31:0]    bus_data_adr_i,
-  input  logic [31:0]    bus_data_data_i,
-  input  logic           bus_data_we_i,
-  input  logic  [3:0]    bus_data_sel_i,
-  input  logic           bus_data_stb_i,
-  input  logic           bus_data_cyc_i,
-  input  logic           bus_data_tga_i,
-  input  logic           bus_data_tgd_i,
-  input  logic  [3:0]    bus_data_tgc_i,
-
-  output logic           bus_data_ack_o,
-  output logic           bus_data_stall_o,
-  output logic           bus_data_err_o,
-  output logic           bus_data_rty_o,
-  output logic [31:0]    bus_data_data_o,
-  output logic           bus_data_tga_o,
-  output logic           bus_data_tgd_o,
-  output logic  [3:0]    bus_data_tgc_o
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 localparam SIZE = 15;
@@ -51,51 +21,51 @@ logic [7:0] mem_array_0 [2**(SIZE-2)-1:0];
 //Instruction bus
 always_ff @(posedge clk)
   begin
-  bus_inst_ack_o         <= bus_inst_cyc_i & bus_inst_stb_i;    
-  bus_inst_stall_o       <= '0;
-  bus_inst_err_o         <= '0;
-  bus_inst_rty_o         <= '0;
-  bus_inst_data_o[31:24] <= {8{bus_inst_sel_i[3]}} & mem_array_3[bus_inst_adr_i[SIZE+2:2]];
-  bus_inst_data_o[23:16] <= {8{bus_inst_sel_i[2]}} & mem_array_2[bus_inst_adr_i[SIZE+2:2]];
-  bus_inst_data_o[15:8]  <= {8{bus_inst_sel_i[1]}} & mem_array_1[bus_inst_adr_i[SIZE+2:2]];
-  bus_inst_data_o[7:0]   <= {8{bus_inst_sel_i[0]}} & mem_array_0[bus_inst_adr_i[SIZE+2:2]];
-  bus_inst_tga_o         <= bus_inst_tga_i;
-  bus_inst_tgd_o         <= bus_inst_tgd_i;
-  bus_inst_tgc_o         <= bus_inst_tgc_i;
+  bus_inst_o.Ack         <= bus_inst_i.Cyc & bus_inst_i.Stb;    
+  bus_inst_o.Stall       <= '0;
+  bus_inst_o.Err         <= '0;
+  bus_inst_o.Rty         <= '0;
+  bus_inst_o.Data[31:24] <= {8{bus_inst_i.Sel[3]}} & mem_array_3[bus_inst_i.Adr[SIZE+2:2]];
+  bus_inst_o.Data[23:16] <= {8{bus_inst_i.Sel[2]}} & mem_array_2[bus_inst_i.Adr[SIZE+2:2]];
+  bus_inst_o.Data[15:8]  <= {8{bus_inst_i.Sel[1]}} & mem_array_1[bus_inst_i.Adr[SIZE+2:2]];
+  bus_inst_o.Data[7:0]   <= {8{bus_inst_i.Sel[0]}} & mem_array_0[bus_inst_i.Adr[SIZE+2:2]];
+  bus_inst_o.Tga         <= bus_inst_i.Tga;
+  bus_inst_o.Tgd         <= bus_inst_i.Tgd;
+  bus_inst_o.Tgc         <= bus_inst_i.Tgc;
   end
 
 
 //Memory bus
 always_ff @(posedge clk)
   begin
-  if (bus_data_we_i & bus_data_sel_i[0])
+  if (bus_data_i.We & bus_data_i.Sel[0])
     begin
-    mem_array_0[bus_data_adr_i[SIZE+2:2]] <= bus_data_data_i[7:0];
+    mem_array_0[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[7:0];
     end
-  if (bus_data_we_i & bus_data_sel_i[1])
+  if (bus_data_i.We & bus_data_i.Sel[1])
     begin
-    mem_array_1[bus_data_adr_i[SIZE+2:2]] <= bus_data_data_i[15:8];
+    mem_array_1[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[15:8];
     end
-  if (bus_data_we_i & bus_data_sel_i[2])
+  if (bus_data_i.We & bus_data_i.Sel[2])
     begin
-    mem_array_2[bus_data_adr_i[SIZE+2:2]] <= bus_data_data_i[23:16];
+    mem_array_2[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[23:16];
     end
-  if (bus_data_we_i & bus_data_sel_i[3])
+  if (bus_data_i.We & bus_data_i.Sel[3])
     begin
-    mem_array_3[bus_data_adr_i[SIZE+2:2]] <= bus_data_data_i[31:24];
+    mem_array_3[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[31:24];
     end
 
-  bus_data_ack_o         <= bus_data_cyc_i & bus_data_stb_i;    
-  bus_data_stall_o       <= '0;
-  bus_data_err_o         <= '0;
-  bus_data_rty_o         <= '0;
-  bus_data_data_o[31:24] <= {8{bus_data_sel_i[3]}} & mem_array_3[bus_data_adr_i[SIZE+2:2]];
-  bus_data_data_o[23:16] <= {8{bus_data_sel_i[2]}} & mem_array_2[bus_data_adr_i[SIZE+2:2]];
-  bus_data_data_o[15:8]  <= {8{bus_data_sel_i[1]}} & mem_array_1[bus_data_adr_i[SIZE+2:2]];
-  bus_data_data_o[7:0]   <= {8{bus_data_sel_i[0]}} & mem_array_0[bus_data_adr_i[SIZE+2:2]];
-  bus_data_tga_o         <= bus_data_tga_i;
-  bus_data_tgd_o         <= bus_data_tgd_i;
-  bus_data_tgc_o         <= bus_data_tgc_i;
+  bus_data_o.Ack         <= bus_data_i.Cyc & bus_data_i.Stb;    
+  bus_data_o.Stall       <= '0;
+  bus_data_o.Err         <= '0;
+  bus_data_o.Rty         <= '0;
+  bus_data_o.Data[31:24] <= {8{bus_data_i.Sel[3]}} & mem_array_3[bus_data_i.Adr[SIZE+2:2]];
+  bus_data_o.Data[23:16] <= {8{bus_data_i.Sel[2]}} & mem_array_2[bus_data_i.Adr[SIZE+2:2]];
+  bus_data_o.Data[15:8]  <= {8{bus_data_i.Sel[1]}} & mem_array_1[bus_data_i.Adr[SIZE+2:2]];
+  bus_data_o.Data[7:0]   <= {8{bus_data_i.Sel[0]}} & mem_array_0[bus_data_i.Adr[SIZE+2:2]];
+  bus_data_o.Tga         <= bus_data_i.Tga;
+  bus_data_o.Tgd         <= bus_data_i.Tgd;
+  bus_data_o.Tgc         <= bus_data_i.Tgc;
   end
 
 initial

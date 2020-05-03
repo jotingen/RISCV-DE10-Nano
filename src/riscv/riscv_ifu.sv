@@ -1,3 +1,4 @@
+import wishbone_pkg::*;
 
 module riscv_ifu (
   input  logic             clk,
@@ -25,25 +26,8 @@ module riscv_ifu (
   output logic             ifu_inst_br_taken,
   output logic [31:0]      ifu_inst_br_pred_PC_next,
 
-  output logic [31:0]      bus_inst_adr_o,
-  output logic [31:0]      bus_inst_data_o,
-  output logic             bus_inst_we_o,
-  output logic  [3:0]      bus_inst_sel_o,
-  output logic             bus_inst_stb_o,
-  output logic             bus_inst_cyc_o,
-  output logic             bus_inst_tga_o,
-  output logic             bus_inst_tgd_o,
-  output logic  [3:0]      bus_inst_tgc_o,
-
-  input  logic             bus_inst_ack_i,
-  input  logic             bus_inst_stall_i,
-  input  logic             bus_inst_err_i,
-  input  logic             bus_inst_rty_i,
-  input  logic [31:0]      bus_inst_data_i,
-  input  logic             bus_inst_tga_i,
-  input  logic             bus_inst_tgd_i,
-  input  logic  [3:0]      bus_inst_tgc_i
-   
+  output wishbone_pkg::bus_req_t bus_inst_o,
+  input  wishbone_pkg::bus_rsp_t bus_inst_i
 
 );
 
@@ -90,15 +74,15 @@ logic [31:0] ifu_buff_br_taken_out;
 logic [31:0] ifu_buff_br_pred_PC_next_in;
 logic [31:0] ifu_buff_br_pred_PC_next_out;
 
-assign bus_inst_stb_o   = pre_ifu_vld; 
-assign bus_inst_cyc_o   = bus_inst_stb_o;
-assign bus_inst_we_o    = '0;
-assign bus_inst_sel_o   = '1;
-assign bus_inst_adr_o   = pre_ifu_PC;
-assign bus_inst_data_o  = '0;
-assign bus_inst_tga_o   = pre_ifu_br_pred_taken;
-assign bus_inst_tgd_o   = '0;
-assign bus_inst_tgc_o   = pre_ifu_era;
+assign bus_inst_o.Stb   = pre_ifu_vld; 
+assign bus_inst_o.Cyc   = bus_inst_o.Stb;
+assign bus_inst_o.We    = '0;
+assign bus_inst_o.Sel   = '1;
+assign bus_inst_o.Adr   = pre_ifu_PC;
+assign bus_inst_o.Data  = '0;
+assign bus_inst_o.Tga   = pre_ifu_br_pred_taken;
+assign bus_inst_o.Tgd   = '0;
+assign bus_inst_o.Tgc   = pre_ifu_era;
 
 ifu_buff ifu_buff_order_1 (
   .clock ( clk ),
@@ -172,7 +156,7 @@ always_comb
   pre_ifu_vld  = '0;
   ifu_buff_addr_ack   = '0;
   ifu_buff_data_ack   = '0;
-  if(~ifu_buff_addr_full & ~bus_inst_stall_i)
+  if(~ifu_buff_addr_full & ~bus_inst_i.Stall)
     begin
     pre_ifu_vld  = '1;
     end
@@ -225,7 +209,7 @@ always_ff @(posedge clk)
 
 
   //Make requests while we have buffers available
-  if(~ifu_buff_addr_full & ~bus_inst_stall_i)
+  if(~ifu_buff_addr_full & ~bus_inst_i.Stall)
     begin
 
     if(pre_ifu_br_pred_taken)
@@ -254,10 +238,10 @@ always_ff @(posedge clk)
     end
 
   //Recieve from memory
-  if(bus_inst_ack_i & bus_inst_tgc_i == pre_ifu_era)
+  if(bus_inst_i.Ack & bus_inst_i.Tgc == pre_ifu_era)
     begin
     ifu_buff_data_wrreq  <= '1;
-    ifu_buff_data_in     <= bus_inst_data_i;
+    ifu_buff_data_in     <= bus_inst_i.Data;
     end
 
   //TODO put in bypass

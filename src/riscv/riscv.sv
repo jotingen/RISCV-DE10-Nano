@@ -1,3 +1,5 @@
+import wishbone_pkg::*;
+
 module riscv #(
   parameter M_EXT = 1
 ) (
@@ -38,24 +40,11 @@ module riscv #(
   output reg   [5:0][63:0] rvfi_csr_minstret_wdata,
 `endif
 
-  output logic [31:0]      bus_inst_adr_o,
-  output logic [31:0]      bus_inst_data_o,
-  output logic             bus_inst_we_o,
-  output logic  [3:0]      bus_inst_sel_o,
-  output logic             bus_inst_stb_o,
-  output logic             bus_inst_cyc_o,
-  output logic             bus_inst_tga_o,
-  output logic             bus_inst_tgd_o,
-  output logic  [3:0]      bus_inst_tgc_o,
+  output wishbone_pkg::bus_req_t bus_inst_o,
+  input  wishbone_pkg::bus_rsp_t bus_inst_i,
 
-  input  logic             bus_inst_ack_i,
-  input  logic             bus_inst_stall_i,
-  input  logic             bus_inst_err_i,
-  input  logic             bus_inst_rty_i,
-  input  logic [31:0]      bus_inst_data_i,
-  input  logic             bus_inst_tga_i,
-  input  logic             bus_inst_tgd_i,
-  input  logic  [3:0]      bus_inst_tgc_i,
+  output wishbone_pkg::bus_req_t bus_data_o,
+  input  wishbone_pkg::bus_rsp_t bus_data_i,
 
   output logic [31:0]      bus_data_adr_o,
   output logic [31:0]      bus_data_data_o,
@@ -392,24 +381,8 @@ riscv_ifu ifu (
   .ifu_inst_br_taken    (ifu_inst_br_taken),
   .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
 
-  .bus_inst_adr_o   (bus_inst_adr_o), 
-  .bus_inst_data_o  (bus_inst_data_o),
-  .bus_inst_we_o    (bus_inst_we_o),  
-  .bus_inst_sel_o   (bus_inst_sel_o), 
-  .bus_inst_stb_o   (bus_inst_stb_o), 
-  .bus_inst_cyc_o   (bus_inst_cyc_o), 
-  .bus_inst_tga_o   (bus_inst_tga_o), 
-  .bus_inst_tgd_o   (bus_inst_tgd_o), 
-  .bus_inst_tgc_o   (bus_inst_tgc_o), 
-                                     
-  .bus_inst_ack_i   (bus_inst_ack_i), 
-  .bus_inst_stall_i (bus_inst_stall_i),
-  .bus_inst_err_i   (bus_inst_err_i), 
-  .bus_inst_rty_i   (bus_inst_rty_i), 
-  .bus_inst_data_i  (bus_inst_data_i), 
-  .bus_inst_tga_i   (bus_inst_tga_i), 
-  .bus_inst_tgd_i   (bus_inst_tgd_i), 
-  .bus_inst_tgc_i   (bus_inst_tgc_i) 
+  .bus_inst_o   (bus_inst_o), 
+  .bus_inst_i   (bus_inst_i) 
 );
 
 riscv_idu #(.M_EXT(M_EXT)) idu (
@@ -712,24 +685,8 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .csr_data_wr      (csr_data_wr),
   .csr_data_rd      (csr_data_rd),
 
-  .bus_data_adr_o   (bus_data_adr_o),
-  .bus_data_data_o  (bus_data_data_o),
-  .bus_data_we_o    (bus_data_we_o),
-  .bus_data_sel_o   (bus_data_sel_o),
-  .bus_data_stb_o   (bus_data_stb_o),
-  .bus_data_cyc_o   (bus_data_cyc_o),
-  .bus_data_tga_o   (bus_data_tga_o),
-  .bus_data_tgd_o   (bus_data_tgd_o),
-  .bus_data_tgc_o   (bus_data_tgc_o),
-
-  .bus_data_ack_i   (bus_data_ack_i),
-  .bus_data_stall_i (bus_data_stall_i),
-  .bus_data_err_i   (bus_data_err_i),
-  .bus_data_rty_i   (bus_data_rty_i),
-  .bus_data_data_i  (bus_data_data_i),
-  .bus_data_tga_i   (bus_data_tga_i),
-  .bus_data_tgd_i   (bus_data_tgd_i),
-  .bus_data_tgc_i   (bus_data_tgc_i)
+  .bus_data_o           (bus_data_o),
+  .bus_data_i           (bus_data_i)
 );
 
 endmodule

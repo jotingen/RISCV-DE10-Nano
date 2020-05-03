@@ -1,3 +1,5 @@
+import wishbone_pkg::*;
+
 module uart (
   input logic clk,
   input logic rst,
@@ -8,24 +10,8 @@ module uart (
   input  logic CTS,
   output logic RTS,
 
-  input  logic [31:0]    bus_adr_i,
-  input  logic [31:0]    bus_data_i,
-  input  logic           bus_we_i,
-  input  logic  [3:0]    bus_sel_i,
-  input  logic           bus_stb_i,
-  input  logic           bus_cyc_i,
-  input  logic           bus_tga_i,
-  input  logic           bus_tgd_i,
-  input  logic  [3:0]    bus_tgc_i,
-
-  output logic           bus_ack_o,
-  output logic           bus_stall_o,
-  output logic           bus_err_o,
-  output logic           bus_rty_o,
-  output logic [31:0]    bus_data_o,
-  output logic           bus_tga_o,
-  output logic           bus_tgd_o,
-  output logic  [3:0]    bus_tgc_o
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 logic [12:0] clk_cnt;
@@ -46,14 +32,14 @@ always_ff @(posedge clk)
   state_idle    <= '0;
   state_sending <= '0;
 
-  bus_ack_o   <= '0;   
-  bus_stall_o <= '0; //bus_stall_o; 
-  bus_err_o   <= '0; //bus_err_o;   
-  bus_rty_o   <= '0; //bus_rty_o;   
-  bus_data_o  <= '0; //bus_data_o;  
-  bus_tga_o   <= '0; //bus_tga_o;   
-  bus_tgd_o   <= '0; //bus_tgd_o;   
-  bus_tgc_o   <= '0; //bus_tgc_o;   
+  bus_data_o.Ack   <= '0;   
+  bus_data_o.Stall <= '0; //bus_data_o.Stall; 
+  bus_data_o.Err   <= '0; //bus_data_o.Err;   
+  bus_data_o.Rty   <= '0; //bus_data_o.Rty;   
+  bus_data_o.Data  <= '0; //bus_data_o.Data;  
+  bus_data_o.Tga   <= '0; //bus_data_o.Tga;   
+  bus_data_o.Tgd   <= '0; //bus_data_o.Tgd;   
+  bus_data_o.Tgc   <= '0; //bus_data_o.Tgc;   
 
   msg_bit <= msg_bit;
   clk_cnt <= clk_cnt;
@@ -61,28 +47,28 @@ always_ff @(posedge clk)
 
   TXD <= TXD;
 
-  if(bus_stb_i & bus_cyc_i)
+  if(bus_data_i.Stb & bus_data_i.Cyc)
     begin
-    case (bus_adr_i[31:2])
+    case (bus_data_i.Adr[31:2])
       'd0:     begin
                state_sending <= '1;
                msg <= {2'b11,
-                       ^bus_data_i[7:0],
-                       bus_data_i[7:0],
+                       ^bus_data_i.Data[7:0],
+                       bus_data_i.Data[7:0],
                        1'b0};
-               bus_data_o <= '0;
-               bus_data_o <= '0;
+               bus_data_o.Data <= '0;
+               bus_data_o.Data <= '0;
                end
       'd1:     begin
                state_idle    <= '1;
-               baud_rate <= bus_data_i;
-               bus_ack_o <= '1;
-               bus_data_o <= '0;
+               baud_rate <= bus_data_i.Data;
+               bus_data_o.Ack <= '1;
+               bus_data_o.Data <= '0;
                end
       default: begin
                state_idle    <= '1;
-               bus_ack_o <= '1;
-               bus_data_o <= '0;
+               bus_data_o.Ack <= '1;
+               bus_data_o.Data <= '0;
                end
     endcase
     end
@@ -102,7 +88,7 @@ always_ff @(posedge clk)
       clk_cnt   <= '0;
       if(msg_bit == 'd11)
         begin
-        bus_ack_o <= '1;
+        bus_data_o.Ack <= '1;
         msg_bit <= '0;
         state_idle <= '1;
         end

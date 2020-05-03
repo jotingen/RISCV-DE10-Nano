@@ -6,4 +6,4 @@ PATH := ${SVUNIT_INSTALL}/bin:${MODELSIM_INSTALL}/bin:${PATH}
 all:
 	SVUNIT_INSTALL=${SVUNIT_INSTALL} \
 	PATH="${PATH}"                   \
-	runSVUnit -s modelsim -d SIM -r "-wlf test.wlf"
+	runSVUnit -s modelsim -d SIM -r "-wlf sim.wlf"
