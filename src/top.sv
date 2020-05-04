@@ -321,6 +321,18 @@ wishbone_pkg::bus_rsp_t keys_mmc_inst;
 wishbone_pkg::bus_req_t mmc_uart_inst;
 wishbone_pkg::bus_rsp_t uart_mmc_inst;
 
+wishbone_pkg::bus_req_t mmc_touchpad_inst;
+wishbone_pkg::bus_rsp_t touchpad_mmc_inst;
+
+wishbone_pkg::bus_req_t mmc_display_inst;
+wishbone_pkg::bus_rsp_t display_mmc_inst;
+
+wishbone_pkg::bus_req_t mmc_displaybuff_inst;
+wishbone_pkg::bus_rsp_t displaybuff_mmc_inst;
+
+wishbone_pkg::bus_req_t mmc_consolebuff_inst;
+wishbone_pkg::bus_rsp_t consolebuff_mmc_inst;
+
 wishbone_pkg::bus_req_t mmc_sdcard_inst;
 wishbone_pkg::bus_rsp_t sdcard_mmc_inst;
 
@@ -341,6 +353,18 @@ wishbone_pkg::bus_rsp_t keys_mmc_data;
 
 wishbone_pkg::bus_req_t mmc_uart_data;
 wishbone_pkg::bus_rsp_t uart_mmc_data;
+
+wishbone_pkg::bus_req_t mmc_touchpad_data;
+wishbone_pkg::bus_rsp_t touchpad_mmc_data;
+
+wishbone_pkg::bus_req_t mmc_display_data;
+wishbone_pkg::bus_rsp_t display_mmc_data;
+
+wishbone_pkg::bus_req_t mmc_displaybuff_data;
+wishbone_pkg::bus_rsp_t displaybuff_mmc_data;
+
+wishbone_pkg::bus_req_t mmc_consolebuff_data;
+wishbone_pkg::bus_rsp_t consolebuff_mmc_data;
 
 wishbone_pkg::bus_req_t mmc_sdcard_data;
 wishbone_pkg::bus_rsp_t sdcard_mmc_data;
@@ -581,64 +605,20 @@ waveshare_tft_touch_shield shield (
   .ARDUINO_IO_15   (ARDUINO_IO_15),
   .ARDUINO_RESET_N (ARDUINO_RESET_N),
 
-  .mmc_touchpad_bus_req          (mmc_touchpad_bus_req         ),
-  .mmc_touchpad_bus_write        (mmc_touchpad_bus_write       ),
-  .mmc_touchpad_bus_addr         (mmc_touchpad_bus_addr        ),
-  .mmc_touchpad_bus_data         (mmc_touchpad_bus_data        ),
-  .mmc_touchpad_bus_data_rd_mask (mmc_touchpad_bus_data_rd_mask),
-  .mmc_touchpad_bus_data_wr_mask (mmc_touchpad_bus_data_wr_mask),
+  .touchpad_data_i                 (mmc_touchpad_data),  
+  .touchpad_data_o                 (touchpad_mmc_data),   
                                                                  
-  .touchpad_mmc_bus_ack          (touchpad_mmc_bus_ack         ),
-  .touchpad_mmc_bus_data         (touchpad_mmc_bus_data        ),
+  .display_data_i                (mmc_display_data),  
+  .display_data_o                (display_mmc_data),   
                                                                  
-  .mmc_display_bus_req           (mmc_display_bus_req          ),
-  .mmc_display_bus_write         (mmc_display_bus_write        ),
-  .mmc_display_bus_addr          (mmc_display_bus_addr         ),
-  .mmc_display_bus_data          (mmc_display_bus_data         ),
-  .mmc_display_bus_data_rd_mask  (mmc_display_bus_data_rd_mask ),
-  .mmc_display_bus_data_wr_mask  (mmc_display_bus_data_wr_mask ),
+  .displaybuff_data_i               (mmc_displaybuff_data),  
+  .displaybuff_data_o               (displaybuff_mmc_data),   
                                                                  
-  .display_mmc_bus_ack           (display_mmc_bus_ack          ),
-  .display_mmc_bus_data          (display_mmc_bus_data         ),
+  .consolebuff_data_i            (mmc_consolebuff_data),  
+  .consolebuff_data_o            (consolebuff_mmc_data),   
                                                                  
-  .mmc_dispbuff_bus_req          (mmc_dispbuff_bus_req         ),
-  .mmc_dispbuff_bus_write        (mmc_dispbuff_bus_write       ),
-  .mmc_dispbuff_bus_addr         (mmc_dispbuff_bus_addr        ),
-  .mmc_dispbuff_bus_data         (mmc_dispbuff_bus_data        ),
-  .mmc_dispbuff_bus_data_rd_mask (mmc_dispbuff_bus_data_rd_mask),
-  .mmc_dispbuff_bus_data_wr_mask (mmc_dispbuff_bus_data_wr_mask),
-                                                                 
-  .dispbuff_mmc_bus_ack          (dispbuff_mmc_bus_ack         ),
-  .dispbuff_mmc_bus_data         (dispbuff_mmc_bus_data        ),
-                                                                 
-  .mmc_consolebuff_bus_req          (mmc_consolebuff_bus_req         ),
-  .mmc_consolebuff_bus_write        (mmc_consolebuff_bus_write       ),
-  .mmc_consolebuff_bus_addr         (mmc_consolebuff_bus_addr        ),
-  .mmc_consolebuff_bus_data         (mmc_consolebuff_bus_data        ),
-  .mmc_consolebuff_bus_data_rd_mask (mmc_consolebuff_bus_data_rd_mask),
-  .mmc_consolebuff_bus_data_wr_mask (mmc_consolebuff_bus_data_wr_mask),
-                                                                 
-  .consolebuff_mmc_bus_ack          (consolebuff_mmc_bus_ack         ),
-  .consolebuff_mmc_bus_data         (consolebuff_mmc_bus_data        ),
-                                                                 
-  .sdcard_bus_adr_i                 (mmc_sdcard_data.Adr),  
-  .sdcard_bus_data_i                (mmc_sdcard_data.Data), 
-  .sdcard_bus_we_i                  (mmc_sdcard_data.We),   
-  .sdcard_bus_sel_i                 (mmc_sdcard_data.Sel),  
-  .sdcard_bus_stb_i                 (mmc_sdcard_data.Stb),  
-  .sdcard_bus_cyc_i                 (mmc_sdcard_data.Cyc),  
-  .sdcard_bus_tga_i                 (mmc_sdcard_data.Tga),  
-  .sdcard_bus_tgd_i                 (mmc_sdcard_data.Tgd),  
-  .sdcard_bus_tgc_i                 (mmc_sdcard_data.Tgc),  
-                                                          
-  .sdcard_bus_ack_o                 (sdcard_mmc_data.Ack),    
-  .sdcard_bus_stall_o               (sdcard_mmc_data.Stall),  
-  .sdcard_bus_err_o                 (sdcard_mmc_data.Err),    
-  .sdcard_bus_rty_o                 (sdcard_mmc_data.Rty),    
-  .sdcard_bus_data_o                (sdcard_mmc_data.Data),   
-  .sdcard_bus_tga_o                 (sdcard_mmc_data.Tga),    
-  .sdcard_bus_tgd_o                 (sdcard_mmc_data.Tgd),    
-  .sdcard_bus_tgc_o                 (sdcard_mmc_data.Tgc)    
+  .sdcard_data_i                 (mmc_sdcard_data),  
+  .sdcard_data_o                 (sdcard_mmc_data)    
 );
 
 `ifndef SIM

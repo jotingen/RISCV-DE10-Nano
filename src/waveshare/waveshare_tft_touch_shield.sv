@@ -1,67 +1,25 @@
+import wishbone_pkg::*;
+
 module waveshare_tft_touch_shield (
 
-input  logic           clk,
-input  logic           rst,
-output logic           arst,
+  input  logic           clk,
+  input  logic           rst,
+  output logic           arst,
 
-  input  logic           mmc_touchpad_bus_req,
-  input  logic           mmc_touchpad_bus_write,
-  input  logic [31:0]    mmc_touchpad_bus_addr,
-  input  logic [31:0]    mmc_touchpad_bus_data,
-  input  logic  [3:0]    mmc_touchpad_bus_data_rd_mask,
-  input  logic  [3:0]    mmc_touchpad_bus_data_wr_mask,
+  input  wishbone_pkg::bus_req_t touchpad_data_i,
+  output wishbone_pkg::bus_rsp_t touchpad_data_o,
 
-  output logic           touchpad_mmc_bus_ack,
-  output logic [31:0]    touchpad_mmc_bus_data,
+  input  wishbone_pkg::bus_req_t display_data_i,
+  output wishbone_pkg::bus_rsp_t display_data_o,
 
-  input  logic           mmc_display_bus_req,
-  input  logic           mmc_display_bus_write,
-  input  logic [31:0]    mmc_display_bus_addr,
-  input  logic [31:0]    mmc_display_bus_data,
-  input  logic  [3:0]    mmc_display_bus_data_rd_mask,
-  input  logic  [3:0]    mmc_display_bus_data_wr_mask,
+  input  wishbone_pkg::bus_req_t consolebuff_data_i,
+  output wishbone_pkg::bus_rsp_t consolebuff_data_o,
 
-  output logic           display_mmc_bus_ack,
-  output logic [31:0]    display_mmc_bus_data,
+  input  wishbone_pkg::bus_req_t displaybuff_data_i,
+  output wishbone_pkg::bus_rsp_t displaybuff_data_o,
 
-  input  logic           mmc_consolebuff_bus_req,
-  input  logic           mmc_consolebuff_bus_write,
-  input  logic [31:0]    mmc_consolebuff_bus_addr,
-  input  logic [31:0]    mmc_consolebuff_bus_data,
-  input  logic  [3:0]    mmc_consolebuff_bus_data_rd_mask,
-  input  logic  [3:0]    mmc_consolebuff_bus_data_wr_mask,
-
-  output logic           consolebuff_mmc_bus_ack,
-  output logic [31:0]    consolebuff_mmc_bus_data,
-
-  input  logic           mmc_dispbuff_bus_req,
-  input  logic           mmc_dispbuff_bus_write,
-  input  logic [31:0]    mmc_dispbuff_bus_addr,
-  input  logic [31:0]    mmc_dispbuff_bus_data,
-  input  logic  [3:0]    mmc_dispbuff_bus_data_rd_mask,
-  input  logic  [3:0]    mmc_dispbuff_bus_data_wr_mask,
-
-  output logic           dispbuff_mmc_bus_ack,
-  output logic [31:0]    dispbuff_mmc_bus_data,
-
-  input  logic [31:0]    sdcard_bus_adr_i,
-  input  logic [31:0]    sdcard_bus_data_i,
-  input  logic           sdcard_bus_we_i,
-  input  logic  [3:0]    sdcard_bus_sel_i,
-  input  logic           sdcard_bus_stb_i,
-  input  logic           sdcard_bus_cyc_i,
-  input  logic           sdcard_bus_tga_i,
-  input  logic           sdcard_bus_tgd_i,
-  input  logic  [3:0]    sdcard_bus_tgc_i,
-
-  output logic           sdcard_bus_ack_o,
-  output logic           sdcard_bus_stall_o,
-  output logic           sdcard_bus_err_o,
-  output logic           sdcard_bus_rty_o,
-  output logic [31:0]    sdcard_bus_data_o,
-  output logic           sdcard_bus_tga_o,
-  output logic           sdcard_bus_tgd_o,
-  output logic  [3:0]    sdcard_bus_tgc_o,
+  input  wishbone_pkg::bus_req_t sdcard_data_i,
+  output wishbone_pkg::bus_rsp_t sdcard_data_o,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -163,27 +121,6 @@ logic sdcard_CS;
 logic sdcard_RS_DC;
 logic sdcard_DATA;
 
-////Joystick
-//joystick #(.SIZE(5),.ADDR_BASE(32'h00000000)) joystick (
-//  .clk         (clk),
-//  .rst         (rst),
-//
-//  .ADC_CONVST  (ADC_CONVST),     
-//  .ADC_SCK     (ADC_SCK),        
-//  .ADC_SDI     (ADC_SDI),        
-//  .ADC_SDO     (ADC_SDO),        
-//
-//  .i_bus_req           (mmc_joystick_bus_req),   
-//  .i_bus_write         (mmc_joystick_bus_write), 
-//  .i_bus_addr          (mmc_joystick_bus_addr),  
-//  .i_bus_data          (mmc_joystick_bus_data),
-//  .i_bus_data_rd_mask  (mmc_joystick_bus_data_rd_mask),
-//  .i_bus_data_wr_mask  (mmc_joystick_bus_data_wr_mask),
-//
-//  .o_bus_ack           (joystick_mmc_bus_ack),   
-//  .o_bus_data          (joystick_mmc_bus_data)
-//);
-
 
 //Display
 ILI9486 display (
@@ -199,15 +136,8 @@ ILI9486 display (
   .RS_DC   (display_RS_DC),
   .DATA    (display_MOSI),
 
-  .i_bus_req           (mmc_display_bus_req),   
-  .i_bus_write         (mmc_display_bus_write), 
-  .i_bus_addr          (mmc_display_bus_addr),  
-  .i_bus_data          (mmc_display_bus_data),
-  .i_bus_data_rd_mask  (mmc_display_bus_data_rd_mask) ,
-  .i_bus_data_wr_mask  (mmc_display_bus_data_wr_mask),
-
-  .o_bus_ack           (display_mmc_bus_ack),   
-  .o_bus_data          (display_mmc_bus_data)
+  .bus_data_i          (display_data_i),   
+  .bus_data_o          (display_data_o)
 );
 
 //Display Buffer
@@ -215,15 +145,8 @@ ILI9486_buffer display_buffer (
   .clk (clk),
   .rst (rst),
 
-  .i_membus_req           (mmc_dispbuff_bus_req),   
-  .i_membus_write         (mmc_dispbuff_bus_write), 
-  .i_membus_addr          (mmc_dispbuff_bus_addr),  
-  .i_membus_data          (mmc_dispbuff_bus_data),
-  .i_membus_data_rd_mask  (mmc_dispbuff_bus_data_rd_mask) ,
-  .i_membus_data_wr_mask  (mmc_dispbuff_bus_data_wr_mask),
-
-  .o_membus_ack           (dispbuff_mmc_bus_ack),   
-  .o_membus_data          (dispbuff_mmc_bus_data)
+  .bus_data_i             (dispbuff_data_i),   
+  .bus_data_o             (dispbuff_data_o)
 );
 
 //Console Buffer
@@ -231,15 +154,8 @@ console_buffer console_buffer (
   .clk (clk),
   .rst (rst),
 
-  .i_membus_req           (mmc_consolebuff_bus_req),   
-  .i_membus_write         (mmc_consolebuff_bus_write), 
-  .i_membus_addr          (mmc_consolebuff_bus_addr),  
-  .i_membus_data          (mmc_consolebuff_bus_data),
-  .i_membus_data_rd_mask  (mmc_consolebuff_bus_data_rd_mask) ,
-  .i_membus_data_wr_mask  (mmc_consolebuff_bus_data_wr_mask),
-
-  .o_membus_ack           (consolebuff_mmc_bus_ack),   
-  .o_membus_data          (consolebuff_mmc_bus_data)
+  .bus_data_i             (consolebuff_data_i),   
+  .bus_data_o             (consolebuff_data_o)
 );
 
 //SD Card
@@ -251,30 +167,14 @@ sdcard sdcard (
   .SPIReq  (sdcard_SPIReq),
   .SPIAck  (sdcard_SPIAck),
   .SPIDone (sdcard_SPIDone),
-  .SCK   (sdcard_SCK),
-  .CS    (sdcard_CS),
-  .RS_DC (sdcard_RS_DC),
-  .MOSI  (sdcard_MOSI),
-  .MISO  (MISO),
+  .SCK     (sdcard_SCK),
+  .CS      (sdcard_CS),
+  .RS_DC   (sdcard_RS_DC),
+  .MOSI    (sdcard_MOSI),
+  .MISO    (MISO),
 
-  .bus_adr_i                 (sdcard_bus_adr_i),  
-  .bus_data_i                (sdcard_bus_data_i), 
-  .bus_we_i                  (sdcard_bus_we_i),   
-  .bus_sel_i                 (sdcard_bus_sel_i),  
-  .bus_stb_i                 (sdcard_bus_stb_i),  
-  .bus_cyc_i                 (sdcard_bus_cyc_i),  
-  .bus_tga_i                 (sdcard_bus_tga_i),  
-  .bus_tgd_i                 (sdcard_bus_tgd_i),  
-  .bus_tgc_i                 (sdcard_bus_tgc_i),  
-                                                          
-  .bus_ack_o                 (sdcard_bus_ack_o),    
-  .bus_stall_o               (sdcard_bus_stall_o),  
-  .bus_err_o                 (sdcard_bus_err_o),    
-  .bus_rty_o                 (sdcard_bus_rty_o),    
-  .bus_data_o                (sdcard_bus_data_o),   
-  .bus_tga_o                 (sdcard_bus_tga_o),    
-  .bus_tgd_o                 (sdcard_bus_tgd_o),    
-  .bus_tgc_o                 (sdcard_bus_tgc_o)    
+  .bus_data_i (sdcard_data_i),  
+  .bus_data_o (sdcard_data_o)    
 );
 
 spi_arb spi_arb (

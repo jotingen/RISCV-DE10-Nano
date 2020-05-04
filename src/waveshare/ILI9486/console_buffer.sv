@@ -1,16 +1,12 @@
+import wishbone_pkg::*;
+
 module console_buffer (
   input  logic           clk,
   input  logic           rst,
 
-  input  logic           i_membus_req,
-  input  logic           i_membus_write,
-  input  logic [31:0]    i_membus_addr,
-  input  logic [31:0]    i_membus_data,
-  input  logic  [3:0]    i_membus_data_rd_mask,
-  input  logic  [3:0]    i_membus_data_wr_mask,
-
-  output logic           o_membus_ack,
-  output logic [31:0]    o_membus_data
+  //////////// BUS //////////
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 logic [7:0] mem_array_3 [2399:0];
@@ -61,32 +57,32 @@ always_comb
 
 always_ff @(posedge clk)
   begin
-  o_membus_ack   <= '0;   
-  o_membus_data  <= '0;   
+  bus_data_o.Ack   <= '0;   
+  bus_data_o.Data  <= '0;   
 
-  if(i_membus_req)
+  if(bus_data_i.Cyc & bus_data_i.Stb)
     begin
-    o_membus_ack <= '1;
-    if (i_membus_write & i_membus_data_wr_mask[0])
+    bus_data_o.Ack <= '1;
+    if (bus_data_i.We & bus_data_i.Sel[0])
       begin
-      mem_array_0[i_membus_addr[31:2]] <= i_membus_data[7:0];
+      mem_array_0[bus_data_i.Adr[31:2]] <= bus_data_i.Data[7:0];
       end
-    if (i_membus_write & i_membus_data_wr_mask[1])
+    if (bus_data_i.We & bus_data_i.Sel[1])
       begin
-      mem_array_1[i_membus_addr[31:2]] <= i_membus_data[15:8];
+      mem_array_1[bus_data_i.Adr[31:2]] <= bus_data_i.Data[15:8];
       end
-    if (i_membus_write & i_membus_data_wr_mask[2])
+    if (bus_data_i.We & bus_data_i.Sel[2])
       begin
-      mem_array_2[i_membus_addr[31:2]] <= i_membus_data[23:16];
+      mem_array_2[bus_data_i.Adr[31:2]] <= bus_data_i.Data[23:16];
       end
-    if (i_membus_write & i_membus_data_wr_mask[3])
+    if (bus_data_i.We & bus_data_i.Sel[3])
       begin
-      mem_array_3[i_membus_addr[31:2]] <= i_membus_data[31:24];
+      mem_array_3[bus_data_i.Adr[31:2]] <= bus_data_i.Data[31:24];
       end
-    o_membus_data[7:0]   <= mem_array_0[i_membus_addr[31:2]];
-    o_membus_data[15:8]  <= mem_array_1[i_membus_addr[31:2]];
-    o_membus_data[23:16] <= mem_array_2[i_membus_addr[31:2]];
-    o_membus_data[31:24] <= mem_array_3[i_membus_addr[31:2]];
+    bus_data_o.Data[7:0]   <= mem_array_0[bus_data_i.Adr[31:2]];
+    bus_data_o.Data[15:8]  <= mem_array_1[bus_data_i.Adr[31:2]];
+    bus_data_o.Data[23:16] <= mem_array_2[bus_data_i.Adr[31:2]];
+    bus_data_o.Data[31:24] <= mem_array_3[bus_data_i.Adr[31:2]];
     end
   end
 

@@ -8,7 +8,7 @@ module ddr3_model (
   input  logic [127:0] ddr3_avl_wdata,       
   input  logic         ddr3_avl_read_req,    
   input  logic         ddr3_avl_write_req,   
-  input  logic [0:0]   ddr3_avl_size        
+  input  logic [8:0]   ddr3_avl_size        
 );
 
 logic [127:0] ddr3 [2**25-1:0];

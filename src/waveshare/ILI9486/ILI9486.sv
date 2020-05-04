@@ -1,3 +1,5 @@
+import wishbone_pkg::*;
+
 module ILI9486 (
   input  logic clk,
   input  logic rst,
@@ -12,15 +14,8 @@ module ILI9486 (
   output logic CS,
   
   //////////// BUS //////////
-  input  logic           i_bus_req,
-  input  logic           i_bus_write,
-  input  logic [31:0]    i_bus_addr,
-  input  logic [31:0]    i_bus_data,
-  input  logic  [3:0]    i_bus_data_rd_mask,
-  input  logic  [3:0]    i_bus_data_wr_mask,
-  
-  output logic           o_bus_ack,
-  output logic [31:0]    o_bus_data
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 logic arst_1;
@@ -47,24 +42,24 @@ always_ff @(posedge clk)
   cmd  <= cmd;
   data <= data;
 
-  o_bus_ack   <= '0;    
-  o_bus_data  <= i_bus_data;   
+  bus_data_o.Ack   <= '0;    
+  bus_data_o.Data  <= bus_data_i.Data;   
 
   pending_cmd  <= '0;
   pending_data <= '0;
 
-  if(i_bus_req)
+  if(bus_data_i.Cyc & bus_data_i.Stb)
     begin
-    if(i_bus_write)
+    if(bus_data_i.We)
       begin
-      case (i_bus_addr[31:2])
+      case (bus_data_i.Adr[31:2])
         'h0: begin
-                 o_bus_ack <= '1;
-                 o_bus_data    <= '0;
+                 bus_data_o.Ack <= '1;
+                 bus_data_o.Data    <= '0;
                  end
         'h1: begin 
                  cmd           <= '1;
-                 data          <= i_bus_data;
+                 data          <= bus_data_i.Data;
                  if(fifo_full)
                    begin
                    pending_cmd  <= '1;
@@ -72,13 +67,13 @@ always_ff @(posedge clk)
                  else
                    begin
                    req           <= '1;
-                   o_bus_ack     <= '1;
-                   o_bus_data    <= '0;
+                   bus_data_o.Ack     <= '1;
+                   bus_data_o.Data    <= '0;
                    end
                  end
         'h2: begin 
                  cmd           <= '0;
-                 data          <= i_bus_data;
+                 data          <= bus_data_i.Data;
                  if(fifo_full)
                    begin
                    pending_data <= '1;
@@ -86,13 +81,13 @@ always_ff @(posedge clk)
                  else
                    begin
                    req           <= '1;
-                   o_bus_ack     <= '1;
-                   o_bus_data    <= '0;
+                   bus_data_o.Ack     <= '1;
+                   bus_data_o.Data    <= '0;
                    end
                  end
         default: begin
-                 o_bus_ack <= '1;
-                 o_bus_data    <= '0;
+                 bus_data_o.Ack <= '1;
+                 bus_data_o.Data    <= '0;
                  end
       endcase
       end
@@ -107,8 +102,8 @@ always_ff @(posedge clk)
     else
       begin
       req           <= '1;
-      o_bus_ack     <= '1;
-      o_bus_data    <= '0;
+      bus_data_o.Ack     <= '1;
+      bus_data_o.Data    <= '0;
       end
     end
 
@@ -121,8 +116,8 @@ always_ff @(posedge clk)
     else
       begin
       req           <= '1;
-      o_bus_ack     <= '1;
-      o_bus_data    <= '0;
+      bus_data_o.Ack     <= '1;
+      bus_data_o.Data    <= '0;
       end
     end
   end

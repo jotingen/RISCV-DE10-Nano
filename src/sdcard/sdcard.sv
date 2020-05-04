@@ -1,38 +1,24 @@
+import wishbone_pkg::*;
+
 module sdcard  (
-input  logic clk,
-input  logic rst,
-input  logic arst,
-
-//////////// SPI //////////
-output logic SPIReq,
-input  logic SPIAck,
-output logic SPIDone,
-
-output logic SCK,
-output logic RS_DC,
-output logic MOSI,
-output logic CS,
-input  logic MISO,
-
-//////////// BUS //////////
-  input  logic [31:0]    bus_adr_i,
-  input  logic [31:0]    bus_data_i,
-  input  logic           bus_we_i,
-  input  logic  [3:0]    bus_sel_i,
-  input  logic           bus_stb_i,
-  input  logic           bus_cyc_i,
-  input  logic           bus_tga_i,
-  input  logic           bus_tgd_i,
-  input  logic  [3:0]    bus_tgc_i,
-
-  output logic           bus_ack_o,
-  output logic           bus_stall_o,
-  output logic           bus_err_o,
-  output logic           bus_rty_o,
-  output logic [31:0]    bus_data_o,
-  output logic           bus_tga_o,
-  output logic           bus_tgd_o,
-  output logic  [3:0]    bus_tgc_o
+  input  logic clk,
+  input  logic rst,
+  input  logic arst,
+  
+  //////////// SPI //////////
+  output logic SPIReq,
+  input  logic SPIAck,
+  output logic SPIDone,
+  
+  output logic SCK,
+  output logic RS_DC,
+  output logic MOSI,
+  output logic CS,
+  input  logic MISO,
+  
+  //////////// BUS //////////
+  input  wishbone_pkg::bus_req_t bus_data_i,
+  output wishbone_pkg::bus_rsp_t bus_data_o
 );
 
 parameter SDCARD_PERIOD = 6;//Trying faster  125;
@@ -84,8 +70,10 @@ sdcard_data_in_fifo data_in_fifo (
   .data    (MISO),
   .rdclk   (clk),
   .rdreq   (data_in_fifo_rdack),
+  .rdusedw (),
   .wrclk   (clk),
   .wrreq   (data_in_fifo_wrreq),
+  .wrusedw (),
   .q       (data_in_fifo_data_out_rev),
   .rdempty (data_in_fifo_empty)
 );
@@ -135,30 +123,30 @@ always_ff @(posedge clk)
   data_in_fifo_wrreq   <= '0;
   data_in_fifo_rdack   <= '0;
 
-  bus_ack_o   <= '0;   
-  bus_stall_o <= '0; //bus_stall_o; 
-  bus_err_o   <= '0; //bus_err_o;   
-  bus_rty_o   <= '0; //bus_rty_o;   
-  bus_data_o  <= '0; //bus_data_o;  
-  bus_tga_o   <= '0; //bus_tga_o;   
-  bus_tgd_o   <= '0; //bus_tgd_o;   
-  bus_tgc_o   <= '0; //bus_tgc_o;   
+  bus_data_o.Ack   <= '0;   
+  bus_data_o.Stall <= '0; //bus_data_o.Stall; 
+  bus_data_o.Err   <= '0; //bus_data_o.Err;   
+  bus_data_o.Rty   <= '0; //bus_data_o.Rty;   
+  bus_data_o.Data  <= '0; //bus_data_o.Data;  
+  bus_data_o.Tga   <= '0; //bus_data_o.Tga;   
+  bus_data_o.Tgd   <= '0; //bus_data_o.Tgd;   
+  bus_data_o.Tgc   <= '0; //bus_data_o.Tgc;   
 
   unique
   case (1'b1)
   state_idle : begin
-               if(bus_stb_i & bus_cyc_i)
+               if(bus_data_i.Stb & bus_data_i.Cyc)
                  begin
                  unique
-                 case (bus_adr_i[31:2])
+                 case (bus_data_i.Adr[31:2])
                    //NoOp
                    'h0000:  begin
-                            bus_ack_o             <= '1;
+                            bus_data_o.Ack             <= '1;
                             state_idle            <= '1;
                             end
                    //Cmd Send
                    'h0001:  begin 
-                            if(bus_we_i)
+                            if(bus_data_i.We)
                               begin
                               rspArrived            <= '0;
                               rsp                   <= '0;
@@ -168,64 +156,64 @@ always_ff @(posedge clk)
                             end
                    //Cmd Lo
                    'h0002:  begin 
-                           if(bus_we_i)
+                           if(bus_data_i.We)
                              begin
-                             cmd[31:24]            <= bus_sel_i ? bus_data_i[31:24] : cmd[31:24];
-                             cmd[23:16]            <= bus_sel_i ? bus_data_i[23:16] : cmd[23:16];
-                             cmd[15:8]             <= bus_sel_i ? bus_data_i[15:8]  : cmd[15:8] ;
-                             cmd[7:0]              <= bus_sel_i ? bus_data_i[7:0]   : cmd[7:0]  ;
+                             cmd[31:24]            <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[31:24];
+                             cmd[23:16]            <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[23:16];
+                             cmd[15:8]             <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[15:8] ;
+                             cmd[7:0]              <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[7:0]  ;
                              end
-                            bus_ack_o             <= '1;
-                            bus_data_o[31:24]     <= bus_sel_i ? cmd[31:24] : '0;
-                            bus_data_o[23:16]     <= bus_sel_i ? cmd[23:16] : '0;
-                            bus_data_o[15:8]      <= bus_sel_i ? cmd[15:8]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? cmd[7:0]   : '0;
+                            bus_data_o.Ack             <= '1;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[31:24] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[23:16] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[15:8]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Cmd Hi
                    'h0003:  begin 
-                            if(bus_we_i)
+                            if(bus_data_i.We)
                               begin
-                              cmd[63:56]            <= bus_sel_i ? bus_data_i[31:24] : cmd[63:56] ;
-                              cmd[55:48]            <= bus_sel_i ? bus_data_i[23:16] : cmd[55:48] ;
-                              cmd[47:40]            <= bus_sel_i ? bus_data_i[15:8]  : cmd[47:40] ;
-                              cmd[39:32]            <= bus_sel_i ? bus_data_i[7:0]   : cmd[39:32] ;
+                              cmd[63:56]            <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[63:56] ;
+                              cmd[55:48]            <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[55:48] ;
+                              cmd[47:40]            <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[47:40] ;
+                              cmd[39:32]            <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[39:32] ;
                               end
-                            bus_ack_o             <= '1;
-                            bus_data_o[31:24]     <= bus_sel_i ? cmd[63:56]  : '0;
-                            bus_data_o[23:16]     <= bus_sel_i ? cmd[55:48]  : '0;
-                            bus_data_o[15:8]      <= bus_sel_i ? cmd[47:40]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? cmd[39:32]  : '0;
+                            bus_data_o.Ack             <= '1;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[63:56]  : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[55:48]  : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[47:40]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[39:32]  : '0;
                             state_idle            <= '1;
                             end
                    //Rsp  Arrived
                    'h0004:  begin 
-                            bus_ack_o             <= '1;
-                            bus_data_o[31:24]     <= bus_sel_i ? rspArrived[31:24] : '0;
-                            bus_data_o[23:16]     <= bus_sel_i ? rspArrived[23:16] : '0;
-                            bus_data_o[15:8]      <= bus_sel_i ? rspArrived[15:8]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? rspArrived[7:0]   : '0;
+                            bus_data_o.Ack             <= '1;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rspArrived[31:24] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rspArrived[23:16] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rspArrived[15:8]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rspArrived[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Rsp Lo
                    'h0005:  begin 
-                            bus_ack_o             <= '1;
-                            bus_data_o[31:24]     <= bus_sel_i ? rsp[31:24] : '0;
-                            bus_data_o[23:16]     <= bus_sel_i ? rsp[23:16] : '0;
-                            bus_data_o[15:8]      <= bus_sel_i ? rsp[15:8]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? rsp[7:0]   : '0;
+                            bus_data_o.Ack             <= '1;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rsp[31:24] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rsp[23:16] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rsp[15:8]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rsp[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Rsp Hi
                    'h0006:  begin 
-                            bus_ack_o             <= '1;
-                            bus_data_o[15:8]      <= bus_sel_i ? rsp[47:40]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? rsp[39:32]  : '0;
+                            bus_data_o.Ack             <= '1;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rsp[47:40]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rsp[39:32]  : '0;
                             state_idle            <= '1;
                             end
                    //Data
                    'h0007:  begin 
-                            bus_ack_o             <= '1;
+                            bus_data_o.Ack             <= '1;
                             data_in_fifo_rdack    <= '1;
                             if(data_32b_out < 'd129) 
                               begin
@@ -233,16 +221,16 @@ always_ff @(posedge clk)
                                 begin            ;
                                 if(data_32b_out == 'd128)
                                   begin
-                                  bus_data_o[i+24]     <= '0;
-                                  bus_data_o[i+16]     <= '0;
+                                  bus_data_o.Data[i+24]     <= '0;
+                                  bus_data_o.Data[i+16]     <= '0;
                                   end
                                 else
                                   begin
-                                  bus_data_o[i+24]     <= bus_sel_i ? data_in_fifo_data_out_rev[31-i] : '0; //Reverse bytes to compensate for stream
-                                  bus_data_o[i+16]     <= bus_sel_i ? data_in_fifo_data_out_rev[23-i] : '0; //Reverse bytes to compensate for stream
+                                  bus_data_o.Data[i+24]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[31-i] : '0; //Reverse bytes to compensate for stream
+                                  bus_data_o.Data[i+16]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[23-i] : '0; //Reverse bytes to compensate for stream
                                   end
-                                bus_data_o[i+8]      <= bus_sel_i ? data_in_fifo_data_out_rev[15-i] : '0; //Reverse bytes to compensate for stream
-                                bus_data_o[i+0]      <= bus_sel_i ? data_in_fifo_data_out_rev[7-i]  : '0; //Reverse bytes to compensate for stream
+                                bus_data_o.Data[i+8]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[15-i] : '0; //Reverse bytes to compensate for stream
+                                bus_data_o.Data[i+0]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[7-i]  : '0; //Reverse bytes to compensate for stream
                                 end
                               //data <= {data[31:0],data[512*8+16-1:32]};
                               data_32b_out <= data_32b_out+1;
@@ -250,11 +238,11 @@ always_ff @(posedge clk)
                             state_idle <= '1;
                             end
                    default: begin
-                            bus_ack_o      <= '1;
-                            bus_data_o[31:24]     <= bus_sel_i ? bus_data_i[31:24] : '0;
-                            bus_data_o[23:16]     <= bus_sel_i ? bus_data_i[23:16] : '0;
-                            bus_data_o[15:8]      <= bus_sel_i ? bus_data_i[15:8]  : '0;
-                            bus_data_o[7:0]       <= bus_sel_i ? bus_data_i[7:0]   : '0;
+                            bus_data_o.Ack      <= '1;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? bus_data_i.Data[31:24] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? bus_data_i.Data[23:16] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : '0;
                             state_idle <= '1;
                             end
                  endcase
@@ -335,7 +323,7 @@ always_ff @(posedge clk)
                             SPIDone    <= '1;
                             rspArrived <= '1;  
                             state_idle <= '1;
-                            bus_ack_o  <= '1;
+                            bus_data_o.Ack  <= '1;
                             end
                           end
                         else
@@ -357,7 +345,7 @@ always_ff @(posedge clk)
                            begin
                              SPIDone     <= '1;
                              state_idle <= '1;
-                             bus_ack_o  <= '1;
+                             bus_data_o.Ack  <= '1;
                            end
                          else if({MISO,data[16-1:16-1-6]} == 'h7F)
                            begin
@@ -387,7 +375,7 @@ always_ff @(posedge clk)
                             SPIDone     <= '1;
                             dataArrived <= '1;  
                             state_idle  <= '1;
-                            bus_ack_o   <= '1;
+                            bus_data_o.Ack   <= '1;
                             end
                           else
                             begin
