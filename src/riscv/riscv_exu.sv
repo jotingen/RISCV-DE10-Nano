@@ -1197,9 +1197,9 @@ always_comb
 
   rvfi_valid = '0;
 
-  if(alu_vld)
+  if(alu_vld)// & alu_retired)
     begin
-    rvfi_valid[index]              = alu_vld;
+    rvfi_valid[index]              = alu_vld; // & alu_retired;
     rvfi_order[index]              = alu_order;
     rvfi_insn[index]               = alu_inst;
     rvfi_trap[index]               = alu_trap;
@@ -1231,7 +1231,7 @@ always_comb
     index++;
     end
 
-  if(alu_vld)
+  if(mpu_vld & mpu_retired)
     begin
     rvfi_valid[index]              = mpu_vld & mpu_retired;
     rvfi_order[index]              = mpu_order;
@@ -1265,7 +1265,7 @@ always_comb
     index++;
     end
 
-  if(alu_vld)
+  if(dvu_vld & dvu_retired)
     begin
     rvfi_valid[index]              = dvu_vld & dvu_retired;
     rvfi_order[index]              = dvu_order;
@@ -1299,7 +1299,7 @@ always_comb
     index++;
     end
 
-  if(alu_vld)
+  if(lsu_vld & lsu_retired)
     begin
     rvfi_valid[index]              = lsu_vld & lsu_retired;// & ~exu_FENCE;
     rvfi_order[index]              = lsu_order;
@@ -1317,11 +1317,11 @@ always_comb
     rvfi_rd_wdata[index]           = lsu_rd_data;
     rvfi_pc_rdata[index]           = lsu_PC;
     rvfi_pc_wdata[index]           = lsu_PC_next;
-    rvfi_mem_addr[index]           = bus_addr;
-    rvfi_mem_rmask[index]          = {4{lsu_vld}} & bus_data_rd_mask;
-    rvfi_mem_wmask[index]          = {4{lsu_vld}} & bus_data_wr_mask;
+    rvfi_mem_addr[index]           = bus_data_o.Adr;
+    rvfi_mem_rmask[index]          = {4{lsu_vld}} & bus_data_o.Sel;
+    rvfi_mem_wmask[index]          = {4{lsu_vld}} & bus_data_o.Sel;
     rvfi_mem_rdata[index]          = {32{lsu_vld}} & lsu_mem_rdata;
-    rvfi_mem_wdata[index]          = {32{lsu_vld}} & bus_data_wr;
+    rvfi_mem_wdata[index]          = {32{lsu_vld}} & bus_data_o.Data;
     rvfi_csr_mcycle_rmask[index]   = '0;
     rvfi_csr_mcycle_wmask[index]   = '0;
     rvfi_csr_mcycle_rdata[index]   = '0;
@@ -1333,7 +1333,7 @@ always_comb
     index++;
     end
 
-  if(alu_vld)
+  if(csu_vld & csu_retired)
     begin
     rvfi_valid[index]              = csu_vld & csu_retired;// & ~csu_FENCE;
     rvfi_order[index]              = csu_order;
@@ -1367,9 +1367,9 @@ always_comb
     index++;
     end
 
-  if(alu_vld)
+  if(bru_vld) // & bru_retired)
     begin
-    rvfi_valid[index]              = bru_vld;
+    rvfi_valid[index]              = bru_vld; // & bru_retired;
     rvfi_order[index]              = bru_order;
     rvfi_insn[index]               = bru_inst;
     rvfi_trap[index]               = bru_trap;

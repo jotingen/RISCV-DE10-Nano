@@ -60,12 +60,16 @@
 `include "../../src/waveshare/ILI9486/console_buffer.sv"
 `include "../../src/waveshare/ILI9486/fifo.v"
 `include "../../src/waveshare/waveshare_tft_touch_shield.sv"
+`include "../../src/waveshare/waveshare_tft_touch_shield.sv"
 
 `include "../../verif/spi_sd_model/spi_sd_model.v"
 `include "../../verif/ddr3/ddr3_model.sv"
 
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/altera_mf.v"
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/220model.v"
+
+`include "rvfi_monitor.sv"
+`include "led_monitor.sv"
 
 //`include "ddr3_mem.sv"
 //`include "ddr3_wishbone_driver.sv"
@@ -77,6 +81,8 @@ module sim_unit_test;
   string name = "sim";
   svunit_testcase svunit_ut;
 
+  rvfi_monitor rvfi_mon;
+  led_monitor  led_mon;
 
   wire rst_n;
   `CLK_RESET_FIXTURE(20,10)
@@ -232,6 +238,38 @@ module sim_unit_test;
   logic           ddr3_avl_write_req;   
   logic [8:0]     ddr3_avl_size;        
 
+  logic [5:0]       rvfi_valid;
+  logic [5:0][63:0] rvfi_order;
+  logic [5:0][31:0] rvfi_insn;
+  logic [5:0]       rvfi_trap;
+  logic [5:0]       rvfi_halt;
+  logic [5:0]       rvfi_intr;
+  logic [5:0][ 1:0] rvfi_mode;
+  logic [5:0][ 1:0] rvfi_ixl;
+  logic [5:0][ 4:0] rvfi_rs1_addr;
+  logic [5:0][ 4:0] rvfi_rs2_addr;
+  logic [5:0][31:0] rvfi_rs1_rdata;
+  logic [5:0][31:0] rvfi_rs2_rdata;
+  logic [5:0][ 4:0] rvfi_rd_addr;
+  logic [5:0][31:0] rvfi_rd_wdata;
+  logic [5:0][31:0] rvfi_pc_rdata;
+  logic [5:0][31:0] rvfi_pc_wdata;
+  logic [5:0][31:0] rvfi_mem_addr;
+  logic [5:0][ 3:0] rvfi_mem_rmask;
+  logic [5:0][ 3:0] rvfi_mem_wmask;
+  logic [5:0][31:0] rvfi_mem_rdata;
+  logic [5:0][31:0] rvfi_mem_wdata;
+       
+  logic [5:0][63:0] rvfi_csr_mcycle_rmask;
+  logic [5:0][63:0] rvfi_csr_mcycle_wmask;
+  logic [5:0][63:0] rvfi_csr_mcycle_rdata;
+  logic [5:0][63:0] rvfi_csr_mcycle_wdata;
+        
+  logic [5:0][63:0] rvfi_csr_minstret_rmask;
+  logic [5:0][63:0] rvfi_csr_minstret_wmask;
+  logic [5:0][63:0] rvfi_csr_minstret_rdata;
+  logic [5:0][63:0] rvfi_csr_minstret_wdata;
+
   //===================================
   // This is the UUT that we're 
   // running the Unit Tests on
@@ -383,7 +421,39 @@ module sim_unit_test;
     .ddr3_avl_wdata,       
     .ddr3_avl_read_req,    
     .ddr3_avl_write_req,   
-    .ddr3_avl_size
+    .ddr3_avl_size,
+
+    .rvfi_valid,
+    .rvfi_order,
+    .rvfi_insn,
+    .rvfi_trap,
+    .rvfi_halt,
+    .rvfi_intr,
+    .rvfi_mode,
+    .rvfi_ixl,
+    .rvfi_rs1_addr,
+    .rvfi_rs2_addr,
+    .rvfi_rs1_rdata,
+    .rvfi_rs2_rdata,
+    .rvfi_rd_addr,
+    .rvfi_rd_wdata,
+    .rvfi_pc_rdata,
+    .rvfi_pc_wdata,
+    .rvfi_mem_addr,
+    .rvfi_mem_rmask,
+    .rvfi_mem_wmask,
+    .rvfi_mem_rdata,
+    .rvfi_mem_wdata,
+                                       
+    .rvfi_csr_mcycle_rmask,
+    .rvfi_csr_mcycle_wmask,
+    .rvfi_csr_mcycle_rdata,
+    .rvfi_csr_mcycle_wdata,
+                                       
+    .rvfi_csr_minstret_rmask,
+    .rvfi_csr_minstret_wmask,
+    .rvfi_csr_minstret_rdata,
+    .rvfi_csr_minstret_wdata 
   );    
 
 ddr3_model ddr3 (
@@ -483,7 +553,8 @@ always
   function void build();
     svunit_ut = new(name);
 
-    //my_ddr3 = new(/* New arguments if needed */);
+    rvfi_mon = new();
+    led_mon  = new();
   endfunction
 
 
@@ -512,13 +583,44 @@ always
 
   endtask
 
-
-  //initial
-  //  begin
-  //  $dumpfile("sim.vcd");
-  //  //$dumpvars();
-  //  $dumpvars(100, de10nano);
-  //  end
+  initial
+  forever
+  begin
+    #9;
+    rvfi_mon.monitor(.rvfi_valid             (rvfi_valid),            
+                     .rvfi_order             (rvfi_order),            
+                     .rvfi_insn              (rvfi_insn),             
+                     .rvfi_trap              (rvfi_trap),             
+                     .rvfi_halt              (rvfi_halt),             
+                     .rvfi_intr              (rvfi_intr),             
+                     .rvfi_mode              (rvfi_mode),             
+                     .rvfi_ixl               (rvfi_ixl),              
+                     .rvfi_rs1_addr          (rvfi_rs1_addr),         
+                     .rvfi_rs2_addr          (rvfi_rs2_addr),         
+                     .rvfi_rs1_rdata         (rvfi_rs1_rdata),        
+                     .rvfi_rs2_rdata         (rvfi_rs2_rdata),        
+                     .rvfi_rd_addr           (rvfi_rd_addr),          
+                     .rvfi_rd_wdata          (rvfi_rd_wdata),         
+                     .rvfi_pc_rdata          (rvfi_pc_rdata),         
+                     .rvfi_pc_wdata          (rvfi_pc_wdata),         
+                     .rvfi_mem_addr          (rvfi_mem_addr),         
+                     .rvfi_mem_rmask         (rvfi_mem_rmask),        
+                     .rvfi_mem_wmask         (rvfi_mem_wmask),        
+                     .rvfi_mem_rdata         (rvfi_mem_rdata),        
+                     .rvfi_mem_wdata         (rvfi_mem_wdata),        
+                                                                               
+                     .rvfi_csr_mcycle_rmask  (rvfi_csr_mcycle_rmask), 
+                     .rvfi_csr_mcycle_wmask  (rvfi_csr_mcycle_wmask), 
+                     .rvfi_csr_mcycle_rdata  (rvfi_csr_mcycle_rdata), 
+                     .rvfi_csr_mcycle_wdata  (rvfi_csr_mcycle_wdata), 
+                                                                               
+                     .rvfi_csr_minstret_rmask(rvfi_csr_minstret_rmask),
+                     .rvfi_csr_minstret_wmask(rvfi_csr_minstret_wmask),
+                     .rvfi_csr_minstret_rdata(rvfi_csr_minstret_rdata),
+                     .rvfi_csr_minstret_wdata(rvfi_csr_minstret_wdata));
+    led_mon.monitor(.LED (LED));            
+    step();
+  end
 
   //===================================
   // All tests are defined between the
@@ -534,16 +636,33 @@ always
   //   `SVTEST_END
   //===================================
 
+  int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
-  `SVTEST(TEST)
-  $readmemh("../../output/programs/bootloader/bootloader_sdtest_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
-  //$readmemh("../../output/programs//benchmarks/primes.v", ddr3.ddr3);
+  `SVTEST(LED_123)
+  cycleCount = 0;
+  $readmemh("../../output/programs/regressions/led_123_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/regressions/led_123_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/regressions/led_123_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/regressions/led_123_0.v", de10nano.mem.mem_array_0);
   $readmemh("../../verif/sdcard.txt", sd.flash_mem);
-  step(100000);
+
+  while( cycleCount < 100000 &
+        !rvfi_mon.endLoop)
+  begin
+    step();
+  end
+
+  `FAIL_IF(cycleCount >= 1000000);
+  $display("End Loop Detected");
+
+  step(100);
+
+  `FAIL_IF(!(led_mon.q_LED[0] === 'd3 &
+             led_mon.q_LED[1] === 'd2 &
+             led_mon.q_LED[2] === 'd1))
+  $display("LED Pattern Detected");
+
   `SVTEST_END
 
 
