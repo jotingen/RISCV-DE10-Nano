@@ -44,6 +44,7 @@ module ddr3_cache (
 logic         bus_buff_almost_empty;
 logic         bus_buff_empty;
 
+logic  [4:0]  bus_unused_stgd;
 logic         bus_req_stgd;
 logic [31:0]  bus_adr_stgd;
 logic [31:0]  bus_data_stgd;
@@ -71,170 +72,11 @@ logic [4:0]         mem_buffer_lru;
 logic [4:0]         mem_buffer_lru_entry_next;
 logic [4:0]         mem_buffer_lru_entry;
 
-logic         mem_buffer_0_vld;
-logic [25:4]  mem_buffer_0_addr;
-logic         mem_buffer_0_dirty;
-logic [127:0] mem_buffer_0_data;
-
-logic         mem_buffer_1_vld;
-logic [25:4]  mem_buffer_1_addr;
-logic         mem_buffer_1_dirty;
-logic [127:0] mem_buffer_1_data;
-
-logic         mem_buffer_2_vld;
-logic [25:4]  mem_buffer_2_addr;
-logic         mem_buffer_2_dirty;
-logic [127:0] mem_buffer_2_data;
-
-logic         mem_buffer_3_vld;
-logic [25:4]  mem_buffer_3_addr;
-logic         mem_buffer_3_dirty;
-logic [127:0] mem_buffer_3_data;
-
-logic         mem_buffer_4_vld;
-logic [25:4]  mem_buffer_4_addr;
-logic         mem_buffer_4_dirty;
-logic [127:0] mem_buffer_4_data;
-
-logic         mem_buffer_5_vld;
-logic [25:4]  mem_buffer_5_addr;
-logic         mem_buffer_5_dirty;
-logic [127:0] mem_buffer_5_data;
-
-logic         mem_buffer_6_vld;
-logic [25:4]  mem_buffer_6_addr;
-logic         mem_buffer_6_dirty;
-logic [127:0] mem_buffer_6_data;
-
-logic         mem_buffer_7_vld;
-logic [25:4]  mem_buffer_7_addr;
-logic         mem_buffer_7_dirty;
-logic [127:0] mem_buffer_7_data;
-
-logic         mem_buffer_8_vld;
-logic [25:4]  mem_buffer_8_addr;
-logic         mem_buffer_8_dirty;
-logic [127:0] mem_buffer_8_data;
-
-logic         mem_buffer_9_vld;
-logic [25:4]  mem_buffer_9_addr;
-logic         mem_buffer_9_dirty;
-logic [127:0] mem_buffer_9_data;
-
-logic         mem_buffer_10_vld;
-logic [25:4]  mem_buffer_10_addr;
-logic         mem_buffer_10_dirty;
-logic [127:0] mem_buffer_10_data;
-
-logic         mem_buffer_11_vld;
-logic [25:4]  mem_buffer_11_addr;
-logic         mem_buffer_11_dirty;
-logic [127:0] mem_buffer_11_data;
-
-logic         mem_buffer_12_vld;
-logic [25:4]  mem_buffer_12_addr;
-logic         mem_buffer_12_dirty;
-logic [127:0] mem_buffer_12_data;
-
-logic         mem_buffer_13_vld;
-logic [25:4]  mem_buffer_13_addr;
-logic         mem_buffer_13_dirty;
-logic [127:0] mem_buffer_13_data;
-
-logic         mem_buffer_14_vld;
-logic [25:4]  mem_buffer_14_addr;
-logic         mem_buffer_14_dirty;
-logic [127:0] mem_buffer_14_data;
-
-logic         mem_buffer_15_vld;
-logic [25:4]  mem_buffer_15_addr;
-logic         mem_buffer_15_dirty;
-logic [127:0] mem_buffer_15_data;
-
-assign mem_buffer_0_vld       = mem_buffer_vld[0];      
-assign mem_buffer_0_addr      = mem_buffer_addr[0];     
-assign mem_buffer_0_dirty     = mem_buffer_dirty[0];       
-assign mem_buffer_0_data      = mem_buffer_data[0];       
-
-assign mem_buffer_1_vld       = mem_buffer_vld[1];     
-assign mem_buffer_1_addr      = mem_buffer_addr[1];    
-assign mem_buffer_1_dirty     = mem_buffer_dirty[1];       
-assign mem_buffer_1_data      = mem_buffer_data[1];      
-
-assign mem_buffer_2_vld       = mem_buffer_vld[2];     
-assign mem_buffer_2_addr      = mem_buffer_addr[2];    
-assign mem_buffer_2_dirty     = mem_buffer_dirty[2];       
-assign mem_buffer_2_data      = mem_buffer_data[2];      
-
-assign mem_buffer_3_vld       = mem_buffer_vld[3];     
-assign mem_buffer_3_addr      = mem_buffer_addr[3];    
-assign mem_buffer_3_dirty     = mem_buffer_dirty[3];       
-assign mem_buffer_3_data      = mem_buffer_data[3];      
-
-assign mem_buffer_4_vld       = mem_buffer_vld[4];     
-assign mem_buffer_4_addr      = mem_buffer_addr[4];    
-assign mem_buffer_4_dirty     = mem_buffer_dirty[4];       
-assign mem_buffer_4_data      = mem_buffer_data[4];      
-
-assign mem_buffer_5_vld       = mem_buffer_vld[5];     
-assign mem_buffer_5_addr      = mem_buffer_addr[5];    
-assign mem_buffer_5_dirty     = mem_buffer_dirty[5];       
-assign mem_buffer_5_data      = mem_buffer_data[5];      
-
-assign mem_buffer_6_vld       = mem_buffer_vld[6];     
-assign mem_buffer_6_addr      = mem_buffer_addr[6];    
-assign mem_buffer_6_dirty     = mem_buffer_dirty[6];       
-assign mem_buffer_6_data      = mem_buffer_data[6];      
-
-assign mem_buffer_7_vld       = mem_buffer_vld[7];     
-assign mem_buffer_7_addr      = mem_buffer_addr[7];    
-assign mem_buffer_7_dirty     = mem_buffer_dirty[7];       
-assign mem_buffer_7_data      = mem_buffer_data[7];      
-
-assign mem_buffer_8_vld       = mem_buffer_vld[8];     
-assign mem_buffer_8_addr      = mem_buffer_addr[8];    
-assign mem_buffer_8_dirty     = mem_buffer_dirty[8];       
-assign mem_buffer_8_data      = mem_buffer_data[8];      
-
-assign mem_buffer_9_vld       = mem_buffer_vld[9];     
-assign mem_buffer_9_addr      = mem_buffer_addr[9];    
-assign mem_buffer_9_dirty     = mem_buffer_dirty[9];       
-assign mem_buffer_9_data      = mem_buffer_data[9];      
-
-assign mem_buffer_10_vld      = mem_buffer_vld[10];     
-assign mem_buffer_10_addr     = mem_buffer_addr[10];    
-assign mem_buffer_10_dirty    = mem_buffer_dirty[10];       
-assign mem_buffer_10_data     = mem_buffer_data[10];      
-
-assign mem_buffer_11_vld      = mem_buffer_vld[11];     
-assign mem_buffer_11_addr     = mem_buffer_addr[11];    
-assign mem_buffer_11_dirty    = mem_buffer_dirty[11];       
-assign mem_buffer_11_data     = mem_buffer_data[11];      
-
-assign mem_buffer_12_vld      = mem_buffer_vld[12];     
-assign mem_buffer_12_addr     = mem_buffer_addr[12];    
-assign mem_buffer_12_dirty    = mem_buffer_dirty[12];       
-assign mem_buffer_12_data     = mem_buffer_data[12];      
-
-assign mem_buffer_13_vld      = mem_buffer_vld[13];     
-assign mem_buffer_13_addr     = mem_buffer_addr[13];    
-assign mem_buffer_13_dirty    = mem_buffer_dirty[13];       
-assign mem_buffer_13_data     = mem_buffer_data[13];      
-
-assign mem_buffer_14_vld      = mem_buffer_vld[14];     
-assign mem_buffer_14_addr     = mem_buffer_addr[14];    
-assign mem_buffer_14_dirty    = mem_buffer_dirty[14];       
-assign mem_buffer_14_data     = mem_buffer_data[14];      
-
-assign mem_buffer_15_vld      = mem_buffer_vld[15];     
-assign mem_buffer_15_addr     = mem_buffer_addr[15];    
-assign mem_buffer_15_dirty    = mem_buffer_dirty[15];       
-assign mem_buffer_15_data     = mem_buffer_data[15];      
-
 assign bus_req_stgd = ~bus_buff_empty; 
 wishbone_buff	bus_buff (
 	.clock        ( clk ),
-	.data         ( {bus_adr_i,
+	.data         ( {5'd0,
+                   bus_adr_i,
                    bus_data_i,
                    bus_we_i,
                    bus_sel_i,
@@ -248,7 +90,8 @@ wishbone_buff	bus_buff (
 	.almost_full  ( bus_stall_o ),
 	.empty        ( bus_buff_empty ),
 	.full         (  ),
-	.q            ( {bus_adr_stgd,
+	.q            ( {bus_unused_stgd,
+                   bus_adr_stgd,
                    bus_data_stgd,
                    bus_we_stgd,
                    bus_sel_stgd,

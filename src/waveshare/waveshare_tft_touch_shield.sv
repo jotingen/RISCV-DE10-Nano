@@ -145,8 +145,8 @@ ILI9486_buffer display_buffer (
   .clk (clk),
   .rst (rst),
 
-  .bus_data_i             (dispbuff_data_i),   
-  .bus_data_o             (dispbuff_data_o)
+  .bus_data_i             (displaybuff_data_i),   
+  .bus_data_o             (displaybuff_data_o)
 );
 
 //Console Buffer

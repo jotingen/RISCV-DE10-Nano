@@ -449,9 +449,11 @@ always_ff @(posedge ddr3_clk)
 
   end
 
+logic [35:0] ddr3_fifo_out_unused;
+
 ddr3_fifo ddr3_fifo_out (
   .aclr    ( rst ),
-  .data    ( {45'b0,
+  .data    ( {36'b0,
               ddr3_fifo_out_wrreq,
               ddr3_fifo_out_rdreq,
               ddr3_fifo_out_addr,
@@ -460,21 +462,25 @@ ddr3_fifo ddr3_fifo_out (
   .rdreq   ( ddr3_fifo_out_rdack ),
   .wrclk   ( clk ),
   .wrreq   ( (ddr3_fifo_out_wrreq | ddr3_fifo_out_rdreq) ),
-  .q       ( {ddr3_fifo_out_wrreq_q,
+  .q       ( {ddr3_fifo_out_unused,
+              ddr3_fifo_out_wrreq_q,
               ddr3_fifo_out_rdreq_q,
               ddr3_fifo_out_addr_q,
               ddr3_fifo_out_wdata_q} ),
   .rdempty ( ddr3_fifo_out_rdempty )
 );
 
+logic [1:0] ddr3_fifo_in_unused;
+
 ddr3_fifo ddr3_fifo_in (
   .aclr    ( rst ),
-  .data    ( {62'b0,ddr3_avl_rdata} ),
+  .data    ( {64'b0,ddr3_avl_rdata} ),
   .rdclk   ( clk ),
   .rdreq   ( ddr3_fifo_in_rdack ),
   .wrclk   ( ddr3_clk ),
   .wrreq   ( ddr3_fifo_in_wrreq ),
-  .q       ( ddr3_fifo_in_q ),
+  .q       ( {ddr3_fifo_in_unused,
+              ddr3_fifo_in_q} ),
   .rdempty ( ddr3_fifo_in_empty )
 );
 

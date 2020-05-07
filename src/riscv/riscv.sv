@@ -44,26 +44,7 @@ module riscv #(
   input  wishbone_pkg::bus_rsp_t bus_inst_i,
 
   output wishbone_pkg::bus_req_t bus_data_o,
-  input  wishbone_pkg::bus_rsp_t bus_data_i,
-
-  output logic [31:0]      bus_data_adr_o,
-  output logic [31:0]      bus_data_data_o,
-  output logic             bus_data_we_o,
-  output logic  [3:0]      bus_data_sel_o,
-  output logic             bus_data_stb_o,
-  output logic             bus_data_cyc_o,
-  output logic             bus_data_tga_o,
-  output logic             bus_data_tgd_o,
-  output logic  [3:0]      bus_data_tgc_o,
-
-  input  logic             bus_data_ack_i,
-  input  logic             bus_data_stall_i,
-  input  logic             bus_data_err_i,
-  input  logic             bus_data_rty_i,
-  input  logic [31:0]      bus_data_data_i,
-  input  logic             bus_data_tga_i,
-  input  logic             bus_data_tgd_i,
-  input  logic  [3:0]      bus_data_tgc_i
+  input  wishbone_pkg::bus_rsp_t bus_data_i
 );
 
 logic              csr_req;
@@ -165,17 +146,26 @@ logic [31:0]      idu_inst_br_pred_PC_next;
 logic             dpu_vld;
 logic             dpu_freeze;
 
-logic             exu_vld;
-logic [63:0]      exu_order_next;
-logic             exu_retired;
-logic             exu_freeze;
-logic             exu_br;
-logic             exu_br_taken;
-logic [31:0]      exu_br_pred_PC_next;
-logic             exu_br_miss;
-logic [31:0]      exu_PC;
-logic [31:0]      exu_PC_next;
-logic             exu_trap;
+logic        exu_vld;
+logic [31:0] exu_inst;
+logic [63:0] exu_order;
+logic [63:0] exu_order_next;
+logic        exu_retired;
+logic        exu_freeze;
+logic        exu_br;
+logic        exu_br_taken;
+logic        exu_br_miss;
+logic        exu_trap;
+logic [31:0] exu_PC;
+logic [31:0] exu_PC_next;
+logic  [4:0] exu_rs1;
+logic  [4:0] exu_rs2;
+logic [31:0] exu_rs1_data;
+logic [31:0] exu_rs2_data;
+logic        exu_rd_wr;
+logic  [4:0] exu_rd;
+logic [31:0] exu_rd_data;
+logic [31:0] exu_mem_rdata;
 
 logic [31:0]      inst;
 logic  [3:0]      idu_decode_fm;
@@ -523,16 +513,26 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .dpu_vld        (dpu_vld),
   .dpu_freeze     (dpu_freeze),
 
-  .exu_vld          (exu_vld),
+  .exu_vld           (exu_vld       ),
+  .exu_inst          (exu_inst      ),
+  .exu_order         (exu_order     ),
   .exu_order_next    (exu_order_next),
-  .exu_retired    (exu_retired),
-  .exu_freeze     (exu_freeze),
-  .exu_br         (exu_br),
-  .exu_br_taken   (exu_br_taken),
-  .exu_br_miss      (exu_br_miss),
-  .exu_trap       (exu_trap),
-  .exu_PC         (exu_PC),
-  .exu_PC_next    (exu_PC_next),
+  .exu_retired       (exu_retired   ),
+  .exu_freeze        (exu_freeze    ),
+  .exu_br            (exu_br        ),
+  .exu_br_taken      (exu_br_taken  ),
+  .exu_br_miss       (exu_br_miss   ),
+  .exu_trap          (exu_trap      ),
+  .exu_PC            (exu_PC        ),
+  .exu_PC_next       (exu_PC_next   ),
+  .exu_rs1           (exu_rs1       ),
+  .exu_rs2           (exu_rs2       ),
+  .exu_rs1_data      (exu_rs1_data  ),
+  .exu_rs2_data      (exu_rs2_data  ),
+  .exu_rd_wr         (exu_rd_wr     ),
+  .exu_rd            (exu_rd        ),
+  .exu_rd_data       (exu_rd_data   ),
+  .exu_mem_rdata     (exu_mem_rdata ),
                                
   .idu_vld          (idu_vld),
   .idu_inst             (idu_inst    ),

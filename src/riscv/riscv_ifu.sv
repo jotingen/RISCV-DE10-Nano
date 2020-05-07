@@ -92,6 +92,8 @@ ifu_buff ifu_buff_order_1 (
   .wrreq ( ifu_buff_addr_wrreq ),
   .empty (  ),
   .almost_full  (  ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_order_out[63:32] ),
   .usedw (  )
   );
@@ -103,6 +105,8 @@ ifu_buff ifu_buff_order_0 (
   .wrreq ( ifu_buff_addr_wrreq ),
   .empty (  ),
   .almost_full  (  ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_order_out[31:0] ),
   .usedw (  )
   );
@@ -114,6 +118,8 @@ ifu_buff ifu_buff_addr (
   .wrreq ( ifu_buff_addr_wrreq ),
   .empty ( ifu_buff_addr_empty ),
   .almost_full  ( ifu_buff_addr_full ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_addr_out ),
   .usedw ( ifu_buff_addr_used )
   );
@@ -125,6 +131,8 @@ ifu_buff ifu_buff_br_taken (
   .wrreq ( ifu_buff_addr_wrreq ),
   .empty (  ),
   .almost_full  (  ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_br_taken_out ),
   .usedw (  )
   );
@@ -136,6 +144,8 @@ ifu_buff ifu_buff_br_pred_PC_next (
   .wrreq ( ifu_buff_addr_wrreq ),
   .empty (  ),
   .almost_full  (  ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_br_pred_PC_next_out ),
   .usedw (  )
   );
@@ -147,6 +157,8 @@ ifu_buff ifu_buff_data (
   .wrreq ( ifu_buff_data_wrreq ),
   .empty ( ifu_buff_data_empty ),
   .almost_full  ( ifu_buff_data_full ),
+  .almost_empty (  ),
+  .full  (  ),
   .q     ( ifu_buff_data_out ),
   .usedw ( ifu_buff_data_used )
   );

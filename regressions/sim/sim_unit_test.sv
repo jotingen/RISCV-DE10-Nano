@@ -453,7 +453,10 @@ module sim_unit_test;
     .rvfi_csr_minstret_rmask,
     .rvfi_csr_minstret_wmask,
     .rvfi_csr_minstret_rdata,
-    .rvfi_csr_minstret_wdata 
+    .rvfi_csr_minstret_wdata,
+
+    .clk (  ),
+    .rst (  ) 
   );    
 
 ddr3_model ddr3 (
@@ -658,9 +661,7 @@ always
 
   step(100);
 
-  `FAIL_IF(!(led_mon.q_LED[0] === 'd3 &
-             led_mon.q_LED[1] === 'd2 &
-             led_mon.q_LED[2] === 'd1))
+  `FAIL_IF(!(led_mon.q_LED[0] === 'd3 & led_mon.q_LED[1] === 'd2 & led_mon.q_LED[2] === 'd1))
   $display("LED Pattern Detected");
 
   `SVTEST_END
