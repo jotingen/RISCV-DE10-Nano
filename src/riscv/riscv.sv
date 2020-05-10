@@ -40,12 +40,24 @@ module riscv #(
   output reg   [5:0][63:0] rvfi_csr_minstret_wdata,
 `endif
 
-  output wishbone_pkg::bus_req_t bus_inst_o,
-  input  wishbone_pkg::bus_rsp_t bus_inst_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_inst_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_inst_flat_i,
 
-  output wishbone_pkg::bus_req_t bus_data_o,
-  input  wishbone_pkg::bus_rsp_t bus_data_i
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_data_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_data_flat_i
 );
+
+wishbone_pkg::bus_req_t bus_inst_o;
+wishbone_pkg::bus_rsp_t bus_inst_i;
+wishbone_pkg::bus_req_t bus_data_o;
+wishbone_pkg::bus_rsp_t bus_data_i;
+always_comb
+begin
+  bus_inst_flat_o = bus_inst_o;
+  bus_inst_i      = bus_inst_flat_i;
+  bus_data_flat_o = bus_data_o;
+  bus_data_i      = bus_data_flat_i;
+end
 
 logic              csr_req;
 logic              csr_ack;
@@ -371,8 +383,8 @@ riscv_ifu ifu (
   .ifu_inst_br_taken    (ifu_inst_br_taken),
   .ifu_inst_br_pred_PC_next    (ifu_inst_br_pred_PC_next),
 
-  .bus_inst_o   (bus_inst_o), 
-  .bus_inst_i   (bus_inst_i) 
+  .bus_inst_flat_o   (bus_inst_o), 
+  .bus_inst_flat_i   (bus_inst_i) 
 );
 
 riscv_idu #(.M_EXT(M_EXT)) idu (
@@ -685,8 +697,8 @@ riscv_exu #(.M_EXT(M_EXT)) exu (
   .csr_data_wr      (csr_data_wr),
   .csr_data_rd      (csr_data_rd),
 
-  .bus_data_o           (bus_data_o),
-  .bus_data_i           (bus_data_i)
+  .bus_data_flat_o           (bus_data_o),
+  .bus_data_flat_i           (bus_data_i)
 );
 
 endmodule

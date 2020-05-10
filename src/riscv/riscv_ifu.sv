@@ -26,10 +26,17 @@ module riscv_ifu (
   output logic             ifu_inst_br_taken,
   output logic [31:0]      ifu_inst_br_pred_PC_next,
 
-  output wishbone_pkg::bus_req_t bus_inst_o,
-  input  wishbone_pkg::bus_rsp_t bus_inst_i
-
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_inst_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_inst_flat_i
 );
+
+wishbone_pkg::bus_req_t bus_inst_o;
+wishbone_pkg::bus_rsp_t bus_inst_i;
+always_comb
+begin
+  bus_inst_flat_o = bus_inst_o;
+  bus_inst_i      = bus_inst_flat_i;
+end
 
 //Invalid state  TODO halt?
 logic illegal;

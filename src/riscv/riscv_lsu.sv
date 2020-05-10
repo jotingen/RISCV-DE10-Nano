@@ -52,10 +52,19 @@ module riscv_lsu(
   input  logic dpu_SH,
   input  logic dpu_SW,
 
-  output wishbone_pkg::bus_req_t bus_data_o,
-  input  wishbone_pkg::bus_rsp_t bus_data_i
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_data_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_data_flat_i
 
 );
+
+wishbone_pkg::bus_req_t bus_data_o;
+wishbone_pkg::bus_rsp_t bus_data_i;
+always_comb
+begin
+  bus_data_flat_o = bus_data_o;
+  bus_data_i      = bus_data_flat_i;
+end
+
 
 logic  [3:0] lsu_fm;
 logic  [3:0] lsu_pred;

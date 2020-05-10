@@ -6,20 +6,20 @@ module waveshare_tft_touch_shield (
   input  logic           rst,
   output logic           arst,
 
-  input  wishbone_pkg::bus_req_t touchpad_data_i,
-  output wishbone_pkg::bus_rsp_t touchpad_data_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] touchpad_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] touchpad_data_flat_o,
 
-  input  wishbone_pkg::bus_req_t display_data_i,
-  output wishbone_pkg::bus_rsp_t display_data_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] display_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] display_data_flat_o,
 
-  input  wishbone_pkg::bus_req_t consolebuff_data_i,
-  output wishbone_pkg::bus_rsp_t consolebuff_data_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] consolebuff_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] consolebuff_data_flat_o,
 
-  input  wishbone_pkg::bus_req_t displaybuff_data_i,
-  output wishbone_pkg::bus_rsp_t displaybuff_data_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] displaybuff_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] displaybuff_data_flat_o,
 
-  input  wishbone_pkg::bus_req_t sdcard_data_i,
-  output wishbone_pkg::bus_rsp_t sdcard_data_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] sdcard_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] sdcard_data_flat_o,
 
 //////////// ADC //////////
 output logic           ADC_CONVST,
@@ -67,6 +67,36 @@ inout  logic           ARDUINO_IO_15,
 inout  logic           ARDUINO_RESET_N
 
 );
+
+wishbone_pkg::bus_req_t touchpad_data_i;
+wishbone_pkg::bus_rsp_t touchpad_data_o;
+
+wishbone_pkg::bus_req_t display_data_i;
+wishbone_pkg::bus_rsp_t display_data_o;
+
+wishbone_pkg::bus_req_t consolebuff_data_i;
+wishbone_pkg::bus_rsp_t consolebuff_data_o;
+
+wishbone_pkg::bus_req_t displaybuff_data_i;
+wishbone_pkg::bus_rsp_t displaybuff_data_o;
+
+wishbone_pkg::bus_req_t sdcard_data_i;
+wishbone_pkg::bus_rsp_t sdcard_data_o;
+
+always_comb
+begin
+  touchpad_data_i         = touchpad_data_flat_i;
+  touchpad_data_flat_o    = touchpad_data_o;
+  display_data_i          = display_data_flat_i;
+  display_data_flat_o     = display_data_o;
+  consolebuff_data_i      = consolebuff_data_flat_i;
+  consolebuff_data_flat_o = consolebuff_data_o;
+  displaybuff_data_i      = displaybuff_data_flat_i;
+  displaybuff_data_flat_o = displaybuff_data_o;
+  sdcard_data_i           = sdcard_data_flat_i;
+  sdcard_data_flat_o      = sdcard_data_o;
+end
+
 
 //IO
 logic SCLK;
@@ -136,8 +166,8 @@ ILI9486 display (
   .RS_DC   (display_RS_DC),
   .DATA    (display_MOSI),
 
-  .bus_data_i          (display_data_i),   
-  .bus_data_o          (display_data_o)
+  .bus_data_flat_i          (display_data_i),   
+  .bus_data_flat_o          (display_data_o)
 );
 
 //Display Buffer
@@ -145,8 +175,8 @@ ILI9486_buffer display_buffer (
   .clk (clk),
   .rst (rst),
 
-  .bus_data_i             (displaybuff_data_i),   
-  .bus_data_o             (displaybuff_data_o)
+  .bus_data_flat_i             (displaybuff_data_i),   
+  .bus_data_flat_o             (displaybuff_data_o)
 );
 
 //Console Buffer
@@ -154,8 +184,8 @@ console_buffer console_buffer (
   .clk (clk),
   .rst (rst),
 
-  .bus_data_i             (consolebuff_data_i),   
-  .bus_data_o             (consolebuff_data_o)
+  .bus_data_flat_i             (consolebuff_data_i),   
+  .bus_data_flat_o             (consolebuff_data_o)
 );
 
 //SD Card
@@ -173,8 +203,8 @@ sdcard sdcard (
   .MOSI    (sdcard_MOSI),
   .MISO    (MISO),
 
-  .bus_data_i (sdcard_data_i),  
-  .bus_data_o (sdcard_data_o)    
+  .bus_data_flat_i (sdcard_data_i),  
+  .bus_data_flat_o (sdcard_data_o)    
 );
 
 spi_arb spi_arb (

@@ -4,12 +4,24 @@ module mem (
   input  logic           clk,
   input  logic           rst,
 
-  input  wishbone_pkg::bus_req_t bus_inst_i,
-  output wishbone_pkg::bus_rsp_t bus_inst_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_inst_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_inst_flat_o,
 
-  input  wishbone_pkg::bus_req_t bus_data_i,
-  output wishbone_pkg::bus_rsp_t bus_data_o
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_data_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_data_flat_o
 );
+
+wishbone_pkg::bus_req_t bus_inst_i;
+wishbone_pkg::bus_rsp_t bus_inst_o;
+wishbone_pkg::bus_req_t bus_data_i;
+wishbone_pkg::bus_rsp_t bus_data_o;
+always_comb
+begin
+  bus_inst_i      = bus_inst_flat_i;
+  bus_inst_flat_o = bus_inst_o;
+  bus_data_i      = bus_data_flat_i;
+  bus_data_flat_o = bus_data_o;
+end
 
 localparam SIZE = 15;
 

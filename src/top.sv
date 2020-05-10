@@ -416,11 +416,11 @@ riscv #(.M_EXT(1)) riscv (
   .clk         (clk),
   .rst         (rst),
 
-  .bus_inst_o  (riscv_mmc_inst), 
-  .bus_inst_i  (mmc_riscv_inst), 
+  .bus_inst_flat_o  (riscv_mmc_inst), 
+  .bus_inst_flat_i  (mmc_riscv_inst), 
 
-  .bus_data_o  (riscv_mmc_data), 
-  .bus_data_i  (mmc_riscv_data) 
+  .bus_data_flat_o  (riscv_mmc_data), 
+  .bus_data_flat_i  (mmc_riscv_data) 
 
 `ifdef RISCV_FORMAL
   ,
@@ -458,204 +458,204 @@ riscv #(.M_EXT(1)) riscv (
 `endif
 );
 
-mmc_wb mmc_inst (
-  .clk         (clk),
-  .rst         (rst),
+  mmc_wb mmc_inst (
+    .clk         (clk),
+    .rst         (rst),
+    
+    .riscv_mmc_flat_i  (riscv_mmc_inst),
+    .mmc_riscv_flat_o  (mmc_riscv_inst),
   
-  .riscv_mmc_i  (riscv_mmc_inst),
-  .mmc_riscv_o  (mmc_riscv_inst),
-
-  .mmc_mem_o    (mmc_mem_inst),
-  .mem_mmc_i    (mem_mmc_inst),
-
-  .mmc_ddr3_o   (mmc_ddr3_inst),
-  .ddr3_mmc_i   (ddr3_mmc_inst),
-
-  .mmc_led_o    (mmc_led_inst),
-  .led_mmc_i    (led_mmc_inst),
-
-  .mmc_keys_o   (mmc_keys_inst),
-  .keys_mmc_i   (keys_mmc_inst),
-
-  .mmc_uart_o   (mmc_uart_inst),
-  .uart_mmc_i   (uart_mmc_inst),
-
-  .mmc_sdcard_o (mmc_sdcard_inst),
-  .sdcard_mmc_i (sdcard_mmc_inst)
-);
-
-mmc_wb mmc_data (
-  .clk         (clk),
-  .rst         (rst),
+    .mmc_mem_flat_o    (mmc_mem_inst),
+    .mem_mmc_flat_i    (mem_mmc_inst),
   
-  .riscv_mmc_i  (riscv_mmc_data),
-  .mmc_riscv_o  (mmc_riscv_data),
-
-  .mmc_mem_o    (mmc_mem_data),
-  .mem_mmc_i    (mem_mmc_data),
-
-  .mmc_ddr3_o   (mmc_ddr3_data),
-  .ddr3_mmc_i   (ddr3_mmc_data),
-
-  .mmc_led_o    (mmc_led_data),
-  .led_mmc_i    (led_mmc_data),
-
-  .mmc_keys_o   (mmc_keys_data),
-  .keys_mmc_i   (keys_mmc_data),
-
-  .mmc_uart_o   (mmc_uart_data),
-  .uart_mmc_i   (uart_mmc_data),
-
-  .mmc_sdcard_o (mmc_sdcard_data),
-  .sdcard_mmc_i (sdcard_mmc_data)
-);
-
-mem mem (
-  .clk         (clk),
-  .rst         (rst),
-
-  .bus_inst_i                (mmc_mem_inst),
-  .bus_inst_o                (mem_mmc_inst),   
-
-  .bus_data_i                (mmc_mem_data),
-  .bus_data_o                (mem_mmc_data)
-);
-
-ddr3 ddr3 (
-  .clk         (clk),
-  .ddr3_clk    (DDR3_CLK),
-  .rst         (rst),
-
-  .ddr3_avl_ready         (ddr3_avl_ready),       
-  .ddr3_avl_addr          (ddr3_avl_addr),        
-  .ddr3_avl_rdata_valid   (ddr3_avl_rdata_valid), 
-  .ddr3_avl_rdata         (ddr3_avl_rdata),       
-  .ddr3_avl_wdata         (ddr3_avl_wdata),       
-  .ddr3_avl_read_req      (ddr3_avl_read_req),    
-  .ddr3_avl_write_req     (ddr3_avl_write_req),   
-  .ddr3_avl_size          (ddr3_avl_size),         
-
-  .bus_inst_i                (mmc_ddr3_inst),
-  .bus_inst_o                (ddr3_mmc_inst),   
-
-  .bus_data_i                (mmc_ddr3_data),
-  .bus_data_o                (ddr3_mmc_data)
-);
-
-led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
-  .clk         (clk),
-  .rst         (rst),
-
-  .LED         (LED),
-
-  .bus_data_i                (mmc_led_data),
-  .bus_data_o                (led_mmc_data)    
-);
-
-keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
-  .clk         (clk),
-  .rst         (rst),
-
-  .KEY         (KEY),
-
-  .bus_data_i                (mmc_keys_data),
-  .bus_data_o                (keys_mmc_data)    
-);
-
-uart uart (
-  .clk (clk),
-  .rst (rst),
+    .mmc_ddr3_flat_o   (mmc_ddr3_inst),
+    .ddr3_mmc_flat_i   (ddr3_mmc_inst),
   
-  .GND (GPIO_0_01),
-  .TXD (GPIO_0_05),
-  .RXD (GPIO_0_03),
-  .CTS (GPIO_0_09),
-  .RTS (GPIO_0_07),
-
-  .bus_data_i                (mmc_uart_data),
-  .bus_data_o                (uart_mmc_data)    
-);
-
-waveshare_tft_touch_shield shield (
-  .clk (FPGA_CLK1_50),
-  .rst (rst),
-
-  .arst (arst),
-
-  .ADC_CONVST      (ADC_CONVST),     
-  .ADC_SCK         (ADC_SCK),        
-  .ADC_SDI         (ADC_SDI),        
-  .ADC_SDO         (ADC_SDO),        
-                                    
-  .ARDUINO_IO_00   (ARDUINO_IO_00),
-  .ARDUINO_IO_01   (ARDUINO_IO_01),
-  .ARDUINO_IO_02   (ARDUINO_IO_02),
-  .ARDUINO_IO_03   (ARDUINO_IO_03),
-  .ARDUINO_IO_04   (ARDUINO_IO_04),
-  .ARDUINO_IO_05   (ARDUINO_IO_05),
-  .ARDUINO_IO_06   (ARDUINO_IO_06),
-  .ARDUINO_IO_07   (ARDUINO_IO_07),
-  .ARDUINO_IO_08   (ARDUINO_IO_08),
-  .ARDUINO_IO_09   (ARDUINO_IO_09),
-  .ARDUINO_IO_10   (ARDUINO_IO_10),
-  .ARDUINO_IO_11   (ARDUINO_IO_11),
-  .ARDUINO_IO_12   (ARDUINO_IO_12),
-  .ARDUINO_IO_13   (ARDUINO_IO_13),
-  .ARDUINO_IO_14   (ARDUINO_IO_14),
-  .ARDUINO_IO_15   (ARDUINO_IO_15),
-  .ARDUINO_RESET_N (ARDUINO_RESET_N),
-
-  .touchpad_data_i                 (mmc_touchpad_data),  
-  .touchpad_data_o                 (touchpad_mmc_data),   
-                                                                 
-  .display_data_i                (mmc_display_data),  
-  .display_data_o                (display_mmc_data),   
-                                                                 
-  .displaybuff_data_i               (mmc_displaybuff_data),  
-  .displaybuff_data_o               (displaybuff_mmc_data),   
-                                                                 
-  .consolebuff_data_i            (mmc_consolebuff_data),  
-  .consolebuff_data_o            (consolebuff_mmc_data),   
-                                                                 
-  .sdcard_data_i                 (mmc_sdcard_data),  
-  .sdcard_data_o                 (sdcard_mmc_data)    
-);
-
-`ifndef SIM
-soc_system u0 (
-  //Clock&Reset
-  .clk_clk                               ( FPGA_CLK1_50 ),                               //                            clk.clk
-  .ddr3_clk_clk                          ( DDR3_CLK ),                             //                    clk_ddr3.clk
+    .mmc_led_flat_o    (mmc_led_inst),
+    .led_mmc_flat_i    (led_mmc_inst),
   
-  //HPS ddr3
-  .memory_mem_a                          ( HPS_DDR3_ADDR),                       //                memory.mem_a
-  .memory_mem_ba                         ( HPS_DDR3_BA),                         //                .mem_ba
-  .memory_mem_ck                         ( HPS_DDR3_CK_P),                       //                .mem_ck
-  .memory_mem_ck_n                       ( HPS_DDR3_CK_N),                       //                .mem_ck_n
-  .memory_mem_cke                        ( HPS_DDR3_CKE),                        //                .mem_cke
-  .memory_mem_cs_n                       ( HPS_DDR3_CS_N),                       //                .mem_cs_n
-  .memory_mem_ras_n                      ( HPS_DDR3_RAS_N),                      //                .mem_ras_n
-  .memory_mem_cas_n                      ( HPS_DDR3_CAS_N),                      //                .mem_cas_n
-  .memory_mem_we_n                       ( HPS_DDR3_WE_N),                       //                .mem_we_n
-  .memory_mem_reset_n                    ( HPS_DDR3_RESET_N),                    //                .mem_reset_n
-  .memory_mem_dq                         ( HPS_DDR3_DQ),                         //                .mem_dq
-  .memory_mem_dqs                        ( HPS_DDR3_DQS_P),                      //                .mem_dqs
-  .memory_mem_dqs_n                      ( HPS_DDR3_DQS_N),                      //                .mem_dqs_n
-  .memory_mem_odt                        ( HPS_DDR3_ODT),                        //                .mem_odt
-  .memory_mem_dm                         ( HPS_DDR3_DM),                         //                .mem_dm
-  .memory_oct_rzqin                      ( HPS_DDR3_RZQ),                        //                .oct_rzqin
+    .mmc_keys_flat_o   (mmc_keys_inst),
+    .keys_mmc_flat_i   (keys_mmc_inst),
   
-  .ddr3_hps_f2h_sdram0_clock_clk          (DDR3_CLK),          // ddr3_0_hps_f2h_sdram0_clock.clk
-  .ddr3_hps_f2h_sdram0_data_address       (ddr3_avl_addr),       //  ddr3_0_hps_f2h_sdram0_data.address
-  .ddr3_hps_f2h_sdram0_data_read          (ddr3_avl_read_req),          //                            .read
-  .ddr3_hps_f2h_sdram0_data_readdata      (ddr3_avl_rdata),      //                            .readdata
-  .ddr3_hps_f2h_sdram0_data_write         (ddr3_avl_write_req),         //                            .write
-  .ddr3_hps_f2h_sdram0_data_writedata     (ddr3_avl_wdata),     //                            .writedata
-  .ddr3_hps_f2h_sdram0_data_readdatavalid (ddr3_avl_rdata_valid), //                            .readdatavalid
-  .ddr3_hps_f2h_sdram0_data_waitrequest   (ddr3_avl_ready),   //                            .waitrequest
-  .ddr3_hps_f2h_sdram0_data_byteenable    (16'hffff),    //                            .byteenable
-  .ddr3_hps_f2h_sdram0_data_burstcount    (ddr3_avl_size)     //                            .burstcount
-);
-`endif
+    .mmc_uart_flat_o   (mmc_uart_inst),
+    .uart_mmc_flat_i   (uart_mmc_inst),
+  
+    .mmc_sdcard_flat_o (mmc_sdcard_inst),
+    .sdcard_mmc_flat_i (sdcard_mmc_inst)
+  );
+  
+  mmc_wb mmc_data (
+    .clk         (clk),
+    .rst         (rst),
+    
+    .riscv_mmc_flat_i  (riscv_mmc_data),
+    .mmc_riscv_flat_o  (mmc_riscv_data),
+  
+    .mmc_mem_flat_o    (mmc_mem_data),
+    .mem_mmc_flat_i    (mem_mmc_data),
+  
+    .mmc_ddr3_flat_o   (mmc_ddr3_data),
+    .ddr3_mmc_flat_i   (ddr3_mmc_data),
+  
+    .mmc_led_flat_o    (mmc_led_data),
+    .led_mmc_flat_i    (led_mmc_data),
+  
+    .mmc_keys_flat_o   (mmc_keys_data),
+    .keys_mmc_flat_i   (keys_mmc_data),
+  
+    .mmc_uart_flat_o   (mmc_uart_data),
+    .uart_mmc_flat_i   (uart_mmc_data),
+  
+    .mmc_sdcard_flat_o (mmc_sdcard_data),
+    .sdcard_mmc_flat_i (sdcard_mmc_data)
+  );
+  
+  mem mem (
+    .clk         (clk),
+    .rst         (rst),
+  
+    .bus_inst_flat_i                (mmc_mem_inst),
+    .bus_inst_flat_o                (mem_mmc_inst),   
+  
+    .bus_data_flat_i                (mmc_mem_data),
+    .bus_data_flat_o                (mem_mmc_data)
+  );
+  
+  ddr3 ddr3 (
+    .clk         (clk),
+    .ddr3_clk    (DDR3_CLK),
+    .rst         (rst),
+  
+    .ddr3_avl_ready         (ddr3_avl_ready),       
+    .ddr3_avl_addr          (ddr3_avl_addr),        
+    .ddr3_avl_rdata_valid   (ddr3_avl_rdata_valid), 
+    .ddr3_avl_rdata         (ddr3_avl_rdata),       
+    .ddr3_avl_wdata         (ddr3_avl_wdata),       
+    .ddr3_avl_read_req      (ddr3_avl_read_req),    
+    .ddr3_avl_write_req     (ddr3_avl_write_req),   
+    .ddr3_avl_size          (ddr3_avl_size),         
+  
+    .bus_inst_flat_i                (mmc_ddr3_inst),
+    .bus_inst_flat_o                (ddr3_mmc_inst),   
+  
+    .bus_data_flat_i                (mmc_ddr3_data),
+    .bus_data_flat_o                (ddr3_mmc_data)
+  );
+  
+  led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
+    .clk         (clk),
+    .rst         (rst),
+  
+    .LED         (LED),
+  
+    .bus_data_flat_i                (mmc_led_data),
+    .bus_data_flat_o                (led_mmc_data)    
+  );
+  
+  keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
+    .clk         (clk),
+    .rst         (rst),
+  
+    .KEY         (KEY),
+  
+    .bus_data_flat_i                (mmc_keys_data),
+    .bus_data_flat_o                (keys_mmc_data)    
+  );
+  
+  uart uart (
+    .clk (clk),
+    .rst (rst),
+    
+    .GND (GPIO_0_01),
+    .TXD (GPIO_0_05),
+    .RXD (GPIO_0_03),
+    .CTS (GPIO_0_09),
+    .RTS (GPIO_0_07),
+  
+    .bus_data_flat_i                (mmc_uart_data),
+    .bus_data_flat_o                (uart_mmc_data)    
+  );
+  
+  waveshare_tft_touch_shield shield (
+    .clk (FPGA_CLK1_50),
+    .rst (rst),
+  
+    .arst (arst),
+  
+    .ADC_CONVST      (ADC_CONVST),     
+    .ADC_SCK         (ADC_SCK),        
+    .ADC_SDI         (ADC_SDI),        
+    .ADC_SDO         (ADC_SDO),        
+                                      
+    .ARDUINO_IO_00   (ARDUINO_IO_00),
+    .ARDUINO_IO_01   (ARDUINO_IO_01),
+    .ARDUINO_IO_02   (ARDUINO_IO_02),
+    .ARDUINO_IO_03   (ARDUINO_IO_03),
+    .ARDUINO_IO_04   (ARDUINO_IO_04),
+    .ARDUINO_IO_05   (ARDUINO_IO_05),
+    .ARDUINO_IO_06   (ARDUINO_IO_06),
+    .ARDUINO_IO_07   (ARDUINO_IO_07),
+    .ARDUINO_IO_08   (ARDUINO_IO_08),
+    .ARDUINO_IO_09   (ARDUINO_IO_09),
+    .ARDUINO_IO_10   (ARDUINO_IO_10),
+    .ARDUINO_IO_11   (ARDUINO_IO_11),
+    .ARDUINO_IO_12   (ARDUINO_IO_12),
+    .ARDUINO_IO_13   (ARDUINO_IO_13),
+    .ARDUINO_IO_14   (ARDUINO_IO_14),
+    .ARDUINO_IO_15   (ARDUINO_IO_15),
+    .ARDUINO_RESET_N (ARDUINO_RESET_N),
+  
+    .touchpad_data_flat_i                 (mmc_touchpad_data),  
+    .touchpad_data_flat_o                 (touchpad_mmc_data),   
+                                                                   
+    .display_data_flat_i                (mmc_display_data),  
+    .display_data_flat_o                (display_mmc_data),   
+                                                                   
+    .displaybuff_data_flat_i               (mmc_displaybuff_data),  
+    .displaybuff_data_flat_o               (displaybuff_mmc_data),   
+                                                                   
+    .consolebuff_data_flat_i            (mmc_consolebuff_data),  
+    .consolebuff_data_flat_o            (consolebuff_mmc_data),   
+                                                                   
+    .sdcard_data_flat_i                 (mmc_sdcard_data),  
+    .sdcard_data_flat_o                 (sdcard_mmc_data)    
+  );
+  
+  `ifndef SIM
+  soc_system u0 (
+    //Clock&Reset
+    .clk_clk                               ( FPGA_CLK1_50 ),                               //                            clk.clk
+    .ddr3_clk_clk                          ( DDR3_CLK ),                             //                    clk_ddr3.clk
+    
+    //HPS ddr3
+    .memory_mem_a                          ( HPS_DDR3_ADDR),                       //                memory.mem_a
+    .memory_mem_ba                         ( HPS_DDR3_BA),                         //                .mem_ba
+    .memory_mem_ck                         ( HPS_DDR3_CK_P),                       //                .mem_ck
+    .memory_mem_ck_n                       ( HPS_DDR3_CK_N),                       //                .mem_ck_n
+    .memory_mem_cke                        ( HPS_DDR3_CKE),                        //                .mem_cke
+    .memory_mem_cs_n                       ( HPS_DDR3_CS_N),                       //                .mem_cs_n
+    .memory_mem_ras_n                      ( HPS_DDR3_RAS_N),                      //                .mem_ras_n
+    .memory_mem_cas_n                      ( HPS_DDR3_CAS_N),                      //                .mem_cas_n
+    .memory_mem_we_n                       ( HPS_DDR3_WE_N),                       //                .mem_we_n
+    .memory_mem_reset_n                    ( HPS_DDR3_RESET_N),                    //                .mem_reset_n
+    .memory_mem_dq                         ( HPS_DDR3_DQ),                         //                .mem_dq
+    .memory_mem_dqs                        ( HPS_DDR3_DQS_P),                      //                .mem_dqs
+    .memory_mem_dqs_n                      ( HPS_DDR3_DQS_N),                      //                .mem_dqs_n
+    .memory_mem_odt                        ( HPS_DDR3_ODT),                        //                .mem_odt
+    .memory_mem_dm                         ( HPS_DDR3_DM),                         //                .mem_dm
+    .memory_oct_rzqin                      ( HPS_DDR3_RZQ),                        //                .oct_rzqin
+    
+    .ddr3_hps_f2h_sdram0_clock_clk          (DDR3_CLK),          // ddr3_0_hps_f2h_sdram0_clock.clk
+    .ddr3_hps_f2h_sdram0_data_address       (ddr3_avl_addr),       //  ddr3_0_hps_f2h_sdram0_data.address
+    .ddr3_hps_f2h_sdram0_data_read          (ddr3_avl_read_req),          //                            .read
+    .ddr3_hps_f2h_sdram0_data_readdata      (ddr3_avl_rdata),      //                            .readdata
+    .ddr3_hps_f2h_sdram0_data_write         (ddr3_avl_write_req),         //                            .write
+    .ddr3_hps_f2h_sdram0_data_writedata     (ddr3_avl_wdata),     //                            .writedata
+    .ddr3_hps_f2h_sdram0_data_readdatavalid (ddr3_avl_rdata_valid), //                            .readdatavalid
+    .ddr3_hps_f2h_sdram0_data_waitrequest   (ddr3_avl_ready),   //                            .waitrequest
+    .ddr3_hps_f2h_sdram0_data_byteenable    (16'hffff),    //                            .byteenable
+    .ddr3_hps_f2h_sdram0_data_burstcount    (ddr3_avl_size)     //                            .burstcount
+  );
+  `endif
        
 endmodule

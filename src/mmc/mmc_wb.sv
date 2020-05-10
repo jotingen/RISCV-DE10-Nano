@@ -5,28 +5,73 @@ module mmc_wb (
   input  logic           clk,
   input  logic           rst,
 
-  input  wishbone_pkg::bus_req_t riscv_mmc_i,
-  output wishbone_pkg::bus_rsp_t mmc_riscv_o,
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] riscv_mmc_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] mmc_riscv_flat_o,
 
-  output wishbone_pkg::bus_req_t mmc_mem_o,
-  input  wishbone_pkg::bus_rsp_t mem_mmc_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_mem_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] mem_mmc_flat_i,
 
-  output wishbone_pkg::bus_req_t mmc_ddr3_o,
-  input  wishbone_pkg::bus_rsp_t ddr3_mmc_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_ddr3_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] ddr3_mmc_flat_i,
 
-  output wishbone_pkg::bus_req_t mmc_led_o,
-  input  wishbone_pkg::bus_rsp_t led_mmc_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_led_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] led_mmc_flat_i,
 
-  output wishbone_pkg::bus_req_t mmc_keys_o,
-  input  wishbone_pkg::bus_rsp_t keys_mmc_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_keys_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] keys_mmc_flat_i,
 
-  output wishbone_pkg::bus_req_t mmc_uart_o,
-  input  wishbone_pkg::bus_rsp_t uart_mmc_i,
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_uart_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] uart_mmc_flat_i,
 
-  output wishbone_pkg::bus_req_t mmc_sdcard_o,
-  input  wishbone_pkg::bus_rsp_t sdcard_mmc_i
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_sdcard_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] sdcard_mmc_flat_i
 
 );
+  wishbone_pkg::bus_req_t riscv_mmc_i;
+  wishbone_pkg::bus_rsp_t mmc_riscv_o;
+
+  wishbone_pkg::bus_req_t mmc_mem_o;
+  wishbone_pkg::bus_rsp_t mem_mmc_i;
+
+  wishbone_pkg::bus_req_t mmc_ddr3_o;
+  wishbone_pkg::bus_rsp_t ddr3_mmc_i;
+
+  wishbone_pkg::bus_req_t mmc_led_o;
+  wishbone_pkg::bus_rsp_t led_mmc_i;
+
+  wishbone_pkg::bus_req_t mmc_keys_o;
+  wishbone_pkg::bus_rsp_t keys_mmc_i;
+
+  wishbone_pkg::bus_req_t mmc_uart_o;
+  wishbone_pkg::bus_rsp_t uart_mmc_i;
+
+  wishbone_pkg::bus_req_t mmc_sdcard_o;
+  wishbone_pkg::bus_rsp_t sdcard_mmc_i;
+
+always_comb
+begin
+  riscv_mmc_i       = riscv_mmc_flat_i;   
+  mmc_riscv_flat_o  = mmc_riscv_o;   
+                               
+  mmc_mem_flat_o    = mmc_mem_o;     
+  mem_mmc_i         = mem_mmc_flat_i;     
+                               
+  mmc_ddr3_flat_o   = mmc_ddr3_o;    
+  ddr3_mmc_i        = ddr3_mmc_flat_i;    
+                               
+  mmc_led_flat_o    = mmc_led_o;     
+  led_mmc_i         = led_mmc_flat_i;     
+                               
+  mmc_keys_flat_o   = mmc_keys_o;    
+  keys_mmc_i        = keys_mmc_flat_i;    
+                               
+  mmc_uart_flat_o   = mmc_uart_o;    
+  uart_mmc_i        = uart_mmc_flat_i;    
+                               
+  mmc_sdcard_flat_o = mmc_sdcard_o;  
+  sdcard_mmc_i      = sdcard_mmc_flat_i;  
+end
+
 
 logic null_ack;
 
