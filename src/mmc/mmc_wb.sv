@@ -24,7 +24,10 @@ module mmc_wb (
   input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] uart_mmc_flat_i,
 
   output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_sdcard_flat_o,
-  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] sdcard_mmc_flat_i
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] sdcard_mmc_flat_i,
+
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_debug_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] debug_mmc_flat_i
 
 );
   wishbone_pkg::bus_req_t riscv_mmc_i;
@@ -48,6 +51,9 @@ module mmc_wb (
   wishbone_pkg::bus_req_t mmc_sdcard_o;
   wishbone_pkg::bus_rsp_t sdcard_mmc_i;
 
+  wishbone_pkg::bus_req_t mmc_debug_o;
+  wishbone_pkg::bus_rsp_t debug_mmc_i;
+
 always_comb
 begin
   riscv_mmc_i       = riscv_mmc_flat_i;   
@@ -70,6 +76,9 @@ begin
                                
   mmc_sdcard_flat_o = mmc_sdcard_o;  
   sdcard_mmc_i      = sdcard_mmc_flat_i;  
+                               
+  mmc_debug_flat_o = mmc_debug_o;  
+  debug_mmc_i      = debug_mmc_flat_i;  
 end
 
 
@@ -81,6 +90,7 @@ logic [15:0]    led_stb_cnt;
 logic [15:0]    keys_stb_cnt;
 logic [15:0]    uart_stb_cnt;
 logic [15:0]    sdcard_stb_cnt;
+logic [15:0]    debug_stb_cnt;
 
 //Memory mapping
 logic [31:0]    MEM_ADDR_LO      = 'h0000_0000;
@@ -95,6 +105,8 @@ logic [31:0]    UART_ADDR_LO     = 'hC304_0000;
 logic [31:0]    UART_ADDR_HI     = 'hC304_FFFF;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
+logic [31:0]    DEBUG_ADDR_LO    = 'hD000_0000;
+logic [31:0]    DEBUG_ADDR_HI    = 'hD000_FFFF;
 
 //Instruction counters
 always_ff @(posedge clk)
@@ -105,6 +117,7 @@ always_ff @(posedge clk)
   keys_stb_cnt   <= keys_stb_cnt   + mmc_keys_o.Stb   - keys_mmc_i.Ack;
   uart_stb_cnt   <= uart_stb_cnt   + mmc_uart_o.Stb   - uart_mmc_i.Ack;
   sdcard_stb_cnt <= sdcard_stb_cnt + mmc_sdcard_o.Stb - sdcard_mmc_i.Ack;
+  debug_stb_cnt  <= debug_stb_cnt  + mmc_debug_o.Stb  - debug_mmc_i.Ack;
 
   if(rst)
     begin
@@ -114,6 +127,7 @@ always_ff @(posedge clk)
     keys_stb_cnt   <= '0;
     uart_stb_cnt   <= '0;
     sdcard_stb_cnt <= '0;
+    debug_stb_cnt <= '0;
     end
   end
 //
@@ -126,6 +140,7 @@ always_comb
   mmc_keys_o.Stb   = '0;
   mmc_uart_o.Stb   = '0;
   mmc_sdcard_o.Stb = '0;
+  mmc_debug_o.Stb = '0;
 
   //Generate regs based on memory map
   if(riscv_mmc_i.Adr >= MEM_ADDR_LO &
@@ -162,6 +177,12 @@ always_comb
      riscv_mmc_i.Adr <= SDCARD_ADDR_HI)
     begin
     mmc_sdcard_o.Stb = riscv_mmc_i.Stb;
+    end
+
+  if(riscv_mmc_i.Adr >= DEBUG_ADDR_LO &
+     riscv_mmc_i.Adr <= DEBUG_ADDR_HI)
+    begin
+    mmc_debug_o.Stb = riscv_mmc_i.Stb;
     end
 
   mmc_mem_o.Adr     = riscv_mmc_i.Adr - MEM_ADDR_LO; 
@@ -222,6 +243,16 @@ always_comb
   mmc_sdcard_o.Tga  = riscv_mmc_i.Tga; 
   mmc_sdcard_o.Tgd  = riscv_mmc_i.Tgd; 
   mmc_sdcard_o.Tgc  = riscv_mmc_i.Tgc; 
+
+
+  mmc_debug_o.Adr  = riscv_mmc_i.Adr - DEBUG_ADDR_LO; 
+  mmc_debug_o.Data = riscv_mmc_i.Data;
+  mmc_debug_o.We   = riscv_mmc_i.We;  
+  mmc_debug_o.Sel  = riscv_mmc_i.Sel; 
+  mmc_debug_o.Cyc  = riscv_mmc_i.Cyc; 
+  mmc_debug_o.Tga  = riscv_mmc_i.Tga; 
+  mmc_debug_o.Tgd  = riscv_mmc_i.Tgd; 
+  mmc_debug_o.Tgc  = riscv_mmc_i.Tgc; 
   end
 
 //Subsystems to CPU
@@ -264,6 +295,11 @@ always_comb
   if(sdcard_stb_cnt)
     begin
     mmc_riscv_o.Stall = sdcard_mmc_i.Stall;
+    end
+
+  if(debug_stb_cnt)
+    begin
+    mmc_riscv_o.Stall = debug_mmc_i.Stall;
     end
 
   if(mem_mmc_i.Ack | mem_mmc_i.Err | mem_mmc_i.Rty)
@@ -332,6 +368,17 @@ always_comb
     mmc_riscv_o.Tgc   = sdcard_mmc_i.Tgc;
     end
 
+  if(debug_mmc_i.Ack | debug_mmc_i.Err | debug_mmc_i.Rty)
+    begin
+    mmc_riscv_o.Ack   = debug_mmc_i.Ack;
+    mmc_riscv_o.Err   = debug_mmc_i.Err;
+    mmc_riscv_o.Rty   = debug_mmc_i.Rty;
+    mmc_riscv_o.Data  = debug_mmc_i.Data;
+    mmc_riscv_o.Tga   = debug_mmc_i.Tga;
+    mmc_riscv_o.Tgd   = debug_mmc_i.Tgd;
+    mmc_riscv_o.Tgc   = debug_mmc_i.Tgc;
+    end
+
   if(null_ack)
     begin
     mmc_riscv_o.Ack   = '1;
@@ -357,7 +404,8 @@ always_ff @(posedge clk)
      ~mmc_led_o.Stb &
      ~mmc_keys_o.Stb &
      ~mmc_uart_o.Stb &
-     ~mmc_sdcard_o.Stb)
+     ~mmc_sdcard_o.Stb &
+     ~mmc_debug_o.Stb)
     begin
     null_ack <= '1;
     end

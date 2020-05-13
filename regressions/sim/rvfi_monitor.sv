@@ -32,6 +32,40 @@ class rvfi_monitor;
   logic [63:0] q_rvfi_csr_minstret_rdata[$];
   logic [63:0] q_rvfi_csr_minstret_wdata[$];
 
+  function void reset();
+    q_rvfi_valid.delete();
+    q_rvfi_order.delete();
+    q_rvfi_insn.delete();
+    q_rvfi_trap.delete();
+    q_rvfi_halt.delete();
+    q_rvfi_intr.delete();
+    q_rvfi_mode.delete();
+    q_rvfi_ixl.delete();
+    q_rvfi_rs1_addr.delete();
+    q_rvfi_rs2_addr.delete();
+    q_rvfi_rs1_rdata.delete();
+    q_rvfi_rs2_rdata.delete();
+    q_rvfi_rd_addr.delete();
+    q_rvfi_rd_wdata.delete();
+    q_rvfi_pc_rdata.delete();
+    q_rvfi_pc_wdata.delete();
+    q_rvfi_mem_addr.delete();
+    q_rvfi_mem_rmask.delete();
+    q_rvfi_mem_wmask.delete();
+    q_rvfi_mem_rdata.delete();
+    q_rvfi_mem_wdata.delete();
+    
+    q_rvfi_csr_mcycle_rmask.delete();
+    q_rvfi_csr_mcycle_wmask.delete();
+    q_rvfi_csr_mcycle_rdata.delete();
+    q_rvfi_csr_mcycle_wdata.delete();
+    
+    q_rvfi_csr_minstret_rmask.delete();
+    q_rvfi_csr_minstret_wmask.delete();
+    q_rvfi_csr_minstret_rdata.delete();
+    q_rvfi_csr_minstret_wdata.delete();
+  endfunction
+
   function void monitor(
     input logic [5:0]       rvfi_valid,
     input logic [5:0][63:0] rvfi_order,
@@ -100,6 +134,8 @@ class rvfi_monitor;
         q_rvfi_csr_minstret_wmask.push_front(rvfi_csr_minstret_wmask);
         q_rvfi_csr_minstret_rdata.push_front(rvfi_csr_minstret_rdata);
         q_rvfi_csr_minstret_wdata.push_front(rvfi_csr_minstret_wdata);
+        if(!endLoop())
+          $display("INFO:  [%0t][rvfi_mon]: Executed 0x%08x: 0x%08x", $time, rvfi_pc_rdata, rvfi_insn);
       end
     
   endfunction

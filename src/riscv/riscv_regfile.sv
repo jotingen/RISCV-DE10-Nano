@@ -69,8 +69,44 @@ module riscv_regfile (
   output logic [31:0]       x31
 );
 
+logic [31:0][31:0]       x;
+
 always_ff @(posedge clk)
   begin
+
+    x <= x;
+  if(x_wr[00]) x[00] <= '0;
+  if(x_wr[01]) x[01] <= x01_in;
+  if(x_wr[02]) x[02] <= x02_in;
+  if(x_wr[03]) x[03] <= x03_in;
+  if(x_wr[04]) x[04] <= x04_in;
+  if(x_wr[05]) x[05] <= x05_in;
+  if(x_wr[06]) x[06] <= x06_in;
+  if(x_wr[07]) x[07] <= x07_in;
+  if(x_wr[08]) x[08] <= x08_in;
+  if(x_wr[09]) x[09] <= x09_in;
+  if(x_wr[10]) x[10] <= x10_in;
+  if(x_wr[11]) x[11] <= x11_in;
+  if(x_wr[12]) x[12] <= x12_in;
+  if(x_wr[13]) x[13] <= x13_in;
+  if(x_wr[14]) x[14] <= x14_in;
+  if(x_wr[15]) x[15] <= x15_in;
+  if(x_wr[16]) x[16] <= x16_in;
+  if(x_wr[17]) x[17] <= x17_in;
+  if(x_wr[18]) x[18] <= x18_in;
+  if(x_wr[19]) x[19] <= x19_in;
+  if(x_wr[20]) x[20] <= x20_in;
+  if(x_wr[21]) x[21] <= x21_in;
+  if(x_wr[22]) x[22] <= x22_in;
+  if(x_wr[23]) x[23] <= x23_in;
+  if(x_wr[24]) x[24] <= x24_in;
+  if(x_wr[25]) x[25] <= x25_in;
+  if(x_wr[26]) x[26] <= x26_in;
+  if(x_wr[27]) x[27] <= x27_in;
+  if(x_wr[28]) x[28] <= x28_in;
+  if(x_wr[29]) x[29] <= x29_in;
+  if(x_wr[30]) x[30] <= x30_in;
+  if(x_wr[31]) x[31] <= x31_in;
 
   x00 <= x00;
   x01 <= x01;
@@ -140,6 +176,7 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
+  x <= '0;
     x00 <= '0;
     x01 <= '0;
     x02 <= '0;

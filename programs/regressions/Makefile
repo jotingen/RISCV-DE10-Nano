@@ -50,6 +50,7 @@ init:
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 ../../output/programs/regressions/$(patsubst %.s,%.out,$@) ../../output/programs/regressions/$(patsubst %.s,%_2.v,$@)
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 ../../output/programs/regressions/$(patsubst %.s,%.out,$@) ../../output/programs/regressions/$(patsubst %.s,%_3.v,$@)
 	$(RV_PREFIX)objcopy -O binary                      ../../output/programs/regressions/$(patsubst %.s,%.out,$@) ../../output/programs/regressions/$(patsubst %.s,%.bin,$@)
+	$(RV_PREFIX)objdump -d -M numeric                  ../../output/programs/regressions/$(patsubst %.s,%.out,$@) > ../../output/programs/regressions/$(patsubst %.s,%.asm,$@)
 
 .PHONY: clean
 clean: 

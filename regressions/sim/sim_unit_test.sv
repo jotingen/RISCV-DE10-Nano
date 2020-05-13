@@ -70,6 +70,7 @@
 
 `include "rvfi_monitor.sv"
 `include "led_monitor.sv"
+`include "debug_monitor.sv"
 
 //`include "ddr3_mem.sv"
 //`include "ddr3_wishbone_driver.sv"
@@ -83,6 +84,7 @@ module sim_unit_test;
 
   rvfi_monitor rvfi_mon;
   led_monitor  led_mon;
+  debug_monitor  debug_mon;
 
   wire rst_n;
   `CLK_RESET_FIXTURE(20,10)
@@ -558,6 +560,7 @@ always
 
     rvfi_mon = new();
     led_mon  = new();
+    debug_mon  = new();
   endfunction
 
 
@@ -571,6 +574,7 @@ always
       reset();
       ddr3_reset();
     join
+    rvfi_mon.reset();
 
   endtask
 
@@ -622,6 +626,8 @@ always
                      .rvfi_csr_minstret_rdata(rvfi_csr_minstret_rdata),
                      .rvfi_csr_minstret_wdata(rvfi_csr_minstret_wdata));
     led_mon.monitor(.LED (LED));            
+    debug_mon.monitor(.mmc_debug_data (de10nano.mmc_debug_data),
+                      .debug_mmc_data (de10nano.debug_mmc_data));
     step();
   end
 
@@ -642,30 +648,77 @@ always
   int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
-  `SVTEST(LED_123)
+  `SVTEST(SIM_00_LED123)
   cycleCount = 0;
-  $readmemh("../../output/programs/regressions/led_123_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/led_123_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/led_123_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/led_123_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../output/programs/regressions/00_led123_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/regressions/00_led123_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/regressions/00_led123_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/regressions/00_led123_0.v", de10nano.mem.mem_array_0);
   $readmemh("../../verif/sdcard.txt", sd.flash_mem);
 
-  while( cycleCount < 100000 &
-        !rvfi_mon.endLoop)
+  while(!( cycleCount > 100000 |
+           rvfi_mon.endLoop) )
   begin
+    cycleCount++;
+    step();
+  end
+
+  `FAIL_IF(cycleCount >= 100000);
+  $display("End Loop Detected");
+
+
+  `FAIL_UNLESS(led_mon.q_LED[0] === 'd3 & led_mon.q_LED[1] === 'd2 & led_mon.q_LED[2] === 'd1)
+  $display("LED Pattern Detected");
+
+  `SVTEST_END
+
+
+  `SVTEST(SIM_01_DEBUG)
+  cycleCount = 0;
+  $readmemh("../../output/programs/regressions/01_debug_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/regressions/01_debug_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/regressions/01_debug_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/regressions/01_debug_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
+
+  while(!( cycleCount > 1000000 |
+           rvfi_mon.endLoop) )
+  begin
+    cycleCount++;
     step();
   end
 
   `FAIL_IF(cycleCount >= 1000000);
   $display("End Loop Detected");
 
-  step(100);
-
-  `FAIL_IF(!(led_mon.q_LED[0] === 'd3 & led_mon.q_LED[1] === 'd2 & led_mon.q_LED[2] === 'd1))
+  `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
   $display("LED Pattern Detected");
 
-  `SVTEST_END
+  `SVTEST_END                        
 
+
+  `SVTEST(SIM_02_DEBUG_SWEEP)
+  cycleCount = 0;
+  $readmemh("../../output/programs/regressions/02_debug_sweep_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../output/programs/regressions/02_debug_sweep_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../output/programs/regressions/02_debug_sweep_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../output/programs/regressions/02_debug_sweep_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
+
+  while(!( cycleCount > 1000000 |
+           rvfi_mon.endLoop) )
+  begin
+    cycleCount++;
+    step();
+  end
+
+  `FAIL_IF(cycleCount >= 1000000);
+  $display("End Loop Detected");
+
+  `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
+  $display("LED Pattern Detected");
+
+  `SVTEST_END                        
 
   `SVUNIT_TESTS_END
 

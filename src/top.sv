@@ -369,6 +369,9 @@ wishbone_pkg::bus_rsp_t consolebuff_mmc_data;
 wishbone_pkg::bus_req_t mmc_sdcard_data;
 wishbone_pkg::bus_rsp_t sdcard_mmc_data;
 
+wishbone_pkg::bus_req_t mmc_debug_data;
+wishbone_pkg::bus_rsp_t debug_mmc_data;
+
 
 `ifndef SIM
 logic         DDR3_CLK;  //100MHz
@@ -481,7 +484,10 @@ riscv #(.M_EXT(1)) riscv (
     .uart_mmc_flat_i   (uart_mmc_inst),
   
     .mmc_sdcard_flat_o (mmc_sdcard_inst),
-    .sdcard_mmc_flat_i (sdcard_mmc_inst)
+    .sdcard_mmc_flat_i (sdcard_mmc_inst),
+  
+    .mmc_debug_flat_o  (mmc_debug_inst),
+    .debug_mmc_flat_i  (debug_mmc_inst)
   );
   
   mmc_wb mmc_data (
@@ -507,10 +513,13 @@ riscv #(.M_EXT(1)) riscv (
     .uart_mmc_flat_i   (uart_mmc_data),
   
     .mmc_sdcard_flat_o (mmc_sdcard_data),
-    .sdcard_mmc_flat_i (sdcard_mmc_data)
+    .sdcard_mmc_flat_i (sdcard_mmc_data),
+  
+    .mmc_debug_flat_o  (mmc_debug_data),
+    .debug_mmc_flat_i  (debug_mmc_data)
   );
   
-  mem mem (
+  mem #(.SIZE(15)) mem (
     .clk         (clk),
     .rst         (rst),
   
@@ -619,6 +628,17 @@ riscv #(.M_EXT(1)) riscv (
                                                                    
     .sdcard_data_flat_i                 (mmc_sdcard_data),  
     .sdcard_data_flat_o                 (sdcard_mmc_data)    
+  );
+  
+  mem #(.SIZE(14)) debug (
+    .clk         (clk),
+    .rst         (rst),
+  
+    .bus_inst_flat_i                (mmc_debug_inst),
+    .bus_inst_flat_o                (debug_mmc_inst),   
+  
+    .bus_data_flat_i                (mmc_debug_data),
+    .bus_data_flat_o                (debug_mmc_data)
   );
   
   `ifndef SIM

@@ -1,6 +1,8 @@
 import wishbone_pkg::*;
 
-module mem (
+module mem #(
+  parameter SIZE = 15
+) (
   input  logic           clk,
   input  logic           rst,
 
@@ -22,8 +24,6 @@ begin
   bus_data_i      = bus_data_flat_i;
   bus_data_flat_o = bus_data_o;
 end
-
-localparam SIZE = 15;
 
 logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
 logic [7:0] mem_array_2 [2**(SIZE-2)-1:0];
@@ -50,22 +50,25 @@ always_ff @(posedge clk)
 //Memory bus
 always_ff @(posedge clk)
   begin
-  if (bus_data_i.We & bus_data_i.Sel[0])
-    begin
-    mem_array_0[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[7:0];
-    end
-  if (bus_data_i.We & bus_data_i.Sel[1])
-    begin
-    mem_array_1[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[15:8];
-    end
-  if (bus_data_i.We & bus_data_i.Sel[2])
-    begin
-    mem_array_2[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[23:16];
-    end
-  if (bus_data_i.We & bus_data_i.Sel[3])
-    begin
-    mem_array_3[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[31:24];
-    end
+  if (bus_data_i.Cyc & bus_data_i.Stb)
+  begin     
+    if (bus_data_i.We & bus_data_i.Sel[0])
+      begin
+      mem_array_0[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[7:0];
+      end
+    if (bus_data_i.We & bus_data_i.Sel[1])
+      begin
+      mem_array_1[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[15:8];
+      end
+    if (bus_data_i.We & bus_data_i.Sel[2])
+      begin
+      mem_array_2[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[23:16];
+      end
+    if (bus_data_i.We & bus_data_i.Sel[3])
+      begin
+      mem_array_3[bus_data_i.Adr[SIZE+2:2]] <= bus_data_i.Data[31:24];
+      end
+  end
 
   bus_data_o.Ack         <= bus_data_i.Cyc & bus_data_i.Stb;    
   bus_data_o.Stall       <= '0;
