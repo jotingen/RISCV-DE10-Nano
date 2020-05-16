@@ -336,6 +336,9 @@ wishbone_pkg::bus_rsp_t consolebuff_mmc_inst;
 wishbone_pkg::bus_req_t mmc_sdcard_inst;
 wishbone_pkg::bus_rsp_t sdcard_mmc_inst;
 
+wishbone_pkg::bus_req_t mmc_debug_inst;
+wishbone_pkg::bus_rsp_t debug_mmc_inst;
+
 wishbone_pkg::bus_req_t riscv_mmc_data;
 wishbone_pkg::bus_rsp_t mmc_riscv_data;
 

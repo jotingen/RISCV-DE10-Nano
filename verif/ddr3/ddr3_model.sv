@@ -11,7 +11,7 @@ module ddr3_model (
   input  logic [8:0]   ddr3_avl_size        
 );
 
-logic [127:0] ddr3 [2**25-1:0];
+logic [127:0] ddr3 [2**(26-4)-1:0];
 logic         ddr3_avl_rdata_valid_stg1; 
 logic [127:0] ddr3_avl_rdata_stg1;       
 logic         ddr3_avl_rdata_valid_stg2; 

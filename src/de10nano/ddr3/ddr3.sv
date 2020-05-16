@@ -283,7 +283,7 @@ begin
                ddr3_fifo_out_wrreq <= dst_we_i;
                ddr3_fifo_out_rdreq <= ~dst_we_i;
                ddr3_fifo_out_data  <= dst_data_i;
-               ddr3_fifo_out_addr  <= dst_adr_i[29:4];
+               ddr3_fifo_out_addr  <= dst_adr_i[25:0];
 
                if(dst_we_i)
                  begin

@@ -3,6 +3,8 @@
 `include "clk_and_reset.svh"
 `include "ddr3_clk_and_reset.svh"
 
+`include "../../src/wishbone/wishbone_pkg.sv"
+
 `include "../../src/de10nano/ddr3/ddr3.sv"
 `include "../../src/de10nano/ddr3/ddr3_cache.sv"
 `include "../../src/common/lru_32.sv"
@@ -38,43 +40,10 @@ module ddr3_unit_test;
   logic           ddr3_avl_write_req;   
   logic [8:0]     ddr3_avl_size;
 
-  logic [31:0]    bus_inst_adr_i;
-  logic [31:0]    bus_inst_data_i;
-  logic           bus_inst_we_i;
-  logic  [3:0]    bus_inst_sel_i;
-  logic           bus_inst_stb_i;
-  logic           bus_inst_cyc_i;
-  logic           bus_inst_tga_i;
-  logic           bus_inst_tgd_i;
-  logic  [3:0]    bus_inst_tgc_i;
-
-  logic           bus_inst_ack_o;
-  logic           bus_inst_stall_o;
-  logic           bus_inst_err_o;
-  logic           bus_inst_rty_o;
-  logic [31:0]    bus_inst_data_o;
-  logic           bus_inst_tga_o;
-  logic           bus_inst_tgd_o;
-  logic  [3:0]    bus_inst_tgc_o;
-
-  logic [31:0]    bus_mem_adr_i;
-  logic [31:0]    bus_mem_data_i;
-  logic           bus_mem_we_i;
-  logic  [3:0]    bus_mem_sel_i;
-  logic           bus_mem_stb_i;
-  logic           bus_mem_cyc_i;
-  logic           bus_mem_tga_i;
-  logic           bus_mem_tgd_i;
-  logic  [3:0]    bus_mem_tgc_i;
-
-  logic           bus_mem_ack_o;
-  logic           bus_mem_stall_o;
-  logic           bus_mem_err_o;
-  logic           bus_mem_rty_o;
-  logic [31:0]    bus_mem_data_o;
-  logic           bus_mem_tga_o;
-  logic           bus_mem_tgd_o;
-  logic  [3:0]    bus_mem_tgc_o;
+  wishbone_pkg::bus_req_t bus_inst_i;
+  wishbone_pkg::bus_rsp_t bus_inst_o;
+  wishbone_pkg::bus_req_t bus_data_i;
+  wishbone_pkg::bus_rsp_t bus_data_o;
 
   logic           i_membus_req;
   logic           i_membus_write;
@@ -93,8 +62,8 @@ module ddr3_unit_test;
   ddr3_wishbone_driver bus_inst_driver;
   ddr3_wishbone_monitor bus_inst_monitor;
 
-  ddr3_wishbone_driver bus_mem_driver;
-  ddr3_wishbone_monitor bus_mem_monitor;
+  ddr3_wishbone_driver bus_data_driver;
+  ddr3_wishbone_monitor bus_data_monitor;
 
   initial
   begin
@@ -114,13 +83,13 @@ module ddr3_unit_test;
     bus_inst_monitor.name = "bus_ins_mon";
     bus_inst_monitor.verbose = VERBOSE;
 
-    bus_mem_driver = new();
-    bus_mem_driver.name = "bus_mem_drv";
-    bus_mem_driver.verbose = VERBOSE;
+    bus_data_driver = new();
+    bus_data_driver.name = "bus_data_drv";
+    bus_data_driver.verbose = VERBOSE;
 
-    bus_mem_monitor = new(mem_tst);
-    bus_mem_monitor.name = "bus_mem_mon";
-    bus_mem_monitor.verbose = VERBOSE;
+    bus_data_monitor = new(mem_tst);
+    bus_data_monitor.name = "bus_data_mon";
+    bus_data_monitor.verbose = VERBOSE;
   end
 
   //DDR3 Emulation
@@ -197,42 +166,42 @@ module ddr3_unit_test;
     forever
     begin
       nextSamplePoint();
-      bus_inst_monitor.monitor(bus_inst_adr_i,
-                               bus_inst_data_i,
-                               bus_inst_we_i,
-                               bus_inst_sel_i,
-                               bus_inst_stb_i,
-                               bus_inst_cyc_i,
-                               bus_inst_tga_i,
-                               bus_inst_tgd_i,
-                               bus_inst_tgc_i,
+      bus_inst_monitor.monitor(bus_inst_i.Adr,
+                               bus_inst_i.Data,
+                               bus_inst_i.We,
+                               bus_inst_i.Sel,
+                               bus_inst_i.Stb,
+                               bus_inst_i.Cyc,
+                               bus_inst_i.Tga,
+                               bus_inst_i.Tgd,
+                               bus_inst_i.Tgc,
                                
-                               bus_inst_ack_o,
-                               bus_inst_stall_o,
-                               bus_inst_err_o,
-                               bus_inst_rty_o,
-                               bus_inst_data_o,
-                               bus_inst_tga_o,
-                               bus_inst_tgd_o,
-                               bus_inst_tgc_o);
-      bus_mem_monitor.monitor(bus_mem_adr_i,
-                              bus_mem_data_i,
-                              bus_mem_we_i,
-                              bus_mem_sel_i,
-                              bus_mem_stb_i,
-                              bus_mem_cyc_i,
-                              bus_mem_tga_i,
-                              bus_mem_tgd_i,
-                              bus_mem_tgc_i,
+                               bus_inst_o.Ack,
+                               bus_inst_o.Stall,
+                               bus_inst_o.Err,
+                               bus_inst_o.Rty,
+                               bus_inst_o.Data,
+                               bus_inst_o.Tga,
+                               bus_inst_o.Tgd,
+                               bus_inst_o.Tgc);
+      bus_data_monitor.monitor(bus_data_i.Adr,
+                              bus_data_i.Data,
+                              bus_data_i.We,
+                              bus_data_i.Sel,
+                              bus_data_i.Stb,
+                              bus_data_i.Cyc,
+                              bus_data_i.Tga,
+                              bus_data_i.Tgd,
+                              bus_data_i.Tgc,
                               
-                              bus_mem_ack_o,
-                              bus_mem_stall_o,
-                              bus_mem_err_o,
-                              bus_mem_rty_o,
-                              bus_mem_data_o,
-                              bus_mem_tga_o,
-                              bus_mem_tgd_o,
-                              bus_mem_tgc_o);
+                              bus_data_o.Ack,
+                              bus_data_o.Stall,
+                              bus_data_o.Err,
+                              bus_data_o.Rty,
+                              bus_data_o.Data,
+                              bus_data_o.Tga,
+                              bus_data_o.Tgd,
+                              bus_data_o.Tgc);
       step();
     end
   end
@@ -241,7 +210,13 @@ module ddr3_unit_test;
   // This is the UUT that we're 
   // running the Unit Tests on
   //===================================
-  ddr3 my_ddr3(.*);
+  ddr3 my_ddr3(.*,
+
+               .bus_inst_flat_i (bus_inst_i),
+               .bus_inst_flat_o (bus_inst_o),
+                              
+               .bus_data_flat_i (bus_data_i),
+               .bus_data_flat_o (bus_data_o));
 
 
   //===================================
@@ -284,26 +259,26 @@ module ddr3_unit_test;
     begin
     forever
       begin
-      bus_inst_driver.drive(bus_inst_adr_i,
-                            bus_inst_data_i,
-                            bus_inst_we_i,
-                            bus_inst_sel_i,
-                            bus_inst_stb_i,
-                            bus_inst_cyc_i,
-                            bus_inst_tga_i,
-                            bus_inst_tgd_i,
-                            bus_inst_tgc_i,
-                            bus_inst_stall_o);
-      bus_mem_driver.drive(bus_mem_adr_i,
-                           bus_mem_data_i,
-                           bus_mem_we_i,
-                           bus_mem_sel_i,
-                           bus_mem_stb_i,
-                           bus_mem_cyc_i,
-                           bus_mem_tga_i,
-                           bus_mem_tgd_i,
-                           bus_mem_tgc_i,
-                           bus_mem_stall_o);
+      bus_inst_driver.drive(bus_inst_i.Adr,
+                            bus_inst_i.Data,
+                            bus_inst_i.We,
+                            bus_inst_i.Sel,
+                            bus_inst_i.Stb,
+                            bus_inst_i.Cyc,
+                            bus_inst_i.Tga,
+                            bus_inst_i.Tgd,
+                            bus_inst_i.Tgc,
+                            bus_inst_o.Stall);
+      bus_data_driver.drive(bus_data_i.Adr,
+                           bus_data_i.Data,
+                           bus_data_i.We,
+                           bus_data_i.Sel,
+                           bus_data_i.Stb,
+                           bus_data_i.Cyc,
+                           bus_data_i.Tga,
+                           bus_data_i.Tgd,
+                           bus_data_i.Tgc,
+                           bus_data_o.Stall);
       step();
       end
     end
@@ -324,12 +299,6 @@ module ddr3_unit_test;
       end
     end
 
-  initial
-    begin
-    $dumpfile("sim.vcd");
-    //$dumpvars();
-    $dumpvars(100, my_ddr3);
-    end
 
   //===================================
   // All tests are defined between the
@@ -355,7 +324,7 @@ module ddr3_unit_test;
 
     //Initial addresses
     automatic logic [31:0] bus_inst_addr = 'd0;
-    automatic logic [31:0] bus_mem_addr  = 'd512;
+    automatic logic [31:0] bus_data_addr  = 'd1024;
 
     //Set test mem to dut mem
     foreach(mem_dut.mem[i])
@@ -366,40 +335,40 @@ module ddr3_unit_test;
     //Generate inst ops
     for(int i = 0; i < inst_op_count; i++)
     begin
-      if($urandom_range(25,0) == 0 || bus_inst_addr == 'd511)
-        bus_inst_addr = $urandom_range(511,0);
+      if($urandom_range(25,0) == 0 || bus_inst_addr >= 'd508)
+        bus_inst_addr = $urandom_range(508,0);
       else
-        bus_inst_addr++;
+        bus_inst_addr += 4;
 
       inst_ops++;
-      bus_inst_driver.read(bus_inst_addr<<2);
+      bus_inst_driver.read(bus_inst_addr);
     end
 
     //Generate mem ops
     for(int i = 0; i < mem_op_count; i++)
     begin
-      if($urandom_range(10,0) == 0 || bus_mem_addr == 'd1023)
-        bus_mem_addr = $urandom_range(1023,512);
+      if($urandom_range(10,0) == 0 || bus_data_addr >= 'd4092)
+        bus_data_addr = $urandom_range(4092,1024);
       else
-        bus_mem_addr++;
+        bus_data_addr += 4;
 
       if($urandom_range(1,0)>0)
       begin
         mem_ops++;
-        bus_mem_driver.write(bus_mem_addr<<2,$urandom());//{32{i[2]^i[0]}});
+        bus_data_driver.write(bus_data_addr,$urandom());//{32{i[2]^i[0]}});
       end
       else
       begin
         mem_ops++;
-        bus_mem_driver.read(bus_mem_addr<<2);
+        bus_data_driver.read(bus_data_addr);
       end
     end
 
     start_time = $time;
     while(bus_inst_driver.requests_queued() |
-          bus_mem_driver.requests_queued() |
+          bus_data_driver.requests_queued() |
           bus_inst_monitor.responses_queued() |
-          bus_mem_monitor.responses_queued())
+          bus_data_monitor.responses_queued())
     begin
 
       step();
@@ -410,8 +379,8 @@ module ddr3_unit_test;
           $time, name, 
           bus_inst_driver.requests_queued(),
           bus_inst_monitor.responses_queued(),
-          bus_mem_driver.requests_queued(),
-          bus_mem_monitor.responses_queued() );
+          bus_data_driver.requests_queued(),
+          bus_data_monitor.responses_queued() );
       end
 
       if(~inst_done &
@@ -423,8 +392,8 @@ module ddr3_unit_test;
       end
 
       if(~mem_done &
-         bus_mem_driver.requests_queued()==0 &
-         bus_mem_monitor.responses_queued()==0)
+         bus_data_driver.requests_queued()==0 &
+         bus_data_monitor.responses_queued()==0)
       begin
         mem_done = '1;
         done_time = $time;
@@ -439,17 +408,17 @@ module ddr3_unit_test;
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(INST)
-  test_program(500, 0);
+  test_program(5000, 0);
   `SVTEST_END
 
 
   `SVTEST(MEM)
-  test_program(0, 500);
+  test_program(0, 5000);
   `SVTEST_END
 
 
   `SVTEST(ALL)
-  test_program(500, 500);
+  test_program(5000, 5000);
   `SVTEST_END
 
 

@@ -7,4 +7,6 @@ void main(void) {
   LED_set(1);
   LED_set(2);
   LED_set(3);
+
+  while(1) {}
 }

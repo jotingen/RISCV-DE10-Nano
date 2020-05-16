@@ -34,4 +34,6 @@ void main(void) {
     LED_set(0x08);
   }
 
+  while(1) {}
+
 }

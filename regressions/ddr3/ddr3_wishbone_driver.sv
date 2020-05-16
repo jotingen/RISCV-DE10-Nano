@@ -20,16 +20,16 @@ class ddr3_wishbone_driver;
     this.adr.push_back(adr);
   endfunction
 
-  function drive(ref logic [31:0]    adr_i,
-                 ref logic [31:0]    data_i,
-                 ref logic           we_i,
-                 ref logic  [3:0]    sel_i,
-                 ref logic           stb_i,
-                 ref logic           cyc_i,
-                 ref logic           tga_i,
-                 ref logic           tgd_i,
-                 ref logic  [3:0]    tgc_i,
-                     logic           stall_o);
+  function drive(output logic [31:0]    adr_i,
+                 output logic [31:0]    data_i,
+                 output logic           we_i,
+                 output logic  [3:0]    sel_i,
+                 output logic           stb_i,
+                 output logic           cyc_i,
+                 output logic           tga_i,
+                 output logic           tgd_i,
+                 output logic  [3:0]    tgc_i,
+                 input  logic           stall_o);
     //if(verbose) $display("  [%s]: Entries Remaining: %d",name, we.size());
     if(requests_queued() && !stall_o && $urandom_range(10,0)>1)
     begin

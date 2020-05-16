@@ -20,22 +20,22 @@ class ddr3_wishbone_monitor;
   endfunction
 
   task monitor(logic [31:0]    adr_i,
-                   logic [31:0]    data_i,
-                   logic           we_i,
-                   logic  [3:0]    sel_i,
-                   logic           stb_i,
-                   logic           cyc_i,
-                   logic           tga_i,
-                   logic           tgd_i,
-                   logic  [3:0]    tgc_i,
-                   logic           ack_o,
-                   logic           stall_o,
-                   logic           err_o,
-                   logic           rty_o,
-                   logic [31:0]    data_o,
-                   logic           tga_o,
-                   logic           tgd_o,
-                   logic  [3:0]    tgc_o);
+               logic [31:0]    data_i,
+               logic           we_i,
+               logic  [3:0]    sel_i,
+               logic           stb_i,
+               logic           cyc_i,
+               logic           tga_i,
+               logic           tgd_i,
+               logic  [3:0]    tgc_i,
+               logic           ack_o,
+               logic           stall_o,
+               logic           err_o,
+               logic           rty_o,
+               logic [31:0]    data_o,
+               logic           tga_o,
+               logic           tgd_o,
+               logic  [3:0]    tgc_o);
     if(stb_i & cyc_i)
     begin
       if(verbose) $display("INFO:  [%1t][%s]: Request we:%1b adr:0x%08X sel:0x%1X data:0x%08X tga:0x%X tgd:0x%X tgc:0x%X", 
@@ -50,7 +50,7 @@ class ddr3_wishbone_monitor;
         tgc_i);
       if(we_i)
       begin
-        mem.write(adr_i>>4,data_i,{(((adr_i>>2)&'h3)==3),
+        mem.write(adr_i,data_i,{(((adr_i>>2)&'h3)==3),
                                    (((adr_i>>2)&'h3)==2),
                                    (((adr_i>>2)&'h3)==1),
                                    (((adr_i>>2)&'h3)==0)});
@@ -61,11 +61,11 @@ class ddr3_wishbone_monitor;
       begin
         logic [127:0] exp_data;
         logic [31:0]  exp_data_word;
-        exp_data = mem.read(adr_i>>4);
-        if(((adr_i>>2)&'h3)==3) exp_data_word = exp_data[127:96]; 
-        if(((adr_i>>2)&'h3)==2) exp_data_word = exp_data[95:64];  
-        if(((adr_i>>2)&'h3)==1) exp_data_word = exp_data[63:32];  
-        if(((adr_i>>2)&'h3)==0) exp_data_word = exp_data[31:0];   
+        exp_data = mem.read(adr_i);
+        if(adr_i[3:2]==3) exp_data_word = exp_data[127:96]; 
+        if(adr_i[3:2]==2) exp_data_word = exp_data[95:64];  
+        if(adr_i[3:2]==1) exp_data_word = exp_data[63:32];  
+        if(adr_i[3:2]==0) exp_data_word = exp_data[31:0];   
         if(verbose) $display("INFO:  [%1t][%s]: Expected Response addr:0x%08X data=0x%08X tga:0x%X tgd:0x%X tgc:0x%X", 
           $time, 
           name, 

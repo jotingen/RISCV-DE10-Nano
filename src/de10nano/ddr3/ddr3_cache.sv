@@ -41,6 +41,12 @@ module ddr3_cache (
   input  logic  [3:0]    dst_tgc_o
 );
 
+typedef struct packed {
+  logic         Vld;
+  logic [25:4]  Addr;
+  logic         Dirty;
+  logic [3:0][31:0] Data;
+} buffer_entry_t;
 logic         bus_buff_almost_empty;
 logic         bus_buff_empty;
 
@@ -62,10 +68,7 @@ logic         state_load;
 logic         state_load_pending;
 logic         state_update;
 
-logic [31:0]        mem_buffer_vld;
-logic [31:0][25:4]  mem_buffer_addr;
-logic [31:0]        mem_buffer_dirty;
-logic [31:0][127:0] mem_buffer_data;
+buffer_entry_t [31:0]        mem_buffer;
 logic               mem_buffer_in_lru;
 logic               mem_buffer_lru_touch;
 logic [4:0]         mem_buffer_lru;
@@ -118,8 +121,8 @@ always_comb
   for(int i = 0; i < 32; i++)
     begin
     if(!bus_buff_empty &&
-       mem_buffer_vld[i] &&
-       mem_buffer_addr[i][25:4] == bus_adr_stgd[25:4])
+       mem_buffer[i].Vld &&
+       mem_buffer[i].Addr[25:4] == bus_adr_stgd[25:4])
       begin
       mem_buffer_in_lru         = '1;
       mem_buffer_lru_entry_next =  i;
@@ -135,10 +138,7 @@ begin
   state_load_pending  <= '0;
   state_update        <= '0;
 
-  mem_buffer_vld      <= mem_buffer_vld; 
-  mem_buffer_addr     <= mem_buffer_addr;
-  mem_buffer_dirty    <= mem_buffer_dirty;
-  mem_buffer_data     <= mem_buffer_data;
+  mem_buffer          <= mem_buffer; 
   mem_buffer_lru_entry<= mem_buffer_lru_entry;
   mem_buffer_lru_touch  <= '0;
 
@@ -173,7 +173,7 @@ begin
                     mem_buffer_lru_entry<= mem_buffer_lru_entry_next;
                     if(bus_we_stgd)
                       begin
-                      mem_buffer_dirty[mem_buffer_lru_entry] <= '1;
+                      mem_buffer[mem_buffer_lru_entry].Dirty <= '1;
                       end
                     state_update <= '1;
                     end
@@ -184,17 +184,17 @@ begin
                     lru_entry = mem_buffer_lru;
                     for(int i = 0; i < 32; i++)
                       begin
-                      if(~mem_buffer_vld[i])
+                      if(~mem_buffer[i].Vld)
                         begin
                         lru_entry = i;
                         break;
                         end
                       end
                     mem_buffer_lru_entry <= lru_entry;
-                    if(mem_buffer_vld[lru_entry] & mem_buffer_dirty[lru_entry])
+                    if(mem_buffer[lru_entry].Vld & mem_buffer[lru_entry].Dirty)
                       begin
-                      dst_adr_i  <= {6'd0,mem_buffer_addr[lru_entry],4'd0};
-                      dst_data_i <= mem_buffer_data[lru_entry];
+                      dst_adr_i  <= {6'd0,mem_buffer[lru_entry].Addr[25:4],4'd0};
+                      dst_data_i <= mem_buffer[lru_entry].Data;
                       dst_we_i   <= '1;
                       dst_sel_i  <= '0;
                       dst_stb_i  <= '1;
@@ -225,8 +225,8 @@ begin
                   end
                 end
       state_flush: begin             
-                   dst_adr_i  <= {6'd0,mem_buffer_addr[mem_buffer_lru_entry],4'd0};
-                   dst_data_i <= mem_buffer_data[mem_buffer_lru_entry];
+                   dst_adr_i  <= {6'd0,mem_buffer[mem_buffer_lru_entry].Addr[25:4],4'd0};
+                   dst_data_i <= mem_buffer[mem_buffer_lru_entry].Data;
                    dst_we_i   <= '1;
                    dst_sel_i  <= '0;
                    dst_stb_i  <= '1;
@@ -235,7 +235,7 @@ begin
                    dst_tgd_i  <= '0;
                    dst_tgc_i  <= '0;
 
-                   mem_buffer_vld[mem_buffer_lru_entry] <= '0;
+                   mem_buffer[mem_buffer_lru_entry].Vld <= '0;
 
                    if(dst_stall_o)
                    begin
@@ -266,9 +266,9 @@ begin
                   dst_tgd_i  <= '0;
                   dst_tgc_i  <= '0;
 
-                  mem_buffer_vld[mem_buffer_lru_entry]   <= '0;
-                  mem_buffer_addr[mem_buffer_lru_entry]  <= bus_adr_stgd[25:4];
-                  mem_buffer_dirty[mem_buffer_lru_entry] <= '0;
+                  mem_buffer[mem_buffer_lru_entry].Vld   <= '0;
+                  mem_buffer[mem_buffer_lru_entry].Addr  <= bus_adr_stgd[25:4];
+                  mem_buffer[mem_buffer_lru_entry].Dirty <= '0;
 
                    if(dst_stall_o)
                    begin
@@ -284,8 +284,8 @@ begin
       state_load_pending: begin             
                           if(dst_ack_o)
                             begin
-                            mem_buffer_vld[mem_buffer_lru_entry]   <= '1;
-                            mem_buffer_data[mem_buffer_lru_entry]  <= dst_data_o;
+                            mem_buffer[mem_buffer_lru_entry].Vld   <= '1;
+                            mem_buffer[mem_buffer_lru_entry].Data  <= dst_data_o;
                             bus_rd_ack <= '1;
                             state_update <= '1;
                             end
@@ -299,58 +299,58 @@ begin
 
                       if(bus_we_stgd)
                         begin
-                        mem_buffer_dirty[mem_buffer_lru_entry] <= '1;
+                        mem_buffer[mem_buffer_lru_entry].Dirty <= '1;
                         case(bus_adr_stgd[3:2])
                           2'b00: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][31:24]   <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][31:24]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][23:16]   <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][23:16]  ;
-                                 mem_buffer_data[mem_buffer_lru_entry][15:8]    <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][15:8]   ;
-                                 mem_buffer_data[mem_buffer_lru_entry][7:0]     <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][7:0]    ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[0][31:24] <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer[mem_buffer_lru_entry].Data[0][31:24];
+                                 mem_buffer[mem_buffer_lru_entry].Data[0][23:16] <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer[mem_buffer_lru_entry].Data[0][23:16];
+                                 mem_buffer[mem_buffer_lru_entry].Data[0][15:8]  <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer[mem_buffer_lru_entry].Data[0][15:8] ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[0][7:0]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer[mem_buffer_lru_entry].Data[0][7:0]  ;
                                  end
                           2'b01: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][63:56]   <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][63:56];
-                                 mem_buffer_data[mem_buffer_lru_entry][55:48]   <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][55:48];
-                                 mem_buffer_data[mem_buffer_lru_entry][47:40]   <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][47:40];
-                                 mem_buffer_data[mem_buffer_lru_entry][39:32]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][39:32];
+                                 mem_buffer[mem_buffer_lru_entry].Data[1][31:24] <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer[mem_buffer_lru_entry].Data[1][31:24];
+                                 mem_buffer[mem_buffer_lru_entry].Data[1][23:16] <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer[mem_buffer_lru_entry].Data[1][23:16];
+                                 mem_buffer[mem_buffer_lru_entry].Data[1][15:8]  <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer[mem_buffer_lru_entry].Data[1][15:8] ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[1][7:0]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer[mem_buffer_lru_entry].Data[1][7:0]  ;
                                  end
                           2'b10: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][95:88]   <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][95:88];
-                                 mem_buffer_data[mem_buffer_lru_entry][87:80]   <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][87:80];
-                                 mem_buffer_data[mem_buffer_lru_entry][79:72]   <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][79:72];
-                                 mem_buffer_data[mem_buffer_lru_entry][71:64]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][71:64];
+                                 mem_buffer[mem_buffer_lru_entry].Data[2][31:24] <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer[mem_buffer_lru_entry].Data[2][31:24];
+                                 mem_buffer[mem_buffer_lru_entry].Data[2][23:16] <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer[mem_buffer_lru_entry].Data[2][23:16];
+                                 mem_buffer[mem_buffer_lru_entry].Data[2][15:8]  <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer[mem_buffer_lru_entry].Data[2][15:8] ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[2][7:0]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer[mem_buffer_lru_entry].Data[2][7:0]  ;
                                  end
                           2'b11: begin
-                                 mem_buffer_data[mem_buffer_lru_entry][127:120] <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer_data[mem_buffer_lru_entry][127:120];
-                                 mem_buffer_data[mem_buffer_lru_entry][119:112] <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer_data[mem_buffer_lru_entry][119:112];
-                                 mem_buffer_data[mem_buffer_lru_entry][111:104] <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer_data[mem_buffer_lru_entry][111:104];
-                                 mem_buffer_data[mem_buffer_lru_entry][103:96]  <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer_data[mem_buffer_lru_entry][103:96] ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[3][31:24] <= bus_sel_stgd[3] ? bus_data_stgd[31:24] : mem_buffer[mem_buffer_lru_entry].Data[3][31:24];
+                                 mem_buffer[mem_buffer_lru_entry].Data[3][23:16] <= bus_sel_stgd[2] ? bus_data_stgd[23:16] : mem_buffer[mem_buffer_lru_entry].Data[3][23:16];
+                                 mem_buffer[mem_buffer_lru_entry].Data[3][15:8]  <= bus_sel_stgd[1] ? bus_data_stgd[15:8]  : mem_buffer[mem_buffer_lru_entry].Data[3][15:8] ;
+                                 mem_buffer[mem_buffer_lru_entry].Data[3][7:0]   <= bus_sel_stgd[0] ? bus_data_stgd[7:0]   : mem_buffer[mem_buffer_lru_entry].Data[3][7:0]  ;
                                  end
                         endcase
                         end
                       case(bus_adr_stgd[3:2])
                         2'b00: begin
-                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][31:24]   : '0;   
-                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][23:16]   : '0;   
-                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][15:8]    : '0;   
-                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][7:0]     : '0;   
+                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer[mem_buffer_lru_entry].Data[0][31:24] : '0;   
+                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer[mem_buffer_lru_entry].Data[0][23:16] : '0;   
+                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer[mem_buffer_lru_entry].Data[0][15:8]  : '0;   
+                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer[mem_buffer_lru_entry].Data[0][7:0]   : '0;   
                                end
                         2'b01: begin
-                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][63:56]   : '0;   
-                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][55:48]   : '0;   
-                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][47:40]   : '0;   
-                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][39:32]   : '0;   
+                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer[mem_buffer_lru_entry].Data[1][31:24] : '0;   
+                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer[mem_buffer_lru_entry].Data[1][23:16] : '0;   
+                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer[mem_buffer_lru_entry].Data[1][15:8]  : '0;   
+                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer[mem_buffer_lru_entry].Data[1][7:0]   : '0;   
                                end
                         2'b10: begin
-                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][95:88]   : '0;   
-                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][87:80]   : '0;   
-                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][79:72]   : '0;   
-                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][71:64]   : '0;   
+                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer[mem_buffer_lru_entry].Data[2][31:24] : '0;   
+                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer[mem_buffer_lru_entry].Data[2][23:16] : '0;   
+                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer[mem_buffer_lru_entry].Data[2][15:8]  : '0;   
+                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer[mem_buffer_lru_entry].Data[2][7:0]   : '0;   
                                end
                         2'b11: begin
-                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer_data[mem_buffer_lru_entry][127:120] : '0;   
-                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer_data[mem_buffer_lru_entry][119:112] : '0;   
-                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer_data[mem_buffer_lru_entry][111:104] : '0;   
-                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer_data[mem_buffer_lru_entry][103:96]  : '0;   
+                               bus_data_o[31:24] <= bus_sel_stgd[3] ? mem_buffer[mem_buffer_lru_entry].Data[3][31:24] : '0;   
+                               bus_data_o[23:16] <= bus_sel_stgd[2] ? mem_buffer[mem_buffer_lru_entry].Data[3][23:16] : '0;   
+                               bus_data_o[15:8]  <= bus_sel_stgd[1] ? mem_buffer[mem_buffer_lru_entry].Data[3][15:8]  : '0;   
+                               bus_data_o[7:0]   <= bus_sel_stgd[0] ? mem_buffer[mem_buffer_lru_entry].Data[3][7:0]   : '0;   
                                end
                       endcase
                       bus_tga_o <= bus_tga_stgd;
@@ -368,10 +368,7 @@ begin
       state_load_pending  <= '0;
       state_update        <= '0;
 
-      mem_buffer_vld   <= '0;
-      mem_buffer_addr  <= '0;
-      mem_buffer_data  <= '0;
-      mem_buffer_dirty <= '0;
+      mem_buffer          <= '0;
       end
   end
 
