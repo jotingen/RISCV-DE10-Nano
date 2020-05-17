@@ -1,5 +1,7 @@
 class led_monitor;
 
+  logic verbose = 1;
+
   logic  [7:0]    q_LED[$];
 
   function void monitor(

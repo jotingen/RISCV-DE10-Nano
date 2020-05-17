@@ -1,13 +1,14 @@
 import wishbone_pkg::*;
 
-module led #(
+module ddr3_cntl #(
   parameter integer      SIZE = 4,
   parameter logic [31:0] ADDR_BASE = 32'h00000000
 ) (
   input  logic           clk,
   input  logic           rst,
 
-  output logic  [7:0]    LED,
+  output logic           flushStart,
+  input  logic           flushDone,
 
   //////////// BUS //////////
   input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_data_flat_i,
@@ -22,6 +23,8 @@ begin
   bus_data_flat_o = bus_data_o;
 end
 
+logic flushing;
+
 always_ff @(posedge clk)
   begin
   bus_data_o.Ack   <= '0;   
@@ -33,22 +36,37 @@ always_ff @(posedge clk)
   bus_data_o.Tgd   <= '0; //bus_data_o.Tgd;   
   bus_data_o.Tgc   <= '0; //bus_data_o.Tgc;   
 
-  LED <= LED;
+  flushing   <= flushing;
+  flushStart <= flushStart;
 
-  if(bus_data_i.Stb &
-     bus_data_i.Cyc &
-     bus_data_i.Adr >= ADDR_BASE &
-     bus_data_i.Adr <= ADDR_BASE + 2**SIZE - 1)
+  if(flushing)
+  begin
+    if(flushDone)
     begin
-    bus_data_o.Ack <= '1;
-    case (bus_data_i.Adr[SIZE+2:2] - ADDR_BASE[SIZE+2:2])
+      bus_data_o.Ack <= '1;
+      bus_data_o.Data      <= '0;
+      flushing <= '0;
+      flushStart <= '0;
+    end
+  end
+  else if(bus_data_i.Stb &
+          bus_data_i.Cyc)
+    begin
+    case (bus_data_i.Adr[SIZE+2:2])
       'd0:     begin
                if (bus_data_i.We & bus_data_i.Sel[0])
+               begin
+                 if(bus_data_i.Data[0])
                  begin
-                 LED[7:0]        <= bus_data_i.Data[7:0];
+                   flushing   <= '1;
+                   flushStart <= '1;
                  end
-               bus_data_o.Data      <= '0;
-               bus_data_o.Data[7:0] <= LED[7:0];
+                 else
+                 begin
+                   bus_data_o.Ack <= '1;
+                   bus_data_o.Data      <= '0;
+                 end
+               end
                end
       default: begin
                bus_data_o.Data      <= '0;
@@ -58,7 +76,8 @@ always_ff @(posedge clk)
 
   if(rst)
     begin
-    LED <= 'hAA;
+    flushing <= '0;
+    flushStart <= '0;
     end
 
   end

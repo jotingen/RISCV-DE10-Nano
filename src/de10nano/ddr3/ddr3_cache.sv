@@ -2,6 +2,9 @@ module ddr3_cache (
   input  logic           clk,
   input  logic           rst,
 
+  input  logic           flushStart,
+  output logic           flushDone,
+
   input  logic [31:0]    bus_adr_i,
   input  logic [31:0]    bus_data_i,
   input  logic           bus_we_i,
@@ -67,6 +70,9 @@ logic         state_flush;
 logic         state_load;
 logic         state_load_pending;
 logic         state_update;
+logic         state_flushall;
+
+logic [4:0]  flush_ndx;
 
 buffer_entry_t [31:0]        mem_buffer;
 logic               mem_buffer_in_lru;
@@ -137,6 +143,10 @@ begin
   state_load          <= '0;
   state_load_pending  <= '0;
   state_update        <= '0;
+  state_flushall      <= '0;
+
+  flush_ndx <= flush_ndx;
+  flushDone <= '0;
 
   mem_buffer          <= mem_buffer; 
   mem_buffer_lru_entry<= mem_buffer_lru_entry;
@@ -164,7 +174,12 @@ begin
 
   casex (1'b1)
     state_idle: begin
-                if((bus_req_stgd ))
+                if(flushStart)
+                begin
+                  flush_ndx <= '0;
+                  state_flushall <= '1;
+                end
+                else if((bus_req_stgd ))
                   begin
                   if(mem_buffer_in_lru)
                     begin
@@ -358,6 +373,34 @@ begin
                       bus_tgc_o <= bus_tgc_stgd;
                   state_idle <= '1;
                   end
+      state_flushall: begin             
+                        dst_adr_i  <= {6'd0,mem_buffer[flush_ndx].Addr[25:4],4'd0};
+                        dst_data_i <= mem_buffer[flush_ndx].Data;
+                        dst_we_i   <= '1;
+                        dst_sel_i  <= '0;
+                        dst_stb_i  <= '1;
+                        dst_cyc_i  <= '1;
+                        dst_tga_i  <= '0;
+                        dst_tgd_i  <= '0;
+                        dst_tgc_i  <= '0;
+
+                        mem_buffer[flush_ndx].Vld <= '0;
+
+                        if(flush_ndx == '1)
+                        begin
+                          flushDone <= '1;
+                          state_idle <= '1;
+                        end
+                        else
+                        begin
+                          if(~dst_stall_o)
+                          begin
+                            flush_ndx <= flush_ndx + 'd1;
+                          end
+
+                          state_flushall <= '1;
+                        end
+                      end
       endcase
  
     if(rst) 

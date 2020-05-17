@@ -312,6 +312,9 @@ wishbone_pkg::bus_rsp_t mem_mmc_inst;
 wishbone_pkg::bus_req_t mmc_ddr3_inst;
 wishbone_pkg::bus_rsp_t ddr3_mmc_inst;
 
+wishbone_pkg::bus_req_t mmc_ddr3cntl_inst;
+wishbone_pkg::bus_rsp_t ddr3cntl_mmc_inst;
+
 wishbone_pkg::bus_req_t mmc_led_inst;
 wishbone_pkg::bus_rsp_t led_mmc_inst;
 
@@ -347,6 +350,9 @@ wishbone_pkg::bus_rsp_t mem_mmc_data;
 
 wishbone_pkg::bus_req_t mmc_ddr3_data;
 wishbone_pkg::bus_rsp_t ddr3_mmc_data;
+
+wishbone_pkg::bus_req_t mmc_ddr3cntl_data;
+wishbone_pkg::bus_rsp_t ddr3cntl_mmc_data;
 
 wishbone_pkg::bus_req_t mmc_led_data;
 wishbone_pkg::bus_rsp_t led_mmc_data;
@@ -477,6 +483,9 @@ riscv #(.M_EXT(1)) riscv (
     .mmc_ddr3_flat_o   (mmc_ddr3_inst),
     .ddr3_mmc_flat_i   (ddr3_mmc_inst),
   
+    .mmc_ddr3cntl_flat_o   (mmc_ddr3cntl_inst),
+    .ddr3cntl_mmc_flat_i   (ddr3cntl_mmc_inst),
+  
     .mmc_led_flat_o    (mmc_led_inst),
     .led_mmc_flat_i    (led_mmc_inst),
   
@@ -505,6 +514,9 @@ riscv #(.M_EXT(1)) riscv (
   
     .mmc_ddr3_flat_o   (mmc_ddr3_data),
     .ddr3_mmc_flat_i   (ddr3_mmc_data),
+  
+    .mmc_ddr3cntl_flat_o   (mmc_ddr3cntl_data),
+    .ddr3cntl_mmc_flat_i   (ddr3cntl_mmc_data),
   
     .mmc_led_flat_o    (mmc_led_data),
     .led_mmc_flat_i    (led_mmc_data),
@@ -546,6 +558,9 @@ riscv #(.M_EXT(1)) riscv (
     .ddr3_avl_read_req      (ddr3_avl_read_req),    
     .ddr3_avl_write_req     (ddr3_avl_write_req),   
     .ddr3_avl_size          (ddr3_avl_size),         
+  
+    .bus_cntl_flat_i                (mmc_ddr3cntl_data),
+    .bus_cntl_flat_o                (ddr3cntl_mmc_data),   
   
     .bus_inst_flat_i                (mmc_ddr3_inst),
     .bus_inst_flat_o                (ddr3_mmc_inst),   

@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "../lib/csr.h"
+#include "../lib/ddr3.h"
 #include "../lib/rand.h"
 #include "../lib/sdcard.h"
 
@@ -24,7 +25,7 @@ void main(void) {
 
   LED = 0x00;
 
-  while(sector_index < 40) {
+  while(sector_index < 2) {
     sdcard_read(sdcard_data,512*sector_index);
 
     for(int i = 0; i < 512; i= i+4) {
@@ -44,6 +45,7 @@ void main(void) {
   reset_time();
   reset_instret();
 
+  DDR3_flush();
   ((void (*)(void))0x10000000)();
 
 }

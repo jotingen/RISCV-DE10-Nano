@@ -121,7 +121,7 @@ wire stop_transmission = (cmd_in1 == 12);//for CMD25
 task R1;
 input [7:0] data;
 begin
-   $display("   SD R1: 0x%2h at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD R1: 0x%2h",$time,data);
    k = 0;
    while (k < 8) begin
       @(negedge sclk) miso = data[7-k];
@@ -133,7 +133,7 @@ endtask
 task R1b;
 input [7:0] data;
 begin
-   $display("   SD R1B: 0x%2h at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD R1B: 0x%2h",$time,data);
    k = 0;
    while (k < 8) begin
       @(negedge sclk) miso = data[7-k];
@@ -145,7 +145,7 @@ endtask
 task R2;
 input [15:0] data;
 begin
-   $display("   SD R2: 0x%2h at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD R2: 0x%2h",$time,data);
    k = 0;
    while (k < 16) begin
       @(negedge sclk) miso = data[15-k];
@@ -157,7 +157,7 @@ endtask
 task R3;
 input [39:0] data;
 begin
-   $display("   SD R3: 0x%10h at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD R3: 0x%10h",$time,data);
    for (k =0; k < 40; k = k + 1) begin 
       @(negedge sclk) ;
 	  miso = data[39 - k];
@@ -168,7 +168,7 @@ endtask
 task R7;
 input [39:0] data;
 begin
-   $display("   SD R7: 0x%10h at %0t ns",data,$realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD R7: 0x%10h",$time,data);
    k = 0;
    while (k < 40) begin
       @(negedge sclk) miso = data[39-k];
@@ -195,7 +195,7 @@ begin
    for (k = 7; k >= 0; k = k - 1) begin
       @(posedge sclk) capture_data[k] = mosi;
    end
-   $display("   SD DataIn: %2h at %0t ns",capture_data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD DataIn: %2h",$time,capture_data);
 end
 endtask
 
@@ -206,7 +206,7 @@ end
 task CRCOut;
 input [15:0] data;
 begin
-   $display("   SD CRC Out 0x%4H at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD CRC Out 0x%4H",$time,data);
    k = 0;
    while (k < 16) begin
       @(negedge sclk) miso = data[15 - k];
@@ -218,7 +218,7 @@ endtask
 task TokenOut;
 input [7:0] data;
 begin
-   $display("   SD TokenOut 0x%2H at %0t ns",data, $realtime);
+   $display("INFO:  [%0t][spi_sd]:    SD TokenOut 0x%2H",$time,data);
    k = 0;
    while (k < 8) begin
       @(negedge sclk) miso = data[7 - k];
@@ -251,35 +251,35 @@ end
 
 always @(*) begin
    if (ist == 0 && cmd_index == 0) begin
-      $display("iCMD0 at %0t ns",$realtime);
-      ist <= 1;
-   end
-   if (ist == 1 && cmd_index == 8) begin
-      $display("iCMD8 at %0t ns",$realtime);
+      $display("INFO:  [%0t][spi_sd]: iCMD0", $time);
+      ist <= 1;                          
+   end                                   
+   if (ist == 1 && cmd_index == 8) begin 
+      $display("INFO:  [%0t][spi_sd]: iCMD8", $time);
       ist <= 2;
    end
    if (ist == 2 && cmd_index == 58) begin
-      $display("iCMD58 at %0t ns",$realtime);
+      $display("INFO:  [%0t][spi_sd]: iCMD58", $time);
       ist <= 3;
    end
    if (ist == 3 && cmd_index == 55) begin
-      $display("iCMD55 at %0t ns",$realtime);
+      $display("INFO:  [%0t][spi_sd]: iCMD55", $time);
       ist <= 4;
    end
    if (ist == 4 && cmd_index == 41) begin
-      $display("iACMD41 at %0t ns",$realtime);
+      $display("INFO:  [%0t][spi_sd]: iACMD41", $time);
       ist <= 5;
    end
    if (ist == 5 && cmd_index == 58 && CSD_VER == 1) begin
-      $display("iCMD58 at %0t ns",$realtime);
+      $display("INFO:  [%0t][spi_sd]: iCMD58", $time);
       ist <= 6;
    end
    else if (ist == 5 && CSD_VER == 0) ist <= 6;
    if (ist == 6 && st == IDLE) begin
-      $display("Init Done at %0t ns",$realtime);
-      if (v2sdhc) $display("Ver 2, SDHC detected");
-      else if (v2sdsc) $display("Ver 2, SDSC detected");
-      else if (v1sdsc) $display("Ver 1, SDSC detected");
+      $display("INFO:  [%0t][spi_sd]: Init Done", $time);
+      if (v2sdhc) $display("INFO:  [%0t][spi_sd]: Ver 2, SDHC detected", $time);
+      else if (v2sdsc) $display("INFO:  [%0t][spi_sd]: Ver 2, SDSC detected", $time);
+      else if (v1sdsc) $display("INFO:  [%0t][spi_sd]: Ver 1, SDSC detected", $time);
       init_done = 1;
       ist <= 7;
    end
@@ -366,11 +366,11 @@ always @(*) begin
 		      6'd29,
 		      6'd38: 	R1b(8'b0011_1010);
 		      6'd8: 	if (VHS_match) begin
-                                   $display("   VHS match");
+                                   $display("INFO:  [%0t][spi_sd]:    VHS match",$time);
                                    R7({8'h01 | (VHS_match ? 8'h04 : 8'h00), 20'h00000, VHS, check_pattern}); 
                                 end
                                 else begin
-                                   $display("   VHS not match");
+                                   $display("INFO:  [%0t][spi_sd]:    VHS not match",$time);
                                    R7({8'h01 | (VHS_match ? 8'h04 : 8'h00), 20'h00000, 4'b0, check_pattern}); 
                                 end
 		      6'd13: 	R2({1'b0, OUT_OF_RANGE, ADDRESS_ERROR, ERASE_SEQ_ERROR, COM_CRC_ERROR, 
@@ -478,6 +478,7 @@ always @(*) begin
 		begin
 		   if (read_single) begin
                       TokenOut(8'hFE);//Start Token
+                      $write("INFO:  [%0t][spi_sd]: Data Out 0x", $time);
 		      for (i = 0; i < block_len; i = i + 1) begin
 		         DataOut(flash_mem[start_addr+i]);
 		      end
@@ -490,6 +491,7 @@ always @(*) begin
 		   else if (read_multi) begin:loop_1
  		      for (j = 0; ; j  = j + 1) begin
                          TokenOut(8'hFE);//Start Token
+		         $write("INFO:  [%0t][spi_sd]: Data Out 0x", $time);
                          i = 0;
                          while (i < block_len) begin
 		            DataOut(flash_mem[start_addr+i+block_len*j]);
@@ -499,7 +501,7 @@ always @(*) begin
                          CRCOut(16'haaaa);
                          if (stop_transmission) begin//check stop_tx at end of each data block?
                             repeat (tNEC*8) @(posedge sclk);
-                            $display("STOP transmission");
+                            $display("INFO:  [%0t][spi_sd]: STOP transmission",$time);
                             @(posedge sclk) begin
                                   R1(8'b0000_0000);
                                   repeat (tNEC*8) @(posedge sclk);
@@ -521,12 +523,12 @@ always @(*) begin
 		      @(posedge sclk)  token[7-i] = mosi;
                       i = i + 1;
 		   end
-		   if (token == 8'hfe && write_single) $display("Single Write Start Token OK");
-		   else if (token != 8'hfe && write_single) $display("Single Write Start Token NG");
-		   if (token == 8'hfc && write_multi)  $display("Multiblock Write Start Token OK");
-		   else if ((token != 8'hfc && token != 8'hfd) && write_multi)  $display("Multiblock Write Start Token NG");
+		   if (token == 8'hfe && write_single) $display("INFO:  [%0t][spi_sd]: Single Write Start Token OK",$time);
+		   else if (token != 8'hfe && write_single) $display("INFO:  [%0t][spi_sd]: Single Write Start Token NG",$time);
+		   if (token == 8'hfc && write_multi)  $display("INFO:  [%0t][spi_sd]: Multiblock Write Start Token OK",$time);
+		   else if ((token != 8'hfc && token != 8'hfd) && write_multi)  $display("INFO:  [%0t][spi_sd]: Multiblock Write Start Token NG",$time);
 		   if (token == 8'hfd && write_multi) begin
-		      $display("Multiblock Write Stop Token");
+		      $display("INFO:  [%0t][spi_sd]: Multiblock Write Stop Token",$time);
 		      st <= WriteStop;
 		   end
                    i = 0;

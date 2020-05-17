@@ -14,6 +14,9 @@ module ddr3 (
   output logic           ddr3_avl_write_req,   
   output logic [8:0]     ddr3_avl_size,
 
+  input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_cntl_flat_i,
+  output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_cntl_flat_o,
+
   input  logic [$bits(wishbone_pkg::bus_req_t)-1:0] bus_inst_flat_i,
   output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_inst_flat_o,
 
@@ -21,12 +24,16 @@ module ddr3 (
   output logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] bus_data_flat_o
 );
 
+wishbone_pkg::bus_req_t bus_cntl_i;
+wishbone_pkg::bus_rsp_t bus_cntl_o;
 wishbone_pkg::bus_req_t bus_inst_i;
 wishbone_pkg::bus_rsp_t bus_inst_o;
 wishbone_pkg::bus_req_t bus_data_i;
 wishbone_pkg::bus_rsp_t bus_data_o;
 always_comb
 begin
+  bus_cntl_i      = bus_cntl_flat_i;
+  bus_cntl_flat_o = bus_cntl_o;
   bus_inst_i      = bus_inst_flat_i;
   bus_inst_flat_o = bus_inst_o;
   bus_data_i      = bus_data_flat_i;
@@ -38,6 +45,9 @@ logic         state_mem;
 logic         state_idle;
 logic         state_req;
 logic         state_rsp;
+
+logic         flushStart;
+logic         flushDone;
 
 logic         ddr3_fifo_out_wrreq;
 logic         ddr3_fifo_out_rdreq;
@@ -99,10 +109,24 @@ logic         dst_mem_tga_o;
 logic         dst_mem_tgd_o;
 logic  [3:0]  dst_mem_tgc_o;
 
+ddr3_cntl cntl (
+  .clk                    (clk),                       
+  .rst                    (rst),                       
+
+  .flushStart             (flushStart),
+  .flushDone              (flushDone),
+
+  .bus_data_flat_i        (bus_cntl_i),
+  .bus_data_flat_o        (bus_cntl_o)
+);
+                                                     
 ddr3_cache inst_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      
+  .flushStart             ('0),
+  .flushDone              (),
+
   .bus_adr_i              (bus_inst_i.Adr),                 
   .bus_data_i             (bus_inst_i.Data),                
   .bus_we_i               (bus_inst_i.We),                  
@@ -146,6 +170,9 @@ ddr3_cache mem_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      
+  .flushStart             (flushStart),
+  .flushDone              (flushDone),
+
   .bus_adr_i              (bus_data_i.Adr),                 
   .bus_data_i             (bus_data_i.Data),                
   .bus_we_i               (bus_data_i.We),                  

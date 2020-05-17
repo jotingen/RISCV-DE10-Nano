@@ -51,6 +51,8 @@ init:
 	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 ../../output/programs/regressions/$(patsubst %.s,%.out,$@) ../../output/programs/regressions/$(patsubst %.s,%_3.v,$@)
 	$(RV_PREFIX)objcopy -O binary                      ../../output/programs/regressions/$(patsubst %.s,%.out,$@) ../../output/programs/regressions/$(patsubst %.s,%.bin,$@)
 	$(RV_PREFIX)objdump -d -M numeric                  ../../output/programs/regressions/$(patsubst %.s,%.out,$@) > ../../output/programs/regressions/$(patsubst %.s,%.asm,$@)
+	xxd -e -c 4 ../../output/programs/regressions/$(patsubst %.s,%.bin,$@)  | awk '{print $$2;}' | paste -d' ' - - - - | sed 's/\s//g' | sed -e :a -e 's/^.\{1,31\}$$/&0/;ta' | fold -w8 | tac | paste -d' ' - - - - | tac | sed 's/\s//g' >  ../../output/programs/regressions/$(patsubst %.s,%_mem.v,$@)
+	xxd -e -c 1 ../../output/programs/regressions/$(patsubst %.s,%.bin,$@)  | awk '{print $$2;}'                       | sed 's/\s//g' | sed -e :a -e 's/^.\{1,1\}$$/&0/;ta'  | fold -w8                                   | sed 's/\s//g' >  ../../output/programs/regressions/$(patsubst %.s,%_sdc.v,$@)
 
 .PHONY: clean
 clean: 

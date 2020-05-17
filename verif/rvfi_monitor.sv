@@ -1,5 +1,7 @@
 class rvfi_monitor;
 
+  logic verbose = 1;
+
   logic        q_rvfi_valid[$];
   logic [63:0] q_rvfi_order[$];
   logic [31:0] q_rvfi_insn[$];
@@ -135,7 +137,7 @@ class rvfi_monitor;
         q_rvfi_csr_minstret_rdata.push_front(rvfi_csr_minstret_rdata);
         q_rvfi_csr_minstret_wdata.push_front(rvfi_csr_minstret_wdata);
         if(!endLoop())
-          $display("INFO:  [%0t][rvfi_mon]: Executed 0x%08x: 0x%08x", $time, rvfi_pc_rdata, rvfi_insn);
+          if(verbose) $display("INFO:  [%0t][rvfi_mon]: Executed 0x%08x: 0x%08x", $time, rvfi_pc_rdata, rvfi_insn);
       end
     
   endfunction

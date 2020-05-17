@@ -14,6 +14,9 @@ module mmc_wb (
   output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_ddr3_flat_o,
   input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] ddr3_mmc_flat_i,
 
+  output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_ddr3cntl_flat_o,
+  input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] ddr3cntl_mmc_flat_i,
+
   output logic [$bits(wishbone_pkg::bus_req_t)-1:0] mmc_led_flat_o,
   input  logic [$bits(wishbone_pkg::bus_rsp_t)-1:0] led_mmc_flat_i,
 
@@ -39,6 +42,9 @@ module mmc_wb (
   wishbone_pkg::bus_req_t mmc_ddr3_o;
   wishbone_pkg::bus_rsp_t ddr3_mmc_i;
 
+  wishbone_pkg::bus_req_t mmc_ddr3cntl_o;
+  wishbone_pkg::bus_rsp_t ddr3cntl_mmc_i;
+
   wishbone_pkg::bus_req_t mmc_led_o;
   wishbone_pkg::bus_rsp_t led_mmc_i;
 
@@ -56,29 +62,32 @@ module mmc_wb (
 
 always_comb
 begin
-  riscv_mmc_i       = riscv_mmc_flat_i;   
-  mmc_riscv_flat_o  = mmc_riscv_o;   
-                               
-  mmc_mem_flat_o    = mmc_mem_o;     
-  mem_mmc_i         = mem_mmc_flat_i;     
-                               
-  mmc_ddr3_flat_o   = mmc_ddr3_o;    
-  ddr3_mmc_i        = ddr3_mmc_flat_i;    
-                               
-  mmc_led_flat_o    = mmc_led_o;     
-  led_mmc_i         = led_mmc_flat_i;     
-                               
-  mmc_keys_flat_o   = mmc_keys_o;    
-  keys_mmc_i        = keys_mmc_flat_i;    
-                               
-  mmc_uart_flat_o   = mmc_uart_o;    
-  uart_mmc_i        = uart_mmc_flat_i;    
-                               
-  mmc_sdcard_flat_o = mmc_sdcard_o;  
-  sdcard_mmc_i      = sdcard_mmc_flat_i;  
-                               
-  mmc_debug_flat_o = mmc_debug_o;  
-  debug_mmc_i      = debug_mmc_flat_i;  
+  riscv_mmc_i         = riscv_mmc_flat_i;
+  mmc_riscv_flat_o    = mmc_riscv_o;
+
+  mmc_mem_flat_o      = mmc_mem_o;
+  mem_mmc_i           = mem_mmc_flat_i;
+
+  mmc_ddr3_flat_o     = mmc_ddr3_o;
+  ddr3_mmc_i          = ddr3_mmc_flat_i;
+
+  mmc_ddr3cntl_flat_o = mmc_ddr3cntl_o;
+  ddr3cntl_mmc_i      = ddr3cntl_mmc_flat_i;
+
+  mmc_led_flat_o      = mmc_led_o;
+  led_mmc_i           = led_mmc_flat_i;
+
+  mmc_keys_flat_o     = mmc_keys_o;
+  keys_mmc_i          = keys_mmc_flat_i;
+
+  mmc_uart_flat_o     = mmc_uart_o;
+  uart_mmc_i          = uart_mmc_flat_i;
+
+  mmc_sdcard_flat_o   = mmc_sdcard_o;
+  sdcard_mmc_i        = sdcard_mmc_flat_i;
+
+  mmc_debug_flat_o    = mmc_debug_o;
+  debug_mmc_i         = debug_mmc_flat_i;
 end
 
 
@@ -86,6 +95,7 @@ logic null_ack;
 
 logic [15:0]    mem_stb_cnt;
 logic [15:0]    ddr3_stb_cnt;
+logic [15:0]    ddr3cntl_stb_cnt;
 logic [15:0]    led_stb_cnt;
 logic [15:0]    keys_stb_cnt;
 logic [15:0]    uart_stb_cnt;
@@ -105,29 +115,33 @@ logic [31:0]    UART_ADDR_LO     = 'hC304_0000;
 logic [31:0]    UART_ADDR_HI     = 'hC304_FFFF;
 logic [31:0]    SDCARD_ADDR_LO   = 'hC400_0000;
 logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
+logic [31:0]    DDR3CNTL_ADDR_LO = 'hC500_0000;
+logic [31:0]    DDR3CNTL_ADDR_HI = 'hC500_FFFF;
 logic [31:0]    DEBUG_ADDR_LO    = 'hD000_0000;
 logic [31:0]    DEBUG_ADDR_HI    = 'hD000_FFFF;
 
 //Instruction counters
 always_ff @(posedge clk)
   begin
-  mem_stb_cnt    <= mem_stb_cnt    + mmc_mem_o.Stb    - mem_mmc_i.Ack;
-  ddr3_stb_cnt   <= ddr3_stb_cnt   + mmc_ddr3_o.Stb   - ddr3_mmc_i.Ack;
-  led_stb_cnt    <= led_stb_cnt    + mmc_led_o.Stb    - led_mmc_i.Ack;
-  keys_stb_cnt   <= keys_stb_cnt   + mmc_keys_o.Stb   - keys_mmc_i.Ack;
-  uart_stb_cnt   <= uart_stb_cnt   + mmc_uart_o.Stb   - uart_mmc_i.Ack;
-  sdcard_stb_cnt <= sdcard_stb_cnt + mmc_sdcard_o.Stb - sdcard_mmc_i.Ack;
-  debug_stb_cnt  <= debug_stb_cnt  + mmc_debug_o.Stb  - debug_mmc_i.Ack;
+  mem_stb_cnt      <= mem_stb_cnt      + mmc_mem_o.Stb      - mem_mmc_i.Ack;
+  ddr3_stb_cnt     <= ddr3_stb_cnt     + mmc_ddr3_o.Stb     - ddr3_mmc_i.Ack;
+  ddr3cntl_stb_cnt <= ddr3cntl_stb_cnt + mmc_ddr3cntl_o.Stb - ddr3cntl_mmc_i.Ack;
+  led_stb_cnt      <= led_stb_cnt      + mmc_led_o.Stb      - led_mmc_i.Ack;
+  keys_stb_cnt     <= keys_stb_cnt     + mmc_keys_o.Stb     - keys_mmc_i.Ack;
+  uart_stb_cnt     <= uart_stb_cnt     + mmc_uart_o.Stb     - uart_mmc_i.Ack;
+  sdcard_stb_cnt   <= sdcard_stb_cnt   + mmc_sdcard_o.Stb   - sdcard_mmc_i.Ack;
+  debug_stb_cnt    <= debug_stb_cnt    + mmc_debug_o.Stb    - debug_mmc_i.Ack;
 
   if(rst)
     begin
-    mem_stb_cnt    <= '0;
-    ddr3_stb_cnt   <= '0;
-    led_stb_cnt    <= '0;
-    keys_stb_cnt   <= '0;
-    uart_stb_cnt   <= '0;
-    sdcard_stb_cnt <= '0;
-    debug_stb_cnt <= '0;
+    mem_stb_cnt      <= '0;
+    ddr3_stb_cnt     <= '0;
+    ddr3cntl_stb_cnt <= '0;
+    led_stb_cnt      <= '0;
+    keys_stb_cnt     <= '0;
+    uart_stb_cnt     <= '0;
+    sdcard_stb_cnt   <= '0;
+    debug_stb_cnt    <= '0;
     end
   end
 //
@@ -136,6 +150,7 @@ always_comb
   begin
   mmc_mem_o.Stb    = '0;
   mmc_ddr3_o.Stb   = '0;
+  mmc_ddr3cntl_o.Stb   = '0;
   mmc_led_o.Stb    = '0;
   mmc_keys_o.Stb   = '0;
   mmc_uart_o.Stb   = '0;
@@ -153,6 +168,12 @@ always_comb
      riscv_mmc_i.Adr <= DDR3_ADDR_HI)
     begin
     mmc_ddr3_o.Stb = riscv_mmc_i.Stb;
+    end
+
+  if(riscv_mmc_i.Adr >= DDR3CNTL_ADDR_LO &
+     riscv_mmc_i.Adr <= DDR3CNTL_ADDR_HI)
+    begin
+    mmc_ddr3cntl_o.Stb = riscv_mmc_i.Stb;
     end
 
   if(riscv_mmc_i.Adr >= LED_ADDR_LO &
@@ -185,74 +206,84 @@ always_comb
     mmc_debug_o.Stb = riscv_mmc_i.Stb;
     end
 
-  mmc_mem_o.Adr     = riscv_mmc_i.Adr - MEM_ADDR_LO; 
-  mmc_mem_o.Data    = riscv_mmc_i.Data;
-  mmc_mem_o.We      = riscv_mmc_i.We;  
-  mmc_mem_o.Sel     = riscv_mmc_i.Sel; 
-  mmc_mem_o.Cyc     = riscv_mmc_i.Cyc; 
-  mmc_mem_o.Tga     = riscv_mmc_i.Tga; 
-  mmc_mem_o.Tgd     = riscv_mmc_i.Tgd; 
-  mmc_mem_o.Tgc     = riscv_mmc_i.Tgc; 
+  mmc_mem_o.Adr       = riscv_mmc_i.Adr - MEM_ADDR_LO;
+  mmc_mem_o.Data      = riscv_mmc_i.Data;
+  mmc_mem_o.We        = riscv_mmc_i.We;
+  mmc_mem_o.Sel       = riscv_mmc_i.Sel;
+  mmc_mem_o.Cyc       = riscv_mmc_i.Cyc;
+  mmc_mem_o.Tga       = riscv_mmc_i.Tga;
+  mmc_mem_o.Tgd       = riscv_mmc_i.Tgd;
+  mmc_mem_o.Tgc       = riscv_mmc_i.Tgc;
 
 
-  mmc_ddr3_o.Adr    = riscv_mmc_i.Adr - DDR3_ADDR_LO; 
-  mmc_ddr3_o.Data   = riscv_mmc_i.Data;
-  mmc_ddr3_o.We     = riscv_mmc_i.We;  
-  mmc_ddr3_o.Sel    = riscv_mmc_i.Sel; 
-  mmc_ddr3_o.Cyc    = riscv_mmc_i.Cyc; 
-  mmc_ddr3_o.Tga    = riscv_mmc_i.Tga; 
-  mmc_ddr3_o.Tgd    = riscv_mmc_i.Tgd; 
-  mmc_ddr3_o.Tgc    = riscv_mmc_i.Tgc; 
+  mmc_ddr3_o.Adr      = riscv_mmc_i.Adr - DDR3_ADDR_LO;
+  mmc_ddr3_o.Data     = riscv_mmc_i.Data;
+  mmc_ddr3_o.We       = riscv_mmc_i.We;
+  mmc_ddr3_o.Sel      = riscv_mmc_i.Sel;
+  mmc_ddr3_o.Cyc      = riscv_mmc_i.Cyc;
+  mmc_ddr3_o.Tga      = riscv_mmc_i.Tga;
+  mmc_ddr3_o.Tgd      = riscv_mmc_i.Tgd;
+  mmc_ddr3_o.Tgc      = riscv_mmc_i.Tgc;
 
 
-  mmc_led_o.Adr     = riscv_mmc_i.Adr - LED_ADDR_LO; 
-  mmc_led_o.Data    = riscv_mmc_i.Data;
-  mmc_led_o.We      = riscv_mmc_i.We;  
-  mmc_led_o.Sel     = riscv_mmc_i.Sel; 
-  mmc_led_o.Cyc     = riscv_mmc_i.Cyc; 
-  mmc_led_o.Tga     = riscv_mmc_i.Tga; 
-  mmc_led_o.Tgd     = riscv_mmc_i.Tgd; 
-  mmc_led_o.Tgc     = riscv_mmc_i.Tgc; 
+  mmc_ddr3cntl_o.Adr  = riscv_mmc_i.Adr - DDR3CNTL_ADDR_LO;
+  mmc_ddr3cntl_o.Data = riscv_mmc_i.Data;
+  mmc_ddr3cntl_o.We   = riscv_mmc_i.We;
+  mmc_ddr3cntl_o.Sel  = riscv_mmc_i.Sel;
+  mmc_ddr3cntl_o.Cyc  = riscv_mmc_i.Cyc;
+  mmc_ddr3cntl_o.Tga  = riscv_mmc_i.Tga;
+  mmc_ddr3cntl_o.Tgd  = riscv_mmc_i.Tgd;
+  mmc_ddr3cntl_o.Tgc  = riscv_mmc_i.Tgc;
 
 
-  mmc_keys_o.Adr    = riscv_mmc_i.Adr - KEYS_ADDR_LO; 
-  mmc_keys_o.Data   = riscv_mmc_i.Data;
-  mmc_keys_o.We     = riscv_mmc_i.We;  
-  mmc_keys_o.Sel    = riscv_mmc_i.Sel; 
-  mmc_keys_o.Cyc    = riscv_mmc_i.Cyc; 
-  mmc_keys_o.Tga    = riscv_mmc_i.Tga; 
-  mmc_keys_o.Tgd    = riscv_mmc_i.Tgd; 
-  mmc_keys_o.Tgc    = riscv_mmc_i.Tgc; 
+  mmc_led_o.Adr       = riscv_mmc_i.Adr - LED_ADDR_LO;
+  mmc_led_o.Data      = riscv_mmc_i.Data;
+  mmc_led_o.We        = riscv_mmc_i.We;
+  mmc_led_o.Sel       = riscv_mmc_i.Sel;
+  mmc_led_o.Cyc       = riscv_mmc_i.Cyc;
+  mmc_led_o.Tga       = riscv_mmc_i.Tga;
+  mmc_led_o.Tgd       = riscv_mmc_i.Tgd;
+  mmc_led_o.Tgc       = riscv_mmc_i.Tgc;
 
 
-  mmc_uart_o.Adr    = riscv_mmc_i.Adr - UART_ADDR_LO; 
-  mmc_uart_o.Data   = riscv_mmc_i.Data;
-  mmc_uart_o.We     = riscv_mmc_i.We;  
-  mmc_uart_o.Sel    = riscv_mmc_i.Sel; 
-  mmc_uart_o.Cyc    = riscv_mmc_i.Cyc; 
-  mmc_uart_o.Tga    = riscv_mmc_i.Tga; 
-  mmc_uart_o.Tgd    = riscv_mmc_i.Tgd; 
-  mmc_uart_o.Tgc    = riscv_mmc_i.Tgc; 
+  mmc_keys_o.Adr      = riscv_mmc_i.Adr - KEYS_ADDR_LO;
+  mmc_keys_o.Data     = riscv_mmc_i.Data;
+  mmc_keys_o.We       = riscv_mmc_i.We;
+  mmc_keys_o.Sel      = riscv_mmc_i.Sel;
+  mmc_keys_o.Cyc      = riscv_mmc_i.Cyc;
+  mmc_keys_o.Tga      = riscv_mmc_i.Tga;
+  mmc_keys_o.Tgd      = riscv_mmc_i.Tgd;
+  mmc_keys_o.Tgc      = riscv_mmc_i.Tgc;
 
 
-  mmc_sdcard_o.Adr  = riscv_mmc_i.Adr - SDCARD_ADDR_LO; 
-  mmc_sdcard_o.Data = riscv_mmc_i.Data;
-  mmc_sdcard_o.We   = riscv_mmc_i.We;  
-  mmc_sdcard_o.Sel  = riscv_mmc_i.Sel; 
-  mmc_sdcard_o.Cyc  = riscv_mmc_i.Cyc; 
-  mmc_sdcard_o.Tga  = riscv_mmc_i.Tga; 
-  mmc_sdcard_o.Tgd  = riscv_mmc_i.Tgd; 
-  mmc_sdcard_o.Tgc  = riscv_mmc_i.Tgc; 
+  mmc_uart_o.Adr      = riscv_mmc_i.Adr - UART_ADDR_LO;
+  mmc_uart_o.Data     = riscv_mmc_i.Data;
+  mmc_uart_o.We       = riscv_mmc_i.We;
+  mmc_uart_o.Sel      = riscv_mmc_i.Sel;
+  mmc_uart_o.Cyc      = riscv_mmc_i.Cyc;
+  mmc_uart_o.Tga      = riscv_mmc_i.Tga;
+  mmc_uart_o.Tgd      = riscv_mmc_i.Tgd;
+  mmc_uart_o.Tgc      = riscv_mmc_i.Tgc;
 
 
-  mmc_debug_o.Adr  = riscv_mmc_i.Adr - DEBUG_ADDR_LO; 
-  mmc_debug_o.Data = riscv_mmc_i.Data;
-  mmc_debug_o.We   = riscv_mmc_i.We;  
-  mmc_debug_o.Sel  = riscv_mmc_i.Sel; 
-  mmc_debug_o.Cyc  = riscv_mmc_i.Cyc; 
-  mmc_debug_o.Tga  = riscv_mmc_i.Tga; 
-  mmc_debug_o.Tgd  = riscv_mmc_i.Tgd; 
-  mmc_debug_o.Tgc  = riscv_mmc_i.Tgc; 
+  mmc_sdcard_o.Adr    = riscv_mmc_i.Adr - SDCARD_ADDR_LO;
+  mmc_sdcard_o.Data   = riscv_mmc_i.Data;
+  mmc_sdcard_o.We     = riscv_mmc_i.We;
+  mmc_sdcard_o.Sel    = riscv_mmc_i.Sel;
+  mmc_sdcard_o.Cyc    = riscv_mmc_i.Cyc;
+  mmc_sdcard_o.Tga    = riscv_mmc_i.Tga;
+  mmc_sdcard_o.Tgd    = riscv_mmc_i.Tgd;
+  mmc_sdcard_o.Tgc    = riscv_mmc_i.Tgc;
+
+
+  mmc_debug_o.Adr     = riscv_mmc_i.Adr - DEBUG_ADDR_LO;
+  mmc_debug_o.Data    = riscv_mmc_i.Data;
+  mmc_debug_o.We      = riscv_mmc_i.We;
+  mmc_debug_o.Sel     = riscv_mmc_i.Sel;
+  mmc_debug_o.Cyc     = riscv_mmc_i.Cyc;
+  mmc_debug_o.Tga     = riscv_mmc_i.Tga;
+  mmc_debug_o.Tgd     = riscv_mmc_i.Tgd;
+  mmc_debug_o.Tgc     = riscv_mmc_i.Tgc;
   end
 
 //Subsystems to CPU
@@ -275,6 +306,11 @@ always_comb
   if(ddr3_stb_cnt)
     begin
     mmc_riscv_o.Stall = ddr3_mmc_i.Stall;
+    end
+
+  if(ddr3cntl_stb_cnt)
+    begin
+    mmc_riscv_o.Stall = ddr3cntl_mmc_i.Stall;
     end
 
   if(led_stb_cnt)
@@ -322,6 +358,17 @@ always_comb
     mmc_riscv_o.Tga   = ddr3_mmc_i.Tga;
     mmc_riscv_o.Tgd   = ddr3_mmc_i.Tgd;
     mmc_riscv_o.Tgc   = ddr3_mmc_i.Tgc;
+    end
+
+  if(ddr3cntl_mmc_i.Ack | ddr3cntl_mmc_i.Err | ddr3cntl_mmc_i.Rty)
+    begin
+    mmc_riscv_o.Ack   = ddr3cntl_mmc_i.Ack;
+    mmc_riscv_o.Err   = ddr3cntl_mmc_i.Err;
+    mmc_riscv_o.Rty   = ddr3cntl_mmc_i.Rty;
+    mmc_riscv_o.Data  = ddr3cntl_mmc_i.Data;
+    mmc_riscv_o.Tga   = ddr3cntl_mmc_i.Tga;
+    mmc_riscv_o.Tgd   = ddr3cntl_mmc_i.Tgd;
+    mmc_riscv_o.Tgc   = ddr3cntl_mmc_i.Tgc;
     end
 
   if(led_mmc_i.Ack | led_mmc_i.Err | led_mmc_i.Rty)
@@ -401,6 +448,7 @@ always_ff @(posedge clk)
   if( riscv_mmc_i.Stb &
      ~mmc_mem_o.Stb &
      ~mmc_ddr3_o.Stb &
+     ~mmc_ddr3cntl_o.Stb &
      ~mmc_led_o.Stb &
      ~mmc_keys_o.Stb &
      ~mmc_uart_o.Stb &

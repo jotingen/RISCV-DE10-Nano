@@ -6,6 +6,7 @@
 `include "../../src/wishbone/wishbone_pkg.sv"
 
 `include "../../src/de10nano/ddr3/ddr3.sv"
+`include "../../src/de10nano/ddr3/ddr3_cntl.sv"
 `include "../../src/de10nano/ddr3/ddr3_cache.sv"
 `include "../../src/common/lru_32.sv"
 `include "../../src/common/lru_16.sv"
@@ -212,6 +213,9 @@ module ddr3_unit_test;
   //===================================
   ddr3 my_ddr3(.*,
 
+               .bus_cntl_flat_i ('0),
+               .bus_cntl_flat_o (),
+                              
                .bus_inst_flat_i (bus_inst_i),
                .bus_inst_flat_o (bus_inst_o),
                               

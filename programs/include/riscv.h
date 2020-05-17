@@ -7,6 +7,8 @@
 #define DDR3_ENTRIES_32B  (DDR3_ENTRIES_8B>>2)
 #define DDR3_ENTRIES_64B  (DDR3_ENTRIES_8B>>3)
 
+#define DDR3CNTL_FLUSH    (*((volatile unsigned int *) (0xC5000000)))
+
 #define LED               (*((volatile unsigned int *) (0xC0000000)))
 
 #define DEBUG             (*((volatile unsigned int *) (0xD0000000)))

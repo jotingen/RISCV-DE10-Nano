@@ -41,9 +41,14 @@ init:
 	mkdir -p ../../output/programs/apps/$(dir $@)
 	$(CC) $(CCFLAGS) -S -o ../../output/programs/apps/$(patsubst %.s,%.s,$@)    $(patsubst %.s,%.c,$@) 
 	$(CC) $(CCFLAGS)    -o ../../output/programs/apps/$(patsubst %.s,%.out,$@)  $(patsubst %.s,%.c,$@) $(addprefix ../../output/programs/lib/,$(LIB_OBJ)) ../../output/programs/apps/riscv.o
-	$(RV_PREFIX)objcopy -O verilog                     ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_0.v,$@)
-	sed -i 's/@1/@0/' ../../output/programs/apps/$(patsubst %.s,%_0.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 0 ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_0.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 1 ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_1.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 2 ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_2.v,$@)
+	$(RV_PREFIX)objcopy -O verilog --interleave=4 -b 3 ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%_3.v,$@)
 	$(RV_PREFIX)objcopy -O binary                      ../../output/programs/apps/$(patsubst %.s,%.out,$@) ../../output/programs/apps/$(patsubst %.s,%.bin,$@)
+	$(RV_PREFIX)objdump -d -M numeric                  ../../output/programs/apps/$(patsubst %.s,%.out,$@) > ../../output/programs/apps/$(patsubst %.s,%.asm,$@)
+	xxd -e -c 4 ../../output/programs/apps/$(patsubst %.s,%.bin,$@)  | awk '{print $$2;}' | paste -d' ' - - - - | sed 's/\s//g' | sed -e :a -e 's/^.\{1,31\}$$/&0/;ta' | fold -w8 | tac | paste -d' ' - - - - | tac | sed 's/\s//g' >  ../../output/programs/apps/$(patsubst %.s,%_mem.v,$@)
+	xxd -e -c 1 ../../output/programs/apps/$(patsubst %.s,%.bin,$@)  | awk '{print $$2;}'                       | sed 's/\s//g' | sed -e :a -e 's/^.\{1,1\}$$/&0/;ta'  | fold -w8                                   | sed 's/\s//g' >  ../../output/programs/apps/$(patsubst %.s,%_sdc.v,$@)
 
 .PHONY: clean
 clean: 
