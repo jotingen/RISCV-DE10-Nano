@@ -13,17 +13,9 @@ module ddr3_model (
 
 localparam DELAY = 1;
 
-logic [127:0] ddr3 [2**(26-4)-1:0];
+logic          [127:0] ddr3 [2**(26-4)-1:0];
 logic [DELAY:0]        ddr3_avl_rdata_valid_stg; 
 logic [DELAY:0][127:0] ddr3_avl_rdata_stg;       
-logic         ddr3_avl_rdata_valid_stg2; 
-logic [127:0] ddr3_avl_rdata_stg2;       
-logic         ddr3_avl_rdata_valid_stg3; 
-logic [127:0] ddr3_avl_rdata_stg3;       
-logic         ddr3_avl_rdata_valid_stg4; 
-logic [127:0] ddr3_avl_rdata_stg4;       
-logic         ddr3_avl_rdata_valid_stg5; 
-logic [127:0] ddr3_avl_rdata_stg5;       
 
 always_ff @(posedge clk)
   begin
