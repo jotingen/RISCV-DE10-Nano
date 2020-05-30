@@ -20,19 +20,19 @@ all: clean build sim
 .PHONY: build
 build: 
 	mkdir -p $(OUT)
-	vlib.exe $(OUT)
-	vmap.exe work $(OUT)
+	vlib $(OUT)
+	vmap work $(OUT)
 	$(MAKE) $(V_FILES) $(SV_PKG) $(SV_FILES)
 
 %$(V_SUFFIX): FORCE
-	@vlog.exe -vlog01compat -work work +define+DEBUG +define+SIM +incdir+$(dir $@) $@ 
+	@vlog -vlog01compat -work work +define+DEBUG +define+SIM +incdir+$(dir $@) $@ 
 
 %$(SV_SUFFIX): FORCE
-	vlog.exe -sv -work work +define+DEBUG +define+SIM +incdir+$(dir $@) $@
+	vlog -sv -work work +define+DEBUG +define+SIM +incdir+$(dir $@) $@
 	
 .PHONY: sim
 sim:
-	vsim.exe -c -GOUT=$(OUT) -do RISCV.do
+	vsim -c -GOUT=$(OUT) -do RISCV.do
 
 .PHONY: clean
 clean:
