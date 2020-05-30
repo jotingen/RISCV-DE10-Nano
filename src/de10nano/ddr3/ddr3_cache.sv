@@ -44,6 +44,8 @@ module ddr3_cache (
   input  logic  [3:0]    dst_tgc_o
 );
 
+  localparam BUFFERS = 64;
+
 typedef struct packed {
   logic         Vld;
   logic [25:4]  Addr;
@@ -72,14 +74,14 @@ logic         state_load_pending;
 logic         state_update;
 logic         state_flushall;
 
-logic [4:0]  flush_ndx;
+logic [$clog2(BUFFERS)-1:0]  flush_ndx;
 
-buffer_entry_t [31:0]        mem_buffer;
+buffer_entry_t       mem_buffer [BUFFERS-1:0]  ;
 logic               mem_buffer_in_lru;
 logic               mem_buffer_lru_touch;
-logic [4:0]         mem_buffer_lru;
-logic [4:0]         mem_buffer_lru_entry_next;
-logic [4:0]         mem_buffer_lru_entry;
+logic [$clog2(BUFFERS)-1:0]         mem_buffer_lru;
+logic [$clog2(BUFFERS)-1:0]         mem_buffer_lru_entry_next;
+logic [$clog2(BUFFERS)-1:0]         mem_buffer_lru_entry;
 
 assign bus_req_stgd = ~bus_buff_empty; 
 wishbone_buff	bus_buff (
@@ -110,21 +112,71 @@ wishbone_buff	bus_buff (
 	.usedw        (  )
 	);
 
-lru_32 mem_lru (
-  .clk,
-  .rst,
-  
-  .lru_touch   (mem_buffer_lru_touch),
-  .lru_touched (mem_buffer_lru_entry),
+  logic [(BUFFERS*(BUFFERS-1) >> 1)-1:0] lru_reg;
+  logic [(BUFFERS*(BUFFERS-1) >> 1)-1:0] lru_update;
+  logic [BUFFERS-1:0] lru_access;
+  logic [BUFFERS-1:0] lru_post;
 
-  
-  .lru         (mem_buffer_lru)
+mor1kx_cache_lru #(.NUMWAYS(BUFFERS)) mem_lru (
+  .current  (lru_reg),
+  .update   (lru_update),
+  .access   (lru_access),
+  .lru_pre  (),
+  .lru_post (lru_post)
   );
+always_comb
+begin
+  //Decode touched LRU
+  lru_access = '0;
+  lru_access[mem_buffer_lru_entry] = mem_buffer_lru_touch;
+
+  //Encode current LRU
+  mem_buffer_lru = '0;
+    for(int i = 0; i < BUFFERS; i++)
+    begin
+      if(lru_post[i])
+      begin
+        mem_buffer_lru = i;
+        break;
+      end
+    end
+
+end
+
+
+always_ff @(posedge clk)
+begin
+  if(mem_buffer_lru_touch)
+  begin
+    lru_reg <= lru_update;
+  end
+  else
+  begin
+    lru_reg <= lru_reg;
+  end
+
+  if(rst)
+  begin
+    lru_reg <= '0;
+  end
+end
+
+//lru_32 mem_lru (
+//  .clk,
+//  .rst,
+//  
+//  .lru_touch   (mem_buffer_lru_touch),
+//  .lru_touched (mem_buffer_lru_entry),
+//
+//  
+//  .lru         (mem_buffer_lru)
+//  );
+
 always_comb
   begin
   mem_buffer_in_lru         = '0;
   mem_buffer_lru_entry_next = '0;
-  for(int i = 0; i < 32; i++)
+  for(int i = 0; i < BUFFERS; i++)
     begin
     if(!bus_buff_empty &&
        mem_buffer[i].Vld &&
@@ -194,10 +246,10 @@ begin
                     end
                   else
                     begin
-                    logic [4:0] lru_entry;
+                    logic [BUFFERS-1:0] lru_entry;
                     mem_buffer_lru_touch <= '1;
                     lru_entry = mem_buffer_lru;
-                    for(int i = 0; i < 32; i++)
+                    for(int i = 0; i < BUFFERS; i++)
                       begin
                       if(~mem_buffer[i].Vld)
                         begin
@@ -411,7 +463,10 @@ begin
       state_load_pending  <= '0;
       state_update        <= '0;
 
-      mem_buffer          <= '0;
+      for(int i = 0; i < BUFFERS; i++)
+      begin
+        mem_buffer[i]       <= '0;
+      end
       end
   end
 
