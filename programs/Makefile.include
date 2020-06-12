@@ -6,7 +6,7 @@ AR        = $(RV_PREFIX)ar
 OBJCOPY   = $(RV_PREFIX)objcopy
 OBJDUMP   = $(RV_PREFIX)objdump
 
-CCFLAGS   = -Wall -Wextra -O2 -mno-fdiv -ffreestanding -nostartfiles  -T../riscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im 
+CCFLAGS   = -Wall -Wextra -O2 -mno-fdiv -ffreestanding -nostartfiles  -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im 
 
 ROOTDIR  := $(shell git rev-parse --show-toplevel)
 OUTDIR   := $(ROOTDIR)/output/programs
