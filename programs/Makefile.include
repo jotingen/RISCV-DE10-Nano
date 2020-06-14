@@ -1,0 +1,29 @@
+#RISC-V Command Prefix
+RV_PREFIX = riscv32-unknown-elf-
+#Commands
+GCC       = $(RV_PREFIX)gcc 
+AR        = $(RV_PREFIX)ar
+OBJCOPY   = $(RV_PREFIX)objcopy
+OBJDUMP   = $(RV_PREFIX)objdump
+
+CCFLAGS   = -Wall -Wextra -O2 -mno-fdiv -ffreestanding -nostartfiles  -Triscv32.ld  -mcmodel=medany -mabi=ilp32 -march=rv32im 
+
+ROOTDIR  := $(shell git rev-parse --show-toplevel)
+OUTDIR   := $(ROOTDIR)/output/programs
+
+rwildcard  = $(foreach d,$(wildcard $1/*),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))            
+FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
+FILTER_IN  = $(foreach v,$(2),$(if $(findstring $(1),$(v)),$(v),))
+
+C_SUFFIX            =.c
+OBJ_SUFFIX          =.o
+ASSEMBLY_SUFFIX     =.s
+LIB_SUFFIX          =.a
+OUT_SUFFIX          =.out
+OUT_ASSEMBLY_SUFFIX =.out.s
+BIN_SUFFIX          =.bin
+VERILOG_SUFFIX      =.v
+VERILOG0_SUFFIX     =_0.v
+VERILOG1_SUFFIX     =_1.v
+VERILOG2_SUFFIX     =_2.v
+VERILOG3_SUFFIX     =_3.v
