@@ -357,6 +357,49 @@ void sdcard_rsp(uint8_t * arr, uint8_t bytes, uint64_t rsp) {
     }
     return;
 }
+void     sdcard_read2(uint32_t addr) {
+  //LED = 0x11;
+  uint64_t message;
+  uint64_t rsp;
+  uint8_t  rsp_arr[5];
+
+  message = genSDCardMsg(17,addr);
+
+  //console_puts("  MSG:");
+  //printSDMsg(message);
+  //console_putc('\n');
+  //display_write();
+
+  rsp = sdcard_cmd(message,1,1);
+  sdcard_rsp(rsp_arr, 1, rsp);
+
+  //console_puts("  RSP:");
+  //printSDResult(rsp,1);
+  //console_putc('\n');
+  //display_write();
+
+  //console_puts("  ");
+  //SD_printR1(rsp_arr[0]);
+
+  //for(int i = 0; i < 514; i = i+4) {
+  //  //LED = i;
+  //  uint32_t data_out = SDCARD_DATA_OUT;
+  //  data[i+0] = data_out >> 0;
+  //  data[i+1] = data_out >> 8;
+  //  if(i+2 < 514) {
+  //    data[i+2] = data_out >> 16;
+  //  }
+  //  if(i+3 < 514) {
+  //    data[i+3] = data_out >> 24;
+  //  }
+  //}
+  //console_putc('\n');
+  //console_puts("Read data captured\n");
+  //display_write();
+  //LED = 0x22;
+  return;
+}
+
 
 void     sdcard_read(uint8_t * data, uint32_t addr) {
   //LED = 0x11;

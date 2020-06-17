@@ -820,8 +820,8 @@ always
     if(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
     begin
       $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_0[%1d]:%02X",
-        i,sd.flash_mem[i+0],
-        i,de10nano.mem.mem_array_0[i]);
+        i,sd.flash_mem[4*i+0],
+        i,de10nano.debug.mem_array_0[i]);
     end
     `FAIL_IF(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
 
@@ -829,7 +829,7 @@ always
     begin
       $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_1[%1d]:%02X",
         i,sd.flash_mem[4*i+1],
-        i,de10nano.mem.mem_array_1[i]);
+        i,de10nano.debug.mem_array_1[i]);
     end
     `FAIL_IF(sd.flash_mem[4*i+1] !== de10nano.debug.mem_array_1[i])
 
@@ -837,7 +837,7 @@ always
     begin
       $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_2[%1d]:%02X",
         i,sd.flash_mem[4*i+2],
-        i,de10nano.mem.mem_array_2[i]);
+        i,de10nano.debug.mem_array_2[i]);
     end
     `FAIL_IF(sd.flash_mem[4*i+2] !== de10nano.debug.mem_array_2[i])
 
@@ -845,7 +845,7 @@ always
     begin
       $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_3[%1d]:%02X",
         i,sd.flash_mem[4*i+3],
-        i,de10nano.mem.mem_array_3[i]);
+        i,de10nano.debug.mem_array_3[i]);
     end
     `FAIL_IF(sd.flash_mem[4*i+3] !== de10nano.debug.mem_array_3[i])
   end

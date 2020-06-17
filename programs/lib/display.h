@@ -59,6 +59,7 @@ void console_puthex8(uint8_t val);
 void set_uart_baud(uint32_t baud);
 
 char * uint8_to_hex(uint8_t number);
+char * uint16_to_hex(uint16_t number);
 char * uint32_to_hex(uint32_t number);
 char * uint64_to_hex(uint64_t number);
 
