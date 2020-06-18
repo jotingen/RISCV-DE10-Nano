@@ -75,8 +75,6 @@ void reverse(uint8_t arr[], int n) {
 }
 
 void main(void) {
-  static uint8_t sdcard_data[514];
-
   static volatile uint32_t * const ddr3 = (volatile uint32_t *) 0x10000000;
 
   master_boot_record_t * master_boot_record;
@@ -104,18 +102,10 @@ void main(void) {
   LED=1;
   console_puts("Testing SDCard read of Sector 0...");
   LED=2;
-  sdcard_read2(512*0);
+  sdcard_read(512*0);
   LED=22;
-  for(int i = 0; i < 512>>2; i++) {
-    //LED = 0xf & SDCARD_DATA[i];
-    //LED = 0xf & SDCARD_DATA[i] >> 8;
-    //LED = 0xf & SDCARD_DATA[i] >> 16;
-    //LED = 0xf & SDCARD_DATA[i] >> 24;
-    //console_puts(uint32_to_hex(SDCARD_DATA[i]));
-    console_puts(uint8_to_hex(0xFF &  SDCARD_DATA[i]));
-    console_puts(uint8_to_hex(0xFF & (SDCARD_DATA[i] >> 8)));
-    console_puts(uint8_to_hex(0xFF & (SDCARD_DATA[i] >> 16)));
-    console_puts(uint8_to_hex(0xFF & (SDCARD_DATA[i] >> 24)));
+  for(int i = 0; i < 512; i++) {
+    console_puts(uint8_to_hex(SDCARD_DATA_8B[i]));
   }
   //LED=3;
   //sdcard_read(sdcard_data,512*0);
@@ -128,7 +118,7 @@ void main(void) {
   LED=5;
 
   console_puts("SDCard Master Boot Record Parse Test\n");
-  sdcard_read2(512*0);
+  sdcard_read(512*0);
   //sdcard_read(sdcard_data,512*0);
 
   master_boot_record = (master_boot_record_t*)SDCARD_DATA;
@@ -267,7 +257,7 @@ void main(void) {
   console_puts(uint32_to_hex(boot_sector_address));
   console_putc('\n');
   
-  sdcard_read2(boot_sector_address);
+  sdcard_read(boot_sector_address);
   //sdcard_read(sdcard_data,boot_sector_address);
   boot_sector = (boot_sector_t*)SDCARD_DATA;
   //Convert little endian to big endian
@@ -403,7 +393,7 @@ void main(void) {
   console_puts(uint32_to_hex(fat_sector_address));
   console_putc('\n');
 
-  sdcard_read2(fat_sector_address);
+  sdcard_read(fat_sector_address);
   //sdcard_read(sdcard_data,fat_sector_address);
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(SDCARD_DATA[i]));
@@ -427,7 +417,7 @@ void main(void) {
   console_puts(uint32_to_hex(boot_sector_address));
   console_putc('\n');
   
-  sdcard_read2(boot_sector_address);
+  sdcard_read(boot_sector_address);
   //sdcard_read(sdcard_data,boot_sector_address);
   boot_sector = (boot_sector_t*)SDCARD_DATA;
   //Convert little endian to big endian
@@ -563,7 +553,7 @@ void main(void) {
   console_puts(uint32_to_hex(fat_sector_address));
   console_putc('\n');
 
-  sdcard_read2(fat_sector_address);
+  sdcard_read(fat_sector_address);
   //sdcard_read(sdcard_data,fat_sector_address);
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(SDCARD_DATA[i]));
@@ -583,7 +573,7 @@ void main(void) {
   console_puts(uint32_to_hex(boot_sector_address));
   console_putc('\n');
   
-  sdcard_read2(boot_sector_address);
+  sdcard_read(boot_sector_address);
   //sdcard_read(sdcard_data,boot_sector_address);
   boot_sector = (boot_sector_t*)SDCARD_DATA;
   //Convert little endian to big endian
@@ -719,7 +709,7 @@ void main(void) {
   console_puts(uint32_to_hex(fat_sector_address));
   console_putc('\n');
 
-  sdcard_read2(fat_sector_address);
+  sdcard_read(fat_sector_address);
   //sdcard_read(sdcard_data,fat_sector_address);
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(SDCARD_DATA[i]));
@@ -739,7 +729,7 @@ void main(void) {
   console_puts(uint32_to_hex(boot_sector_address));
   console_putc('\n');
   
-  sdcard_read2(boot_sector_address);
+  sdcard_read(boot_sector_address);
   //sdcard_read(sdcard_data,boot_sector_address);
   boot_sector = (boot_sector_t*)SDCARD_DATA;
   //Convert little endian to big endian
@@ -875,7 +865,7 @@ void main(void) {
   console_puts(uint32_to_hex(fat_sector_address));
   console_putc('\n');
 
-  sdcard_read2(fat_sector_address);
+  sdcard_read(fat_sector_address);
   //sdcard_read(sdcard_data,fat_sector_address);
   for(int i = 0; i < 514; i++) {
     console_puts(uint8_to_hex(SDCARD_DATA[i]));

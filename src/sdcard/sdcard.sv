@@ -65,41 +65,14 @@ logic          state_data_pending;
 logic          state_data_recieving;
 logic          state_data_recieved;
 
-logic          data_in_fifo_clr;
 logic          data_in_fifo_wrreq;
 logic [$clog2(512+16)-1+3:0] data_in_fifo_wrndx; //Add 3 to count incoming bits
 logic          data_in_fifo_rdack;
-logic [31:0]   data_in_fifo_data_out_rev;
-logic [31:0]   data_in_fifo_data_out;
-logic          data_in_fifo_empty;
 
 logic [7:0] mem_array_3 [((512+16)>>2)-1:0];
 logic [7:0] mem_array_2 [((512+16)>>2)-1:0];
 logic [7:0] mem_array_1 [((512+16)>>2)-1:0];
 logic [7:0] mem_array_0 [((512+16)>>2)-1:0];
-
-
-//TODO this is 8k because I dont want to deal with CRC, should probably deal and use 4k
-sdcard_data_in_fifo data_in_fifo (
-  .aclr    (data_in_fifo_clr),
-  .data    (MISO),
-  .rdclk   (clk),
-  .rdreq   (data_in_fifo_rdack),
-  .rdusedw (),
-  .wrclk   (clk),
-  .wrreq   (data_in_fifo_wrreq),
-  .wrusedw (),
-  .q       (data_in_fifo_data_out_rev),
-  .rdempty (data_in_fifo_empty)
-);
-
-always_comb
-  begin
-  for(int i = 0; i < 32; i++)
-    begin
-    data_in_fifo_data_out[i] = data_in_fifo_data_out_rev[31-i];
-    end
-  end
 
 always_comb
   begin
@@ -134,7 +107,6 @@ always_ff @(posedge clk)
   dataArrived          <= dataArrived; 
   dataOut              <= dataOut;     
 
-  data_in_fifo_clr     <= '0;
   data_in_fifo_wrreq   <= '0;
   data_in_fifo_wrndx   <= data_in_fifo_wrndx;
   data_in_fifo_rdack   <= '0;
@@ -289,32 +261,6 @@ always_ff @(posedge clk)
                             state_idle            <= '1;
                             end
                    //Data
-                   'h0007:  begin 
-                            bus_data_o.Ack             <= '1;
-                            data_in_fifo_rdack    <= '1;
-                            if(data_32b_out < 'd129) 
-                              begin
-                              for(int i = 0; i < 8; i++)
-                                begin            ;
-                                if(data_32b_out == 'd128)
-                                  begin
-                                  bus_data_o.Data[i+24]     <= '0;
-                                  bus_data_o.Data[i+16]     <= '0;
-                                  end
-                                else
-                                  begin
-                                  bus_data_o.Data[i+24]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[31-i] : '0; //Reverse bytes to compensate for stream
-                                  bus_data_o.Data[i+16]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[23-i] : '0; //Reverse bytes to compensate for stream
-                                  end
-                                bus_data_o.Data[i+8]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[15-i] : '0; //Reverse bytes to compensate for stream
-                                bus_data_o.Data[i+0]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[7-i]  : '0; //Reverse bytes to compensate for stream
-                                end
-                              //data <= {data[31:0],data[512*8+16-1:32]};
-                              data_32b_out <= data_32b_out+1;
-                              end
-                            state_idle <= '1;
-                            end
-                   //Data
                    'b0000_001x_xxxx_xx: begin
                                     //$display("Reading %03x:%08x",(bus_data_i.Adr - 'h0201)>>2,{mem_array_3[(bus_data_i.Adr - 'h0200)>>2],
                                     //                                                           mem_array_2[(bus_data_i.Adr - 'h0200)>>2],
@@ -438,7 +384,6 @@ always_ff @(posedge clk)
                            end
                          else if({MISO,data[16-1:16-1-6]} == 'h7F)
                            begin
-                           data_in_fifo_clr   <= '1;
                            data_in_fifo_wrndx <= '0;
                            bits <= 'd1;
                            state_data_recieved <= '1;
@@ -508,7 +453,6 @@ always_ff @(posedge clk)
     dataArrived <= '0;
     dataOut     <= '0;
 
-    data_in_fifo_clr   <= '1;
     data_in_fifo_wrndx <= '0;
     end
   end
