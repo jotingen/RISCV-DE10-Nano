@@ -12,8 +12,6 @@
 void reverse(uint8_t arr[], int n);
 
 void main(void) {
-  static uint8_t sdcard_data[514];
-
   static volatile uint32_t * const ddr3 = (volatile uint32_t *) 0x10000000;
 
   uint32_t sector_index = 0;
@@ -26,14 +24,14 @@ void main(void) {
   LED = 0x00;
 
   while(sector_index < 2) {
-    sdcard_read(sdcard_data,512*sector_index);
+    sdcard_read(512*sector_index);
 
     for(int i = 0; i < 512; i= i+4) {
       uint32_t word = 0;
-      word = (word << 8) | sdcard_data[i+3];
-      word = (word << 8) | sdcard_data[i+2];
-      word = (word << 8) | sdcard_data[i+1];
-      word = (word << 8) | sdcard_data[i+0];
+      word = (word << 8) | SDCARD_DATA_8B[i+3];
+      word = (word << 8) | SDCARD_DATA_8B[i+2];
+      word = (word << 8) | SDCARD_DATA_8B[i+1];
+      word = (word << 8) | SDCARD_DATA_8B[i+0];
       ddr3[sector_index*512/4+i/4] = word;
     }
 

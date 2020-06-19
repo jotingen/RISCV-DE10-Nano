@@ -2,10 +2,10 @@
 
 #include "debug.h"
 
-uint8_t  * debug_array_8  = (uint8_t *)&DEBUG;
-uint16_t * debug_array_16 = (uint16_t*)&DEBUG;
-uint32_t * debug_array_32 = (uint32_t*)&DEBUG;
-uint64_t * debug_array_64 = (uint64_t*)&DEBUG;
+static volatile uint8_t  * const debug_array_8  = (volatile uint8_t *)&DEBUG;
+static volatile uint16_t * const debug_array_16 = (volatile uint16_t*)&DEBUG;
+static volatile uint32_t * const debug_array_32 = (volatile uint32_t*)&DEBUG;
+static volatile uint64_t * const debug_array_64 = (volatile uint64_t*)&DEBUG;
 
 void DEBUG_set8 (uint16_t addr, uint8_t  val) {
   if(addr < DEBUG_ENTRIES_8B) {
