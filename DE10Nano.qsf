@@ -974,6 +974,8 @@ set_global_assignment -name SEARCH_PATH src/quartus/ram_1rw_8192x16
 set_global_assignment -name SEARCH_PATH src/riscv
 set_global_assignment -name SEARCH_PATH src/sdcard
 set_global_assignment -name SEARCH_PATH src/shield
+set_global_assignment -name VERILOG_FILE submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v
+set_global_assignment -name SYSTEMVERILOG_FILE src/de10nano/ddr3/ddr3_cache_set.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/wishbone/wishbone_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/common/lru_32.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/common/lru_16.sv
