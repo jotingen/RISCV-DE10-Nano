@@ -91,8 +91,8 @@ ddr3_cntl cntl (
   .bus_data_flat_i        (bus_cntl_i),
   .bus_data_flat_o        (bus_cntl_o)
 );
-                                                     
-ddr3_cache #(.WAYS(4)) inst_cache (
+     
+ddr3_cache #(.SETS(8), .WAYS(4)) inst_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      
@@ -106,7 +106,7 @@ ddr3_cache #(.WAYS(4)) inst_cache (
   .dst_o_flat             (dst_inst_o)
 );
 
-ddr3_cache #(.WAYS(128)) mem_cache (
+  ddr3_cache #(.SETS(16), .WAYS(4)) mem_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      

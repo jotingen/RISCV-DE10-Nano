@@ -15,6 +15,7 @@
 `include "../../src/de10nano/ddr3/ddr3.sv"
 `include "../../src/de10nano/ddr3/ddr3_cntl.sv"
 `include "../../src/de10nano/ddr3/ddr3_cache.sv"
+`include "../../src/de10nano/ddr3/ddr3_cache_set.sv"
 `include "../../src/de10nano/ddr3/ddr3_fifo.v"
 `include "../../src/de10nano/debounce.v"
 `include "../../src/de10nano/keys.sv"

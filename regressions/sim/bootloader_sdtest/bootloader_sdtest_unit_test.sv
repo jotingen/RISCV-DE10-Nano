@@ -5,6 +5,8 @@
 
 `include "../../../src/wishbone/wishbone_pkg.sv"
 
+`include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v" 
+
 `include "../../../src/common/lru_16.sv"
 `include "../../../src/common/lru_32.sv"
 `include "../../../src/de10nano/ADC/simulation/ADC.v"
@@ -13,6 +15,7 @@
 `include "../../../src/de10nano/ddr3/ddr3.sv"
 `include "../../../src/de10nano/ddr3/ddr3_cntl.sv"
 `include "../../../src/de10nano/ddr3/ddr3_cache.sv"
+`include "../../../src/de10nano/ddr3/ddr3_cache_set.sv"
 `include "../../../src/de10nano/ddr3/ddr3_fifo.v"
 `include "../../../src/de10nano/debounce.v"
 `include "../../../src/de10nano/keys.sv"

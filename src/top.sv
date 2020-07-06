@@ -648,7 +648,7 @@ riscv #(.M_EXT(1)) riscv (
     .sdcard_data_flat_o                 (sdcard_mmc_data)    
   );
   
-  mem #(.SIZE(14)) debug (
+  mem #(.SIZE(10)) debug (
     .clk         (clk),
     .rst         (rst),
   

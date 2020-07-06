@@ -28,9 +28,11 @@ begin
   dst_o      = dst_o_flat;
 end
 
+localparam ADR_TAG_LSB = $clog2(SETS)+4;
+
 typedef struct packed {
   logic             Vld;
-  logic      [26:4] Addr;
+  logic      [26:ADR_TAG_LSB] Addr;
   logic             Dirty;
   logic [3:0][31:0] Data;
 } buffer_entry_t;
@@ -57,7 +59,13 @@ logic [$clog2(WAYS)-1:0]         mem_buffer_lru;
 logic [$clog2(WAYS)-1:0]         mem_buffer_lru_entry_next;
 logic [$clog2(WAYS)-1:0]         mem_buffer_lru_entry;
 
-logic                            bu_req_stgd;
+logic [SETS-1:0]                 set_target;
+logic [$clog2(SETS)-1:0]         set_target_enc;
+buffer_entry_t [SETS-1:0][WAYS-1:0]        set_mem_buffer;
+logic [SETS-1:0]                 set_mem_buffer_in_lru;
+logic [SETS-1:0][$clog2(WAYS)-1:0]         set_mem_buffer_lru;
+logic [SETS-1:0][$clog2(WAYS)-1:0]         set_mem_buffer_lru_entry_next;
+logic [SETS-1:0][$clog2(WAYS)-1:0]         set_mem_buffer_lru_entry;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Incoming buffer
@@ -83,14 +91,27 @@ wishbone_buff	bus_buff (
 // Sets
 ///////////////////////////////////////////////////////////////////////////////
 
+assign set_target_enc = bus_i_stgd.Adr[$clog2(SETS)-1+4:4];
 generate
   genvar s;
   for(s = 0; s < SETS; s++)
   begin : gen_set
-    ddr3_cache_set #(.WAYS(WAYS)) set (
+
+    if(SETS == 1)
+    begin
+      assign set_target[s]  = '1;
+    end
+    else
+    begin
+      assign set_target[s]  = bus_i_stgd.Adr[$clog2(SETS)-1+4:4] == s;
+    end
+
+    ddr3_cache_set #(.SETS(SETS),.WAYS(WAYS)) set (
       .clk                       (clk                      ),
       .rst                       (rst                      ),
-                              
+
+      .set_target                (set_target[s]            ),
+
       .state_idle                (state_idle               ),
       .state_flush               (state_flush              ),
       .state_load                (state_load               ),
@@ -104,14 +125,34 @@ generate
       .bus_buff_empty            (bus_buff_empty           ),
       .flush_ndx                 (flush_ndx                ),
                               
-      .mem_buffer                (mem_buffer               ),
-      .mem_buffer_lru_entry      (mem_buffer_lru_entry     ),
-      .mem_buffer_lru            (mem_buffer_lru           ),
-      .mem_buffer_in_lru         (mem_buffer_in_lru        ),
-      .mem_buffer_lru_entry_next (mem_buffer_lru_entry_next)
+      .mem_buffer                (set_mem_buffer[s]               ),
+      .mem_buffer_lru_entry      (set_mem_buffer_lru_entry[s]     ),
+      .mem_buffer_lru            (set_mem_buffer_lru[s]           ),
+      .mem_buffer_in_lru         (set_mem_buffer_in_lru[s]        ),
+      .mem_buffer_lru_entry_next (set_mem_buffer_lru_entry_next[s])
     );
   end
 endgenerate
+always_comb
+begin
+  mem_buffer                = 'x;
+  mem_buffer_lru_entry      = 'x;
+  mem_buffer_lru            = 'x;
+  mem_buffer_in_lru         = 'x;
+  mem_buffer_lru_entry_next = 'x;
+  for(int s = 0; s < SETS; s++)
+  begin
+    if(set_target[s])
+    begin
+    mem_buffer                = set_mem_buffer[s]               ;
+    mem_buffer_lru_entry      = set_mem_buffer_lru_entry[s]     ;
+    mem_buffer_lru            = set_mem_buffer_lru[s]           ;
+    mem_buffer_in_lru         = set_mem_buffer_in_lru[s]        ;
+    mem_buffer_lru_entry_next = set_mem_buffer_lru_entry_next[s];
+    end
+  end
+end
+
 
 always_ff @(posedge clk)
 begin
@@ -177,7 +218,7 @@ begin
                       end
                     if(mem_buffer[lru_entry].Vld & mem_buffer[lru_entry].Dirty)
                       begin
-                      dst_i.Adr  <= {6'd0,mem_buffer[lru_entry].Addr[25:4],4'd0};
+                      dst_i.Adr  <= {6'd0,mem_buffer[lru_entry].Addr[25:ADR_TAG_LSB],set_target_enc,4'd0};
                       dst_i.Data <= mem_buffer[lru_entry].Data;
                       dst_i.We   <= '1;
                       dst_i.Sel  <= '0;
@@ -209,7 +250,7 @@ begin
                   end
                 end
       state_flush: begin             
-                   dst_i.Adr  <= {6'd0,mem_buffer[mem_buffer_lru_entry].Addr[25:4],4'd0};
+                   dst_i.Adr  <= {6'd0,mem_buffer[mem_buffer_lru_entry].Addr[25:ADR_TAG_LSB],set_target_enc,4'd0};
                    dst_i.Data <= mem_buffer[mem_buffer_lru_entry].Data;
                    dst_i.We   <= '1;
                    dst_i.Sel  <= '0;
@@ -304,7 +345,7 @@ begin
                   state_idle <= '1;
                   end
       state_flushall: begin             
-                        dst_i.Adr  <= {6'd0,mem_buffer[flush_ndx].Addr[25:4],4'd0};
+                        dst_i.Adr  <= {6'd0,mem_buffer[flush_ndx].Addr[25:ADR_TAG_LSB],set_target_enc,4'd0};
                         dst_i.Data <= mem_buffer[flush_ndx].Data;
                         dst_i.We   <= '1;
                         dst_i.Sel  <= '0;
