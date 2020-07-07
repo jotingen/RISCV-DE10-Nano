@@ -40,21 +40,21 @@ uint8_t  DEBUG_get8 (uint16_t addr) {
 }
 
 uint16_t DEBUG_get16(uint16_t addr) {
-  if(addr < DEBUG_ENTRIES_8B >> 1) {
+  if(addr < DEBUG_ENTRIES_16B) {
     return debug_array_16[addr];
   }
   return 0;
 }
 
 uint32_t DEBUG_get32(uint16_t addr) {
-  if(addr < DEBUG_ENTRIES_8B >> 2) {
+  if(addr < DEBUG_ENTRIES_32B) {
     return debug_array_32[addr];
   }
   return 0;
 }
 
 uint64_t DEBUG_get64(uint16_t addr) {
-  if(addr < DEBUG_ENTRIES_8B >> 3) {
+  if(addr < DEBUG_ENTRIES_64B) {
     return debug_array_64[addr];
   }
   return 0;

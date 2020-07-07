@@ -818,7 +818,7 @@ always
   `FAIL_IF(cycleCount >= 1000000);
   $display("End Loop Detected");
 
-  for(int i = 0; i < 128; i++)
+  for(int i = 0; i < 127; i++)
   begin
     if(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
     begin

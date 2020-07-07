@@ -118,7 +118,7 @@ logic [31:0]    SDCARD_ADDR_HI   = 'hC400_FFFF;
 logic [31:0]    DDR3CNTL_ADDR_LO = 'hC500_0000;
 logic [31:0]    DDR3CNTL_ADDR_HI = 'hC500_FFFF;
 logic [31:0]    DEBUG_ADDR_LO    = 'hD000_0000;
-logic [31:0]    DEBUG_ADDR_HI    = 'hD000_03FF;
+logic [31:0]    DEBUG_ADDR_HI    = 'hD000_07FF;
 
 //Instruction counters
 always_ff @(posedge clk)
