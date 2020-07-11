@@ -12,7 +12,7 @@
 #define LED               (*((volatile unsigned int *) (0xC0000000)))
 
 #define DEBUG             (*((volatile unsigned int *) (0xD0000000)))
-#define DEBUG_ENTRIES_8B  0x3FFF
+#define DEBUG_ENTRIES_8B  0x07FF
 #define DEBUG_ENTRIES_16B (DEBUG_ENTRIES_8B>>1)
 #define DEBUG_ENTRIES_32B (DEBUG_ENTRIES_8B>>2)
 #define DEBUG_ENTRIES_64B (DEBUG_ENTRIES_8B>>3)

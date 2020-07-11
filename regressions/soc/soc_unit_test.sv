@@ -5,6 +5,8 @@
 
 `include "../../src/wishbone/wishbone_pkg.sv"
 
+`include "../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v"
+
 `include "../../src/common/lru_16.sv"
 `include "../../src/common/lru_32.sv"
 `include "../../src/de10nano/ADC/simulation/ADC.v"
@@ -13,6 +15,7 @@
 `include "../../src/de10nano/ddr3/ddr3.sv"
 `include "../../src/de10nano/ddr3/ddr3_cntl.sv"
 `include "../../src/de10nano/ddr3/ddr3_cache.sv"
+`include "../../src/de10nano/ddr3/ddr3_cache_set.sv"
 `include "../../src/de10nano/ddr3/ddr3_fifo.v"
 `include "../../src/de10nano/debounce.v"
 `include "../../src/de10nano/keys.sv"
@@ -815,7 +818,7 @@ always
   `FAIL_IF(cycleCount >= 1000000);
   $display("End Loop Detected");
 
-  for(int i = 0; i < 128; i++)
+  for(int i = 0; i < 127; i++)
   begin
     if(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
     begin
