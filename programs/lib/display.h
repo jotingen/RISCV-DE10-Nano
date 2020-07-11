@@ -50,6 +50,8 @@ extern void     display_write(void);
 struct console_index_t console_curser(void);
 void console_curser_set(struct console_index_t index);
 void console_clear();
+void console_enable();
+void console_disable();
 void console_put_char(char c);
 
 void console_putc(char c);

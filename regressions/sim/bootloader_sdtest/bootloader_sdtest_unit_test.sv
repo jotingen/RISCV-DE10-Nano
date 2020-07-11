@@ -731,17 +731,18 @@ always
   $readmemh("../../../output/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
   $readmemh("../../../output/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
   $readmemh("../../../output/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../../verif/sdcard.txt", sd.flash_mem);
+  //$readmemh("../../../verif/sdcard.txt", sd.flash_mem);
+  $readmemh("sdcard.txt", sd.flash_mem);
 
   //Blinky will repeat forever
-  while(!( cycleCount > 2000000 |
+  while(!( cycleCount > 5000000 |
            (led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 2000000);
+  `FAIL_IF(cycleCount >= 5000000);
 
   `FAIL_UNLESS(led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)
   $display("LED Pattern Detected");

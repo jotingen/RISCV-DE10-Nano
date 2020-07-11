@@ -33,6 +33,7 @@
 static volatile display_pixel_t * const display_buffer = (volatile display_pixel_t *) 0x10001000;
 static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0x10080000;
 
+uint8_t console_buffer_disabled = 0;
 console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
@@ -262,53 +263,66 @@ void console_clear() {
   return;
 }
   
+void console_enable() {
+  console_buffer_disabled = 0;
+  return;
+}
+  
+void console_disable() {
+  console_buffer_disabled = 1;
+  return;
+}
+  
 void console_put_char(char c) {
   //if(c == '\n') {
   //  UART = '\r';
   //}
   UART = c;
 
-  if(c == '\n') {
-    //If curser is at bottom, shift everything up by one row
-    if(curser_index.Y == CONSOLE_ROWS-1) {
-      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
-        for(int x = 0; x < CONSOLE_COLS; x++) {
-          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+  //TODO Need to use pointer to scroll instead of change contents
+  if(!console_buffer_disabled) {
+    if(c == '\n') {
+      //If curser is at bottom, shift everything up by one row
+      if(curser_index.Y == CONSOLE_ROWS-1) {
+        for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+          for(int x = 0; x < CONSOLE_COLS; x++) {
+            console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          }
         }
-      }
-      //Clear last line
-      for(int x = 0; x < CONSOLE_COLS; x++) {
-        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
-      }
-      curser_index.Y = curser_index.Y - 1;
-    }
-      
-      curser_index.X = 0;
-      curser_index.Y = curser_index.Y + 1;
-  } else {
-    //If curser is at bottom right, shift everything up by one row
-    if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
-      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+        //Clear last line
         for(int x = 0; x < CONSOLE_COLS; x++) {
-          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
         }
+        curser_index.Y = curser_index.Y - 1;
       }
-      //Clear last line
-      for(int x = 0; x < CONSOLE_COLS; x++) {
-        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
-      }
-      curser_index.Y = curser_index.Y - 1;
-    }
-      
-    //Put character at console
-    console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
-  
-    //Advance curser
-    if(curser_index.X == CONSOLE_COLS-1) {
-      curser_index.X = 0;
-      curser_index.Y = curser_index.Y + 1;
+        
+        curser_index.X = 0;
+        curser_index.Y = curser_index.Y + 1;
     } else {
-      curser_index.X = curser_index.X + 1;
+      //If curser is at bottom right, shift everything up by one row
+      if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
+        for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+          for(int x = 0; x < CONSOLE_COLS; x++) {
+            console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          }
+        }
+        //Clear last line
+        for(int x = 0; x < CONSOLE_COLS; x++) {
+          console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
+        }
+        curser_index.Y = curser_index.Y - 1;
+      }
+        
+      //Put character at console
+      console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
+    
+      //Advance curser
+      if(curser_index.X == CONSOLE_COLS-1) {
+        curser_index.X = 0;
+        curser_index.Y = curser_index.Y + 1;
+      } else {
+        curser_index.X = curser_index.X + 1;
+      }
     }
   }
     
