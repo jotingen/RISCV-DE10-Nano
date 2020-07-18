@@ -1,10 +1,6 @@
 
 .PHONY: all
-all: 
-	mkdir -p output/rvfi; \
-	cd submodules/riscv-formal/monitor; \
-	./generate.py -irv32im -c 6 -a -p riscv_rvfimon -r0 > ../../../output/rvfi/riscv_rvfimon.v; \
-        sed -i 's/  wire misa_ok = 1;/  wire ialign16 = 1;\n  wire misa_ok = 1;/' ../../../output/rvfi/riscv_rvfimon.v
+all:    rvfimon
 	cd programs; make
 	cd simulation/modelsim; make
 
@@ -12,6 +8,13 @@ all:
 clean: 
 	cd programs; make clean
 	cd simulation/modelsim; make clean
+
+.PHONY: rvfimon
+rvfimon: 
+	mkdir -p output/rvfi; \
+	cd submodules/riscv-formal/monitor; \
+	./generate.py -irv32im -c 6 -a -p riscv_rvfimon -r0 > ../../../output/rvfi/riscv_rvfimon.v; \
+        sed -i 's/  wire misa_ok = 1;/  wire ialign16 = 1;\n  wire misa_ok = 1;/' ../../../output/rvfi/riscv_rvfimon.v
 
 #.PHONY: all
 #all: 
