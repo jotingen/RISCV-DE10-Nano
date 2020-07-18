@@ -1,13 +1,13 @@
 
 .PHONY: all
 all:    rvfimon
-	cd programs; make
-	cd simulation/modelsim; make
+	make -C programs
+	make -C regressions
 
 .PHONY: clean
 clean: 
-	cd programs; make clean
-	cd simulation/modelsim; make clean
+	make -C programs clean
+	make -C regressions clean
 
 .PHONY: rvfimon
 rvfimon: 
