@@ -51,7 +51,8 @@ logic                            state_load_pending;
 logic                            state_update;
 logic                            state_flushall;
 
-logic [$clog2(WAYS)-1:0]         flush_ndx;
+logic [$clog2(SETS)-1:0]         flush_setndx;
+logic [$clog2(WAYS)-1:0]         flush_wayndx;
 
 buffer_entry_t [WAYS-1:0]        mem_buffer;
 logic                            mem_buffer_in_lru;
@@ -123,7 +124,7 @@ generate
       .bus_i_stgd                (bus_i_stgd               ),
       .dst_o                     (dst_o                    ),
       .bus_buff_empty            (bus_buff_empty           ),
-      .flush_ndx                 (flush_ndx                ),
+      .flushDone                 (flushDone                ),
                               
       .mem_buffer                (set_mem_buffer[s]               ),
       .mem_buffer_lru_entry      (set_mem_buffer_lru_entry[s]     ),
@@ -163,7 +164,8 @@ begin
   state_update        <= '0;
   state_flushall      <= '0;
 
-  flush_ndx <= flush_ndx;
+  flush_setndx <= flush_setndx;
+  flush_wayndx <= flush_wayndx;
   flushDone <= '0;
 
 
@@ -191,7 +193,8 @@ begin
     state_idle: begin
                 if(flushStart)
                 begin
-                  flush_ndx <= '0;
+                  flush_setndx <= '0;
+                  flush_wayndx <= '0;
                   state_flushall <= '1;
                 end
                 else if((bus_req_stgd ))
@@ -345,9 +348,9 @@ begin
                   state_idle <= '1;
                   end
       state_flushall: begin             
-                        dst_i.Adr  <= {6'd0,mem_buffer[flush_ndx].Addr[25:ADR_TAG_LSB],set_target_enc,4'd0};
-                        dst_i.Data <= mem_buffer[flush_ndx].Data;
-                        dst_i.We   <= '1;
+                        dst_i.Adr  <= {6'd0,set_mem_buffer[flush_setndx][flush_wayndx].Addr[25:ADR_TAG_LSB],flush_setndx,4'd0};
+                        dst_i.Data <= set_mem_buffer[flush_setndx][flush_wayndx].Data;
+                        dst_i.We   <= set_mem_buffer[flush_setndx][flush_wayndx].Vld;
                         dst_i.Sel  <= '0;
                         dst_i.Stb  <= '1;
                         dst_i.Cyc  <= '1;
@@ -355,7 +358,7 @@ begin
                         dst_i.Tgd  <= '0;
                         dst_i.Tgc  <= '0;
 
-                        if(flush_ndx == '1)
+                        if(flush_setndx == '1 && flush_wayndx == '1)
                         begin
                           flushDone <= '1;
                           state_idle <= '1;
@@ -364,7 +367,11 @@ begin
                         begin
                           if(~dst_o.Stall)
                           begin
-                            flush_ndx <= flush_ndx + 'd1;
+                            if(flush_wayndx == '1)
+                            begin
+                              flush_setndx <= flush_setndx + 'd1;
+                            end
+                            flush_wayndx <= flush_wayndx + 'd1;
                           end
 
                           state_flushall <= '1;

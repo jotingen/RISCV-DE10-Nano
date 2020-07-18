@@ -18,7 +18,7 @@ module ddr3_cache_set #(
   bus_i_stgd,
   dst_o,
   bus_buff_empty,
-  flush_ndx,
+  flushDone,
 
   mem_buffer,
   mem_buffer_lru_entry,
@@ -52,7 +52,7 @@ input  logic                     bus_req_stgd;
 input  wishbone_pkg::bus_req_t   bus_i_stgd;
 input  wishbone_pkg::dst_rsp_t   dst_o;
 input  logic                     bus_buff_empty;
-input  logic [$clog2(WAYS)-1:0]  flush_ndx;
+input  logic                     flushDone;
 
 output buffer_entry_t [WAYS-1:0] mem_buffer;
 output logic [$clog2(WAYS)-1:0]  mem_buffer_lru_entry;
@@ -133,6 +133,14 @@ begin
   mem_buffer_lru_entry  <= mem_buffer_lru_entry;
   mem_buffer_lru_touch  <= '0;
 
+  if(flushDone)
+  begin
+    for(int ndx = 0; ndx < WAYS; ndx++)
+    begin
+    mem_buffer[ndx].Vld <= '0;
+    end
+  end
+
   if(set_target)
   begin
     casex (1'b1)
@@ -212,9 +220,6 @@ begin
                         endcase
                         end
                       end
-        state_flushall: begin             
-                        mem_buffer[flush_ndx].Vld <= '0;
-                        end
     endcase
   end
  
