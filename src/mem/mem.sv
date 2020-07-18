@@ -25,10 +25,10 @@ begin
   bus_data_flat_o = bus_data_o;
 end
 
-logic [7:0] mem_array_3 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_2 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_1 [2**(SIZE-2)-1:0];
-logic [7:0] mem_array_0 [2**(SIZE-2)-1:0];
+logic [7:0] mem_array_3 [2**(SIZE+2)-1:0];
+logic [7:0] mem_array_2 [2**(SIZE+2)-1:0];
+logic [7:0] mem_array_1 [2**(SIZE+2)-1:0];
+logic [7:0] mem_array_0 [2**(SIZE+2)-1:0];
 
 //Instruction bus
 always_ff @(posedge clk)

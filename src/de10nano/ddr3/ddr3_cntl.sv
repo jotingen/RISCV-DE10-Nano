@@ -37,7 +37,7 @@ always_ff @(posedge clk)
   bus_data_o.Tgc   <= '0; //bus_data_o.Tgc;   
 
   flushing   <= flushing;
-  flushStart <= flushStart;
+  flushStart <= '0;
 
   if(flushing)
   begin

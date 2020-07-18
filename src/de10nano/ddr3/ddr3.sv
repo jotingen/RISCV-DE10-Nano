@@ -40,6 +40,7 @@ begin
   bus_data_flat_o = bus_data_o;
 end
 
+
 logic         state_inst;
 logic         state_mem;
 logic         state_idle;
@@ -71,43 +72,14 @@ logic         ddr3_fifo_in_wrreq;
 logic [189:0] ddr3_fifo_in_q;
 logic         ddr3_fifo_in_empty;
 
-logic [31:0]  dst_inst_adr_i;
-logic [127:0] dst_inst_data_i;
-logic         dst_inst_we_i;
-logic  [3:0]  dst_inst_sel_i;
-logic         dst_inst_stb_i;
-logic         dst_inst_cyc_i;
-logic         dst_inst_tga_i;
-logic         dst_inst_tgd_i;
-logic  [3:0]  dst_inst_tgc_i;
+wishbone_pkg::dst_req_t dst_inst_i;
+wishbone_pkg::dst_rsp_t dst_inst_o;
 
-logic         dst_inst_ack_o;
-logic         dst_inst_stall_o;
-logic         dst_inst_err_o;
-logic         dst_inst_rty_o;
-logic [127:0] dst_inst_data_o;
-logic         dst_inst_tga_o;
-logic         dst_inst_tgd_o;
-logic  [3:0]  dst_inst_tgc_o;
+wishbone_pkg::dst_req_t dst_data_i;
+wishbone_pkg::dst_rsp_t dst_data_o;
 
-logic [31:0]  dst_mem_adr_i;
-logic [127:0] dst_mem_data_i;
-logic         dst_mem_we_i;
-logic  [3:0]  dst_mem_sel_i;
-logic         dst_mem_stb_i;
-logic         dst_mem_cyc_i;
-logic         dst_mem_tga_i;
-logic         dst_mem_tgd_i;
-logic  [3:0]  dst_mem_tgc_i;
-
-logic         dst_mem_ack_o;
-logic         dst_mem_stall_o;
-logic         dst_mem_err_o;
-logic         dst_mem_rty_o;
-logic [127:0] dst_mem_data_o;
-logic         dst_mem_tga_o;
-logic         dst_mem_tgd_o;
-logic  [3:0]  dst_mem_tgc_o;
+wishbone_pkg::dst_req_t dst_i;
+wishbone_pkg::dst_rsp_t dst_o;
 
 ddr3_cntl cntl (
   .clk                    (clk),                       
@@ -119,107 +91,35 @@ ddr3_cntl cntl (
   .bus_data_flat_i        (bus_cntl_i),
   .bus_data_flat_o        (bus_cntl_o)
 );
-                                                     
-ddr3_cache inst_cache (
+     
+ddr3_cache #(.SETS(8), .WAYS(4)) inst_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      
   .flushStart             ('0),
   .flushDone              (),
 
-  .bus_adr_i              (bus_inst_i.Adr),                 
-  .bus_data_i             (bus_inst_i.Data),                
-  .bus_we_i               (bus_inst_i.We),                  
-  .bus_sel_i              (bus_inst_i.Sel),                 
-  .bus_stb_i              (bus_inst_i.Stb),                 
-  .bus_cyc_i              (bus_inst_i.Cyc),                 
-  .bus_tga_i              (bus_inst_i.Tga),                 
-  .bus_tgd_i              (bus_inst_i.Tgd),                 
-  .bus_tgc_i              (bus_inst_i.Tgc),                 
-                                                     
-  .bus_ack_o              (bus_inst_o.Ack),
-  .bus_stall_o            (bus_inst_o.Stall),
-  .bus_err_o              (bus_inst_o.Err),
-  .bus_rty_o              (bus_inst_o.Rty),
-  .bus_data_o             (bus_inst_o.Data),
-  .bus_tga_o              (bus_inst_o.Tga),
-  .bus_tgd_o              (bus_inst_o.Tgd),
-  .bus_tgc_o              (bus_inst_o.Tgc),
+  .bus_i_flat             (bus_inst_i),                 
+  .bus_o_flat             (bus_inst_o),                 
 
-  .dst_adr_i              (dst_inst_adr_i), 
-  .dst_data_i             (dst_inst_data_i),
-  .dst_we_i               (dst_inst_we_i),  
-  .dst_sel_i              (dst_inst_sel_i), 
-  .dst_stb_i              (dst_inst_stb_i), 
-  .dst_cyc_i              (dst_inst_cyc_i), 
-  .dst_tga_i              (dst_inst_tga_i), 
-  .dst_tgd_i              (dst_inst_tgd_i), 
-  .dst_tgc_i              (dst_inst_tgc_i), 
-                                 
-  .dst_ack_o              (dst_inst_ack_o  ),
-  .dst_stall_o            (dst_inst_stall_o),
-  .dst_err_o              (dst_inst_err_o  ),
-  .dst_rty_o              (dst_inst_rty_o  ),
-  .dst_data_o             (dst_inst_data_o ),
-  .dst_tga_o              (dst_inst_tga_o  ),
-  .dst_tgd_o              (dst_inst_tgd_o  ),
-  .dst_tgc_o              (dst_inst_tgc_o  )
+  .dst_i_flat             (dst_inst_i), 
+  .dst_o_flat             (dst_inst_o)
 );
 
-ddr3_cache mem_cache (
+  ddr3_cache #(.SETS(16), .WAYS(4)) mem_cache (
   .clk                    (clk),                       
   .rst                    (rst),                       
                                                      
   .flushStart             (flushStart),
   .flushDone              (flushDone),
 
-  .bus_adr_i              (bus_data_i.Adr),                 
-  .bus_data_i             (bus_data_i.Data),                
-  .bus_we_i               (bus_data_i.We),                  
-  .bus_sel_i              (bus_data_i.Sel),                 
-  .bus_stb_i              (bus_data_i.Stb),                 
-  .bus_cyc_i              (bus_data_i.Cyc),                 
-  .bus_tga_i              (bus_data_i.Tga),                 
-  .bus_tgd_i              (bus_data_i.Tgd),                 
-  .bus_tgc_i              (bus_data_i.Tgc),                 
-                                                     
-  .bus_ack_o              (bus_data_o.Ack),  
-  .bus_stall_o            (bus_data_o.Stall),
-  .bus_err_o              (bus_data_o.Err),  
-  .bus_rty_o              (bus_data_o.Rty),  
-  .bus_data_o             (bus_data_o.Data), 
-  .bus_tga_o              (bus_data_o.Tga),  
-  .bus_tgd_o              (bus_data_o.Tgd),  
-  .bus_tgc_o              (bus_data_o.Tgc),  
-                               
-  .dst_adr_i              (dst_mem_adr_i), 
-  .dst_data_i             (dst_mem_data_i),
-  .dst_we_i               (dst_mem_we_i),  
-  .dst_sel_i              (dst_mem_sel_i), 
-  .dst_stb_i              (dst_mem_stb_i), 
-  .dst_cyc_i              (dst_mem_cyc_i), 
-  .dst_tga_i              (dst_mem_tga_i), 
-  .dst_tgd_i              (dst_mem_tgd_i), 
-  .dst_tgc_i              (dst_mem_tgc_i), 
-                                 
-  .dst_ack_o              (dst_mem_ack_o  ),
-  .dst_stall_o            (dst_mem_stall_o),
-  .dst_err_o              (dst_mem_err_o  ),
-  .dst_rty_o              (dst_mem_rty_o  ),
-  .dst_data_o             (dst_mem_data_o ),
-  .dst_tga_o              (dst_mem_tga_o  ),
-  .dst_tgd_o              (dst_mem_tgd_o  ),
-  .dst_tgc_o              (dst_mem_tgc_o  ) 
+  .bus_i_flat             (bus_data_i),                 
+  .bus_o_flat             (bus_data_o),                 
+
+  .dst_i_flat             (dst_data_i), 
+  .dst_o_flat             (dst_data_o)
 );
 
-
-logic [31:0]  dst_adr_i;
-logic [127:0] dst_data_i;
-logic         dst_we_i;
-logic  [3:0]  dst_sel_i;
-logic         dst_tga_i;
-logic         dst_tgd_i;
-logic  [3:0]  dst_tgc_i;
 
 always_ff @(posedge clk)
 begin
@@ -229,31 +129,25 @@ begin
   state_req  <= '0;
   state_rsp  <= '0;
 
-  dst_adr_i  <= dst_adr_i;
-  dst_data_i <= dst_data_i;
-  dst_we_i   <= dst_we_i;
-  dst_sel_i  <= dst_sel_i;
-  dst_tga_i  <= dst_tga_i;
-  dst_tgd_i  <= dst_tgd_i;
-  dst_tgc_i  <= dst_tgc_i;
+  dst_i  <= dst_i;
 
-  dst_inst_ack_o   <= '0;
-  dst_inst_stall_o <= '1;
-  dst_inst_err_o   <= '0;
-  dst_inst_rty_o   <= '0;
-  dst_inst_data_o  <= '0;
-  dst_inst_tga_o   <= '0;
-  dst_inst_tgd_o   <= '0;
-  dst_inst_tgc_o   <= '0;
+  dst_inst_o.Ack   <= '0;
+  dst_inst_o.Stall <= '1;
+  dst_inst_o.Err   <= '0;
+  dst_inst_o.Rty   <= '0;
+  dst_inst_o.Data  <= '0;
+  dst_inst_o.Tga   <= '0;
+  dst_inst_o.Tgd   <= '0;
+  dst_inst_o.Tgc   <= '0;
 
-  dst_mem_ack_o   <= '0;
-  dst_mem_stall_o <= '1;
-  dst_mem_err_o   <= '0;
-  dst_mem_rty_o   <= '0;
-  dst_mem_data_o  <= '0;
-  dst_mem_tga_o   <= '0;
-  dst_mem_tgd_o   <= '0;
-  dst_mem_tgc_o   <= '0;
+  dst_data_o.Ack   <= '0;
+  dst_data_o.Stall <= '1;
+  dst_data_o.Err   <= '0;
+  dst_data_o.Rty   <= '0;
+  dst_data_o.Data  <= '0;
+  dst_data_o.Tga   <= '0;
+  dst_data_o.Tgd   <= '0;
+  dst_data_o.Tgc   <= '0;
 
   ddr3_fifo_out_wrreq <= '0;
   ddr3_fifo_out_rdreq <= '0;
@@ -265,20 +159,20 @@ begin
     state_idle: begin
                 if(state_inst)
                   begin
-                  if(dst_inst_stb_i)
+                  if(dst_inst_i.Stb)
                     begin
-                    dst_adr_i  <= dst_inst_adr_i;
-                    dst_data_i <= dst_inst_data_i;
-                    dst_we_i   <= dst_inst_we_i;
-                    dst_sel_i  <= dst_inst_sel_i;
-                    dst_tga_i  <= dst_inst_tga_i;
-                    dst_tgd_i  <= dst_inst_tgd_i;
-                    dst_tgc_i  <= dst_inst_tgc_i;
-                    state_req <= '1;
+                    dst_i.Adr  <= dst_inst_i.Adr;
+                    dst_i.Data <= dst_inst_i.Data;
+                    dst_i.We   <= dst_inst_i.We;
+                    dst_i.Sel  <= dst_inst_i.Sel;
+                    dst_i.Tga  <= dst_inst_i.Tga;
+                    dst_i.Tgd  <= dst_inst_i.Tgd;
+                    dst_i.Tgc  <= dst_inst_i.Tgc;
+                    state_req  <= '1;
                     end
                   else
                     begin
-                    dst_mem_stall_o <= '0;
+                    dst_data_o.Stall <= '0;
                     state_inst <= '0;
                     state_mem  <= '1;
                     state_idle <= '1;
@@ -286,20 +180,20 @@ begin
                   end
                 if(state_mem)
                   begin
-                  if(dst_mem_stb_i)
+                  if(dst_data_i.Stb)
                     begin
-                    dst_adr_i  <= dst_mem_adr_i;
-                    dst_data_i <= dst_mem_data_i;
-                    dst_we_i   <= dst_mem_we_i;
-                    dst_sel_i  <= dst_mem_sel_i;
-                    dst_tga_i  <= dst_mem_tga_i;
-                    dst_tgd_i  <= dst_mem_tgd_i;
-                    dst_tgc_i  <= dst_mem_tgc_i;
-                    state_req <= '1;
+                    dst_i.Adr  <= dst_data_i.Adr;
+                    dst_i.Data <= dst_data_i.Data;
+                    dst_i.We   <= dst_data_i.We;
+                    dst_i.Sel  <= dst_data_i.Sel;
+                    dst_i.Tga  <= dst_data_i.Tga;
+                    dst_i.Tgd  <= dst_data_i.Tgd;
+                    dst_i.Tgc  <= dst_data_i.Tgc;
+                    state_req  <= '1;
                     end
                   else
                     begin
-                    dst_inst_stall_o <= '0;
+                    dst_inst_o.Stall <= '0;
                     state_inst <= '1;
                     state_mem  <= '0;
                     state_idle <= '1;
@@ -307,12 +201,12 @@ begin
                   end
                 end
     state_req: begin
-               ddr3_fifo_out_wrreq <= dst_we_i;
-               ddr3_fifo_out_rdreq <= ~dst_we_i;
-               ddr3_fifo_out_data  <= dst_data_i;
-               ddr3_fifo_out_addr  <= dst_adr_i[25:0];
+               ddr3_fifo_out_wrreq <= dst_i.We;
+               ddr3_fifo_out_rdreq <= ~dst_i.We;
+               ddr3_fifo_out_data  <= dst_i.Data;
+               ddr3_fifo_out_addr  <= dst_i.Adr[25:0];
 
-               if(dst_we_i)
+               if(dst_i.We)
                  begin
                  state_inst <= ~state_inst;
                  state_mem  <= ~state_mem;
@@ -330,35 +224,35 @@ begin
 
                  if(state_inst)
                    begin
-                   dst_inst_ack_o  <= '1;
-                   dst_inst_err_o  <= '0;
-                   dst_inst_rty_o  <= '0;
-                   dst_inst_data_o <= ddr3_fifo_in_q[127:0];
-                   dst_inst_tga_o  <= dst_tga_i;
-                   dst_inst_tgd_o  <= dst_tgd_i;
-                   dst_inst_tgc_o  <= dst_tgc_i;
+                   dst_inst_o.Ack  <= '1;
+                   dst_inst_o.Err  <= '0;
+                   dst_inst_o.Rty  <= '0;
+                   dst_inst_o.Data <= ddr3_fifo_in_q[127:0];
+                   dst_inst_o.Tga  <= dst_i.Tga;
+                   dst_inst_o.Tgd  <= dst_i.Tgd;
+                   dst_inst_o.Tgc  <= dst_i.Tgc;
                    end
 
                  if(state_mem)
                    begin
-                   dst_mem_ack_o  <= '1;
-                   dst_mem_err_o  <= '0;
-                   dst_mem_rty_o  <= '0;
-                   dst_mem_data_o <= ddr3_fifo_in_q[127:0];
-                   dst_mem_tga_o  <= dst_tga_i;
-                   dst_mem_tgd_o  <= dst_tgd_i;
-                   dst_mem_tgc_o  <= dst_tgc_i;
+                   dst_data_o.Ack  <= '1;
+                   dst_data_o.Err  <= '0;
+                   dst_data_o.Rty  <= '0;
+                   dst_data_o.Data <= ddr3_fifo_in_q[127:0];
+                   dst_data_o.Tga  <= dst_i.Tga;
+                   dst_data_o.Tgd  <= dst_i.Tgd;
+                   dst_data_o.Tgc  <= dst_i.Tgc;
                    end
 
                  if(state_inst)
                    begin
-                   dst_mem_stall_o <= '0;
+                   dst_data_o.Stall <= '0;
                    state_inst <= '0;
                    state_mem  <= '1;
                    end
                  if(state_mem)
                    begin
-                   dst_inst_stall_o <= '0;
+                   dst_inst_o.Stall <= '0;
                    state_inst <= '1;
                    state_mem  <= '0;
                    end

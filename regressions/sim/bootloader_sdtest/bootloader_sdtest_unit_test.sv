@@ -1,80 +1,80 @@
 `include "svunit_defines.svh"
 
-`include "../../verif/clk_and_reset.svh"
-`include "../../verif/ddr3_clk_and_reset.svh"
+`include "../../../verif/clk_and_reset.svh"
+`include "../../../verif/ddr3_clk_and_reset.svh"
 
-`include "../../src/wishbone/wishbone_pkg.sv"
+`include "../../../src/wishbone/wishbone_pkg.sv"
 
-`include "../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v"
+`include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v" 
 
-`include "../../src/common/lru_16.sv"
-`include "../../src/common/lru_32.sv"
-`include "../../src/de10nano/ADC/simulation/ADC.v"
-`include "../../src/de10nano/ADC/simulation/submodules/ADC_adc_mega_0.v"
-`include "../../src/de10nano/ADC/simulation/submodules/altera_up_avalon_adv_adc.v"
-`include "../../src/de10nano/ddr3/ddr3.sv"
-`include "../../src/de10nano/ddr3/ddr3_cntl.sv"
-`include "../../src/de10nano/ddr3/ddr3_cache.sv"
-`include "../../src/de10nano/ddr3/ddr3_cache_set.sv"
-`include "../../src/de10nano/ddr3/ddr3_fifo.v"
-`include "../../src/de10nano/debounce.v"
-`include "../../src/de10nano/keys.sv"
-`include "../../src/de10nano/led.sv"
-`include "../../src/mem/mem.sv"
-`include "../../src/mmc/mmc.sv"
-`include "../../src/mmc/mmc_wb.sv"
-`include "../../src/quartus/PLL/PLL.v"
-`include "../../src/quartus/display_buffer/display_buffer.v"
-`include "../../src/quartus/display_buffer_32k/display_buffer_32k.v"
-`include "../../src/quartus/divider/divider.v"
-`include "../../src/quartus/divider_unsigned/divider_unsigned.v"
-`include "../../src/quartus/ifu_buff/ifu_buff.v"
-`include "../../src/quartus/multiplier/multiplier.v"
-`include "../../src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v"
-`include "../../src/quartus/multiplier_unsigned/multiplier_unsigned.v"
-`include "../../src/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v"
-`include "../../src/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v"
-`include "../../src/quartus/wishbone_buff/wishbone_buff.v"
-`include "../../src/riscv/riscv.sv"
-`include "../../src/riscv/riscv_alu.sv"
-`include "../../src/riscv/riscv_br_pred.sv"
-`include "../../src/riscv/riscv_bru.sv"
-`include "../../src/riscv/riscv_csr.sv"
-`include "../../src/riscv/riscv_csu.sv"
-`include "../../src/riscv/riscv_dpu.sv"
-`include "../../src/riscv/riscv_dvu.sv"
-`include "../../src/riscv/riscv_exu.sv"
-`include "../../src/riscv/riscv_idu.sv"
-`include "../../src/riscv/riscv_ifu.sv"
-`include "../../src/riscv/riscv_lsu.sv"
-`include "../../src/riscv/riscv_mpu.sv"
-`include "../../src/riscv/riscv_pkg.sv"
-`include "../../src/riscv/riscv_regfile.sv"
-`include "../../src/riscv/riscv_wbu.sv"
-`include "../../src/sdcard/sdcard.sv"
-`include "../../src/sdcard/sdcard_data_in_fifo.v"
-`include "../../src/spi/spi.sv"
-`include "../../src/spi/spi_arb.sv"
-`include "../../src/top.sv"
-`include "../../src/uart/uart.sv"
-`include "../../src/waveshare/ILI9486/ILI9486.sv"
-`include "../../src/waveshare/ILI9486/ILI9486_buffer.sv"
-`include "../../src/waveshare/ILI9486/ILI9486_clk.sv"
-`include "../../src/waveshare/ILI9486/ILI9486_transmit.sv"
-`include "../../src/waveshare/ILI9486/console_buffer.sv"
-`include "../../src/waveshare/ILI9486/fifo.v"
-`include "../../src/waveshare/waveshare_tft_touch_shield.sv"
-`include "../../src/waveshare/waveshare_tft_touch_shield.sv"
-
-`include "../../verif/spi_sd_model/spi_sd_model.v"
-`include "../../verif/ddr3/ddr3_model.sv"
+`include "../../../src/common/lru_16.sv"
+`include "../../../src/common/lru_32.sv"
+`include "../../../src/de10nano/ADC/simulation/ADC.v"
+`include "../../../src/de10nano/ADC/simulation/submodules/ADC_adc_mega_0.v"
+`include "../../../src/de10nano/ADC/simulation/submodules/altera_up_avalon_adv_adc.v"
+`include "../../../src/de10nano/ddr3/ddr3.sv"
+`include "../../../src/de10nano/ddr3/ddr3_cntl.sv"
+`include "../../../src/de10nano/ddr3/ddr3_cache.sv"
+`include "../../../src/de10nano/ddr3/ddr3_cache_set.sv"
+`include "../../../src/de10nano/ddr3/ddr3_fifo.v"
+`include "../../../src/de10nano/debounce.v"
+`include "../../../src/de10nano/keys.sv"
+`include "../../../src/de10nano/led.sv"
+`include "../../../src/mem/mem.sv"
+`include "../../../src/mmc/mmc.sv"
+`include "../../../src/mmc/mmc_wb.sv"
+`include "../../../src/quartus/PLL/PLL.v"
+`include "../../../src/quartus/display_buffer/display_buffer.v"
+`include "../../../src/quartus/display_buffer_32k/display_buffer_32k.v"
+`include "../../../src/quartus/divider/divider.v"
+`include "../../../src/quartus/divider_unsigned/divider_unsigned.v"
+`include "../../../src/quartus/ifu_buff/ifu_buff.v"
+`include "../../../src/quartus/multiplier/multiplier.v"
+`include "../../../src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v"
+`include "../../../src/quartus/multiplier_unsigned/multiplier_unsigned.v"
+`include "../../../src/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v"
+`include "../../../src/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v"
+`include "../../../src/quartus/wishbone_buff/wishbone_buff.v"
+`include "../../../src/riscv/riscv.sv"
+`include "../../../src/riscv/riscv_alu.sv"
+`include "../../../src/riscv/riscv_br_pred.sv"
+`include "../../../src/riscv/riscv_bru.sv"
+`include "../../../src/riscv/riscv_csr.sv"
+`include "../../../src/riscv/riscv_csu.sv"
+`include "../../../src/riscv/riscv_dpu.sv"
+`include "../../../src/riscv/riscv_dvu.sv"
+`include "../../../src/riscv/riscv_exu.sv"
+`include "../../../src/riscv/riscv_idu.sv"
+`include "../../../src/riscv/riscv_ifu.sv"
+`include "../../../src/riscv/riscv_lsu.sv"
+`include "../../../src/riscv/riscv_mpu.sv"
+`include "../../../src/riscv/riscv_pkg.sv"
+`include "../../../src/riscv/riscv_regfile.sv"
+`include "../../../src/riscv/riscv_wbu.sv"
+`include "../../../src/sdcard/sdcard.sv"
+`include "../../../src/sdcard/sdcard_data_in_fifo.v"
+`include "../../../src/spi/spi.sv"
+`include "../../../src/spi/spi_arb.sv"
+`include "../../../src/top.sv"
+`include "../../../src/uart/uart.sv"
+`include "../../../src/waveshare/ILI9486/ILI9486.sv"
+`include "../../../src/waveshare/ILI9486/ILI9486_buffer.sv"
+`include "../../../src/waveshare/ILI9486/ILI9486_clk.sv"
+`include "../../../src/waveshare/ILI9486/ILI9486_transmit.sv"
+`include "../../../src/waveshare/ILI9486/console_buffer.sv"
+`include "../../../src/waveshare/ILI9486/fifo.v"
+`include "../../../src/waveshare/waveshare_tft_touch_shield.sv"
+`include "../../../src/waveshare/waveshare_tft_touch_shield.sv"
+             
+`include "../../../verif/spi_sd_model/spi_sd_model.v"
+`include "../../../verif/ddr3/ddr3_model.sv"
 
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/altera_mf.v"
 `include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/220model.v"
 
-`include "../../verif/rvfi_monitor.sv"
-`include "../../verif/led_monitor.sv"
-`include "../../verif/wishbone_monitor.sv"
+`include "../../../verif/rvfi_monitor.sv"
+`include "../../../verif/led_monitor.sv"
+`include "../../../verif/wishbone_monitor.sv"
 
 module soc_unit_test;
   import svunit_pkg::svunit_testcase;
@@ -503,7 +503,7 @@ initial
   end
 always
   begin
-  #120
+  #240
   uart_state_idle <=        '0;
   uart_state_something  <=  '0;
   uart_state_timer  <=            uart_state_timer;             
@@ -728,154 +728,28 @@ always
   int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
-  `SVTEST(SOC_00_LED123)
+  `SVTEST(SIM_BOOTLOADER_FAST)
   cycleCount = 0;
-  $readmemh("../../output/programs/regressions/00_led123_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/00_led123_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/00_led123_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/00_led123_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
+  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
+  //$readmemh("../../../verif/sdcard.txt", sd.flash_mem);
+  $readmemh("sdcard.txt", sd.flash_mem);
 
-  while(!( cycleCount > 100000 |
-           rvfi_mon.endLoop) )
+  //Blinky will repeat forever
+  while(!( cycleCount > 5000000 |
+           (led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 100000);
-  $display("End Loop Detected");
+  `FAIL_IF(cycleCount >= 5000000);
 
-
-  `FAIL_UNLESS(led_mon.q_LED[0] === 'd3 & led_mon.q_LED[1] === 'd2 & led_mon.q_LED[2] === 'd1)
+  `FAIL_UNLESS(led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)
   $display("LED Pattern Detected");
 
-  `SVTEST_END
-
-
-  `SVTEST(SOC_01_DEBUG)
-  cycleCount = 0;
-  $readmemh("../../output/programs/regressions/01_debug_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/01_debug_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/01_debug_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/01_debug_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
-
-  while(!( cycleCount > 1000000 |
-           rvfi_mon.endLoop) )
-  begin
-    cycleCount++;
-    step();
-  end
-
-  `FAIL_IF(cycleCount >= 1000000);
-  $display("End Loop Detected");
-
-  `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
-  $display("LED Pattern Detected");
-
-  `SVTEST_END                        
-
-
-  `SVTEST(SOC_02_DEBUG_SWEEP)
-  cycleCount = 0;
-  $readmemh("../../output/programs/regressions/02_debug_sweep_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/02_debug_sweep_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/02_debug_sweep_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/02_debug_sweep_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
-
-  while(!( cycleCount > 1000000 |
-           rvfi_mon.endLoop) )
-  begin
-    cycleCount++;
-    step();
-  end
-
-  `FAIL_IF(cycleCount >= 1000000);
-  $display("End Loop Detected");
-
-  `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
-  $display("LED Pattern Detected");
-
-  `SVTEST_END                        
-
-  `SVTEST(SOC_03_SDCARD)
-  cycleCount = 0;
-  $readmemh("../../output/programs/regressions/03_sdcard_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/03_sdcard_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/03_sdcard_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/03_sdcard_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
-
-  while(!( cycleCount > 1000000 |
-           rvfi_mon.endLoop) )
-  begin
-    cycleCount++;
-    step();
-  end
-
-  `FAIL_IF(cycleCount >= 1000000);
-  $display("End Loop Detected");
-
-  for(int i = 0; i < 127; i++)
-  begin
-    if(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
-    begin
-      $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_0[%1d]:%02X",
-        i,sd.flash_mem[4*i+0],
-        i,de10nano.debug.mem_array_0[i]);
-    end
-    `FAIL_IF(sd.flash_mem[4*i+0] !== de10nano.debug.mem_array_0[i])
-
-    if(sd.flash_mem[4*i+1] !== de10nano.debug.mem_array_1[i])
-    begin
-      $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_1[%1d]:%02X",
-        i,sd.flash_mem[4*i+1],
-        i,de10nano.debug.mem_array_1[i]);
-    end
-    `FAIL_IF(sd.flash_mem[4*i+1] !== de10nano.debug.mem_array_1[i])
-
-    if(sd.flash_mem[4*i+2] !== de10nano.debug.mem_array_2[i])
-    begin
-      $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_2[%1d]:%02X",
-        i,sd.flash_mem[4*i+2],
-        i,de10nano.debug.mem_array_2[i]);
-    end
-    `FAIL_IF(sd.flash_mem[4*i+2] !== de10nano.debug.mem_array_2[i])
-
-    if(sd.flash_mem[4*i+3] !== de10nano.debug.mem_array_3[i])
-    begin
-      $display("sd.flash_mem[%1d]:%02X !== de10nano.debug.mem_array_3[%1d]:%02X",
-        i,sd.flash_mem[4*i+3],
-        i,de10nano.debug.mem_array_3[i]);
-    end
-    `FAIL_IF(sd.flash_mem[4*i+3] !== de10nano.debug.mem_array_3[i])
-  end
-
-  `SVTEST_END                        
-
-
-  `SVTEST(SOC_04_DDR3_SWEEP)
-  cycleCount = 0;
-  $readmemh("../../output/programs/regressions/04_ddr3_sweep_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../output/programs/regressions/04_ddr3_sweep_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../output/programs/regressions/04_ddr3_sweep_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../output/programs/regressions/04_ddr3_sweep_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
-
-  while(!( cycleCount > 1000000 |
-           rvfi_mon.endLoop) )
-  begin
-    cycleCount++;
-    step();
-  end
-
-  `FAIL_IF(cycleCount >= 1000000);
-  $display("End Loop Detected");
-
-  `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
-  $display("LED Pattern Detected");
 
   `SVTEST_END                        
 

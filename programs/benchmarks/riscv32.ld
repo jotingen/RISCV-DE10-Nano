@@ -3,8 +3,8 @@
  *   * Unfortunately this means we must hardcode the size of memory.
  *    * Here we choose 64K. Change this value to change the working memory size.
  *     */
-__mem   = 0x10000000; /*This should be set to the beginning of the memory as specified by the device tree, for spike run: "spike --dump-dts a.out"*/
-__stack = 0x01FFFFFF; /*This is the offset that the stack is from the start of memory.*/
+__mem   = 0x00000000; /*This should be set to the beginning of the memory as specified by the device tree, for spike run: "spike --dump-dts a.out"*/
+__stack = 0x00010000; /*This is the offset that the stack is from the start of memory.*/
 
 SECTIONS
 {

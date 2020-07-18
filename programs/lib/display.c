@@ -33,6 +33,7 @@
 static volatile display_pixel_t * const display_buffer = (volatile display_pixel_t *) 0x10001000;
 static volatile uint32_t * const console_buffer = (volatile uint32_t *) 0x10080000;
 
+uint8_t console_buffer_disabled = 0;
 console_index_t curser_index = { 0, 0};
 
 void display_on(void) {
@@ -262,53 +263,66 @@ void console_clear() {
   return;
 }
   
+void console_enable() {
+  console_buffer_disabled = 0;
+  return;
+}
+  
+void console_disable() {
+  console_buffer_disabled = 1;
+  return;
+}
+  
 void console_put_char(char c) {
   //if(c == '\n') {
   //  UART = '\r';
   //}
   UART = c;
 
-  if(c == '\n') {
-    //If curser is at bottom, shift everything up by one row
-    if(curser_index.Y == CONSOLE_ROWS-1) {
-      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
-        for(int x = 0; x < CONSOLE_COLS; x++) {
-          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+  //TODO Need to use pointer to scroll instead of change contents
+  if(!console_buffer_disabled) {
+    if(c == '\n') {
+      //If curser is at bottom, shift everything up by one row
+      if(curser_index.Y == CONSOLE_ROWS-1) {
+        for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+          for(int x = 0; x < CONSOLE_COLS; x++) {
+            console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          }
         }
-      }
-      //Clear last line
-      for(int x = 0; x < CONSOLE_COLS; x++) {
-        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
-      }
-      curser_index.Y = curser_index.Y - 1;
-    }
-      
-      curser_index.X = 0;
-      curser_index.Y = curser_index.Y + 1;
-  } else {
-    //If curser is at bottom right, shift everything up by one row
-    if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
-      for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+        //Clear last line
         for(int x = 0; x < CONSOLE_COLS; x++) {
-          console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
         }
+        curser_index.Y = curser_index.Y - 1;
       }
-      //Clear last line
-      for(int x = 0; x < CONSOLE_COLS; x++) {
-        console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
-      }
-      curser_index.Y = curser_index.Y - 1;
-    }
-      
-    //Put character at console
-    console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
-  
-    //Advance curser
-    if(curser_index.X == CONSOLE_COLS-1) {
-      curser_index.X = 0;
-      curser_index.Y = curser_index.Y + 1;
+        
+        curser_index.X = 0;
+        curser_index.Y = curser_index.Y + 1;
     } else {
-      curser_index.X = curser_index.X + 1;
+      //If curser is at bottom right, shift everything up by one row
+      if(curser_index.X == CONSOLE_COLS-1 && curser_index.Y == CONSOLE_ROWS-1) {
+        for(int y = 0; y < CONSOLE_ROWS-1; y++) {
+          for(int x = 0; x < CONSOLE_COLS; x++) {
+            console_buffer[y*CONSOLE_COLS+x] = console_buffer[(y+1)*CONSOLE_COLS+x];
+          }
+        }
+        //Clear last line
+        for(int x = 0; x < CONSOLE_COLS; x++) {
+          console_buffer[(CONSOLE_ROWS-1)*CONSOLE_COLS+x] = ' ';
+        }
+        curser_index.Y = curser_index.Y - 1;
+      }
+        
+      //Put character at console
+      console_buffer[curser_index.Y*CONSOLE_COLS+curser_index.X] = c;
+    
+      //Advance curser
+      if(curser_index.X == CONSOLE_COLS-1) {
+        curser_index.X = 0;
+        curser_index.Y = curser_index.Y + 1;
+      } else {
+        curser_index.X = curser_index.X + 1;
+      }
     }
   }
     
@@ -345,44 +359,63 @@ void set_uart_baud(uint32_t baud)
   UART_BAUD = 50000000/baud;
 }
   
+#define TO_HEX(i) (i <= 9 ? '0' + i : 'A' - 10 + i)
+
 char * uint8_to_hex(uint8_t number) {
   static char s[3];
-  for(int8_t d = 0; d < 2; d++) {
-    uint8_t hex = (number >> ((2-1-d)*4)) & 0xF;
-    if(hex < 10) {
-      s[d] = hex+48;
-    } else {
-      s[d] = hex+55;
-    }
-  }
+  s[0] = TO_HEX(((number & 0xF0) >> 4));
+  s[1] = TO_HEX((number & 0x0F));
   s[2] = '\0';
+  return s;
+}
+
+char * uint16_to_hex(uint16_t number) {
+  static char s[5];
+  s[0] = TO_HEX(((number & 0xF000) >> 12));
+  s[1] = TO_HEX(((number & 0x0F00) >> 8));
+  s[2] = TO_HEX(((number & 0x00F0) >> 4));
+  s[3] = TO_HEX((number & 0x000F));
+  s[4] = '\0';
   return s;
 }
   
 char * uint32_to_hex(uint32_t number) {
   static char s[9];
-  for(int32_t d = 0; d < 8; d++) {
-    uint8_t hex = (number >> ((8-1-d)*4)) & 0xF;
-    if(hex < 10) {
-      s[d] = hex+48;
-    } else {
-      s[d] = hex+55;
-    }
-  }
+  s[0] = TO_HEX(((number & 0xF0000000) >> 28));
+  s[1] = TO_HEX(((number & 0x0F000000) >> 24));
+  s[2] = TO_HEX(((number & 0x00F00000) >> 20));
+  s[3] = TO_HEX(((number & 0x000F0000) >> 16));
+  s[4] = TO_HEX(((number & 0x0000F000) >> 12));
+  s[5] = TO_HEX(((number & 0x00000F00) >> 8));
+  s[6] = TO_HEX(((number & 0x000000F0) >> 4));
+  s[7] = TO_HEX((number & 0x0000000F));
   s[8] = '\0';
   return s;
 }
   
 char * uint64_to_hex(uint64_t number) {
   static char s[17];
-  for(int64_t d = 0; d < 16; d++) {
-    uint8_t hex = (number >> ((16-1-d)*4)) & 0xF;
-    if(hex < 10) {
-      s[d] = hex+48;
-    } else {
-      s[d] = hex+55;
-    }
-  }
+  uint32_t number_hi = number >> 32;
+  uint32_t number_lo = number & 0xFFFFFFFF;
+  
+  s[0] = TO_HEX(((number_hi & 0xF0000000) >> 28));
+  s[1] = TO_HEX(((number_hi & 0x0F000000) >> 24));
+  s[2] = TO_HEX(((number_hi & 0x00F00000) >> 20));
+  s[3] = TO_HEX(((number_hi & 0x000F0000) >> 16));
+  s[4] = TO_HEX(((number_hi & 0x0000F000) >> 12));
+  s[5] = TO_HEX(((number_hi & 0x00000F00) >> 8));
+  s[6] = TO_HEX(((number_hi & 0x000000F0) >> 4));
+  s[7] = TO_HEX((number_hi & 0x0000000F));
+
+  s[8] = TO_HEX(((number_lo & 0xF0000000) >> 28));
+  s[9] = TO_HEX(((number_lo & 0x0F000000) >> 24));
+  s[10] = TO_HEX(((number_lo & 0x00F00000) >> 20));
+  s[11] = TO_HEX(((number_lo & 0x000F0000) >> 16));
+  s[12] = TO_HEX(((number_lo & 0x0000F000) >> 12));
+  s[13] = TO_HEX(((number_lo & 0x00000F00) >> 8));
+  s[14] = TO_HEX(((number_lo & 0x000000F0) >> 4));
+  s[15] = TO_HEX((number_lo & 0x0000000F));
+  
   s[16] = '\0';
   return s;
 }

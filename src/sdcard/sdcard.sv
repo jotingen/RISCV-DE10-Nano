@@ -65,34 +65,14 @@ logic          state_data_pending;
 logic          state_data_recieving;
 logic          state_data_recieved;
 
-logic          data_in_fifo_clr;
 logic          data_in_fifo_wrreq;
+logic [$clog2(512+16)-1+3:0] data_in_fifo_wrndx; //Add 3 to count incoming bits
 logic          data_in_fifo_rdack;
-logic [31:0]   data_in_fifo_data_out_rev;
-logic [31:0]   data_in_fifo_data_out;
-logic          data_in_fifo_empty;
 
-//TODO this is 8k because I dont want to deal with CRC, should probably deal and use 4k
-sdcard_data_in_fifo data_in_fifo (
-  .aclr    (data_in_fifo_clr),
-  .data    (MISO),
-  .rdclk   (clk),
-  .rdreq   (data_in_fifo_rdack),
-  .rdusedw (),
-  .wrclk   (clk),
-  .wrreq   (data_in_fifo_wrreq),
-  .wrusedw (),
-  .q       (data_in_fifo_data_out_rev),
-  .rdempty (data_in_fifo_empty)
-);
-
-always_comb
-  begin
-  for(int i = 0; i < 32; i++)
-    begin
-    data_in_fifo_data_out[i] = data_in_fifo_data_out_rev[31-i];
-    end
-  end
+logic [7:0] mem_array_3 [((512+16)>>2)-1:0];
+logic [7:0] mem_array_2 [((512+16)>>2)-1:0];
+logic [7:0] mem_array_1 [((512+16)>>2)-1:0];
+logic [7:0] mem_array_0 [((512+16)>>2)-1:0];
 
 always_comb
   begin
@@ -127,8 +107,8 @@ always_ff @(posedge clk)
   dataArrived          <= dataArrived; 
   dataOut              <= dataOut;     
 
-  data_in_fifo_clr     <= '0;
   data_in_fifo_wrreq   <= '0;
+  data_in_fifo_wrndx   <= data_in_fifo_wrndx;
   data_in_fifo_rdack   <= '0;
 
   bus_data_o.Ack   <= '0;   
@@ -140,13 +120,74 @@ always_ff @(posedge clk)
   bus_data_o.Tgd   <= '0; //bus_data_o.Tgd;   
   bus_data_o.Tgc   <= '0; //bus_data_o.Tgc;   
 
+  if(data_in_fifo_wrreq)
+  begin
+	  data_in_fifo_wrndx <= data_in_fifo_wrndx + 'd1;
+    if(data_in_fifo_wrndx[2:0]=='1)
+    begin
+      //$display("Wrote %02x:%1d:%02x",data_in_fifo_wrndx[$clog2(512+16)-1+3:5],
+      //                               data_in_fifo_wrndx[4:3],
+      //                               {data[8],
+      //                                data[9],
+      //                                data[10],
+      //                                data[11],
+      //                                data[12],
+      //                                data[13],
+      //                                data[14],
+      //                                data[15]});
+      if (data_in_fifo_wrndx[4:3]=='d0)
+        begin
+        mem_array_0[data_in_fifo_wrndx[$clog2(512+16)-1+3:5]] <= {data[8],
+                                               data[9],
+                                               data[10],
+                                               data[11],
+                                               data[12],
+                                               data[13],
+                                               data[14],
+                                               data[15]};
+        end
+      if (data_in_fifo_wrndx[4:3]=='d1)
+        begin
+        mem_array_1[data_in_fifo_wrndx[$clog2(512+16)-1+3:5]] <= {data[8],
+                                               data[9],
+                                               data[10],
+                                               data[11],
+                                               data[12],
+                                               data[13],
+                                               data[14],
+                                               data[15]};
+        end
+      if (data_in_fifo_wrndx[4:3]=='d2)
+        begin
+        mem_array_2[data_in_fifo_wrndx[$clog2(512+16)-1+3:5]] <= {data[8],
+                                               data[9],
+                                               data[10],
+                                               data[11],
+                                               data[12],
+                                               data[13],
+                                               data[14],
+                                               data[15]};
+        end
+      if (data_in_fifo_wrndx[4:3]=='d3)
+        begin
+        mem_array_3[data_in_fifo_wrndx[$clog2(512+16)-1+3:5]] <= {data[8],
+                                               data[9],
+                                               data[10],
+                                               data[11],
+                                               data[12],
+                                               data[13],
+                                               data[14],
+                                               data[15]};
+        end
+      end
+  end
   unique
   case (1'b1)
   state_idle : begin
                if(bus_data_i.Stb & bus_data_i.Cyc)
                  begin
                  unique
-                 case (bus_data_i.Adr[31:2])
+                 casex (bus_data_i.Adr[31:2])
                    //NoOp
                    'h0000:  begin
                             bus_data_o.Ack             <= '1;
@@ -220,31 +261,17 @@ always_ff @(posedge clk)
                             state_idle            <= '1;
                             end
                    //Data
-                   'h0007:  begin 
-                            bus_data_o.Ack             <= '1;
-                            data_in_fifo_rdack    <= '1;
-                            if(data_32b_out < 'd129) 
-                              begin
-                              for(int i = 0; i < 8; i++)
-                                begin            ;
-                                if(data_32b_out == 'd128)
-                                  begin
-                                  bus_data_o.Data[i+24]     <= '0;
-                                  bus_data_o.Data[i+16]     <= '0;
-                                  end
-                                else
-                                  begin
-                                  bus_data_o.Data[i+24]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[31-i] : '0; //Reverse bytes to compensate for stream
-                                  bus_data_o.Data[i+16]     <= bus_data_i.Sel ? data_in_fifo_data_out_rev[23-i] : '0; //Reverse bytes to compensate for stream
-                                  end
-                                bus_data_o.Data[i+8]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[15-i] : '0; //Reverse bytes to compensate for stream
-                                bus_data_o.Data[i+0]      <= bus_data_i.Sel ? data_in_fifo_data_out_rev[7-i]  : '0; //Reverse bytes to compensate for stream
-                                end
-                              //data <= {data[31:0],data[512*8+16-1:32]};
-                              data_32b_out <= data_32b_out+1;
-                              end
-                            state_idle <= '1;
-                            end
+                   'b0000_001x_xxxx_xx: begin
+                                    //$display("Reading %03x:%08x",(bus_data_i.Adr - 'h0201)>>2,{mem_array_3[(bus_data_i.Adr - 'h0200)>>2],
+                                    //                                                           mem_array_2[(bus_data_i.Adr - 'h0200)>>2],
+                                    //                                                           mem_array_1[(bus_data_i.Adr - 'h0200)>>2],
+                                    //                                                           mem_array_0[(bus_data_i.Adr - 'h0200)>>2]});
+                                    bus_data_o.Ack             <= '1;
+                                    bus_data_o.Data[31:24] <= {8{bus_data_i.Sel[3]}} & mem_array_3[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[23:16] <= {8{bus_data_i.Sel[2]}} & mem_array_2[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[15:8]  <= {8{bus_data_i.Sel[1]}} & mem_array_1[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[7:0]   <= {8{bus_data_i.Sel[0]}} & mem_array_0[(bus_data_i.Adr - 'h0200)>>2];
+                                    end
                    default: begin
                             bus_data_o.Ack      <= '1;
                             bus_data_o.Data[31:24]     <= bus_data_i.Sel ? bus_data_i.Data[31:24] : '0;
@@ -357,7 +384,7 @@ always_ff @(posedge clk)
                            end
                          else if({MISO,data[16-1:16-1-6]} == 'h7F)
                            begin
-                           data_in_fifo_clr   <= '1;
+                           data_in_fifo_wrndx <= '0;
                            bits <= 'd1;
                            state_data_recieved <= '1;
                            end
@@ -426,7 +453,7 @@ always_ff @(posedge clk)
     dataArrived <= '0;
     dataOut     <= '0;
 
-    data_in_fifo_clr   <= '1;
+    data_in_fifo_wrndx <= '0;
     end
   end
 
