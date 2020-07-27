@@ -10,3 +10,6 @@
 [submodule "submodules/mor1kx"]
 	path = submodules/mor1kx
 	url = https://github.com/openrisc/mor1kx.git
+[submodule "submodules/mpaland_printf"]
+	path = submodules/mpaland_printf
+	url = https://github.com/mpaland/printf.git

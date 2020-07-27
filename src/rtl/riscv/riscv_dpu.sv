@@ -550,6 +550,7 @@ always_ff @(posedge clk)
 
   dpu_inst            <= dpu_inst;      
   dpu_order           <= dpu_order;      
+  dpu_PC              <= dpu_PC;      
   dpu_fm              <= dpu_fm;        
   dpu_pred            <= dpu_pred;      
   dpu_succ            <= dpu_succ;      
