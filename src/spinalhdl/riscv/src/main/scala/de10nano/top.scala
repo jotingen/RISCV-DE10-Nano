@@ -28,13 +28,13 @@ import spinal.core._
 import spinal.lib._
 
 case class TriState[T <: Data](dataType : HardType[T]) extends Bundle with IMasterSlave{
-    val read,write : T = dataType()
-      val writeEnable = Bool
+  val read,write : T = dataType()
+  val writeEnable = Bool
 
-        override def asMaster(): Unit = {
-              out(write,writeEnable)
-                  in(read)
-                    }
+  override def asMaster(): Unit = {
+    out(write,writeEnable)
+    in(read)
+  }
 }
 
 //Hardware definition
@@ -188,6 +188,7 @@ class de10nano extends Component {
   val HDMI_TX_INT  = in  Bits(1 bits)
   val HDMI_TX_VS   = out Bits(1 bits)
 
+
   val FPGA_Clk1_Domain = ClockDomain(
     clock  = FPGA_CLK1_50,
     reset  = ARDUINO_RESET_N,
@@ -233,30 +234,6 @@ class de10nano extends Component {
     ddr3.busInst <> mmcInst.ddr3Bus
     ddr3.busData <> mmcData.ddr3Bus
 
-    soc_system.memory_mem_a       <> HPS_DDR3_ADDR    
-    soc_system.memory_mem_ba      <> HPS_DDR3_BA      
-    soc_system.memory_mem_ck      <> HPS_DDR3_CK_P    
-    soc_system.memory_mem_ck_n    <> HPS_DDR3_CK_N    
-    soc_system.memory_mem_cke     <> HPS_DDR3_CKE     
-    soc_system.memory_mem_cs_n    <> HPS_DDR3_CS_N    
-    soc_system.memory_mem_ras_n   <> HPS_DDR3_RAS_N   
-    soc_system.memory_mem_cas_n   <> HPS_DDR3_CAS_N   
-    soc_system.memory_mem_we_n    <> HPS_DDR3_WE_N    
-    soc_system.memory_mem_reset_n <> HPS_DDR3_RESET_N 
-    soc_system.memory_mem_dq      <> HPS_DDR3_DQ      
-    soc_system.memory_mem_dqs     <> HPS_DDR3_DQS_P   
-    soc_system.memory_mem_dqs_n   <> HPS_DDR3_DQS_N   
-    soc_system.memory_mem_odt     <> HPS_DDR3_ODT     
-    soc_system.memory_mem_dm      <> HPS_DDR3_DM      
-    soc_system.memory_oct_rzqin   <> HPS_DDR3_RZQ     
-    soc_system.ddr3_hps_f2h_sdram0_clock_clk       := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_address    := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_read       := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_write      := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_writedata  := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_byteenable := 0
-    soc_system.ddr3_hps_f2h_sdram0_data_burstcount := 0
-
     //Temporarily drive
     LED := 0
 
@@ -269,6 +246,35 @@ class de10nano extends Component {
     HDMI_TX_D    := 0
     HDMI_TX_HS   := 0
     HDMI_TX_VS   := 0
+
+    val DDR3_Area = new ClockingArea(soc_system.DDR3_Domain) {
+
+      soc_system.memory_mem_a       <> HPS_DDR3_ADDR    
+      soc_system.memory_mem_ba      <> HPS_DDR3_BA      
+      soc_system.memory_mem_ck      <> HPS_DDR3_CK_P    
+      soc_system.memory_mem_ck_n    <> HPS_DDR3_CK_N    
+      soc_system.memory_mem_cke     <> HPS_DDR3_CKE     
+      soc_system.memory_mem_cs_n    <> HPS_DDR3_CS_N    
+      soc_system.memory_mem_ras_n   <> HPS_DDR3_RAS_N   
+      soc_system.memory_mem_cas_n   <> HPS_DDR3_CAS_N   
+      soc_system.memory_mem_we_n    <> HPS_DDR3_WE_N    
+      soc_system.memory_mem_reset_n <> HPS_DDR3_RESET_N 
+      soc_system.memory_mem_dq      <> HPS_DDR3_DQ      
+      soc_system.memory_mem_dqs     <> HPS_DDR3_DQS_P   
+      soc_system.memory_mem_dqs_n   <> HPS_DDR3_DQS_N   
+      soc_system.memory_mem_odt     <> HPS_DDR3_ODT     
+      soc_system.memory_mem_dm      <> HPS_DDR3_DM      
+      soc_system.memory_oct_rzqin   <> HPS_DDR3_RZQ     
+
+      soc_system.ddr3_hps_f2h_sdram0_clock_clk       <> soc_system.ddr3_clk_clk
+      soc_system.ddr3_hps_f2h_sdram0_data_address    := 0
+      soc_system.ddr3_hps_f2h_sdram0_data_read       := 0
+      soc_system.ddr3_hps_f2h_sdram0_data_write      := 0
+      soc_system.ddr3_hps_f2h_sdram0_data_writedata  := 0
+      soc_system.ddr3_hps_f2h_sdram0_data_byteenable := 0
+      soc_system.ddr3_hps_f2h_sdram0_data_burstcount := 0
+    }
+
   }
 
 }
