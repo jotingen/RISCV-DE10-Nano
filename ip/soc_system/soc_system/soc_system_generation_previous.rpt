@@ -1,151 +1,101 @@
-Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --block-symbol-file --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
-Progress: Loading RISCV-DE10-Nano/soc_system.qsys
+Info: Starting: Create simulation model
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system.qsys --simulation=VERILOG --allow-mixed-language-simulation --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system\simulation --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading soc_system/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 19.1]
+Progress: Adding clk_50 [clock_source 20.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
+Warning: ddr3: Component type terasic_hps_ddr3 is not in the library
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
+Warning: hps_reset_manager_0: Component type hps_reset_manager is not in the library
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 19.1]
+Progress: Adding pll [altera_pll 20.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
 Progress: Validating
 Progress: Done reading input file
-Info: soc_system.ddr3.hps: HPS Main PLL counter settings: n = 0  m = 63
-Info: soc_system.ddr3.hps: HPS peripherial PLL counter settings: n = 0  m = 39
-Warning: soc_system.ddr3.hps: set_interface_assignment: Interface "hps_io" does not exist
+Error: soc_system.ddr3: Component terasic_hps_ddr3 1.0 not found or could not be instantiated
 Info: soc_system.pll: The legal reference clock frequency is 5.0 MHz..700.0 MHz
 Info: soc_system.pll: Able to implement PLL with user settings
-Warning: soc_system.: You have exported the interface ddr3.hps_f2h_sdram0_data but not its associated reset interface.  Export the driver(s) of ddr3.h2f_reset
+Info: soc_system: Generating soc_system "soc_system" for SIM_VERILOG
+Warning: soc_system: "No matching role found for clk_50:clk:clk_out (clk)"
+Warning: soc_system: "No matching role found for clk_50:clk_in_reset:reset_n (reset)"
+Error: ddr3: missing_module does not support generation.
+Error: Generation stopped, 1 or more modules remaining
+Info: soc_system: Done "soc_system" with 3 modules, 1 files
+Error: qsys-generate failed with exit code 1: 3 Errors, 4 Warnings
+Info: Finished: Create simulation model
+Info: Starting: Create Modelsim Project.
+Info: sim-script-gen --spd=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system\soc_system.spd --output-directory=C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system\soc_system.spd --output-directory=C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ directory:
+Info: 	mentor/msim_setup.tcl
+Info: Generating the following file(s) for VCS simulator in C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ directory:
+Info: 	synopsys/vcs/vcs_setup.sh
+Info: Generating the following file(s) for VCSMX simulator in C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ directory:
+Info: 	synopsys/vcsmx/synopsys_sim.setup
+Info: 	synopsys/vcsmx/vcsmx_setup.sh
+Info: Generating the following file(s) for NCSIM simulator in C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ directory:
+Info: 	cadence/cds.lib
+Info: 	cadence/hdl.var
+Info: 	cadence/ncsim_setup.sh
+Info: Generating the following file(s) for RIVIERA simulator in C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/ directory:
+Info: 	aldec/rivierapro_setup.tcl
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/simulation/.
+Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
+Info: Finished: Create Modelsim Project.
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system.qsys --block-symbol-file --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading soc_system/soc_system.qsys
+Progress: Reading input file
+Progress: Adding clk_50 [clock_source 20.1]
+Progress: Parameterizing module clk_50
+Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
+Warning: ddr3: Component type terasic_hps_ddr3 is not in the library
+Progress: Parameterizing module ddr3
+Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
+Warning: hps_reset_manager_0: Component type hps_reset_manager is not in the library
+Progress: Parameterizing module hps_reset_manager_0
+Progress: Adding pll [altera_pll 20.1]
+Progress: Parameterizing module pll
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Error: soc_system.ddr3: Component terasic_hps_ddr3 1.0 not found or could not be instantiated
+Info: soc_system.pll: The legal reference clock frequency is 5.0 MHz..700.0 MHz
+Info: soc_system.pll: Able to implement PLL with user settings
 Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --synthesis=VERILOG --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
-Progress: Loading RISCV-DE10-Nano/soc_system.qsys
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system.qsys --synthesis=VERILOG --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading soc_system/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 19.1]
+Progress: Adding clk_50 [clock_source 20.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
+Warning: ddr3: Component type terasic_hps_ddr3 is not in the library
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
+Warning: hps_reset_manager_0: Component type hps_reset_manager is not in the library
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 19.1]
+Progress: Adding pll [altera_pll 20.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
 Progress: Validating
 Progress: Done reading input file
-Info: soc_system.ddr3.hps: HPS Main PLL counter settings: n = 0  m = 63
-Info: soc_system.ddr3.hps: HPS peripherial PLL counter settings: n = 0  m = 39
-Warning: soc_system.ddr3.hps: set_interface_assignment: Interface "hps_io" does not exist
+Error: soc_system.ddr3: Component terasic_hps_ddr3 1.0 not found or could not be instantiated
 Info: soc_system.pll: The legal reference clock frequency is 5.0 MHz..700.0 MHz
 Info: soc_system.pll: Able to implement PLL with user settings
-Warning: soc_system.: You have exported the interface ddr3.hps_f2h_sdram0_data but not its associated reset interface.  Export the driver(s) of ddr3.h2f_reset
 Info: soc_system: Generating soc_system "soc_system" for QUARTUS_SYNTH
-Info: Interconnect is inserted between master address_span_extender_0.expanded_master and slave hps.f2h_sdram0_data because the master has address signal 32 bit wide, but the slave is 28 bit wide.
-Info: Interconnect is inserted between master address_span_extender_0.expanded_master and slave hps.f2h_sdram0_data because the master has burstcount signal 9 bit wide, but the slave is 8 bit wide.
-Info: ddr3: "soc_system" instantiated terasic_hps_ddr3 "ddr3"
-Info: pll: "soc_system" instantiated altera_pll "pll"
-Info: address_span_extender_0: "ddr3" instantiated altera_address_span_extender "address_span_extender_0"
-Info: hps: "Running  for module: hps"
-Info: hps: HPS Main PLL counter settings: n = 0  m = 63
-Info: hps: HPS peripherial PLL counter settings: n = 0  m = 39
-Warning: hps: set_interface_assignment: Interface "hps_io" does not exist
-Info: hps: "ddr3" instantiated altera_hps "hps"
-Info: hps_reset_manager_0: "ddr3" instantiated hps_reset_manager "hps_reset_manager_0"
-Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
-Info: mm_interconnect_0: "ddr3" instantiated altera_mm_interconnect "mm_interconnect_0"
-Info: rst_controller: "ddr3" instantiated altera_reset_controller "rst_controller"
-Info: fpga_interfaces: "hps" instantiated altera_interface_generator "fpga_interfaces"
-Info: hps_io: "hps" instantiated altera_hps_io "hps_io"
-Info: address_span_extender_0_expanded_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "address_span_extender_0_expanded_master_translator"
-Info: hps_f2h_sdram0_data_translator: "mm_interconnect_0" instantiated altera_merlin_slave_translator "hps_f2h_sdram0_data_translator"
-Info: address_span_extender_0_expanded_master_agent: "mm_interconnect_0" instantiated altera_merlin_master_agent "address_span_extender_0_expanded_master_agent"
-Info: hps_f2h_sdram0_data_agent: "mm_interconnect_0" instantiated altera_merlin_slave_agent "hps_f2h_sdram0_data_agent"
-Info: hps_f2h_sdram0_data_agent_rsp_fifo: "mm_interconnect_0" instantiated altera_avalon_sc_fifo "hps_f2h_sdram0_data_agent_rsp_fifo"
-Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
-Info: router_001: "mm_interconnect_0" instantiated altera_merlin_router "router_001"
-Info: hps_f2h_sdram0_data_burst_adapter: "mm_interconnect_0" instantiated altera_merlin_burst_adapter "hps_f2h_sdram0_data_burst_adapter"
-Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
-Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
-Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
-Info: Reusing file C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
-Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Error during execution of "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt": child process exited abnormally
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Execution of command "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt" failed
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: Command 'dos2unix' not found.  Please install with:
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: sudo apt install dos2unix
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: child process exited abnormally
-Error: border: Error during execution of script generate_hps_sdram.tcl: seq: add_fileset_file: No such file C:/Users/jotin/AppData/Local/Temp/alt8346_8653961875605725264.dir/0004_seq_gen/hps_AC_ROM.hex
-Error: border: Error during execution of script generate_hps_sdram.tcl: Generation stopped, 3 or more modules remaining
-Error: border: Execution of script generate_hps_sdram.tcl failed
-Error: border: 2020.03.24.23:41:47 Info:
-Error: border: ********************************************************************************************************************
-Error: border: 
-Error: border: Use qsys-generate for a simpler command-line interface for generating IP.
-Error: border: 
-Error: border: Run ip-generate with switch --remove-qsys-generate-warning to prevent this notice from appearing in subsequent runs.
-Error: border: 
-Error: border: ********************************************************************************************************************
-Error: border: 2020.03.24.23:41:51 Warning: Ignored parameter assignment device=5CSEBA6U23I7
-Error: border: 2020.03.24.23:41:51 Warning: Ignored parameter assignment extended_family_support=true
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram: 'Quick' simulation modes are NOT timing accurate. Some simulation memory models may issue warnings or errors
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.seq: This module has no ports or interfaces
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.p0: p0.scc must be exported, or connected to a matching conduit.
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.as: as.afi_init_cal_req must be exported, or connected to a matching conduit.
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.as: as.tracking must be exported, or connected to a matching conduit.
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.c0: c0.status must be exported, or connected to a matching conduit.
-Error: border: 2020.03.24.23:41:58 Warning: hps_sdram.p0: p0.avl must be connected to an Avalon-MM master
-Error: border: 2020.03.24.23:41:58 Info: hps_sdram: Generating altera_mem_if_hps_emif "hps_sdram" for QUARTUS_SYNTH
-Error: border: 2020.03.24.23:42:00 Info: pll: "hps_sdram" instantiated altera_mem_if_hps_pll "pll"
-Error: border: 2020.03.24.23:42:00 Info: p0: Generating clock pair generator
-Error: border: 2020.03.24.23:42:02 Info: p0: Generating hps_sdram_p0_altdqdqs
-Error: border: 2020.03.24.23:42:10 Info: p0:
-Error: border: 2020.03.24.23:42:10 Info: p0: *****************************
-Error: border: 2020.03.24.23:42:10 Info: p0:
-Error: border: 2020.03.24.23:42:10 Info: p0: Remember to run the hps_sdram_p0_pin_assignments.tcl
-Error: border: 2020.03.24.23:42:10 Info: p0: script after running Synthesis and before Fitting.
-Error: border: 2020.03.24.23:42:10 Info: p0:
-Error: border: 2020.03.24.23:42:10 Info: p0: *****************************
-Error: border: 2020.03.24.23:42:10 Info: p0:
-Error: border: 2020.03.24.23:42:10 Info: p0: "hps_sdram" instantiated altera_mem_if_ddr3_hard_phy_core "p0"
-Error: border: 2020.03.24.23:42:10 Error: seq: Error during execution of "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt": child process exited abnormally
-Error: border: 2020.03.24.23:42:10 Error: seq: Execution of command "{C:/intelfpga_lite/19.1/quartus/../nios2eds/Nios II Command Shell.bat} make all 2>> stderr.txt" failed
-Error: border: 2020.03.24.23:42:10 Error: seq: Command 'dos2unix' not found.  Please install with:
-Error: border: 2020.03.24.23:42:10 Error: seq: sudo apt install dos2unix
-Error: border: 2020.03.24.23:42:10 Error: seq: child process exited abnormally
-Error: border: 2020.03.24.23:42:10 Error: seq: add_fileset_file: No such file C:/Users/jotin/AppData/Local/Temp/alt8346_8653961875605725264.dir/0004_seq_gen/hps_AC_ROM.hex
-Error: border: while executing
-Error: border: "add_fileset_file $file_name [::alt_mem_if::util::hwtcl_utils::get_file_type $file_name 0] PATH $file_pathname"
-Error: border: ("foreach" body line 4)
-Error: border: invoked from within
-Error: border: "foreach file_pathname $return_files_sw {
-Error: border: 		_dprint 1 "Preparing to add $file_pathname"
-Error: border: 		set file_name [file tail $file_pathname]
-Error: border: 		add_fileset_file $..."
-Error: border: (procedure "generate_sw" line 18)
-Error: border: invoked from within
-Error: border: "generate_sw $name $fileset"
-Error: border: ("if" then script line 4)
-Error: border: invoked from within
-Error: border: "if {[string compare -nocase $fileset QUARTUS_SYNTH] == 0} {
-Error: border: 		set top_level_file "altera_mem_if_hhp_qseq_synth_top.v"
-Error: border: 		add_fileset_file $top_level_fi..."
-Error: border: (procedure "generate_files" line 4)
-Error: border: invoked from within
-Error: border: "generate_files $name QUARTUS_SYNTH"
-Error: border: (procedure "generate_synth" line 3)
-Error: border: invoked from within
-Error: border: "generate_synth altera_mem_if_hhp_qseq_synth_top"
-Error: border: 2020.03.24.23:42:10 Info: seq: "hps_sdram" instantiated altera_mem_if_hhp_ddr3_qseq "seq"
-Error: border: 2020.03.24.23:42:10 Error: Generation stopped, 3 or more modules remaining
-Error: border: 2020.03.24.23:42:10 Info: hps_sdram: Done "hps_sdram" with 7 modules, 33 files
-Info: border: "hps_io" instantiated altera_interface_generator "border"
+Warning: soc_system: "No matching role found for clk_50:clk:clk_out (clk)"
+Warning: soc_system: "No matching role found for clk_50:clk_in_reset:reset_n (reset)"
+Error: ddr3: missing_module does not support generation.
 Error: Generation stopped, 1 or more modules remaining
-Info: soc_system: Done "soc_system" with 24 modules, 74 files
-Error: qsys-generate failed with exit code 1: 70 Errors, 3 Warnings
+Info: soc_system: Done "soc_system" with 3 modules, 1 files
+Error: qsys-generate failed with exit code 1: 3 Errors, 4 Warnings
 Info: Finished: Create HDL design files for synthesis

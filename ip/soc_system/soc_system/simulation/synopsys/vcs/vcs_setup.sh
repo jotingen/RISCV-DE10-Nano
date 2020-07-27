@@ -12,7 +12,7 @@
 # or its authorized distributors. Please refer to the applicable 
 # agreement for further details.
 
-# ACDS 19.1 670 win32 2020.03.24.23:31:10
+# ACDS 20.1 711 win32 2020.07.27.20:56:39
 
 # ----------------------------------------
 # vcs - auto-generated simulation script
@@ -94,12 +94,12 @@
 # within the Quartus project, and generate a unified
 # script which supports all the Altera IP within the design.
 # ----------------------------------------
-# ACDS 19.1 670 win32 2020.03.24.23:31:10
+# ACDS 20.1 711 win32 2020.07.27.20:56:39
 # ----------------------------------------
 # initialize variables
 TOP_LEVEL_NAME="soc_system"
 QSYS_SIMDIR="./../../"
-QUARTUS_INSTALL_DIR="C:/intelfpga_lite/19.1/quartus/"
+QUARTUS_INSTALL_DIR="C:/intelfpga_lite/20.1/quartus/"
 SKIP_FILE_COPY=0
 SKIP_SIM=0
 USER_DEFINED_ELAB_OPTIONS=""
@@ -143,10 +143,6 @@ vcs -lca -timescale=1ps/1ps -sverilog +verilog2001ext+.v -ntb_opts dtm $ELAB_OPT
   -v $QUARTUS_INSTALL_DIR/eda/sim_lib/cyclonev_hssi_atoms.v \
   -v $QUARTUS_INSTALL_DIR/eda/sim_lib/synopsys/cyclonev_pcie_hip_atoms_ncrypt.v \
   -v $QUARTUS_INSTALL_DIR/eda/sim_lib/cyclonev_pcie_hip_atoms.v \
-  $QSYS_SIMDIR/submodules/soc_system_ddr3_hps.v \
-  $QSYS_SIMDIR/submodules/altera_address_span_extender.sv \
-  $QSYS_SIMDIR/submodules/soc_system_pll.vo \
-  $QSYS_SIMDIR/submodules/soc_system_ddr3.v \
   $QSYS_SIMDIR/soc_system.v \
   -top $TOP_LEVEL_NAME
 # ----------------------------------------

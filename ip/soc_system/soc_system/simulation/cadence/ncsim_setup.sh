@@ -12,7 +12,7 @@
 # or its authorized distributors. Please refer to the applicable 
 # agreement for further details.
 
-# ACDS 19.1 670 win32 2020.03.24.23:31:10
+# ACDS 20.1 711 win32 2020.07.27.20:56:39
 
 # ----------------------------------------
 # ncsim - auto-generated simulation script
@@ -106,12 +106,12 @@
 # within the Quartus project, and generate a unified
 # script which supports all the Altera IP within the design.
 # ----------------------------------------
-# ACDS 19.1 670 win32 2020.03.24.23:31:10
+# ACDS 20.1 711 win32 2020.07.27.20:56:39
 # ----------------------------------------
 # initialize variables
 TOP_LEVEL_NAME="soc_system"
 QSYS_SIMDIR="./../"
-QUARTUS_INSTALL_DIR="C:/intelfpga_lite/19.1/quartus/"
+QUARTUS_INSTALL_DIR="C:/intelfpga_lite/20.1/quartus/"
 SKIP_FILE_COPY=0
 SKIP_DEV_COM=0
 SKIP_COM=0
@@ -146,10 +146,6 @@ fi
 # ----------------------------------------
 # create compilation libraries
 mkdir -p ./libraries/work/
-mkdir -p ./libraries/hps/
-mkdir -p ./libraries/address_span_extender_0/
-mkdir -p ./libraries/pll/
-mkdir -p ./libraries/ddr3/
 mkdir -p ./libraries/altera_ver/
 mkdir -p ./libraries/lpm_ver/
 mkdir -p ./libraries/sgate_ver/
@@ -182,11 +178,7 @@ fi
 # ----------------------------------------
 # compile design files in correct order
 if [ $SKIP_COM -eq 0 ]; then
-  ncvlog $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS     "$QSYS_SIMDIR/submodules/soc_system_ddr3_hps.v"           -work hps                     -cdslib ./cds_libs/hps.cds.lib                    
-  ncvlog -sv $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/submodules/altera_address_span_extender.sv" -work address_span_extender_0 -cdslib ./cds_libs/address_span_extender_0.cds.lib
-  ncvlog $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS     "$QSYS_SIMDIR/submodules/soc_system_pll.vo"               -work pll                     -cdslib ./cds_libs/pll.cds.lib                    
-  ncvlog $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS     "$QSYS_SIMDIR/submodules/soc_system_ddr3.v"               -work ddr3                    -cdslib ./cds_libs/ddr3.cds.lib                   
-  ncvlog $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS     "$QSYS_SIMDIR/soc_system.v"                                                                                                               
+  ncvlog $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/soc_system.v"
 fi
 
 # ----------------------------------------

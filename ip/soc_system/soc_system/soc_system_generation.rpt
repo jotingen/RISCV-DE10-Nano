@@ -1,14 +1,33 @@
 Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --block-symbol-file --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
-Progress: Loading RISCV-DE10-Nano/soc_system.qsys
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system.qsys --block-symbol-file --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading soc_system/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 19.1]
+Progress: Adding clk_50 [clock_source 20.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
+Progress: Reading input file
+Progress: Adding address_span_extender_0 [altera_address_span_extender 18.1]
+Warning: address_span_extender_0: Used altera_address_span_extender 20.1 (instead of 18.1)
+Progress: Parameterizing module address_span_extender_0
+Progress: Adding clk_50 [clock_source 18.1]
+Warning: clk_50: Used clock_source 20.1 (instead of 18.1)
+Progress: Parameterizing module clk_50
+Progress: Adding clock_bridge_0 [altera_clock_bridge 18.1]
+Warning: clock_bridge_0: Used altera_clock_bridge 20.1 (instead of 18.1)
+Progress: Parameterizing module clock_bridge_0
+Progress: Adding hps [altera_hps 18.1]
+Warning: hps: Used altera_hps 20.1 (instead of 18.1)
+Progress: Parameterizing module hps
+Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
+Progress: Parameterizing module hps_reset_manager_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 19.1]
+Progress: Adding pll [altera_pll 20.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
@@ -24,16 +43,16 @@ Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system.qsys --synthesis=VERILOG --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
-Progress: Loading RISCV-DE10-Nano/soc_system.qsys
+Info: qsys-generate C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system.qsys --synthesis=VERILOG --output-directory=C:\Users\jotin\Nextcloud\Quartus\RISCV-DE10-Nano\spinalHDL\ip\soc_system\soc_system\synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading soc_system/soc_system.qsys
 Progress: Reading input file
-Progress: Adding clk_50 [clock_source 19.1]
+Progress: Adding clk_50 [clock_source 20.1]
 Progress: Parameterizing module clk_50
 Progress: Adding ddr3 [terasic_hps_ddr3 1.0]
 Progress: Parameterizing module ddr3
 Progress: Adding hps_reset_manager_0 [hps_reset_manager 1.0]
 Progress: Parameterizing module hps_reset_manager_0
-Progress: Adding pll [altera_pll 19.1]
+Progress: Adding pll [altera_pll 20.1]
 Progress: Parameterizing module pll
 Progress: Building connections
 Progress: Parameterizing connections
@@ -73,7 +92,7 @@ Info: hps_f2h_sdram0_data_burst_adapter: "mm_interconnect_0" instantiated altera
 Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
 Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
 Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
-Info: Reusing file C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: Reusing file C:/Users/jotin/Nextcloud/Quartus/RISCV-DE10-Nano/spinalHDL/ip/soc_system/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
 Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
 Info: border: "hps_io" instantiated altera_interface_generator "border"
 Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
