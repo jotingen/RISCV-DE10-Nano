@@ -26,10 +26,10 @@ import spinal.lib._
 
 //Hardware definition
 class riscv_top extends Component {
-  val busInst = master(wbBundle())
-  val busData = master(wbBundle())
+  val busInst = master(WishBone())
+  val busData = master(WishBone())
 
-  val busInstReq = Reg(wbReqBundle()) 
+  val busInstReq = Reg(WishBoneReq()) 
   busInstReq.cyc  init(False)
   busInstReq.stb  init(False)
   busInstReq.we   init(False)
@@ -46,7 +46,7 @@ class riscv_top extends Component {
 
   busInst.req <> busInstReq
 
-  val busDataReq = Reg(wbReqBundle()) 
+  val busDataReq = Reg(WishBoneReq()) 
   busDataReq.cyc  init(False)
   busDataReq.stb  init(False)
   busDataReq.we   init(False)

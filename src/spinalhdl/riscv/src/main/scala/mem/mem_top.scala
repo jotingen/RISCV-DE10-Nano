@@ -26,11 +26,13 @@ import spinal.lib._
 
 //Hardware definition
 class mem_top extends Component {
-  val busInst = slave(wbBundle())
-  val busData = slave(wbBundle())
+  val busInst = slave(WishBone())
+  val busData = slave(WishBone())
 
-  val busInstRsp = Reg(wbRspBundle()) 
-  busInstRsp.stall init(False)
+  val busInstStall = Reg(WishBoneStall()) 
+  busInstStall.stall init(False)
+
+  val busInstRsp = Reg(WishBoneRsp()) 
   busInstRsp.ack   init(False)
   busInstRsp.err   init(False)
   busInstRsp.rty   init(False)
@@ -39,8 +41,10 @@ class mem_top extends Component {
   busInstRsp.tgd   init(0)
   busInstRsp.tgc   init(0)
 
-  val busDataRsp = Reg(wbRspBundle()) 
-  busDataRsp.stall init(False)
+  val busDataStall = Reg(WishBoneStall()) 
+  busDataStall.stall init(False)
+
+  val busDataRsp = Reg(WishBoneRsp()) 
   busDataRsp.ack   init(False)
   busDataRsp.err   init(False)
   busDataRsp.rty   init(False)
@@ -72,8 +76,10 @@ class mem_top extends Component {
     mem(memSectorNdx).io.r1adr  <>   busData.req.adr(15 downto 0)
     busDataRsp.data(memSectorNdx*8+7 downto memSectorNdx*8+0) := mem(memSectorNdx).io.r0data 
   }
-  busInst.rsp <> busInstRsp
-  busData.rsp <> busDataRsp
+  busInst.stall <> busInstStall
+  busInst.rsp   <> busInstRsp
+  busData.stall <> busDataStall
+  busData.rsp   <> busDataRsp
 }
 
 class mem_sector extends Component {

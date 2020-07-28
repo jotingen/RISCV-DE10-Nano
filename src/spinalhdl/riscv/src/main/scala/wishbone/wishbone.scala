@@ -21,7 +21,7 @@ package wishbone
 import spinal.core._
 import spinal.lib._
 
-case class wbReqBundle() extends Bundle {
+case class WishBoneReq() extends Bundle {
   val cyc  = Bool
   val stb  = Bool
   val we   = Bool
@@ -33,8 +33,11 @@ case class wbReqBundle() extends Bundle {
   val tgc  = Bits(4 bits)
 }
 
-case class wbRspBundle() extends Bundle {
+case class WishBoneStall() extends Bundle {
   val stall = Bool
+}
+
+case class WishBoneRsp() extends Bundle {
   val ack   = Bool
   val err   = Bool
   val rty   = Bool
@@ -44,11 +47,13 @@ case class wbRspBundle() extends Bundle {
   val tgc   = Bits(4 bits)
 }
 
-case class wbBundle() extends Bundle with IMasterSlave {
-  val req = wbReqBundle()
-  val rsp = wbRspBundle()
+case class WishBone() extends Bundle with IMasterSlave {
+  val req   = WishBoneReq()
+  val stall = WishBoneStall()
+  val rsp   = WishBoneRsp()
   override def asMaster(): Unit = {
     out(req)
+    in(stall)
     in(rsp)
   }
 }

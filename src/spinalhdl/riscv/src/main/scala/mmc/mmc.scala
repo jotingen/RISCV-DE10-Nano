@@ -26,15 +26,17 @@ import spinal.lib._
 
 //Hardware definition
 class mmc_top extends Component {
-  val riscvBus = slave(wbBundle())
+  val riscvBus = slave(WishBone())
 
-  val memBus  = master(wbBundle())
-  val ledBus  = master(wbBundle())
+  val memBus  = master(WishBone())
+  val ledBus  = master(WishBone())
 
   memBus.req <> riscvBus.req
   ledBus.req <> riscvBus.req
 
-  riscvBus.rsp.stall := False
+  riscvBus.stall.stall := memBus.stall.stall |
+                          ledBus.stall.stall
+
   riscvBus.rsp.ack   := False
   riscvBus.rsp.err   := False
   riscvBus.rsp.rty   := False
