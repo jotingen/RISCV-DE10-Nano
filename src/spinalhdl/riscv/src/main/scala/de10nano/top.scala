@@ -218,11 +218,11 @@ class de10nano extends Component {
   )
 
   val FPGA_Clk1_Area = new ClockingArea(FPGA_Clk1_Domain) {
-    val riscv   = new riscv_top
-    val mmcInst = new mmc_top
-    val mmcData = new mmc_top
-    val mem     = new mem_top
-    val ddr3    = new mem_top
+    val riscv      = new riscv_top
+    val mmcInst    = new mmc_top
+    val mmcData    = new mmc_top
+    val mem        = new mem_top
+    val led        = new led_top
     val soc_system = new soc_system
 
     riscv.busInst <> mmcInst.riscvBus
@@ -231,11 +231,11 @@ class de10nano extends Component {
     mem.busInst <> mmcInst.memBus
     mem.busData <> mmcData.memBus
 
-    ddr3.busInst <> mmcInst.ddr3Bus
-    ddr3.busData <> mmcData.ddr3Bus
+    //led.busInst <> mmcInst.ledBus
+    led.bus <> mmcData.ledBus
 
     //Temporarily drive
-    LED := 0
+    LED <> led.LED
 
     ADC_CONVST := 0
     ADC_SCK    := 0

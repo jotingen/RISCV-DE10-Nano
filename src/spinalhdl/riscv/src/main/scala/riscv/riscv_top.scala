@@ -29,8 +29,35 @@ class riscv_top extends Component {
   val busInst = master(wbBundle())
   val busData = master(wbBundle())
 
-  val busInstReq = wbReqBundle() 
-  busInstReq.cyc := ~busInst.req.cyc
-  busInst.req := RegNext(busInst.req)
-  busInst.req.cyc init(0)
+  val busInstReq = Reg(wbReqBundle()) 
+  busInstReq.cyc  init(False)
+  busInstReq.stb  init(False)
+  busInstReq.we   init(False)
+  busInstReq.adr  init(0)
+  busInstReq.sel  init(0)
+  busInstReq.data init(0)
+  busInstReq.tga  init(0)
+  busInstReq.tgd  init(0)
+  busInstReq.tgc  init(0)
+  busInstReq.cyc := ~busInstReq.cyc
+  busInstReq.stb := ~busInstReq.cyc
+  busInstReq.adr := U(busInst.rsp.data)
+
+
+  busInst.req <> busInstReq
+
+  val busDataReq = Reg(wbReqBundle()) 
+  busDataReq.cyc  init(False)
+  busDataReq.stb  init(False)
+  busDataReq.we   init(False)
+  busDataReq.adr  init(0)
+  busDataReq.sel  init(0)
+  busDataReq.data init(0)
+  busDataReq.tga  init(0)
+  busDataReq.tgd  init(0)
+  busDataReq.tgc  init(0)
+  busDataReq.cyc := ~busDataReq.cyc
+  busDataReq.stb := ~busDataReq.cyc
+  busDataReq.adr := U(busData.rsp.data)
+  busData.req <> busDataReq
 }

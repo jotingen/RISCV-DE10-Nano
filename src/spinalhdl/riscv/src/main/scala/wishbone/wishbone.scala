@@ -22,9 +22,9 @@ import spinal.core._
 import spinal.lib._
 
 case class wbReqBundle() extends Bundle {
-  val cyc  = Bits(1 bits)
-  val stb  = Bits(1 bits)
-  val we   = Bits(1 bits)
+  val cyc  = Bool
+  val stb  = Bool
+  val we   = Bool
   val adr  = UInt(32 bits)
   val sel  = Bits(4 bits)
   val data = Bits(32 bits)
@@ -34,10 +34,10 @@ case class wbReqBundle() extends Bundle {
 }
 
 case class wbRspBundle() extends Bundle {
-  val stall = Bits(1 bits)
-  val ack   = Bits(1 bits)
-  val err   = Bits(1 bits)
-  val rty   = Bits(1 bits)
+  val stall = Bool
+  val ack   = Bool
+  val err   = Bool
+  val rty   = Bool
   val data  = Bits(32 bits)
   val tga   = Bits(1 bits)
   val tgd   = Bits(1 bits)

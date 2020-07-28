@@ -28,16 +28,27 @@ import spinal.lib._
 class mmc_top extends Component {
   val riscvBus = slave(wbBundle())
 
-  val memBus   = master(wbBundle())
-  val ddr3Bus  = master(wbBundle())
+  val memBus  = master(wbBundle())
+  val ledBus  = master(wbBundle())
 
-  memBus.req := Reg(riscvBus.req)
-  ddr3Bus.req := Reg(riscvBus.req)
+  memBus.req <> riscvBus.req
+  ledBus.req <> riscvBus.req
 
-  memBus.req.cyc  init(0)
-  ddr3Bus.req.cyc init(0)
-  memBus.req.stb  init(0)
-  ddr3Bus.req.stb init(0)
+  riscvBus.rsp.stall := False
+  riscvBus.rsp.ack   := False
+  riscvBus.rsp.err   := False
+  riscvBus.rsp.rty   := False
+  riscvBus.rsp.data  := 0
+  riscvBus.rsp.tga   := 0
+  riscvBus.rsp.tgd   := 0
+  riscvBus.rsp.tgc   := 0
+  when (memBus.rsp.ack) {
+    riscvBus.rsp := memBus.rsp
+  }
+  when (ledBus.rsp.ack ) {
+    riscvBus.rsp := ledBus.rsp
+  }
+
 }
 
 

@@ -29,5 +29,80 @@ class mem_top extends Component {
   val busInst = slave(wbBundle())
   val busData = slave(wbBundle())
 
+  val busInstRsp = Reg(wbRspBundle()) 
+  busInstRsp.stall init(False)
+  busInstRsp.ack   init(False)
+  busInstRsp.err   init(False)
+  busInstRsp.rty   init(False)
+  busInstRsp.data  init(0)
+  busInstRsp.tga   init(0)
+  busInstRsp.tgd   init(0)
+  busInstRsp.tgc   init(0)
+
+  val busDataRsp = Reg(wbRspBundle()) 
+  busDataRsp.stall init(False)
+  busDataRsp.ack   init(False)
+  busDataRsp.err   init(False)
+  busDataRsp.rty   init(False)
+  busDataRsp.data  init(0)
+  busDataRsp.tga   init(0)
+  busDataRsp.tgd   init(0)
+  busDataRsp.tgc   init(0)
+
+  val mem = Array.fill(4)(new mem_sector)
+  for(memSectorNdx <- 0 until 4) {
+    mem(memSectorNdx).io.w0en   <> (  busData.req.cyc 
+                                & busData.req.stb 
+                                & busData.req.we
+                                & busData.req.sel(memSectorNdx))
+    mem(memSectorNdx).io.w0adr  <>   busData.req.adr(15 downto 0)
+    mem(memSectorNdx).io.w0data <>   busData.req.data(memSectorNdx*8+7 downto memSectorNdx*8+0) 
+
+    mem(memSectorNdx).io.r0en   <> (  busInst.req.cyc 
+                                & busInst.req.stb 
+                                & ~busInst.req.we
+                                & busInst.req.sel(memSectorNdx))
+    mem(memSectorNdx).io.r0adr  <>   busInst.req.adr(15 downto 0)
+    busInstRsp.data(memSectorNdx*8+7 downto memSectorNdx*8+0) := mem(memSectorNdx).io.r0data 
+
+    mem(memSectorNdx).io.r1en   <> (  busData.req.cyc 
+                                & busData.req.stb 
+                                & ~busData.req.we
+                                & busData.req.sel(memSectorNdx))
+    mem(memSectorNdx).io.r1adr  <>   busData.req.adr(15 downto 0)
+    busDataRsp.data(memSectorNdx*8+7 downto memSectorNdx*8+0) := mem(memSectorNdx).io.r0data 
+  }
+  busInst.rsp <> busInstRsp
+  busData.rsp <> busDataRsp
 }
 
+class mem_sector extends Component {
+  val io = new Bundle {
+    val w0en   = in  Bool
+    val w0adr  = in  UInt(16 bits)
+    val w0data = in  Bits(8 bits)
+    val r0en   = in  Bool
+    val r0adr  = in  UInt(16 bits)
+    val r0data = out Bits(8 bits)
+    val r1en   = in  Bool
+    val r1adr  = in  UInt(16 bits)
+    val r1data = out Bits(8 bits)
+  }
+
+  val mem = Mem(Bits(8 bits),wordCount = 65526)
+
+    mem.write(
+      enable  = io.w0en,
+      address = io.w0adr,
+      data    = io.w0data
+    )
+
+    io.r0data := mem.readSync(
+      enable  = io.r0en,
+      address = io.r0adr
+    )
+    io.r1data := mem.readSync(
+      enable  = io.r1en,
+      address = io.r1adr
+    )
+}
