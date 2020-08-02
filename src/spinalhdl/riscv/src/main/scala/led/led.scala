@@ -38,7 +38,7 @@ class led_top extends Component {
     LED := bus.req.data(7 downto 0)
        }
 
-  bus.stall.stall := False
+  bus.stall       := False
   bus.rsp.ack     := False
   bus.rsp.err     := False
   bus.rsp.rty     := False

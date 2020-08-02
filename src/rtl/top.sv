@@ -424,51 +424,91 @@ assign HDMI_TX_D   = '0;
 assign HDMI_TX_HS  = '0;
 assign HDMI_TX_VS  = '0;
 
-riscv #(.M_EXT(1)) riscv (
-  .clk         (clk),
-  .rst         (rst),
-
-  .bus_inst_flat_o  (riscv_mmc_inst), 
-  .bus_inst_flat_i  (mmc_riscv_inst), 
-
-  .bus_data_flat_o  (riscv_mmc_data), 
-  .bus_data_flat_i  (mmc_riscv_data) 
-
-`ifdef RISCV_FORMAL
-  ,
-  .rvfi_valid              (rvfi_valid             ),
-  .rvfi_order              (rvfi_order             ),
-  .rvfi_insn               (rvfi_insn              ),
-  .rvfi_trap               (rvfi_trap              ),
-  .rvfi_halt               (rvfi_halt              ),
-  .rvfi_intr               (rvfi_intr              ),
-  .rvfi_mode               (rvfi_mode              ),
-  .rvfi_ixl                (rvfi_ixl               ),
-  .rvfi_rs1_addr           (rvfi_rs1_addr          ),
-  .rvfi_rs2_addr           (rvfi_rs2_addr          ),
-  .rvfi_rs1_rdata          (rvfi_rs1_rdata         ),
-  .rvfi_rs2_rdata          (rvfi_rs2_rdata         ),
-  .rvfi_rd_addr            (rvfi_rd_addr           ),
-  .rvfi_rd_wdata           (rvfi_rd_wdata          ),
-  .rvfi_pc_rdata           (rvfi_pc_rdata          ),
-  .rvfi_pc_wdata           (rvfi_pc_wdata          ),
-  .rvfi_mem_addr           (rvfi_mem_addr          ),
-  .rvfi_mem_rmask          (rvfi_mem_rmask         ),
-  .rvfi_mem_wmask          (rvfi_mem_wmask         ),
-  .rvfi_mem_rdata          (rvfi_mem_rdata         ),
-  .rvfi_mem_wdata          (rvfi_mem_wdata         ),
-                                                              
-  .rvfi_csr_mcycle_rmask   (rvfi_csr_mcycle_rmask  ),
-  .rvfi_csr_mcycle_wmask   (rvfi_csr_mcycle_wmask  ),
-  .rvfi_csr_mcycle_rdata   (rvfi_csr_mcycle_rdata  ),
-  .rvfi_csr_mcycle_wdata   (rvfi_csr_mcycle_wdata  ),
-                                                              
-  .rvfi_csr_minstret_rmask (rvfi_csr_minstret_rmask),
-  .rvfi_csr_minstret_wmask (rvfi_csr_minstret_wmask),
-  .rvfi_csr_minstret_rdata (rvfi_csr_minstret_rdata),
-  .rvfi_csr_minstret_wdata (rvfi_csr_minstret_wdata)
-`endif
+//SpinalHDL version
+riscv_top riscv (
+  .busInst_req_cyc     (riscv_mmc_inst.Cyc  ),
+  .busInst_req_stb     (riscv_mmc_inst.Stb  ),
+  .busInst_req_we      (riscv_mmc_inst.We   ),
+  .busInst_req_adr     (riscv_mmc_inst.Adr  ),
+  .busInst_req_sel     (riscv_mmc_inst.Sel  ),
+  .busInst_req_data    (riscv_mmc_inst.Data ),
+  .busInst_req_tga     (riscv_mmc_inst.Tga  ),
+  .busInst_req_tgd     (riscv_mmc_inst.Tgd  ),
+  .busInst_req_tgc     (riscv_mmc_inst.Tgc  ),
+  .busInst_stall       (mmc_riscv_inst.Stall),
+  .busInst_rsp_ack     (mmc_riscv_inst.Ack  ),
+  .busInst_rsp_err     (mmc_riscv_inst.Err  ),
+  .busInst_rsp_rty     (mmc_riscv_inst.Rty  ),
+  .busInst_rsp_data    (mmc_riscv_inst.Data ),
+  .busInst_rsp_tga     (mmc_riscv_inst.Tga  ),
+  .busInst_rsp_tgd     (mmc_riscv_inst.Tgd  ),
+  .busInst_rsp_tgc     (mmc_riscv_inst.Tgc  ),
+  .busData_req_cyc     (riscv_mmc_data.Cyc  ),
+  .busData_req_stb     (riscv_mmc_data.Stb  ),
+  .busData_req_we      (riscv_mmc_data.We   ),
+  .busData_req_adr     (riscv_mmc_data.Adr  ),
+  .busData_req_sel     (riscv_mmc_data.Sel  ),
+  .busData_req_data    (riscv_mmc_data.Data ),
+  .busData_req_tga     (riscv_mmc_data.Tga  ),
+  .busData_req_tgd     (riscv_mmc_data.Tgd  ),
+  .busData_req_tgc     (riscv_mmc_data.Tgc  ),
+  .busData_stall       (mmc_riscv_data.Stall),
+  .busData_rsp_ack     (mmc_riscv_data.Ack  ),
+  .busData_rsp_err     (mmc_riscv_data.Err  ),
+  .busData_rsp_rty     (mmc_riscv_data.Rty  ),
+  .busData_rsp_data    (mmc_riscv_data.Data ),
+  .busData_rsp_tga     (mmc_riscv_data.Tga  ),
+  .busData_rsp_tgd     (mmc_riscv_data.Tgd  ),
+  .busData_rsp_tgc     (mmc_riscv_data.Tgc  ),
+  .clk                 (clk),
+  .reset               (rst)
 );
+
+//riscv #(.M_EXT(1)) riscv (
+//  .clk         (clk),
+//  .rst         (rst),
+//
+//  .bus_inst_flat_o  (riscv_mmc_inst), 
+//  .bus_inst_flat_i  (mmc_riscv_inst), 
+//
+//  .bus_data_flat_o  (riscv_mmc_data), 
+//  .bus_data_flat_i  (mmc_riscv_data) 
+//
+//`ifdef RISCV_FORMAL
+//  ,
+//  .rvfi_valid              (rvfi_valid             ),
+//  .rvfi_order              (rvfi_order             ),
+//  .rvfi_insn               (rvfi_insn              ),
+//  .rvfi_trap               (rvfi_trap              ),
+//  .rvfi_halt               (rvfi_halt              ),
+//  .rvfi_intr               (rvfi_intr              ),
+//  .rvfi_mode               (rvfi_mode              ),
+//  .rvfi_ixl                (rvfi_ixl               ),
+//  .rvfi_rs1_addr           (rvfi_rs1_addr          ),
+//  .rvfi_rs2_addr           (rvfi_rs2_addr          ),
+//  .rvfi_rs1_rdata          (rvfi_rs1_rdata         ),
+//  .rvfi_rs2_rdata          (rvfi_rs2_rdata         ),
+//  .rvfi_rd_addr            (rvfi_rd_addr           ),
+//  .rvfi_rd_wdata           (rvfi_rd_wdata          ),
+//  .rvfi_pc_rdata           (rvfi_pc_rdata          ),
+//  .rvfi_pc_wdata           (rvfi_pc_wdata          ),
+//  .rvfi_mem_addr           (rvfi_mem_addr          ),
+//  .rvfi_mem_rmask          (rvfi_mem_rmask         ),
+//  .rvfi_mem_wmask          (rvfi_mem_wmask         ),
+//  .rvfi_mem_rdata          (rvfi_mem_rdata         ),
+//  .rvfi_mem_wdata          (rvfi_mem_wdata         ),
+//                                                              
+//  .rvfi_csr_mcycle_rmask   (rvfi_csr_mcycle_rmask  ),
+//  .rvfi_csr_mcycle_wmask   (rvfi_csr_mcycle_wmask  ),
+//  .rvfi_csr_mcycle_rdata   (rvfi_csr_mcycle_rdata  ),
+//  .rvfi_csr_mcycle_wdata   (rvfi_csr_mcycle_wdata  ),
+//                                                              
+//  .rvfi_csr_minstret_rmask (rvfi_csr_minstret_rmask),
+//  .rvfi_csr_minstret_wmask (rvfi_csr_minstret_wmask),
+//  .rvfi_csr_minstret_rdata (rvfi_csr_minstret_rdata),
+//  .rvfi_csr_minstret_wdata (rvfi_csr_minstret_wdata)
+//`endif
+//);
 
   mmc_wb mmc_inst (
     .clk         (clk),

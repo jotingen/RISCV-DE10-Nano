@@ -12,4 +12,5 @@ libraryDependencies ++= Seq(
 fork := true
 EclipseKeys.withSource := true
 
-mainClass in (Compile, run) := Some("de10nano.de10nano")
+//mainClass in (Compile, run) := Some("de10nano.de10nano")
+mainClass in (Compile, run) := Some("riscv.riscv_top")

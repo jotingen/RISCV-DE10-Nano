@@ -29,8 +29,8 @@ class mem_top extends Component {
   val busInst = slave(WishBone())
   val busData = slave(WishBone())
 
-  val busInstStall = Reg(WishBoneStall()) 
-  busInstStall.stall init(False)
+  val busInstStall = Reg(Bool) 
+  busInstStall init(False)
 
   val busInstRsp = Reg(WishBoneRsp()) 
   busInstRsp.ack   init(False)
@@ -41,8 +41,8 @@ class mem_top extends Component {
   busInstRsp.tgd   init(0)
   busInstRsp.tgc   init(0)
 
-  val busDataStall = Reg(WishBoneStall()) 
-  busDataStall.stall init(False)
+  val busDataStall = Reg(Bool) 
+  busDataStall init(False)
 
   val busDataRsp = Reg(WishBoneRsp()) 
   busDataRsp.ack   init(False)

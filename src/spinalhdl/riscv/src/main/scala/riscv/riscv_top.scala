@@ -1,21 +1,3 @@
-/*
- * SpinalHDL
- * Copyright (c) Dolu, All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3.0 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.
- */
-
 package riscv
 
 import wishbone._
@@ -29,22 +11,17 @@ class riscv_top extends Component {
   val busInst = master(WishBone())
   val busData = master(WishBone())
 
-  val busInstReq = Reg(WishBoneReq()) 
-  busInstReq.cyc  init(False)
-  busInstReq.stb  init(False)
-  busInstReq.we   init(False)
-  busInstReq.adr  init(0)
-  busInstReq.sel  init(0)
-  busInstReq.data init(0)
-  busInstReq.tga  init(0)
-  busInstReq.tgd  init(0)
-  busInstReq.tgc  init(0)
-  busInstReq.cyc := ~busInstReq.cyc
-  busInstReq.stb := ~busInstReq.cyc
-  busInstReq.adr := U(busInst.rsp.data)
+  val ifu = new riscv_ifu(32)
+  val idu = new riscv_idu()
+  val exu = new riscv_exu()
 
+  ifu.freeze  <> exu.freeze
+  ifu.busInst <> busInst
 
-  busInst.req <> busInstReq
+  idu.freeze  <> exu.freeze
+  idu.inst <> ifu.inst
+
+  exu.instDecoded <> idu.instDecoded
 
   val busDataReq = Reg(WishBoneReq()) 
   busDataReq.cyc  init(False)
@@ -61,3 +38,14 @@ class riscv_top extends Component {
   busDataReq.adr := U(busData.rsp.data)
   busData.req <> busDataReq
 }
+
+//Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
+object riscv_config extends SpinalConfig(defaultConfigForClockDomains = ClockDomainConfig(resetKind = SYNC),targetDirectory="../../../output")
+
+//Generate the riscv's Verilog using the above custom configuration.
+object riscv_top {
+  def main(args: Array[String]) {
+    riscv_config.generateVerilog(new riscv_top)
+  }
+}
+

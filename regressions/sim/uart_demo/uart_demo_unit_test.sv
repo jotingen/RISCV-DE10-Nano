@@ -3,68 +3,69 @@
 `include "../../../verif/clk_and_reset.svh"
 `include "../../../verif/ddr3_clk_and_reset.svh"
 
-`include "../../../src/wishbone/wishbone_pkg.sv"
+`include "../../../src/rtl/wishbone/wishbone_pkg.sv"
 
 `include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v" 
 
-`include "../../../src/common/lru_16.sv"
-`include "../../../src/common/lru_32.sv"
-`include "../../../src/de10nano/ADC/simulation/ADC.v"
-`include "../../../src/de10nano/ADC/simulation/submodules/ADC_adc_mega_0.v"
-`include "../../../src/de10nano/ADC/simulation/submodules/altera_up_avalon_adv_adc.v"
-`include "../../../src/de10nano/ddr3/ddr3.sv"
-`include "../../../src/de10nano/ddr3/ddr3_cntl.sv"
-`include "../../../src/de10nano/ddr3/ddr3_cache.sv"
-`include "../../../src/de10nano/ddr3/ddr3_cache_set.sv"
-`include "../../../src/de10nano/ddr3/ddr3_fifo.v"
-`include "../../../src/de10nano/debounce.v"
-`include "../../../src/de10nano/keys.sv"
-`include "../../../src/de10nano/led.sv"
-`include "../../../src/mem/mem.sv"
-`include "../../../src/mmc/mmc.sv"
-`include "../../../src/mmc/mmc_wb.sv"
-`include "../../../src/quartus/PLL/PLL.v"
-`include "../../../src/quartus/display_buffer/display_buffer.v"
-`include "../../../src/quartus/display_buffer_32k/display_buffer_32k.v"
-`include "../../../src/quartus/divider/divider.v"
-`include "../../../src/quartus/divider_unsigned/divider_unsigned.v"
-`include "../../../src/quartus/ifu_buff/ifu_buff.v"
-`include "../../../src/quartus/multiplier/multiplier.v"
-`include "../../../src/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v"
-`include "../../../src/quartus/multiplier_unsigned/multiplier_unsigned.v"
-`include "../../../src/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v"
-`include "../../../src/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v"
-`include "../../../src/quartus/wishbone_buff/wishbone_buff.v"
-`include "../../../src/riscv/riscv.sv"
-`include "../../../src/riscv/riscv_alu.sv"
-`include "../../../src/riscv/riscv_br_pred.sv"
-`include "../../../src/riscv/riscv_bru.sv"
-`include "../../../src/riscv/riscv_csr.sv"
-`include "../../../src/riscv/riscv_csu.sv"
-`include "../../../src/riscv/riscv_dpu.sv"
-`include "../../../src/riscv/riscv_dvu.sv"
-`include "../../../src/riscv/riscv_exu.sv"
-`include "../../../src/riscv/riscv_idu.sv"
-`include "../../../src/riscv/riscv_ifu.sv"
-`include "../../../src/riscv/riscv_lsu.sv"
-`include "../../../src/riscv/riscv_mpu.sv"
-`include "../../../src/riscv/riscv_pkg.sv"
-`include "../../../src/riscv/riscv_regfile.sv"
-`include "../../../src/riscv/riscv_wbu.sv"
-`include "../../../src/sdcard/sdcard.sv"
-`include "../../../src/sdcard/sdcard_data_in_fifo.v"
-`include "../../../src/spi/spi.sv"
-`include "../../../src/spi/spi_arb.sv"
-`include "../../../src/top.sv"
-`include "../../../src/uart/uart.sv"
-`include "../../../src/waveshare/ILI9486/ILI9486.sv"
-`include "../../../src/waveshare/ILI9486/ILI9486_buffer.sv"
-`include "../../../src/waveshare/ILI9486/ILI9486_clk.sv"
-`include "../../../src/waveshare/ILI9486/ILI9486_transmit.sv"
-`include "../../../src/waveshare/ILI9486/console_buffer.sv"
-`include "../../../src/waveshare/ILI9486/fifo.v"
-`include "../../../src/waveshare/waveshare_tft_touch_shield.sv"
-`include "../../../src/waveshare/waveshare_tft_touch_shield.sv"
+`include "../../../src/rtl/common/lru_16.sv"
+`include "../../../src/rtl/common/lru_32.sv"
+`include "../../../src/rtl/de10nano/ADC/simulation/ADC.v"
+`include "../../../src/rtl/de10nano/ADC/simulation/submodules/ADC_adc_mega_0.v"
+`include "../../../src/rtl/de10nano/ADC/simulation/submodules/altera_up_avalon_adv_adc.v"
+`include "../../../src/rtl/de10nano/ddr3/ddr3.sv"
+`include "../../../src/rtl/de10nano/ddr3/ddr3_cntl.sv"
+`include "../../../src/rtl/de10nano/ddr3/ddr3_cache.sv"
+`include "../../../src/rtl/de10nano/ddr3/ddr3_cache_set.sv"
+`include "../../../src/rtl/de10nano/ddr3/ddr3_fifo.v"
+`include "../../../src/rtl/de10nano/debounce.v"
+`include "../../../src/rtl/de10nano/keys.sv"
+`include "../../../src/rtl/de10nano/led.sv"
+`include "../../../src/rtl/mem/mem.sv"
+`include "../../../src/rtl/mmc/mmc.sv"
+`include "../../../src/rtl/mmc/mmc_wb.sv"
+`include "../../../src/rtl/quartus/PLL/PLL.v"
+`include "../../../src/rtl/quartus/display_buffer/display_buffer.v"
+`include "../../../src/rtl/quartus/display_buffer_32k/display_buffer_32k.v"
+`include "../../../src/rtl/quartus/divider/divider.v"
+`include "../../../src/rtl/quartus/divider_unsigned/divider_unsigned.v"
+`include "../../../src/rtl/quartus/ifu_buff/ifu_buff.v"
+`include "../../../src/rtl/quartus/multiplier/multiplier.v"
+`include "../../../src/rtl/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v"
+`include "../../../src/rtl/quartus/multiplier_unsigned/multiplier_unsigned.v"
+`include "../../../src/rtl/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v"
+`include "../../../src/rtl/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v"
+`include "../../../src/rtl/quartus/wishbone_buff/wishbone_buff.v"
+`include "../../../output/riscv_top.v"
+//`include "../../../src/rtl/riscv/riscv.sv"
+//`include "../../../src/rtl/riscv/riscv_alu.sv"
+//`include "../../../src/rtl/riscv/riscv_br_pred.sv"
+//`include "../../../src/rtl/riscv/riscv_bru.sv"
+//`include "../../../src/rtl/riscv/riscv_csr.sv"
+//`include "../../../src/rtl/riscv/riscv_csu.sv"
+//`include "../../../src/rtl/riscv/riscv_dpu.sv"
+//`include "../../../src/rtl/riscv/riscv_dvu.sv"
+//`include "../../../src/rtl/riscv/riscv_exu.sv"
+//`include "../../../src/rtl/riscv/riscv_idu.sv"
+//`include "../../../src/rtl/riscv/riscv_ifu.sv"
+//`include "../../../src/rtl/riscv/riscv_lsu.sv"
+//`include "../../../src/rtl/riscv/riscv_mpu.sv"
+//`include "../../../src/rtl/riscv/riscv_pkg.sv"
+//`include "../../../src/rtl/riscv/riscv_regfile.sv"
+//`include "../../../src/rtl/riscv/riscv_wbu.sv"
+`include "../../../src/rtl/sdcard/sdcard.sv"
+`include "../../../src/rtl/sdcard/sdcard_data_in_fifo.v"
+`include "../../../src/rtl/spi/spi.sv"
+`include "../../../src/rtl/spi/spi_arb.sv"
+`include "../../../src/rtl/top.sv"
+`include "../../../src/rtl/uart/uart.sv"
+`include "../../../src/rtl/waveshare/ILI9486/ILI9486.sv"
+`include "../../../src/rtl/waveshare/ILI9486/ILI9486_buffer.sv"
+`include "../../../src/rtl/waveshare/ILI9486/ILI9486_clk.sv"
+`include "../../../src/rtl/waveshare/ILI9486/ILI9486_transmit.sv"
+`include "../../../src/rtl/waveshare/ILI9486/console_buffer.sv"
+`include "../../../src/rtl/waveshare/ILI9486/fifo.v"
+`include "../../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
+`include "../../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
              
 `include "../../../verif/spi_sd_model/spi_sd_model.v"
 `include "../../../verif/ddr3/ddr3_model.sv"
@@ -725,6 +726,7 @@ always
   //   `SVTEST_END
   //===================================
 
+  int cycleCountMax = 200;
   int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
@@ -737,14 +739,14 @@ always
   $readmemh("../../../output/programs/apps/demo_uart/demo_uart.ddr3mem.v", ddr3.ddr3);
 
   //Blinky will repeat forever
-  while(!( cycleCount > 2000000 |
+  while(!( cycleCount > cycleCountMax |
            (led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 2000000);
+  `FAIL_IF(cycleCount >= cycleCountMax);
 
   `FAIL_UNLESS(led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)
   $display("LED Pattern Detected");

@@ -34,8 +34,8 @@ class mmc_top extends Component {
   memBus.req <> riscvBus.req
   ledBus.req <> riscvBus.req
 
-  riscvBus.stall.stall := memBus.stall.stall |
-                          ledBus.stall.stall
+  riscvBus.stall := memBus.stall |
+                    ledBus.stall
 
   riscvBus.rsp.ack   := False
   riscvBus.rsp.err   := False

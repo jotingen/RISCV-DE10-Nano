@@ -31,10 +31,7 @@ case class WishBoneReq() extends Bundle {
   val tga  = Bits(1 bits)
   val tgd  = Bits(1 bits)
   val tgc  = Bits(4 bits)
-}
 
-case class WishBoneStall() extends Bundle {
-  val stall = Bool
 }
 
 case class WishBoneRsp() extends Bundle {
@@ -49,12 +46,31 @@ case class WishBoneRsp() extends Bundle {
 
 case class WishBone() extends Bundle with IMasterSlave {
   val req   = WishBoneReq()
-  val stall = WishBoneStall()
+  val stall = Bool
   val rsp   = WishBoneRsp()
   override def asMaster(): Unit = {
     out(req)
     in(stall)
     in(rsp)
   }
+
+  //Todo experiment with this
+  //def SendReq(we: Bool, adr: Bits, data: Bits): Bool = {
+  //  when(stall.stall) {
+  //    req.cyc  := False
+  //    req.stb  := False
+  //    return False
+  //  }
+  //    req.cyc  := True
+  //    req.stb  := True
+  //    req.we   := we
+  //    req.adr  := 0
+  //    req.sel  := 0
+  //    req.data := 0
+  //    req.tga  := 0
+  //    req.tgd  := 0
+  //    req.tgc  := 0
+  //    return True
+  //}
 }
 
