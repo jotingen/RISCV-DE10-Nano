@@ -32,6 +32,7 @@ object InstOp extends SpinalEnum(defaultEncoding=binaryOneHot) {
 case class InstDecoded() extends Bundle {
   val Vld    = Bool
   val Adr    = UInt(32 bits)
+  val AdrNext    = UInt(32 bits)
   val Data   = Bits(32 bits)
   val Op     = InstOp()
   val Rd     = Bits(5  bits)
@@ -76,6 +77,7 @@ class riscv_idu extends Component {
 
     instDecoded.Vld  := inst.Vld 
     instDecoded.Adr  := inst.Adr 
+    instDecoded.AdrNext  := inst.AdrNext 
     instDecoded.Data := inst.Data
     instDecoded.Rd     := inst.Data(11 downto 7)
     instDecoded.Rs1    := inst.Data(19 downto 15)
