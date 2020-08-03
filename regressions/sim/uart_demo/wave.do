@@ -49,103 +49,107 @@ add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/busInst_rsp_data
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/busInst_rsp_tga
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/busInst_rsp_tgd
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Data
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Vld
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Adr
-add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Data
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/busInst_rsp_tgc
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/busInst_rsp_tgc
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrNdx
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrDataNdx
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_rdNdx
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_8_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_9_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_10_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_11_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_12_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_13_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_14_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_15_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_16_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_17_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_18_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_19_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_20_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_21_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_22_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_23_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_24_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_25_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_26_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_27_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_28_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_29_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_30_Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Vld
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Adr
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_31_Data
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/ifu/token
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_Vld
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_Adr
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_AdrNext
@@ -154,24 +158,45 @@ add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Adr
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Data
 add wave -noupdate -expand -group RISCV -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Op_string
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rd
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rs1
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rs2
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rd
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rs1
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Rs2
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Immed
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_CSR
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Pred
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/idu/instDecoded_Succ
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/aluOp
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/aluHazard
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/bruOp
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/bruHazard
 add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/freeze
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/misfetch
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/misfetchAdr
 add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/busy
 add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/done
 add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Vld
 add wave -noupdate -expand -group RISCV -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Op_string
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rs1
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rs1
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/rs1Data
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rs2
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rs2
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/rs2Data
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Immed
-add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rd
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/inst_Rd
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/wr
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/ndx
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu/data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/busy
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/done
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Vld
+add wave -noupdate -expand -group RISCV -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Op_string
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Rs1
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/rs1Data
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Rs2
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/rs2Data
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Immed
+add wave -noupdate -expand -group RISCV -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Rd
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/misfetch
+add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/PCNext
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_31
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_30
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_29
@@ -204,6 +229,13 @@ add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_2
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_1
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_0
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/clk
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru_done
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru_wr
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu_done
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu_wr
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/_zz_1_
+add wave -noupdate -expand -group RISCV /testrunner/__ts/soc_ut/de10nano/riscv/exu/alu_data
 add wave -noupdate -expand -group RISCV -expand -group EXU -height 16 -expand -group DPU -divider -height 15 <NULL>
 add wave -noupdate -group LED /testrunner/__ts/soc_ut/de10nano/led/LED
 add wave -noupdate -group LED /testrunner/__ts/soc_ut/de10nano/led/bus_data_i
@@ -222,10 +254,10 @@ add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/TXD
 add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1320 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1200 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 253
-configure wave -valuecolwidth 91
+configure wave -namecolwidth 266
+configure wave -valuecolwidth 136
 configure wave -justifyvalue left
 configure wave -signalnamewidth 2
 configure wave -snapdistance 10
@@ -238,4 +270,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {363 ps} {1475 ps}
+WaveRestoreZoom {975 ps} {1649 ps}

@@ -29,7 +29,7 @@ class riscv_alu extends Component {
   //Calculate new data
   val rs1Data = B(x(U(inst.Rs1)))
   val rs2Data = B(x(U(inst.Rs2)))
-  switch(instDecoded.Op) {
+  switch(inst.Op) {
     is(InstOp.LUI   ) { data :=      inst.Immed                 }
     is(InstOp.AUIPC ) { data := B( U(inst.Immed) +  inst.Adr   )}
     is(InstOp.ADDI  ) { data := B( U(rs1Data) +   U(inst.Immed))}
@@ -100,40 +100,48 @@ class riscv_bru extends Component {
   //TODO check for misaligned
   wr     := False
   data   := B("32'd0")
-  switch(instDecoded.Op) {
+  switch(inst.Op) {
     is(InstOp.JAL  ) { wr     := True
                        data   := B(inst.Adr + 4)
-                       PCNext := U(inst.Immed)}
+                       PCNext := U(S(inst.Adr) + 
+                                   S(inst.Immed(19 downto 0)))}
     is(InstOp.JALR ) { wr     := True
                        data   := B(inst.Adr + 4)
-                       PCNext := U(inst.Immed)}
+                       PCNext := U(S(rs1Data) + 
+                                   S(inst.Immed(11 downto 0)))}
     is(InstOp.BEQ  ) { when(rs1Data === rs2Data) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }}
     is(InstOp.BNE  ) { when(rs1Data =/= rs2Data) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }}
     is(InstOp.BLT  ) { when(S(rs1Data) < S(rs2Data)) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }}
     is(InstOp.BGE  ) { when(S(rs1Data) >= S(rs2Data)) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }} 
     is(InstOp.BLTU ) { when(U(rs1Data) < U(rs2Data)) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }}
     is(InstOp.BGEU ) { when(U(rs1Data) >= U(rs2Data)) {
-                         PCNext := U(inst.Immed)
+                         PCNext := U(S(inst.Adr) + 
+                                     S(inst.Immed(12 downto 0)))
                        } otherwise {
                          PCNext := inst.Adr + 4
                        }} 
@@ -160,6 +168,7 @@ class riscv_exu extends Component {
   val misfetchAdr = out(UInt(32 bits))
 
   val x = Vec(Reg(Bits(32 bits)),32)
+  x(0) init(0)
   //for(entry <- x) {
   //  entry init(0)
   //}
@@ -249,10 +258,10 @@ class riscv_exu extends Component {
     }
   }
 
-  when(alu.done && alu.wr) {
+  when(alu.done && alu.wr && (alu.ndx =/= 0)) {
     x(alu.ndx) := alu.data
   }
-  when(bru.done && bru.wr) {
+  when(bru.done && bru.wr && (bru.ndx =/= 0)) {
     x(bru.ndx) := bru.data
   }
     

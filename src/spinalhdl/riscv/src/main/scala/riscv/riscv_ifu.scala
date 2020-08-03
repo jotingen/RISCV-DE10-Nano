@@ -32,9 +32,10 @@ case class InstBuff(bufferSize : Int) extends Bundle {
   }
 
   def Clear() : Unit = {
+    wrDataNdx := wrNdx
     rdNdx := wrNdx
     for(entry <- buffer) {
-      entry.Vld init(False)
+      entry.Vld := False
     }
   }
   def PushAdr(adr: UInt) : Unit = {
@@ -48,10 +49,10 @@ case class InstBuff(bufferSize : Int) extends Bundle {
   }
   def Pull() : Inst = {
     val inst = Inst()
-    inst.Vld  := buffer(rdNdx).Vld
-    inst.Adr  := buffer(rdNdx).Adr
-    inst.Data := buffer(rdNdx).Data
-    inst.AdrNext    := buffer(rdNdx+1).Adr //Buffer always being filled, this should have been written
+    inst.Vld          := buffer(rdNdx).Vld
+    inst.Adr          := buffer(rdNdx).Adr
+    inst.Data         := buffer(rdNdx).Data
+    inst.AdrNext      := buffer(rdNdx+1).Adr //Buffer always being filled, this should have been written
     buffer(rdNdx).Vld := False
     rdNdx := rdNdx + 1
     return inst
@@ -82,6 +83,9 @@ class riscv_ifu(bufferSize : Int) extends Component {
   busInstReq.tgd  init(0)
   busInstReq.tgc  init(0)
 
+  val token = Reg(UInt(4 bits))
+  token init(0)
+
   val PC = Reg(UInt(32 bits))
   PC init(0)
 
@@ -92,16 +96,19 @@ class riscv_ifu(bufferSize : Int) extends Component {
     busInstReq.cyc  := True
     busInstReq.stb  := True
     busInstReq.we   := False
-    busInstReq.adr  := PC
     busInstReq.sel  := B"4'hF"
     busInstReq.data := 0
     busInstReq.tga  := 0
     busInstReq.tgd  := 0
-    busInstReq.tgc  := 0
     when(misfetch) {
+      busInstReq.adr  := misfetchAdr
+      busInstReq.tgc  := B(token + 1)
+      token := token + 1
       buf.PushAdr(misfetchAdr)
       PC := misfetchAdr + 4
     } otherwise {
+      busInstReq.adr  := PC
+      busInstReq.tgc  := B(token)
       buf.PushAdr(PC)
       PC := PC + 4
     }
@@ -110,7 +117,9 @@ class riscv_ifu(bufferSize : Int) extends Component {
     busInstReq.stb  := False
   }
 
-  when( busInst.rsp.ack ) {
+  when( busInst.rsp.ack && 
+        (U(busInst.rsp.tgc) === token) &&
+        ~misfetch ) {
     buf.PushData(busInst.rsp.data)
   }
 
