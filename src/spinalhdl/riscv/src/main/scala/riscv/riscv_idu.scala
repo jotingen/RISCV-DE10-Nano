@@ -46,12 +46,16 @@ case class InstDecoded() extends Bundle {
 //Hardware definition
 class riscv_idu extends Component {
   val inst        = in(Inst())
+  val misfetch    = in(Bool)
   val freeze      = in(Bool)
   val instDecoded = out(Reg(InstDecoded()))
 
   instDecoded.Vld init(False)
 
-  when(freeze) {
+  when(misfetch) {
+    //instDecoded := instDecoded
+    instDecoded.Vld := False
+  } elsewhen(freeze) {
     instDecoded := instDecoded
   } elsewhen(inst.Vld) {
     val opcode = Bits(7  bits)

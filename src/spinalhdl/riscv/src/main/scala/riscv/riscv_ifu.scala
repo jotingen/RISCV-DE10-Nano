@@ -31,6 +31,12 @@ case class InstBuff(bufferSize : Int) extends Bundle {
     entry.Vld init(False)
   }
 
+  def Clear() : Unit = {
+    rdNdx := wrNdx
+    for(entry <- buffer) {
+      entry.Vld init(False)
+    }
+  }
   def PushAdr(adr: UInt) : Unit = {
     buffer(wrNdx).Adr := adr
     wrNdx := wrNdx + 1
@@ -57,6 +63,8 @@ case class InstBuff(bufferSize : Int) extends Bundle {
 
 //Hardware definition
 class riscv_ifu(bufferSize : Int) extends Component {
+  val misfetch    = in(Bool)
+  val misfetchAdr = in(UInt(32 bits))
   val freeze      = in(Bool)
   val inst    = out(Reg(Inst()))
   val busInst = master(WishBone())
@@ -90,8 +98,13 @@ class riscv_ifu(bufferSize : Int) extends Component {
     busInstReq.tga  := 0
     busInstReq.tgd  := 0
     busInstReq.tgc  := 0
-    buf.PushAdr(PC)
-    PC := PC + 4
+    when(misfetch) {
+      buf.PushAdr(misfetchAdr)
+      PC := misfetchAdr + 4
+    } otherwise {
+      buf.PushAdr(PC)
+      PC := PC + 4
+    }
   } otherwise {
     busInstReq.cyc  := False
     busInstReq.stb  := False
@@ -101,7 +114,10 @@ class riscv_ifu(bufferSize : Int) extends Component {
     buf.PushData(busInst.rsp.data)
   }
 
-  when(freeze) {
+  when(misfetch) {
+    inst.Vld := False
+    buf.Clear() 
+  } elsewhen(freeze) {
     inst := inst 
   } elsewhen(~buf.Empty()) {
     inst := buf.Pull() 

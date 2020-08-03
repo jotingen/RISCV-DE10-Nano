@@ -15,11 +15,14 @@ class riscv_top extends Component {
   val idu = new riscv_idu()
   val exu = new riscv_exu()
 
-  ifu.freeze  <> exu.freeze
-  ifu.busInst <> busInst
+  ifu.misfetch    <> exu.misfetch
+  ifu.misfetchAdr <> exu.misfetchAdr
+  ifu.freeze      <> exu.freeze
+  ifu.busInst     <> busInst
 
-  idu.freeze  <> exu.freeze
-  idu.inst <> ifu.inst
+  idu.misfetch <> exu.misfetch
+  idu.freeze   <> exu.freeze
+  idu.inst     <> ifu.inst
 
   exu.instDecoded <> idu.instDecoded
 

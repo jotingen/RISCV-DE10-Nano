@@ -157,6 +157,7 @@ class riscv_exu extends Component {
   val instDecoded = in(InstDecoded())
   val freeze      = out(Bool)
   val misfetch    = out(Bool)
+  val misfetchAdr = out(UInt(32 bits))
 
   val x = Vec(Reg(Bits(32 bits)),32)
   //for(entry <- x) {
@@ -216,8 +217,22 @@ class riscv_exu extends Component {
                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === bru.rs2) ||
                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === bru.rd )
 
+  //detect any misfetches
+  //TODO any reason why not just check bru?
+  //TODO figure put how to mux UInt
+  when(alu.done) {
+    misfetch    := alu.misfetch
+    misfetchAdr := alu.PCNext
+  } elsewhen(bru.done) {
+    misfetch    := bru.misfetch
+    misfetchAdr := bru.PCNext
+  } otherwise {
+    misfetch    := False
+    misfetchAdr := 0
+  }
+
   freeze := False
-  when(instDecoded.Vld) {
+  when(instDecoded.Vld && ~misfetch) {
     when(aluOp) {
       when((alu.busy && ~alu.done) || (alu.busy && alu.done && aluHazard)) { 
         freeze := True
@@ -233,9 +248,6 @@ class riscv_exu extends Component {
       }
     }
   }
-
-  misfetch := (alu.done && alu.misfetch) ||
-              (bru.done && bru.misfetch)
 
   when(alu.done && alu.wr) {
     x(alu.ndx) := alu.data
