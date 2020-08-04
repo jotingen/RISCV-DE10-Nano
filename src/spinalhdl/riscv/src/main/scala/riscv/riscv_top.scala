@@ -25,21 +25,8 @@ class riscv_top extends Component {
   idu.inst     <> ifu.inst
 
   exu.instDecoded <> idu.instDecoded
+  exu.busData     <> busData
 
-  val busDataReq = Reg(WishBoneReq()) 
-  busDataReq.cyc  init(False)
-  busDataReq.stb  init(False)
-  busDataReq.we   init(False)
-  busDataReq.adr  init(0)
-  busDataReq.sel  init(0)
-  busDataReq.data init(0)
-  busDataReq.tga  init(0)
-  busDataReq.tgd  init(0)
-  busDataReq.tgc  init(0)
-  busDataReq.cyc := ~busDataReq.cyc
-  busDataReq.stb := ~busDataReq.cyc
-  busDataReq.adr := U(busData.rsp.data)
-  busData.req <> busDataReq
 }
 
 //Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
