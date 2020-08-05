@@ -391,6 +391,90 @@ class riscv_lsu extends Component {
 
 }
 
+class riscv_mpu extends Component {
+  val capture     = in(Bool)
+  val instDecoded = in(InstDecoded())
+  val x           = in(Vec(Bits(32 bits),32))
+  val busy        = out(Bool)
+  val rs1         = out(UInt(5 bits))
+  val rs2         = out(UInt(5 bits))
+  val rd          = out(UInt(5 bits))
+  val done        = out(Bool)
+  val wr          = out(Bool)
+  val ndx         = out(UInt(5 bits))
+  val data        = out(Bits(32 bits))
+  val misfetch    = out(Bool)
+  val PCNext      = out(UInt(32 bits))
+
+  val inst = Reg(InstDecoded())
+  inst.Vld init(False)
+
+  val multiplier                 = new multiplier()
+  val multiplier_unsigned        = new multiplier_unsigned()
+  val multiplier_signed_unsigned = new multiplier_signed_unsigned()
+
+  val cycleMax = U(2)
+  val cycle    = Reg(UInt(2 bits))
+
+  busy <>   inst.Vld
+  rs1  <> U(inst.Rs1)
+  rs2  <> U(inst.Rs2)
+  rd   <> U(inst.Rd )
+
+  //Calculate new data
+  val rs1Data = B(x(U(inst.Rs1)))
+  val rs2Data = B(x(U(inst.Rs2)))
+  multiplier.dataa                 <> S(rs1Data)
+  multiplier_unsigned.dataa        <> U(rs1Data)
+  multiplier_signed_unsigned.dataa <> S(rs1Data)
+  multiplier.datab                 <> S(rs2Data)
+  multiplier_unsigned.datab        <> U(rs2Data)
+  multiplier_signed_unsigned.datab <> U(rs2Data).resized
+  data   := 0
+  when(inst.Vld) {
+    switch(inst.Op) {
+      is(InstOp.MUL   ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(multiplier.result(31 downto 0))
+                          } }
+      is(InstOp.MULH  ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(multiplier.result(63 downto 32))
+                          } } 
+      is(InstOp.MULHSU) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(multiplier_unsigned.result(63 downto 32))
+                          } } 
+      is(InstOp.MULHU ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(multiplier_signed_unsigned.result(63 downto 32))
+                          } } 
+      default           { cycle := cycleMax
+                          data := B("32'd0")}
+    }
+  }
+
+  done   := False
+  wr     := False
+  ndx    := U(inst.Rd)
+  PCNext := inst.Adr + 4
+  misfetch := inst.AdrNext =/= PCNext
+  when(inst.Vld && (cycle >= cycleMax)) {
+    done     := True
+    wr       := True
+    inst.Vld := False
+  }
+  when(capture) {
+    cycle := 0
+    inst  := instDecoded
+  }
+
+}
+
 class riscv_dvu extends Component {
   val capture     = in(Bool)
   val instDecoded = in(InstDecoded())
@@ -508,6 +592,13 @@ class riscv_exu extends Component {
   lsu.busData     <> busData
   lsu.capture := False
 
+  val mpu       = new riscv_mpu()
+  val mpuOp     = new Bool
+  val mpuHazard = new Bool
+  mpu.instDecoded <> instDecoded
+  mpu.x           <> x
+  mpu.capture := False
+
   val dvu       = new riscv_dvu()
   val dvuOp     = new Bool
   val dvuHazard = new Bool
@@ -553,6 +644,10 @@ class riscv_exu extends Component {
            instDecoded.Op === InstOp.SB    ||
            instDecoded.Op === InstOp.SH    ||
            instDecoded.Op === InstOp.SW 
+  mpuOp := instDecoded.Op === InstOp.MUL    ||
+           instDecoded.Op === InstOp.MULH   ||
+           instDecoded.Op === InstOp.MULHSU ||
+           instDecoded.Op === InstOp.MULHU 
   dvuOp := instDecoded.Op === InstOp.DIV   ||
            instDecoded.Op === InstOp.DIVU  ||
            instDecoded.Op === InstOp.REM   ||
@@ -568,6 +663,9 @@ class riscv_exu extends Component {
   lsuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === lsu.rs1) ||
                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === lsu.rs2) ||
                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === lsu.rd )
+  mpuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === mpu.rs1) ||
+               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === mpu.rs2) ||
+               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === mpu.rd )
   dvuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === dvu.rs1) ||
                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === dvu.rs2) ||
                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === dvu.rd )
@@ -584,6 +682,9 @@ class riscv_exu extends Component {
   } elsewhen(lsu.done) {
     misfetch    := lsu.misfetch
     misfetchAdr := lsu.PCNext
+  } elsewhen(mpu.done) {
+    misfetch    := mpu.misfetch
+    misfetchAdr := mpu.PCNext
   } elsewhen(dvu.done) {
     misfetch    := dvu.misfetch
     misfetchAdr := dvu.PCNext
@@ -615,6 +716,13 @@ class riscv_exu extends Component {
         lsu.capture := True
       }
     }
+    when(mpuOp) {
+      when((mpu.busy && ~mpu.done) || (mpu.busy && mpu.done && mpuHazard)) { 
+        freeze := True
+      } otherwise {
+        mpu.capture := True
+      }
+    }
     when(dvuOp) {
       when((dvu.busy && ~dvu.done) || (dvu.busy && dvu.done && dvuHazard)) { 
         freeze := True
@@ -633,10 +741,37 @@ class riscv_exu extends Component {
   when(lsu.done && lsu.wr && (lsu.ndx =/= 0)) {
     x(lsu.ndx) := lsu.data
   }
+  when(mpu.done && mpu.wr && (mpu.ndx =/= 0)) {
+    x(mpu.ndx) := mpu.data
+  }
   when(dvu.done && dvu.wr && (dvu.ndx =/= 0)) {
     x(dvu.ndx) := dvu.data
   }
     
+}
+
+class multiplier extends BlackBox {
+  val clock    = in (Bool)
+  val dataa    = in (SInt(32 bits))
+  val datab    = in (SInt(32 bits))
+  val result   = out(SInt(64 bits))
+  mapCurrentClockDomain(clock=clock)
+}
+
+class multiplier_unsigned extends BlackBox {
+  val clock    = in (Bool)
+  val dataa    = in (UInt(32 bits))
+  val datab    = in (UInt(32 bits))
+  val result   = out(UInt(64 bits))
+  mapCurrentClockDomain(clock=clock)
+}
+
+class multiplier_signed_unsigned extends BlackBox {
+  val clock    = in (Bool)
+  val dataa    = in (SInt(32 bits))
+  val datab    = in (UInt(33 bits))
+  val result   = out(SInt(65 bits))
+  mapCurrentClockDomain(clock=clock)
 }
 
 class divider extends BlackBox {

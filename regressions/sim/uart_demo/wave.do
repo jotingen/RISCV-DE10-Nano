@@ -197,20 +197,44 @@ add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal
 add wave -noupdate -expand -group RISCV -height 16 -group bru -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Rd
 add wave -noupdate -expand -group RISCV -height 16 -group bru /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/misfetch
 add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/PCNext
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/capture
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busy
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/done
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/pendingRsp
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Vld
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Op_string
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rs1
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rd
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_cyc
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_stb
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_adr
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_sel
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_rsp_ack
+add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/capture
+add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busy
+add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/done
+add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/pendingRsp
+add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Vld
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Op_string
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rs1
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rd
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_cyc
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_stb
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_adr
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_sel
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_data
+add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_rsp_ack
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/capture
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/busy
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/cycle
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/done
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/inst_Vld
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/inst_Op_string
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/inst_Rs1
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/rs1Data
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/inst_Rs2
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/rs2Data
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/inst_Rd
+add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/data
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/capture
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/busy
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/cycle
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/done
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/inst_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/inst_Op_string
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/inst_Rs1
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/rs1Data
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/inst_Rs2
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/rs2Data
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/inst_Rd
+add wave -noupdate -expand -group RISCV -height 16 -expand -group dvu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/dvu/data
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_31
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_30
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_29
@@ -268,7 +292,7 @@ add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/TXD
 add wave -noupdate -expand -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {2160 ps} 0}
+WaveRestoreCursors {{Cursor 1} {5480 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 266
 configure wave -valuecolwidth 136
@@ -284,4 +308,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {1277 ps} {2625 ps}
+WaveRestoreZoom {1874 ps} {7266 ps}
