@@ -391,6 +391,87 @@ class riscv_lsu extends Component {
 
 }
 
+class riscv_dvu extends Component {
+  val capture     = in(Bool)
+  val instDecoded = in(InstDecoded())
+  val x           = in(Vec(Bits(32 bits),32))
+  val busy        = out(Bool)
+  val rs1         = out(UInt(5 bits))
+  val rs2         = out(UInt(5 bits))
+  val rd          = out(UInt(5 bits))
+  val done        = out(Bool)
+  val wr          = out(Bool)
+  val ndx         = out(UInt(5 bits))
+  val data        = out(Bits(32 bits))
+  val misfetch    = out(Bool)
+  val PCNext      = out(UInt(32 bits))
+
+  val inst = Reg(InstDecoded())
+  inst.Vld init(False)
+
+  val divider          = new divider()
+  val divider_unsigned = new divider_unsigned()
+
+  val cycleMax = U(10)
+  val cycle    = Reg(UInt(4 bits))
+
+  busy <>   inst.Vld
+  rs1  <> U(inst.Rs1)
+  rs2  <> U(inst.Rs2)
+  rd   <> U(inst.Rd )
+
+  //Calculate new data
+  val rs1Data = B(x(U(inst.Rs1)))
+  val rs2Data = B(x(U(inst.Rs2)))
+  divider.numer          <> S(rs1Data)
+  divider_unsigned.numer <> U(rs1Data)
+  divider.denom          <> S(rs2Data)
+  divider_unsigned.denom <> U(rs2Data)
+  data   := 0
+  when(inst.Vld) {
+    switch(inst.Op) {
+      is(InstOp.DIV   ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(divider.quotient)
+                          } }
+      is(InstOp.DIVU  ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(divider_unsigned.quotient)
+                          } } 
+      is(InstOp.REM   ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(divider.remain)
+                          } } 
+      is(InstOp.REMU  ) { when(cycle < cycleMax) {
+                            cycle := cycle + 1
+                          } otherwise {
+                            data := B(divider_unsigned.remain)
+                          } } 
+      default           { cycle := cycleMax
+                          data := B("32'd0")}
+    }
+  }
+
+  done   := False
+  wr     := False
+  ndx    := U(inst.Rd)
+  PCNext := inst.Adr + 4
+  misfetch := inst.AdrNext =/= PCNext
+  when(inst.Vld && (cycle >= cycleMax)) {
+    done     := True
+    wr       := True
+    inst.Vld := False
+  }
+  when(capture) {
+    cycle := 0
+    inst  := instDecoded
+  }
+
+}
+
 //Hardware definition
 class riscv_exu extends Component {
   val instDecoded = in(InstDecoded())
@@ -426,6 +507,13 @@ class riscv_exu extends Component {
   lsu.x           <> x
   lsu.busData     <> busData
   lsu.capture := False
+
+  val dvu       = new riscv_dvu()
+  val dvuOp     = new Bool
+  val dvuHazard = new Bool
+  dvu.instDecoded <> instDecoded
+  dvu.x           <> x
+  dvu.capture := False
 
   aluOp := instDecoded.Op === InstOp.LUI   ||
            instDecoded.Op === InstOp.AUIPC ||
@@ -465,6 +553,10 @@ class riscv_exu extends Component {
            instDecoded.Op === InstOp.SB    ||
            instDecoded.Op === InstOp.SH    ||
            instDecoded.Op === InstOp.SW 
+  dvuOp := instDecoded.Op === InstOp.DIV   ||
+           instDecoded.Op === InstOp.DIVU  ||
+           instDecoded.Op === InstOp.REM   ||
+           instDecoded.Op === InstOp.REMU
 
   //Simple hazard checking for now
   aluHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === alu.rs1) ||
@@ -476,6 +568,9 @@ class riscv_exu extends Component {
   lsuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === lsu.rs1) ||
                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === lsu.rs2) ||
                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === lsu.rd )
+  dvuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === dvu.rs1) ||
+               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === dvu.rs2) ||
+               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === dvu.rd )
 
   //detect any misfetches
   //TODO any reason why not just check bru?
@@ -489,6 +584,9 @@ class riscv_exu extends Component {
   } elsewhen(lsu.done) {
     misfetch    := lsu.misfetch
     misfetchAdr := lsu.PCNext
+  } elsewhen(dvu.done) {
+    misfetch    := dvu.misfetch
+    misfetchAdr := dvu.PCNext
   } otherwise {
     misfetch    := False
     misfetchAdr := 0
@@ -517,6 +615,13 @@ class riscv_exu extends Component {
         lsu.capture := True
       }
     }
+    when(dvuOp) {
+      when((dvu.busy && ~dvu.done) || (dvu.busy && dvu.done && dvuHazard)) { 
+        freeze := True
+      } otherwise {
+        dvu.capture := True
+      }
+    }
   }
 
   when(alu.done && alu.wr && (alu.ndx =/= 0)) {
@@ -528,5 +633,26 @@ class riscv_exu extends Component {
   when(lsu.done && lsu.wr && (lsu.ndx =/= 0)) {
     x(lsu.ndx) := lsu.data
   }
+  when(dvu.done && dvu.wr && (dvu.ndx =/= 0)) {
+    x(dvu.ndx) := dvu.data
+  }
     
+}
+
+class divider extends BlackBox {
+  val clock    = in (Bool)
+  val denom    = in (SInt(32 bits))
+  val numer    = in (SInt(32 bits))
+  val quotient = out(SInt(32 bits))
+  val remain   = out(SInt(32 bits))
+  mapCurrentClockDomain(clock=clock)
+}
+
+class divider_unsigned extends BlackBox {
+  val clock    = in (Bool)
+  val denom    = in (UInt(32 bits))
+  val numer    = in (UInt(32 bits))
+  val quotient = out(UInt(32 bits))
+  val remain   = out(UInt(32 bits))
+  mapCurrentClockDomain(clock=clock)
 }
