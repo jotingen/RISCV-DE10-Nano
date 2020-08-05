@@ -1,6 +1,6 @@
 
 .PHONY: all
-all:    rvfimon
+all:    build
 	make -C programs
 	make -C regressions
 
@@ -8,6 +8,14 @@ all:    rvfimon
 clean: 
 	make -C programs clean
 	make -C regressions clean
+
+.PHONY: build
+build: rvfimon riscv
+
+.PHONY: riscv
+riscv:
+	cd src/spinalhdl/riscv; \
+	sbt run
 
 .PHONY: rvfimon
 rvfimon: 
