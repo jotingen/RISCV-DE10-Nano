@@ -92,6 +92,7 @@ class riscv_idu extends Component {
     switch(opcode) {
       is(B"7'b0110111") {
         instDecoded.Op     := InstOp.LUI
+        instDecoded.Immed  := immedU
       }
       is(B"7'b0010111") {
         instDecoded.Op     := InstOp.AUIPC
