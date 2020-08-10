@@ -9,7 +9,6 @@ class rvfi_monitor;
   logic        q_rvfi_halt[$];
   logic        q_rvfi_intr[$];
   logic [ 1:0] q_rvfi_mode[$];
-  logic [ 1:0] q_rvfi_ixl[$];
   logic [ 4:0] q_rvfi_rs1_addr[$];
   logic [ 4:0] q_rvfi_rs2_addr[$];
   logic [31:0] q_rvfi_rs1_rdata[$];
@@ -42,7 +41,6 @@ class rvfi_monitor;
     q_rvfi_halt.delete();
     q_rvfi_intr.delete();
     q_rvfi_mode.delete();
-    q_rvfi_ixl.delete();
     q_rvfi_rs1_addr.delete();
     q_rvfi_rs2_addr.delete();
     q_rvfi_rs1_rdata.delete();
@@ -76,7 +74,6 @@ class rvfi_monitor;
     input logic [5:0]       rvfi_halt,
     input logic [5:0]       rvfi_intr,
     input logic [5:0][ 1:0] rvfi_mode,
-    input logic [5:0][ 1:0] rvfi_ixl,
     input logic [5:0][ 4:0] rvfi_rs1_addr,
     input logic [5:0][ 4:0] rvfi_rs2_addr,
     input logic [5:0][31:0] rvfi_rs1_rdata,
@@ -105,39 +102,38 @@ class rvfi_monitor;
     for(int i = 0; i <= 5; i++)
       if(rvfi_valid[i])
       begin
-        q_rvfi_valid.push_front(             rvfi_valid             );
-        q_rvfi_order.push_front(             rvfi_order             );
-        q_rvfi_insn.push_front(              rvfi_insn              );
-        q_rvfi_trap.push_front(              rvfi_trap              );
-        q_rvfi_halt.push_front(              rvfi_halt              );
-        q_rvfi_intr.push_front(              rvfi_intr              );
-        q_rvfi_mode.push_front(              rvfi_mode              );
-        q_rvfi_ixl.push_front(               rvfi_ixl               );
-        q_rvfi_rs1_addr.push_front(          rvfi_rs1_addr          );
-        q_rvfi_rs2_addr.push_front(          rvfi_rs2_addr          );
-        q_rvfi_rs1_rdata.push_front(         rvfi_rs1_rdata         );
-        q_rvfi_rs2_rdata.push_front(         rvfi_rs2_rdata         );
-        q_rvfi_rd_addr.push_front(           rvfi_rd_addr           );
-        q_rvfi_rd_wdata.push_front(          rvfi_rd_wdata          );
-        q_rvfi_pc_rdata.push_front(          rvfi_pc_rdata          );
-        q_rvfi_pc_wdata.push_front(          rvfi_pc_wdata          );
-        q_rvfi_mem_addr.push_front(          rvfi_mem_addr          );
-        q_rvfi_mem_rmask.push_front(         rvfi_mem_rmask         );
-        q_rvfi_mem_wmask.push_front(         rvfi_mem_wmask         );
-        q_rvfi_mem_rdata.push_front(         rvfi_mem_rdata         );
-        q_rvfi_mem_wdata.push_front(         rvfi_mem_wdata         );
+        q_rvfi_valid.push_front(             rvfi_valid[i]             );
+        q_rvfi_order.push_front(             rvfi_order[i]             );
+        q_rvfi_insn.push_front(              rvfi_insn[i]              );
+        q_rvfi_trap.push_front(              rvfi_trap[i]              );
+        q_rvfi_halt.push_front(              rvfi_halt[i]              );
+        q_rvfi_intr.push_front(              rvfi_intr[i]              );
+        q_rvfi_mode.push_front(              rvfi_mode[i]              );
+        q_rvfi_rs1_addr.push_front(          rvfi_rs1_addr[i]          );
+        q_rvfi_rs2_addr.push_front(          rvfi_rs2_addr[i]          );
+        q_rvfi_rs1_rdata.push_front(         rvfi_rs1_rdata[i]         );
+        q_rvfi_rs2_rdata.push_front(         rvfi_rs2_rdata[i]         );
+        q_rvfi_rd_addr.push_front(           rvfi_rd_addr[i]           );
+        q_rvfi_rd_wdata.push_front(          rvfi_rd_wdata[i]          );
+        q_rvfi_pc_rdata.push_front(          rvfi_pc_rdata[i]          );
+        q_rvfi_pc_wdata.push_front(          rvfi_pc_wdata[i]          );
+        q_rvfi_mem_addr.push_front(          rvfi_mem_addr[i]          );
+        q_rvfi_mem_rmask.push_front(         rvfi_mem_rmask[i]         );
+        q_rvfi_mem_wmask.push_front(         rvfi_mem_wmask[i]         );
+        q_rvfi_mem_rdata.push_front(         rvfi_mem_rdata[i]         );
+        q_rvfi_mem_wdata.push_front(         rvfi_mem_wdata[i]         );
         
-        q_rvfi_csr_mcycle_rmask.push_front(  rvfi_csr_mcycle_rmask  );
-        q_rvfi_csr_mcycle_wmask.push_front(  rvfi_csr_mcycle_wmask  );
-        q_rvfi_csr_mcycle_rdata.push_front(  rvfi_csr_mcycle_rdata  );
-        q_rvfi_csr_mcycle_wdata.push_front(  rvfi_csr_mcycle_wdata  );
+        q_rvfi_csr_mcycle_rmask.push_front(  rvfi_csr_mcycle_rmask[i]  );
+        q_rvfi_csr_mcycle_wmask.push_front(  rvfi_csr_mcycle_wmask[i]  );
+        q_rvfi_csr_mcycle_rdata.push_front(  rvfi_csr_mcycle_rdata[i]  );
+        q_rvfi_csr_mcycle_wdata.push_front(  rvfi_csr_mcycle_wdata[i]  );
         
-        q_rvfi_csr_minstret_rmask.push_front(rvfi_csr_minstret_rmask);
-        q_rvfi_csr_minstret_wmask.push_front(rvfi_csr_minstret_wmask);
-        q_rvfi_csr_minstret_rdata.push_front(rvfi_csr_minstret_rdata);
-        q_rvfi_csr_minstret_wdata.push_front(rvfi_csr_minstret_wdata);
+        q_rvfi_csr_minstret_rmask.push_front(rvfi_csr_minstret_rmask[i]);
+        q_rvfi_csr_minstret_wmask.push_front(rvfi_csr_minstret_wmask[i]);
+        q_rvfi_csr_minstret_rdata.push_front(rvfi_csr_minstret_rdata[i]);
+        q_rvfi_csr_minstret_wdata.push_front(rvfi_csr_minstret_wdata[i]);
         if(!endLoop())
-          if(verbose) $display("INFO:  [%0t][rvfi_mon]: Executed 0x%08x: 0x%08x", $time, rvfi_pc_rdata, rvfi_insn);
+          if(verbose) $display("INFO:  [%0t][rvfi_mon]: Executed order 0x%016x: 0x%08x:0x%08x", $time, rvfi_order[i], rvfi_pc_rdata[i], rvfi_insn[i]);
       end
     
   endfunction

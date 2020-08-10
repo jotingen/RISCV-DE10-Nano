@@ -77,6 +77,8 @@
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
 
+`include "../../../output/rvfi/riscv_rvfimon.v"
+
 module soc_unit_test;
   import svunit_pkg::svunit_testcase;
 
@@ -258,7 +260,6 @@ module soc_unit_test;
   logic [5:0]       rvfi_halt;
   logic [5:0]       rvfi_intr;
   logic [5:0][ 1:0] rvfi_mode;
-  logic [5:0][ 1:0] rvfi_ixl;
   logic [5:0][ 4:0] rvfi_rs1_addr;
   logic [5:0][ 4:0] rvfi_rs2_addr;
   logic [5:0][31:0] rvfi_rs1_rdata;
@@ -443,7 +444,6 @@ module soc_unit_test;
     .rvfi_halt,
     .rvfi_intr,
     .rvfi_mode,
-    .rvfi_ixl,
     .rvfi_rs1_addr,
     .rvfi_rs2_addr,
     .rvfi_rs1_rdata,
@@ -471,6 +471,32 @@ module soc_unit_test;
     .clk (  ),
     .rst (  ) 
   );    
+
+riscv_rvfimon rvfimon(
+  .clock (clk),
+  .reset (rst),
+
+  .rvfi_valid,
+  .rvfi_order,
+  .rvfi_insn,
+  .rvfi_trap,
+  .rvfi_halt,
+  .rvfi_intr,
+  .rvfi_mode,
+  .rvfi_rs1_addr,
+  .rvfi_rs2_addr,
+  .rvfi_rs1_rdata,
+  .rvfi_rs2_rdata,
+  .rvfi_rd_addr,
+  .rvfi_rd_wdata,
+  .rvfi_pc_rdata,
+  .rvfi_pc_wdata,
+  .rvfi_mem_addr,
+  .rvfi_mem_rmask,
+  .rvfi_mem_wmask,
+  .rvfi_mem_rdata,
+  .rvfi_mem_wdata
+);
 
 ddr3_model ddr3 (
   .clk                  (ddr3_clk),
@@ -645,7 +671,6 @@ always
                      .rvfi_halt              (rvfi_halt),             
                      .rvfi_intr              (rvfi_intr),             
                      .rvfi_mode              (rvfi_mode),             
-                     .rvfi_ixl               (rvfi_ixl),              
                      .rvfi_rs1_addr          (rvfi_rs1_addr),         
                      .rvfi_rs2_addr          (rvfi_rs2_addr),         
                      .rvfi_rs1_rdata         (rvfi_rs1_rdata),        
@@ -726,7 +751,7 @@ always
   //   `SVTEST_END
   //===================================
 
-  int cycleCountMax = 200;
+  int cycleCountMax = 30;
   int cycleCount;
   `SVUNIT_TESTS_BEGIN
 

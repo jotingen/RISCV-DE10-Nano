@@ -1,5 +1,6 @@
 package riscv
 
+import rvfimon._
 import wishbone._
 
 import spinal.core._
@@ -10,6 +11,8 @@ import spinal.lib._
 class riscv_top extends Component {
   val busInst = master(WishBone())
   val busData = master(WishBone())
+
+  val rvfi    = out(Vec(RvfiMon(),6))
 
   val ifu = new riscv_ifu(32)
   val idu = new riscv_idu()
@@ -26,6 +29,7 @@ class riscv_top extends Component {
 
   exu.instDecoded <> idu.instDecoded
   exu.busData     <> busData
+  exu.rvfi        <> rvfi             
 
 }
 

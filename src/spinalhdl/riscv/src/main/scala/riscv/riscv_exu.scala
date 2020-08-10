@@ -1,5 +1,6 @@
 package riscv
 
+import rvfimon._
 import wishbone._
 
 import spinal.core._
@@ -20,8 +21,14 @@ class riscv_alu extends Component {
   val misfetch    = out(Bool)
   val PCNext      = out(UInt(32 bits))
 
+  val order = in(UInt(64 bits))
+  val rvfi  = out(RvfiMon())
+
   val inst = Reg(InstDecoded())
   inst.Vld init(False)
+
+  val rvfi_order = Reg(UInt(64 bits))
+  rvfi_order init(0)
 
   busy <>   inst.Vld
   rs1  <> U(inst.Rs1)
@@ -68,8 +75,42 @@ class riscv_alu extends Component {
   }
   when(capture) {
     inst := instDecoded
+    rvfi_order := order
   }
 
+  rvfi.valid              := inst.Vld && done
+  rvfi.order              := B(rvfi_order)
+  rvfi.insn               := inst.Data
+  rvfi.trap               := False
+  rvfi.halt               := False
+  rvfi.intr               := False
+  rvfi.mode               := 0
+  rvfi.rs1_addr           := inst.Rs1
+  rvfi.rs2_addr           := inst.Rs2
+  rvfi.rs1_rdata          := rs1Data
+  rvfi.rs2_rdata          := rs2Data
+  when(wr) {
+    rvfi.rd_addr            := inst.Rd
+    rvfi.rd_wdata           := data   
+  } otherwise {
+    rvfi.rd_addr            := 0
+    rvfi.rd_wdata           := 0
+  }
+  rvfi.pc_rdata           := B(inst.Adr)
+  rvfi.pc_wdata           := B(PCNext  )
+  rvfi.mem_addr           := 0
+  rvfi.mem_rmask          := 0
+  rvfi.mem_wmask          := 0
+  rvfi.mem_rdata          := 0
+  rvfi.mem_wdata          := 0
+  rvfi.csr_mcycle_rmask   := 0
+  rvfi.csr_mcycle_wmask   := 0
+  rvfi.csr_mcycle_rdata   := 0
+  rvfi.csr_mcycle_wdata   := 0
+  rvfi.csr_minstret_rmask := 0
+  rvfi.csr_minstret_wmask := 0
+  rvfi.csr_minstret_rdata := 0
+  rvfi.csr_minstret_wdata := 0
 }
 
 class riscv_bru extends Component {
@@ -87,8 +128,14 @@ class riscv_bru extends Component {
   val misfetch    = out(Bool)
   val PCNext      = out(UInt(32 bits))
 
+  val order = in(UInt(64 bits))
+  val rvfi  = out(RvfiMon())
+
   val inst = Reg(InstDecoded())
   inst.Vld init(False)
+
+  val rvfi_order = Reg(UInt(64 bits))
+  rvfi_order init(0)
 
   busy <>   inst.Vld
   rs1  <> U(inst.Rs1)
@@ -159,7 +206,42 @@ class riscv_bru extends Component {
   }
   when(capture) {
     inst := instDecoded
+    rvfi_order := order
   }
+
+  rvfi.valid              := inst.Vld && done
+  rvfi.order              := B(rvfi_order)
+  rvfi.insn               := inst.Data
+  rvfi.trap               := False
+  rvfi.halt               := False
+  rvfi.intr               := False
+  rvfi.mode               := 0
+  rvfi.rs1_addr           := inst.Rs1
+  rvfi.rs2_addr           := inst.Rs2
+  rvfi.rs1_rdata          := rs1Data
+  rvfi.rs2_rdata          := rs2Data
+  when(wr) {
+    rvfi.rd_addr            := inst.Rd
+    rvfi.rd_wdata           := data   
+  } otherwise {
+    rvfi.rd_addr            := 0
+    rvfi.rd_wdata           := 0
+  }
+  rvfi.pc_rdata           := B(inst.Adr)
+  rvfi.pc_wdata           := B(PCNext  )
+  rvfi.mem_addr           := 0
+  rvfi.mem_rmask          := 0
+  rvfi.mem_wmask          := 0
+  rvfi.mem_rdata          := 0
+  rvfi.mem_wdata          := 0
+  rvfi.csr_mcycle_rmask   := 0
+  rvfi.csr_mcycle_wmask   := 0
+  rvfi.csr_mcycle_rdata   := 0
+  rvfi.csr_mcycle_wdata   := 0
+  rvfi.csr_minstret_rmask := 0
+  rvfi.csr_minstret_wmask := 0
+  rvfi.csr_minstret_rdata := 0
+  rvfi.csr_minstret_wdata := 0
 }
 
 class riscv_lsu extends Component {
@@ -178,8 +260,14 @@ class riscv_lsu extends Component {
   val PCNext      = out(UInt(32 bits))
   val busData     = master(WishBone())
 
+  val order = in(UInt(64 bits))
+  val rvfi  = out(RvfiMon())
+
   val inst = Reg(InstDecoded())
   inst.Vld init(False)
+
+  val rvfi_order = Reg(UInt(64 bits))
+  rvfi_order init(0)
 
   val busDataReq = Reg(WishBoneReq()) 
   busData.req <> busDataReq
@@ -387,7 +475,49 @@ class riscv_lsu extends Component {
 
   when(capture) {
     inst := instDecoded
+    rvfi_order := order
   }
+
+  rvfi.valid              := inst.Vld && done
+  rvfi.order              := B(rvfi_order)
+  rvfi.insn               := inst.Data
+  rvfi.trap               := False
+  rvfi.halt               := False
+  rvfi.intr               := False
+  rvfi.mode               := 0
+  rvfi.rs1_addr           := inst.Rs1
+  rvfi.rs2_addr           := inst.Rs2
+  rvfi.rs1_rdata          := rs1Data
+  rvfi.rs2_rdata          := rs2Data
+  rvfi.rd_addr            := inst.Rd
+  when(wr) {
+    rvfi.rd_addr            := inst.Rd
+    rvfi.rd_wdata           := data   
+  } otherwise {
+    rvfi.rd_addr            := 0
+    rvfi.rd_wdata           := 0
+  }
+  rvfi.pc_rdata           := B(inst.Adr)
+  rvfi.pc_wdata           := B(PCNext  )
+  rvfi.mem_addr           := B(busDataReq.adr)
+  when(busDataReq.we) {
+    rvfi.mem_rmask          := 0
+    rvfi.mem_wmask          := busDataReq.sel
+    rvfi.mem_wdata          := busDataReq.data
+  } otherwise {
+    rvfi.mem_rmask          := busDataReq.sel
+    rvfi.mem_wmask          := 0
+    rvfi.mem_wdata          := 0
+  }
+  rvfi.mem_rdata          := data
+  rvfi.csr_mcycle_rmask   := 0
+  rvfi.csr_mcycle_wmask   := 0
+  rvfi.csr_mcycle_rdata   := 0
+  rvfi.csr_mcycle_wdata   := 0
+  rvfi.csr_minstret_rmask := 0
+  rvfi.csr_minstret_wmask := 0
+  rvfi.csr_minstret_rdata := 0
+  rvfi.csr_minstret_wdata := 0
 
 }
 
@@ -406,8 +536,14 @@ class riscv_mpu extends Component {
   val misfetch    = out(Bool)
   val PCNext      = out(UInt(32 bits))
 
+  val order = in(UInt(64 bits))
+  val rvfi  = out(RvfiMon())
+
   val inst = Reg(InstDecoded())
   inst.Vld init(False)
+
+  val rvfi_order = Reg(UInt(64 bits))
+  rvfi_order init(0)
 
   val multiplier                 = new multiplier()
   val multiplier_unsigned        = new multiplier_unsigned()
@@ -471,7 +607,43 @@ class riscv_mpu extends Component {
   when(capture) {
     cycle := 0
     inst  := instDecoded
+    rvfi_order := order
   }
+
+  rvfi.valid              := inst.Vld && done
+  rvfi.order              := B(rvfi_order)
+  rvfi.insn               := inst.Data
+  rvfi.trap               := False
+  rvfi.halt               := False
+  rvfi.intr               := False
+  rvfi.mode               := 0
+  rvfi.rs1_addr           := inst.Rs1
+  rvfi.rs2_addr           := inst.Rs2
+  rvfi.rs1_rdata          := rs1Data
+  rvfi.rs2_rdata          := rs2Data
+  rvfi.rd_addr            := inst.Rd
+  when(wr) {
+    rvfi.rd_addr            := inst.Rd
+    rvfi.rd_wdata           := data   
+  } otherwise {
+    rvfi.rd_addr            := 0
+    rvfi.rd_wdata           := 0
+  }
+  rvfi.pc_rdata           := B(inst.Adr)
+  rvfi.pc_wdata           := B(PCNext  )
+  rvfi.mem_addr           := 0
+  rvfi.mem_rmask          := 0
+  rvfi.mem_wmask          := 0
+  rvfi.mem_rdata          := 0
+  rvfi.mem_wdata          := 0
+  rvfi.csr_mcycle_rmask   := 0
+  rvfi.csr_mcycle_wmask   := 0
+  rvfi.csr_mcycle_rdata   := 0
+  rvfi.csr_mcycle_wdata   := 0
+  rvfi.csr_minstret_rmask := 0
+  rvfi.csr_minstret_wmask := 0
+  rvfi.csr_minstret_rdata := 0
+  rvfi.csr_minstret_wdata := 0
 
 }
 
@@ -490,8 +662,14 @@ class riscv_dvu extends Component {
   val misfetch    = out(Bool)
   val PCNext      = out(UInt(32 bits))
 
+  val order = in(UInt(64 bits))
+  val rvfi  = out(RvfiMon())
+
   val inst = Reg(InstDecoded())
   inst.Vld init(False)
+
+  val rvfi_order = Reg(UInt(64 bits))
+  rvfi_order init(0)
 
   val divider          = new divider()
   val divider_unsigned = new divider_unsigned()
@@ -552,7 +730,43 @@ class riscv_dvu extends Component {
   when(capture) {
     cycle := 0
     inst  := instDecoded
+    rvfi_order := order
   }
+
+  rvfi.valid              := inst.Vld && done
+  rvfi.order              := B(rvfi_order)
+  rvfi.insn               := inst.Data
+  rvfi.trap               := False
+  rvfi.halt               := False
+  rvfi.intr               := False
+  rvfi.mode               := 0
+  rvfi.rs1_addr           := inst.Rs1
+  rvfi.rs2_addr           := inst.Rs2
+  rvfi.rs1_rdata          := rs1Data
+  rvfi.rs2_rdata          := rs2Data
+  rvfi.rd_addr            := inst.Rd
+  when(wr) {
+    rvfi.rd_addr            := inst.Rd
+    rvfi.rd_wdata           := data   
+  } otherwise {
+    rvfi.rd_addr            := 0
+    rvfi.rd_wdata           := 0
+  }
+  rvfi.pc_rdata           := B(inst.Adr)
+  rvfi.pc_wdata           := B(PCNext  )
+  rvfi.mem_addr           := 0
+  rvfi.mem_rmask          := 0
+  rvfi.mem_wmask          := 0
+  rvfi.mem_rdata          := 0
+  rvfi.mem_wdata          := 0
+  rvfi.csr_mcycle_rmask   := 0
+  rvfi.csr_mcycle_wmask   := 0
+  rvfi.csr_mcycle_rdata   := 0
+  rvfi.csr_mcycle_wdata   := 0
+  rvfi.csr_minstret_rmask := 0
+  rvfi.csr_minstret_wmask := 0
+  rvfi.csr_minstret_rdata := 0
+  rvfi.csr_minstret_wdata := 0
 
 }
 
@@ -564,17 +778,56 @@ class riscv_exu extends Component {
   val misfetchAdr = out(UInt(32 bits))
   val busData     = master(WishBone())
 
+  val rvfi    = out(Vec(RvfiMon(),6))
+  for(i <- 5 to 5) {
+    rvfi(i).valid              := False
+    rvfi(i).order              := 0
+    rvfi(i).insn               := 0
+    rvfi(i).trap               := False
+    rvfi(i).halt               := False
+    rvfi(i).intr               := False
+    rvfi(i).mode               := 0
+    rvfi(i).rs1_addr           := 0
+    rvfi(i).rs2_addr           := 0
+    rvfi(i).rs1_rdata          := 0
+    rvfi(i).rs2_rdata          := 0
+    rvfi(i).rd_addr            := 0
+    rvfi(i).rd_wdata           := 0
+    rvfi(i).pc_rdata           := 0
+    rvfi(i).pc_wdata           := 0
+    rvfi(i).mem_addr           := 0
+    rvfi(i).mem_rmask          := 0
+    rvfi(i).mem_wmask          := 0
+    rvfi(i).mem_rdata          := 0
+    rvfi(i).mem_wdata          := 0
+    rvfi(i).csr_mcycle_rmask   := 0
+    rvfi(i).csr_mcycle_wmask   := 0
+    rvfi(i).csr_mcycle_rdata   := 0
+    rvfi(i).csr_mcycle_wdata   := 0
+    rvfi(i).csr_minstret_rmask := 0
+    rvfi(i).csr_minstret_wmask := 0
+    rvfi(i).csr_minstret_rdata := 0
+    rvfi(i).csr_minstret_wdata := 0
+  }
+
+  val order = Reg(UInt(64 bits))
+  order init(0)
+
   val x = Vec(Reg(Bits(32 bits)),32)
   x(0) init(0)
   //for(entry <- x) {
   //  entry init(0)
   //}
 
+  val hazard = new Bool
+
   val alu       = new riscv_alu()
   val aluOp     = new Bool
   val aluHazard = new Bool
   alu.instDecoded <> instDecoded
   alu.x           <> x
+  alu.order       <> order
+  alu.rvfi        <> rvfi(0)              
   alu.capture := False
 
   val bru       = new riscv_bru()
@@ -582,6 +835,8 @@ class riscv_exu extends Component {
   val bruHazard = new Bool
   bru.instDecoded <> instDecoded
   bru.x           <> x
+  bru.order       <> order
+  bru.rvfi        <> rvfi(1)              
   bru.capture := False
 
   val lsu       = new riscv_lsu()
@@ -589,6 +844,8 @@ class riscv_exu extends Component {
   val lsuHazard = new Bool
   lsu.instDecoded <> instDecoded
   lsu.x           <> x
+  lsu.order       <> order
+  lsu.rvfi        <> rvfi(2)              
   lsu.busData     <> busData
   lsu.capture := False
 
@@ -597,6 +854,8 @@ class riscv_exu extends Component {
   val mpuHazard = new Bool
   mpu.instDecoded <> instDecoded
   mpu.x           <> x
+  mpu.order       <> order
+  mpu.rvfi        <> rvfi(3)              
   mpu.capture := False
 
   val dvu       = new riscv_dvu()
@@ -604,6 +863,8 @@ class riscv_exu extends Component {
   val dvuHazard = new Bool
   dvu.instDecoded <> instDecoded
   dvu.x           <> x
+  dvu.order       <> order
+  dvu.rvfi        <> rvfi(4)              
   dvu.capture := False
 
   aluOp := instDecoded.Op === InstOp.LUI   ||
@@ -654,21 +915,31 @@ class riscv_exu extends Component {
            instDecoded.Op === InstOp.REMU
 
   //Simple hazard checking for now
-  aluHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === alu.rs1) ||
-               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === alu.rs2) ||
-               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === alu.rd )
-  bruHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === bru.rs1) ||
-               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === bru.rs2) ||
-               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === bru.rd )
-  lsuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === lsu.rs1) ||
-               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === lsu.rs2) ||
-               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === lsu.rd )
-  mpuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === mpu.rs1) ||
-               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === mpu.rs2) ||
-               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === mpu.rd )
-  dvuHazard := (U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === dvu.rs1) ||
-               (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === dvu.rs2) ||
-               (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === dvu.rd )
+  aluHazard := alu.busy &&
+               ((U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === alu.rs1) ||
+                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === alu.rs2) ||
+                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === alu.rd ) )
+  bruHazard := bru.busy &&
+               ((U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === bru.rs1) ||
+                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === bru.rs2) ||
+                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === bru.rd ) )
+  lsuHazard := lsu.busy &&
+               ((U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === lsu.rs1) ||
+                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === lsu.rs2) ||
+                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === lsu.rd ) )
+  mpuHazard := mpu.busy &&
+               ((U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === mpu.rs1) ||
+                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === mpu.rs2) ||
+                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === mpu.rd ) )
+  dvuHazard := dvu.busy &&
+               ((U(instDecoded.Rs1) =/= 0 && U(instDecoded.Rs1) === dvu.rs1) ||
+                (U(instDecoded.Rs2) =/= 0 && U(instDecoded.Rs2) === dvu.rs2) ||
+                (U(instDecoded.Rd ) =/= 0 && U(instDecoded.Rd ) === dvu.rd ) )
+  hazard    := aluHazard || 
+               bruHazard || 
+               lsuHazard || 
+               mpuHazard || 
+               dvuHazard
 
   //detect any misfetches
   //TODO any reason why not just check bru?
@@ -696,39 +967,42 @@ class riscv_exu extends Component {
   freeze := False
   when(instDecoded.Vld && ~misfetch) {
     when(aluOp) {
-      when((alu.busy && ~alu.done) || (alu.busy && alu.done && aluHazard)) { 
+      when((alu.busy && ~alu.done) || (hazard)) { 
         freeze := True
       } otherwise {
         alu.capture := True
       }
     }
     when(bruOp) {
-      when((bru.busy && ~bru.done) || (bru.busy && bru.done && bruHazard)) { 
+      when((bru.busy && ~bru.done) || (hazard)) { 
         freeze := True
       } otherwise {
         bru.capture := True
       }
     }
     when(lsuOp) {
-      when((lsu.busy && ~lsu.done) || (lsu.busy && lsu.done && lsuHazard)) { 
+      when((lsu.busy && ~lsu.done) || (hazard)) { 
         freeze := True
       } otherwise {
         lsu.capture := True
       }
     }
     when(mpuOp) {
-      when((mpu.busy && ~mpu.done) || (mpu.busy && mpu.done && mpuHazard)) { 
+      when((mpu.busy && ~mpu.done) || (hazard)) { 
         freeze := True
       } otherwise {
         mpu.capture := True
       }
     }
     when(dvuOp) {
-      when((dvu.busy && ~dvu.done) || (dvu.busy && dvu.done && dvuHazard)) { 
+      when((dvu.busy && ~dvu.done) || (hazard)) { 
         freeze := True
       } otherwise {
         dvu.capture := True
       }
+    }
+    when(~freeze) {
+      order := order + 1
     }
   }
 
