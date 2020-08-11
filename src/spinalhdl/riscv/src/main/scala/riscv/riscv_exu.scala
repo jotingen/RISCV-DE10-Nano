@@ -62,6 +62,9 @@ class riscv_alu extends Component {
     is(InstOp.AND   ) { data := B(   rs1Data  &     rs2Data    )}
     default           { data := B("32'd0")}
   }
+  when(inst.Rd === 0) {
+    data := 0
+  }
 
   done   := False
   wr     := False
@@ -195,6 +198,9 @@ class riscv_bru extends Component {
                          PCNext := inst.Adr + 4
                        }} 
     default          { PCNext := U(inst.Immed)}
+  }
+  when(inst.Rd === 0) {
+    data := 0
   }
 
   done   := False
@@ -472,6 +478,9 @@ class riscv_lsu extends Component {
       default         {  }
     }
   }
+  when(inst.Rd === 0) {
+    data := 0
+  }
 
   when(capture) {
     inst := instDecoded
@@ -592,6 +601,9 @@ class riscv_mpu extends Component {
       default           { cycle := cycleMax
                           data := B("32'd0")}
     }
+  }
+  when(inst.Rd === 0) {
+    data := 0
   }
 
   done   := False
@@ -715,6 +727,9 @@ class riscv_dvu extends Component {
       default           { cycle := cycleMax
                           data := B("32'd0")}
     }
+  }
+  when(inst.Rd === 0) {
+    data := 0
   }
 
   done   := False
