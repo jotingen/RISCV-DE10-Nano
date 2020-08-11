@@ -21,7 +21,7 @@ riscv:
 rvfimon: 
 	mkdir -p output/rvfi; \
 	cd submodules/riscv-formal/monitor; \
-	./generate.py -irv32im -c 6 -a -p riscv_rvfimon -r0 > ../../../output/rvfi/riscv_rvfimon.v
+	./generate.py -irv32im -c 6 -a -p riscv_rvfimon  > ../../../output/rvfi/riscv_rvfimon.v
 
 #.PHONY: all
 #all: 
