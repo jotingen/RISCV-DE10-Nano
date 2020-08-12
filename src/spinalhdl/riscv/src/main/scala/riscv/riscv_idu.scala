@@ -408,6 +408,7 @@ class riscv_idu extends Component {
     }
 
   } otherwise {
+    instDecoded.Vld := False
   }
   instDecoded.Vld init(False)
 }
