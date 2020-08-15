@@ -112,9 +112,11 @@ class riscv_ifu(bufferSize : Int) extends Component {
       buf.PushAdr(PC)
       PC := PC + 4
     }
-  } otherwise {
-    busInstReq.cyc  := False
-    busInstReq.stb  := False
+  } 
+
+  when(busInst.stall) {
+    busInst.req.cyc  := False
+    busInst.req.stb  := False
   }
 
   when( busInst.rsp.ack && 

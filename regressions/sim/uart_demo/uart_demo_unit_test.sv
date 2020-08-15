@@ -751,7 +751,7 @@ always
   //   `SVTEST_END
   //===================================
 
-  int cycleCountMax = 200;
+  int cycleCountMax = 2000;
   int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
