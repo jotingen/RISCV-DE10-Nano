@@ -112,6 +112,11 @@ class riscv_ifu(bufferSize : Int) extends Component {
       buf.PushAdr(PC)
       PC := PC + 4
     }
+  } otherwise {
+    when(misfetch) {
+      token := token + 1
+      PC := misfetchAdr
+    }
   } 
 
   when(busInst.stall) {
