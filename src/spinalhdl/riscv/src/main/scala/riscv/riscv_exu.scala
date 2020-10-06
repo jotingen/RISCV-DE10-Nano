@@ -425,13 +425,17 @@ class riscv_lsu extends Component {
                           busDataReq.we   := True
                           busDataReq.adr  := adr
                           busDataReq.adr(1 downto 0)  := 0
+                          busDataReq.data := 0
                           switch(B(adr(1 downto 0))) {
-                            is(B"2'd0") {busDataReq.sel  := B"4'b0001"}
-                            is(B"2'd1") {busDataReq.sel  := B"4'b0010"}
-                            is(B"2'd2") {busDataReq.sel  := B"4'b0100"}
-                            is(B"2'd3") {busDataReq.sel  := B"4'b1000"}
+                            is(B"2'd0") {busDataReq.sel  := B"4'b0001"
+                                         busDataReq.data(7 downto 0) := rs2Data(7 downto 0)}
+                            is(B"2'd1") {busDataReq.sel  := B"4'b0010"
+                                         busDataReq.data(15 downto 8) := rs2Data(7 downto 0)}
+                            is(B"2'd2") {busDataReq.sel  := B"4'b0100"
+                                         busDataReq.data(23 downto 16) := rs2Data(7 downto 0)}
+                            is(B"2'd3") {busDataReq.sel  := B"4'b1000"
+                                         busDataReq.data(31 downto 24) := rs2Data(7 downto 0)}
                           }
-                          busDataReq.data := rs2Data
                           pendingRsp := True
                         } elsewhen(busData.rsp.ack) {
                           done     := True
@@ -446,11 +450,13 @@ class riscv_lsu extends Component {
                           busDataReq.we   := True
                           busDataReq.adr  := adr
                           busDataReq.adr(1 downto 0)  := 0
+                          busDataReq.data := 0
                           switch(B(adr(1))) {
-                            is(B"1'd0") {busDataReq.sel  := B"4'b0011"}
-                            is(B"1'd1") {busDataReq.sel  := B"4'b1100"}
+                            is(B"1'd0") {busDataReq.sel  := B"4'b0011"
+                                         busDataReq.data(15 downto 0) := rs2Data(15 downto 0)}
+                            is(B"1'd1") {busDataReq.sel  := B"4'b1100"
+                                         busDataReq.data(31 downto 16) := rs2Data(15 downto 0)}
                           }
-                          busDataReq.data := rs2Data
                           pendingRsp := True
                         } elsewhen(busData.rsp.ack) {
                           done     := True
@@ -495,13 +501,32 @@ class riscv_lsu extends Component {
   rvfi.intr               := False
   rvfi.mode               := 0
   rvfi.rs1_addr           := inst.Rs1
-  rvfi.rs2_addr           := inst.Rs2
+  when(  inst.Op === InstOp.SW
+      || inst.Op === InstOp.SH
+      || inst.Op === InstOp.SB) {
+    rvfi.rs2_addr           := inst.Rs2
+    rvfi.rs2_rdata          := rs2Data
+      } otherwise {
+    rvfi.rs2_addr           := 0
+    rvfi.rs2_rdata          := 0
+      }
   rvfi.rs1_rdata          := rs1Data
-  rvfi.rs2_rdata          := rs2Data
   rvfi.rd_addr            := inst.Rd
   when(wr) {
     rvfi.rd_addr            := inst.Rd
-    rvfi.rd_wdata           := data   
+    rvfi.rd_wdata           := 0   
+    when(busDataReq.sel(3)) {
+      rvfi.rd_wdata(31 downto 24) := data(31 downto 24)   
+    }
+    when(busDataReq.sel(2)) {
+      rvfi.rd_wdata(23 downto 16) := data(23 downto 16)   
+    }
+    when(busDataReq.sel(1)) {
+      rvfi.rd_wdata(15 downto 8) := data(15 downto 8)   
+    }
+    when(busDataReq.sel(0)) {
+      rvfi.rd_wdata(7 downto 0) := data(7 downto 0)   
+    }
   } otherwise {
     rvfi.rd_addr            := 0
     rvfi.rd_wdata           := 0

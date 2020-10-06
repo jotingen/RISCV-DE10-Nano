@@ -23,8 +23,8 @@ add wave -noupdate -expand -group DDR3 /testrunner/__ts/soc_ut/de10nano/ddr3/ddr
 add wave -noupdate -expand -group DDR3 /testrunner/__ts/soc_ut/de10nano/ddr3/ddr3_avl_wdata
 add wave -noupdate -expand -group DDR3 /testrunner/__ts/soc_ut/de10nano/ddr3/ddr3_avl_write_req
 add wave -noupdate -expand -group DDR3 /testrunner/__ts/soc_ut/de10nano/ddr3/ddr3_avl_wr
-add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Cyc -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Stb -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.We -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Adr -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Sel -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgc -radix hexadecimal}} -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Cyc {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Stb {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.We {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Adr {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Sel {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Data {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tga {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgd {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgc {-radix hexadecimal}} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i
-add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Cyc -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Stb -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.We -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Adr -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Sel -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgc -radix hexadecimal}} -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Cyc {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Stb {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.We {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Adr {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Sel {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Data {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tga {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgd {-radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgc {-radix hexadecimal}} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd
+add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Cyc -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Stb -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.We -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Adr -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Sel -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgc -radix hexadecimal}} -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Cyc {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Stb {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.We {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Adr {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Sel {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Data {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tga {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgd {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i.Tgc {-height 15 -radix hexadecimal}} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i
+add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Cyc -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Stb -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.We -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Adr -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Sel -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgc -radix hexadecimal}} -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Cyc {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Stb {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.We {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Adr {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Sel {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Data {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tga {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgd {-height 15 -radix hexadecimal} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd.Tgc {-height 15 -radix hexadecimal}} /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/bus_i_stgd
 add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/mem_buffer_in_lru
 add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/mem_buffer_lru_entry
 add wave -noupdate -expand -group DDR3 -height 16 -expand -group inst_cache /testrunner/__ts/soc_ut/de10nano/ddr3/inst_cache/state_flush
@@ -251,40 +251,42 @@ add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal
 add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/rvfi_rd_wdata
 add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/rvfi_pc_rdata
 add wave -noupdate -expand -group RISCV -height 16 -group bru -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/rvfi_pc_wdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/capture
-add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busy
-add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/done
-add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/pendingRsp
-add wave -noupdate -expand -group RISCV -height 16 -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Vld
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Op_string
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rs1
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rd
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_cyc
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_stb
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_adr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_sel
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_data
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_rsp_ack
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_valid
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_order
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_insn
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_trap
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_halt
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_intr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mode
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs1_addr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs2_addr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs1_rdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs2_rdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rd_addr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rd_wdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_pc_rdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_pc_wdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_addr
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_rmask
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_wmask
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_rdata
-add wave -noupdate -expand -group RISCV -height 16 -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_wdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/capture
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busy
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/done
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/pendingRsp
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Op_string
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rs1
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix decimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/inst_Rd
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_cyc
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_stb
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_we
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_sel
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_req_data
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_rsp_ack
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/busData_rsp_data
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_valid
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_order
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_insn
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_trap
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_halt
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_intr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mode
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs1_addr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs2_addr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs1_rdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rs2_rdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rd_addr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_rd_wdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_pc_rdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_pc_wdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_addr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_rmask
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_wmask
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_rdata
+add wave -noupdate -expand -group RISCV -height 16 -expand -group lsu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/lsu/rvfi_mem_wdata
 add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/capture
 add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/busy
 add wave -noupdate -expand -group RISCV -height 16 -group mpu -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/mpu/cycle
@@ -358,7 +360,7 @@ add wave -noupdate -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 add wave -noupdate -group UART /testrunner/__ts/soc_ut/de10nano/uart/TXD
 add wave -noupdate -group UART /testrunner/__ts/soc_ut/de10nano/uart/RTS
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {5400 ps} 0}
+WaveRestoreCursors {{Cursor 1} {14080 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 266
 configure wave -valuecolwidth 136
@@ -374,4 +376,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {5183 ps} {6505 ps}
+WaveRestoreZoom {12758 ps} {15402 ps}
