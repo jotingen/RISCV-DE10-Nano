@@ -1,0 +1,10 @@
+import sys
+
+sys.path.append('../submodules/jck_riscv')
+from riscv import decoder
+
+instruction = "{0:08b}".format(int(sys.argv[1], 16))
+print(' '.join(instruction[i:i+4] for i in range(0,len(instruction),4)))
+
+decoded_instruction = decoder.decode(instruction)
+decoder.print_dic(decoded_instruction)

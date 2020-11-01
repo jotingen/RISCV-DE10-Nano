@@ -17,13 +17,13 @@ case class WishBoneReq() extends Bundle {
 }
 
 case class WishBoneRsp() extends Bundle {
-  val ack   = Bool
-  val err   = Bool
-  val rty   = Bool
-  val data  = Bits(32 bits)
-  val tga   = Bits(1 bits)
-  val tgd   = Bits(1 bits)
-  val tgc   = Bits(4 bits)
+  val ack  = Bool
+  val err  = Bool
+  val rty  = Bool
+  val data = Bits(32 bits)
+  val tga  = Bits(1 bits)
+  val tgd  = Bits(1 bits)
+  val tgc  = Bits(4 bits)
 }
 
 case class WishBone() extends Bundle with IMasterSlave {
@@ -55,4 +55,3 @@ case class WishBone() extends Bundle with IMasterSlave {
   //    return True
   //}
 }
-
