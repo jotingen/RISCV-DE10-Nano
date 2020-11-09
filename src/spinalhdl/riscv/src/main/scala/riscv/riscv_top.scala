@@ -13,14 +13,21 @@ class riscv_top extends Component {
 
   val rvfi = out( Vec( RvfiMon(), 6 ) )
 
-  val ifu = new riscv_ifu( 32 )
+  val ifu = new riscv_ifu( bufferSize = 32 )
   val idu = new riscv_idu()
   val exu = new riscv_exu()
+
+  val idle = Bool()
+  idle := ~ifu.inst.Vld &
+    ~idu.instDecoded.Vld &
+    exu.idle
 
   ifu.misfetch <> exu.misfetch
   ifu.misfetchAdr <> exu.misfetchAdr
   ifu.freeze <> exu.freeze
   ifu.busInst <> busInst
+  ifu.idle <> idle
+  ifu.oneShotInstr := True
 
   idu.misfetch <> exu.misfetch
   idu.freeze <> exu.freeze

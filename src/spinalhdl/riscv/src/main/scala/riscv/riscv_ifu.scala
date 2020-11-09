@@ -70,6 +70,8 @@ class riscv_ifu( bufferSize: Int ) extends Component {
   val misfetch = in( Bool )
   val misfetchAdr = in( UInt( 32 bits ) )
   val freeze = in( Bool )
+  val idle = in( Bool )
+  val oneShotInstr = in( Bool )
   val inst = out( Reg( Inst() ) )
   val busInst = master( WishBone() )
 
@@ -94,6 +96,8 @@ class riscv_ifu( bufferSize: Int ) extends Component {
 
   val buf = InstBuff( bufferSize )
 
+  busInstReq.cyc := False
+  busInstReq.stb := False
   when( ~busInst.stall & ~buf.Full() ) {
     busInstReq.cyc := True
     busInstReq.stb := True
@@ -137,8 +141,12 @@ class riscv_ifu( bufferSize: Int ) extends Component {
     ( freeze) {
       inst := inst
     } elsewhen
-    ( ~buf.Empty()) {
-      inst := buf.Pull()
+    ( ~buf.Empty()) { //&& ( ~oneShotInstr || (oneShotInstr && ~idle))) {
+      when( oneShotInstr && ~idle ) {
+        inst.Vld := False
+      } otherwise {
+        inst := buf.Pull()
+      }
     } otherwise {
       inst.Vld := False
     }

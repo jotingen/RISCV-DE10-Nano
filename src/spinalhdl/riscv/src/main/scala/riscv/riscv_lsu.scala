@@ -82,6 +82,20 @@ class riscv_lsu extends Component {
           busDataReq.we := False
           busDataReq.adr := adr
           busDataReq.adr( 1 downto 0 ) := 0
+          switch( B( adr( 1 downto 0 ) ) ) {
+            is( B"2'd0" ) {
+              busDataReq.sel := B"4'b0001"
+            }
+            is( B"2'd1" ) {
+              busDataReq.sel := B"4'b0010"
+            }
+            is( B"2'd2" ) {
+              busDataReq.sel := B"4'b0100"
+            }
+            is( B"2'd3" ) {
+              busDataReq.sel := B"4'b1000"
+            }
+          }
           pendingRsp := True
         } elsewhen
           ( busData.rsp.ack) {
@@ -180,6 +194,20 @@ class riscv_lsu extends Component {
           busDataReq.we := False
           busDataReq.adr := adr
           busDataReq.adr( 1 downto 0 ) := 0
+          switch( B( adr( 1 downto 0 ) ) ) {
+            is( B"2'd0" ) {
+              busDataReq.sel := B"4'b0001"
+            }
+            is( B"2'd1" ) {
+              busDataReq.sel := B"4'b0010"
+            }
+            is( B"2'd2" ) {
+              busDataReq.sel := B"4'b0100"
+            }
+            is( B"2'd3" ) {
+              busDataReq.sel := B"4'b1000"
+            }
+          }
           pendingRsp := True
         } elsewhen
           ( busData.rsp.ack) {

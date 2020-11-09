@@ -10,6 +10,7 @@ import spinal.lib._
 class riscv_exu extends Component {
   val instDecoded = in( InstDecoded() )
   val freeze = out( Bool )
+  val idle = out( Bool )
   val misfetch = out( Bool )
   val misfetchAdr = out( UInt( 32 bits ) )
   val busData = master( WishBone() )
@@ -102,6 +103,12 @@ class riscv_exu extends Component {
   dvu.order <> order
   dvu.rvfi <> rvfi( 4 )
   dvu.capture := False
+
+  idle := ~( alu.busy && ~alu.done) &
+    ~( bru.busy && ~bru.done) &
+    ~( lsu.busy && ~lsu.done) &
+    ~( mpu.busy && ~mpu.done) &
+    ~( dvu.busy && ~dvu.done)
 
   aluOp := instDecoded.Op === InstOp.LUI || instDecoded.Op === InstOp.AUIPC ||
     instDecoded.Op === InstOp.ADD || instDecoded.Op === InstOp.ADDI ||
