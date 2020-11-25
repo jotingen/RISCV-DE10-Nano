@@ -77,6 +77,8 @@
 `include "../../verif/led_monitor.sv"
 `include "../../verif/wishbone_monitor.sv"
 
+`include "../../output/rvfi/riscv_rvfimon.v"
+
 module soc_unit_test;
   import svunit_pkg::svunit_testcase;
 
@@ -272,6 +274,7 @@ module soc_unit_test;
   logic [5:0][ 3:0] rvfi_mem_wmask;
   logic [5:0][31:0] rvfi_mem_rdata;
   logic [5:0][31:0] rvfi_mem_wdata;
+  logic [5:0]       rvfi_mem_extamo;
        
   logic [5:0][63:0] rvfi_csr_mcycle_rmask;
   logic [5:0][63:0] rvfi_csr_mcycle_wmask;
@@ -282,6 +285,8 @@ module soc_unit_test;
   logic [5:0][63:0] rvfi_csr_minstret_wmask;
   logic [5:0][63:0] rvfi_csr_minstret_rdata;
   logic [5:0][63:0] rvfi_csr_minstret_wdata;
+
+  logic [15:0]      errcode;
 
   //===================================
   // This is the UUT that we're 
@@ -490,6 +495,33 @@ spi_sd_model sd (
   .sclk  (SCLK),
   .mosi  (MOSI),
   .miso  (MISO)
+);
+
+riscv_rvfimon monitor (
+  .clock(clk),
+  .reset(rst),
+  .rvfi_valid,
+  .rvfi_order,
+  .rvfi_insn,
+  .rvfi_trap,
+  .rvfi_halt,
+  .rvfi_intr,
+  .rvfi_mode,
+  .rvfi_rs1_addr,
+  .rvfi_rs2_addr,
+  .rvfi_rs1_rdata,
+  .rvfi_rs2_rdata,
+  .rvfi_rd_addr,
+  .rvfi_rd_wdata,
+  .rvfi_pc_rdata,
+  .rvfi_pc_wdata,
+  .rvfi_mem_addr,
+  .rvfi_mem_rmask,
+  .rvfi_mem_wmask,
+  .rvfi_mem_rdata,
+  .rvfi_mem_wdata,
+  .rvfi_mem_extamo,
+  .errcode
 );
 
 logic uart_state_idle;
@@ -809,14 +841,14 @@ always
   $readmemh("../../output/programs/regressions/03_sdcard_0.v", de10nano.mem.mem_array_0);
   $readmemh("../../verif/sdcard.txt", sd.flash_mem);
 
-  while(!( cycleCount > 1000000 |
+  while(!( cycleCount > 2000000 |
            rvfi_mon.endLoop) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 1000000);
+  `FAIL_IF(cycleCount >= 2000000);
   $display("End Loop Detected");
 
   for(int i = 0; i < 127; i++)

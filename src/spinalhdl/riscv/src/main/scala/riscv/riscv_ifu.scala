@@ -18,11 +18,11 @@ case class InstBuffEntry() extends Bundle {
   val Data = Bits( 32 bits )
 }
 
-case class InstBuff( bufferSize: Int ) extends Bundle {
-  val wrNdx = Reg( UInt( log2Up( bufferSize ) bits ) )
-  val wrDataNdx = Reg( UInt( log2Up( bufferSize ) bits ) )
-  val rdNdx = Reg( UInt( log2Up( bufferSize ) bits ) )
-  val buffer = Vec( Reg( InstBuffEntry() ), bufferSize )
+case class InstBuff( config: riscv_config ) extends Bundle {
+  val wrNdx = Reg( UInt( log2Up( config.bufferSize ) bits ) )
+  val wrDataNdx = Reg( UInt( log2Up( config.bufferSize ) bits ) )
+  val rdNdx = Reg( UInt( log2Up( config.bufferSize ) bits ) )
+  val buffer = Vec( Reg( InstBuffEntry() ), config.bufferSize )
 
   wrNdx init ( 0)
   wrDataNdx init ( 0)
@@ -66,12 +66,11 @@ case class InstBuff( bufferSize: Int ) extends Bundle {
 }
 
 //Hardware definition
-class riscv_ifu( bufferSize: Int ) extends Component {
+class riscv_ifu( config: riscv_config ) extends Component {
   val misfetch = in( Bool )
   val misfetchAdr = in( UInt( 32 bits ) )
   val freeze = in( Bool )
   val idle = in( Bool )
-  val oneShotInstr = in( Bool )
   val inst = out( Reg( Inst() ) )
   val busInst = master( WishBone() )
 
@@ -94,7 +93,7 @@ class riscv_ifu( bufferSize: Int ) extends Component {
   val PC = Reg( UInt( 32 bits ) )
   PC init ( 0)
 
-  val buf = InstBuff( bufferSize )
+  val buf = InstBuff( config )
 
   busInstReq.cyc := False
   busInstReq.stb := False
@@ -141,10 +140,14 @@ class riscv_ifu( bufferSize: Int ) extends Component {
     ( freeze) {
       inst := inst
     } elsewhen
-    ( ~buf.Empty()) { //&& ( ~oneShotInstr || (oneShotInstr && ~idle))) {
-      when( oneShotInstr && ~idle ) {
-        inst.Vld := False
-      } otherwise {
+    ( ~buf.Empty()) {
+      if (config.oneShotInst) {
+        when( ~idle ) {
+          inst.Vld := False
+        } otherwise {
+          inst := buf.Pull()
+        }
+      } else {
         inst := buf.Pull()
       }
     } otherwise {

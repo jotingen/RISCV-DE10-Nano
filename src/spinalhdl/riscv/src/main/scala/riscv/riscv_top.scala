@@ -6,6 +6,8 @@ import wishbone._
 import spinal.core._
 import spinal.lib._
 
+case class riscv_config( bufferSize: Int, oneShotInst: Boolean )
+
 //Hardware definition
 class riscv_top extends Component {
   val busInst = master( WishBone() )
@@ -13,7 +15,9 @@ class riscv_top extends Component {
 
   val rvfi = out( Vec( RvfiMon(), 6 ) )
 
-  val ifu = new riscv_ifu( bufferSize = 32 )
+  val config = riscv_config( bufferSize = 32, oneShotInst = true )
+
+  val ifu = new riscv_ifu( config )
   val idu = new riscv_idu()
   val exu = new riscv_exu()
 
@@ -27,7 +31,6 @@ class riscv_top extends Component {
   ifu.freeze <> exu.freeze
   ifu.busInst <> busInst
   ifu.idle <> idle
-  ifu.oneShotInstr := True
 
   idu.misfetch <> exu.misfetch
   idu.freeze <> exu.freeze
