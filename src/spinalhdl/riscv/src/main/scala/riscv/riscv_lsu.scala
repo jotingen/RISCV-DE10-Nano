@@ -33,7 +33,6 @@ class riscv_lsu extends Component {
 
   val busDataReq = Reg( WishBoneReq() )
   busData.req <> busDataReq
-
   busDataReq.cyc init ( False)
   busDataReq.stb init ( False)
   busDataReq.we init ( False)
@@ -43,6 +42,8 @@ class riscv_lsu extends Component {
   busDataReq.tga init ( 0)
   busDataReq.tgd init ( 0)
   busDataReq.tgc init ( 0)
+
+  val busDataRsp = Reg( WishBoneRsp() )
 
   val pendingRsp = Reg( Bool )
   pendingRsp init ( False)
@@ -55,7 +56,17 @@ class riscv_lsu extends Component {
   //Calculate new data
   val rs1Data = B( x( U( inst.Rs1 ) ) )
   val rs2Data = B( x( U( inst.Rs2 ) ) )
+  val adr = U( S( rs1Data ) + S( inst.Immed ) )
 
+  object State extends SpinalEnum( defaultEncoding = binaryOneHot ) {
+    //format: off
+      val IDLE, PENDING, RCVD = newElement()
+  }
+  val state = Reg( State() )
+  state init ( State.IDLE )
+
+  //Default values
+  state := state
   busDataReq.cyc := False
   busDataReq.stb := False
   busDataReq.we := busDataReq.we
@@ -65,305 +76,219 @@ class riscv_lsu extends Component {
   busDataReq.tga := busDataReq.tga
   busDataReq.tgd := busDataReq.tgd
   busDataReq.tgc := busDataReq.tgc
-
-  val adr = U( S( rs1Data ) + S( inst.Immed ) )
   done := False
-  wr := False
   ndx := U( inst.Rd )
   data := 0
+  wr := False
   PCNext := inst.Adr + 4
   misfetch := inst.AdrNext =/= PCNext
-  when( inst.Vld ) {
-    switch( inst.Op ) {
-      is( InstOp.LB ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := False
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          switch( B( adr( 1 downto 0 ) ) ) {
-            is( B"2'd0" ) {
-              busDataReq.sel := B"4'b0001"
-            }
-            is( B"2'd1" ) {
-              busDataReq.sel := B"4'b0010"
-            }
-            is( B"2'd2" ) {
-              busDataReq.sel := B"4'b0100"
-            }
-            is( B"2'd3" ) {
-              busDataReq.sel := B"4'b1000"
-            }
-          }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := True
+
+  switch( state ) {
+    //In idle state we recieve a valid and sned out a bus req
+    is( State.IDLE ) {
+      when( inst.Vld ) {
+        state := State.PENDING
+
+        //Always turn on bus req
+        busDataReq.cyc := True
+        busDataReq.stb := True
+
+        //Always generate aligned address
+        busDataReq.adr := adr
+        busDataReq.adr( 1 downto 0 ) := 0
+
+        //Only Stores can write
+        busDataReq.we := False
+        busDataReq.we.setWhen(inst.Op === InstOp.SB ||
+          inst.Op === InstOp.SH ||
+          inst.Op === InstOp.SW)
+
+        //Build up sel from address
+        when(inst.Op === InstOp.SB ||
+          inst.Op === InstOp.LB ||
+          inst.Op === InstOp.LBU) {
             switch( B( adr( 1 downto 0 ) ) ) {
               is( B"2'd0" ) {
-                data := B(
-                  S( busData.rsp.data( 7 downto 0 ).resized ),
-                  32 bits
-                )
+                busDataReq.sel := B"4'b0001"
               }
               is( B"2'd1" ) {
-                data := B(
-                  S( busData.rsp.data( 15 downto 8 ).resized ),
-                  32 bits
-                )
+                busDataReq.sel := B"4'b0010"
               }
               is( B"2'd2" ) {
-                data := B(
-                  S( busData.rsp.data( 23 downto 16 ).resized ),
-                  32 bits
-                )
+                busDataReq.sel := B"4'b0100"
               }
               is( B"2'd3" ) {
-                data := B(
-                  S( busData.rsp.data( 31 downto 24 ).resized ),
-                  32 bits
-                )
+                busDataReq.sel := B"4'b1000"
               }
             }
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
-      }
-      is( InstOp.LH ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := False
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          switch( B( adr( 1 ) ) ) {
-            is( B"1'd0" ) {
-              busDataReq.sel := B"4'b0011"
-            }
-            is( B"1'd1" ) {
-              busDataReq.sel := B"4'b1100"
-            }
-          }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := True
-            switch( B( adr( 1 ) ) ) {
-              is( B"1'd0" ) {
-                data := B(
-                  S( busData.rsp.data( 15 downto 0 ).resized ),
-                  32 bits
-                )
+          }.elsewhen(inst.Op === InstOp.SH ||
+            inst.Op === InstOp.LH ||
+            inst.Op === InstOp.LHU) {
+              switch( B( adr( 1 ) ) ) {
+                is( B"1'd0" ) {
+                  busDataReq.sel := B"4'b0011"
+                }
+                is( B"1'd1" ) {
+                  busDataReq.sel := B"4'b1100"
+                }
               }
-              is( B"1'd1" ) {
-                data := B(
-                  S( busData.rsp.data( 31 downto 16 ).resized ),
-                  32 bits
-                )
+              }.otherwise {
+                busDataReq.sel := B"4'b1111"
               }
-            }
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
+              //Only Stores modify data
+              when(inst.Op === InstOp.SB) {
+                busDataReq.data := 0
+                switch( B( adr( 1 downto 0 ) ) ) {
+                  is( B"2'd0" ) {
+                    busDataReq.data( 7 downto 0 ) := rs2Data( 7 downto 0 )
+                  }
+                  is( B"2'd1" ) {
+                    busDataReq.data( 15 downto 8 ) := rs2Data( 7 downto 0 )
+                  }
+                  is( B"2'd2" ) {
+                    busDataReq.data( 23 downto 16 ) := rs2Data( 7 downto 0 )
+                  }
+                  is( B"2'd3" ) {
+                    busDataReq.data( 31 downto 24 ) := rs2Data( 7 downto 0 )
+                  }
+                }
+                }.elsewhen(inst.Op === InstOp.SH) {
+                  busDataReq.data := 0
+                  switch( B( adr( 1 ) ) ) {
+                    is( B"1'd0" ) {
+                      busDataReq.data( 15 downto 0 ) := rs2Data( 15 downto 0 )
+                    }
+                    is( B"1'd1" ) {
+                      busDataReq.data( 31 downto 16 ) := rs2Data( 15 downto 0 )
+                    }
+                  }
+                  }.otherwise {
+                    busDataReq.data := rs2Data
+                  }
       }
-      is( InstOp.LW ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := False
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          busDataReq.sel := B"4'b1111"
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := True
-            data := busData.rsp.data
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
+    }
+
+    //In pending state we are waiting to capture bus rsp
+    is( State.PENDING ) {
+      when( busData.rsp.ack) {
+        state := State.RCVD
+
+        //Capture bus data
+        busDataRsp := busData.rsp
       }
-      is( InstOp.LBU ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := False
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
+    }
+
+    //In recieved state we update registers
+    is( State.RCVD ) {
+      state := State.IDLE
+      done := True
+
+      inst.Vld := False
+
+      //Only Loads can write registers
+      wr := False
+      wr.setWhen(inst.Op === InstOp.LB ||
+        inst.Op === InstOp.LH ||
+        inst.Op === InstOp.LW ||
+        inst.Op === InstOp.LBU ||
+        inst.Op === InstOp.LHU)
+
+      switch( inst.Op ) {
+        is( InstOp.LB ) {
           switch( B( adr( 1 downto 0 ) ) ) {
             is( B"2'd0" ) {
-              busDataReq.sel := B"4'b0001"
+              data := B(
+                S( busDataRsp.data( 7 downto 0 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd1" ) {
-              busDataReq.sel := B"4'b0010"
+              data := B(
+                S( busDataRsp.data( 15 downto 8 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd2" ) {
-              busDataReq.sel := B"4'b0100"
+              data := B(
+                S( busDataRsp.data( 23 downto 16 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd3" ) {
-              busDataReq.sel := B"4'b1000"
+              data := B(
+                S( busDataRsp.data( 31 downto 24 ).resized ),
+                32 bits
+              )
             }
           }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := True
-            switch( B( adr( 1 downto 0 ) ) ) {
-              is( B"2'd0" ) {
-                data := B(
-                  U( busData.rsp.data( 7 downto 0 ).resized ),
-                  32 bits
-                )
-              }
-              is( B"2'd1" ) {
-                data := B(
-                  U( busData.rsp.data( 15 downto 8 ).resized ),
-                  32 bits
-                )
-              }
-              is( B"2'd2" ) {
-                data := B(
-                  U( busData.rsp.data( 23 downto 16 ).resized ),
-                  32 bits
-                )
-              }
-              is( B"2'd3" ) {
-                data := B(
-                  U( busData.rsp.data( 31 downto 24 ).resized ),
-                  32 bits
-                )
-              }
-            }
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
-      }
-      is( InstOp.LHU ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := False
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
+        }
+        is( InstOp.LH ) {
           switch( B( adr( 1 ) ) ) {
             is( B"1'd0" ) {
-              busDataReq.sel := B"4'b0011"
+              data := B(
+                S( busDataRsp.data( 15 downto 0 ).resized ),
+                32 bits
+              )
             }
             is( B"1'd1" ) {
-              busDataReq.sel := B"4'b1100"
+              data := B(
+                S( busDataRsp.data( 31 downto 16 ).resized ),
+                32 bits
+              )
             }
           }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := True
-            switch( B( adr( 1 ) ) ) {
-              is( B"1'd0" ) {
-                data := B(
-                  U( busData.rsp.data( 15 downto 0 ).resized ),
-                  32 bits
-                )
-              }
-              is( B"1'd1" ) {
-                data := B(
-                  U( busData.rsp.data( 31 downto 16 ).resized ),
-                  32 bits
-                )
-              }
-            }
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
-      }
-      is( InstOp.SB ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := True
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          busDataReq.data := 0
+        }
+        is( InstOp.LW ) {
+          data := busDataRsp.data
+        }
+        is( InstOp.LBU ) {
           switch( B( adr( 1 downto 0 ) ) ) {
             is( B"2'd0" ) {
-              busDataReq.sel := B"4'b0001"
-              busDataReq.data( 7 downto 0 ) := rs2Data( 7 downto 0 )
+              data := B(
+                U( busDataRsp.data( 7 downto 0 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd1" ) {
-              busDataReq.sel := B"4'b0010"
-              busDataReq.data( 15 downto 8 ) := rs2Data( 7 downto 0 )
+              data := B(
+                U( busDataRsp.data( 15 downto 8 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd2" ) {
-              busDataReq.sel := B"4'b0100"
-              busDataReq.data( 23 downto 16 ) := rs2Data( 7 downto 0 )
+              data := B(
+                U( busDataRsp.data( 23 downto 16 ).resized ),
+                32 bits
+              )
             }
             is( B"2'd3" ) {
-              busDataReq.sel := B"4'b1000"
-              busDataReq.data( 31 downto 24 ) := rs2Data( 7 downto 0 )
+              data := B(
+                U( busDataRsp.data( 31 downto 24 ).resized ),
+                32 bits
+              )
             }
           }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := False
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
-      }
-      is( InstOp.SH ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := True
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          busDataReq.data := 0
+        }
+        is( InstOp.LHU ) {
           switch( B( adr( 1 ) ) ) {
             is( B"1'd0" ) {
-              busDataReq.sel := B"4'b0011"
-              busDataReq.data( 15 downto 0 ) := rs2Data( 15 downto 0 )
+              data := B(
+                U( busDataRsp.data( 15 downto 0 ).resized ),
+                32 bits
+              )
             }
             is( B"1'd1" ) {
-              busDataReq.sel := B"4'b1100"
-              busDataReq.data( 31 downto 16 ) := rs2Data( 15 downto 0 )
+              data := B(
+                U( busDataRsp.data( 31 downto 16 ).resized ),
+                32 bits
+              )
             }
           }
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := False
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
+        }
       }
-      is( InstOp.SW ) {
-        when( ~pendingRsp ) {
-          busDataReq.cyc := True
-          busDataReq.stb := True
-          busDataReq.we := True
-          busDataReq.adr := adr
-          busDataReq.adr( 1 downto 0 ) := 0
-          busDataReq.sel := B"4'b1111"
-          busDataReq.data := rs2Data
-          pendingRsp := True
-        } elsewhen
-          ( busData.rsp.ack) {
-            done := True
-            wr := False
-            inst.Vld := False
-            pendingRsp := False
-          } otherwise {}
-      }
-      default {}
     }
   }
+
   when( inst.Rd === 0 ) {
     data := 0
   }
@@ -394,19 +319,7 @@ class riscv_lsu extends Component {
   rvfi.rd_addr := inst.Rd
   when( wr ) {
     rvfi.rd_addr := inst.Rd
-    rvfi.rd_wdata := 0
-    when( busDataReq.sel( 3 ) ) {
-      rvfi.rd_wdata( 31 downto 24 ) := data( 31 downto 24 )
-    }
-    when( busDataReq.sel( 2 ) ) {
-      rvfi.rd_wdata( 23 downto 16 ) := data( 23 downto 16 )
-    }
-    when( busDataReq.sel( 1 ) ) {
-      rvfi.rd_wdata( 15 downto 8 ) := data( 15 downto 8 )
-    }
-    when( busDataReq.sel( 0 ) ) {
-      rvfi.rd_wdata( 7 downto 0 ) := data( 7 downto 0 )
-    }
+    rvfi.rd_wdata := data
   } otherwise {
     rvfi.rd_addr := 0
     rvfi.rd_wdata := 0
@@ -423,7 +336,7 @@ class riscv_lsu extends Component {
     rvfi.mem_wmask := 0
     rvfi.mem_wdata := 0
   }
-  rvfi.mem_rdata := data
+  rvfi.mem_rdata := busDataRsp.data
   rvfi.csr_mcycle_rmask := 0
   rvfi.csr_mcycle_wmask := 0
   rvfi.csr_mcycle_rdata := 0
