@@ -13,6 +13,3 @@
 [submodule "submodules/mpaland_printf"]
 	path = submodules/mpaland_printf
 	url = https://github.com/mpaland/printf.git
-[submodule "submodules/jck_riscv"]
-	path = submodules/jck_riscv
-	url = https://github.com/jck/riscv.git

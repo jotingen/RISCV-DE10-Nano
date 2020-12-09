@@ -3,33 +3,42 @@ package wishbone
 import spinal.core._
 import spinal.lib._
 
-case class WishBoneReq() extends Bundle {
+case class WishBoneConfig(
+    val adrWidth: Int,
+    val selWidth: Int,
+    val dataWidth: Int,
+    val tgaWidth: Int,
+    val tgdWidth: Int,
+    val tgcWidth: Int
+) {}
+
+case class WishBoneReq( config: WishBoneConfig ) extends Bundle {
   val cyc = Bool
   val stb = Bool
   val we = Bool
-  val adr = UInt( 32 bits )
-  val sel = Bits( 4 bits )
-  val data = Bits( 32 bits )
-  val tga = Bits( 1 bits )
-  val tgd = Bits( 1 bits )
-  val tgc = Bits( 4 bits )
+  val adr = UInt( config.adrWidth bits )
+  val sel = Bits( config.selWidth bits )
+  val data = Bits( config.dataWidth bits )
+  val tga = Bits( config.tgaWidth bits )
+  val tgd = Bits( config.tgdWidth bits )
+  val tgc = Bits( config.tgcWidth bits )
 
 }
 
-case class WishBoneRsp() extends Bundle {
+case class WishBoneRsp( config: WishBoneConfig ) extends Bundle {
   val ack = Bool
   val err = Bool
   val rty = Bool
-  val data = Bits( 32 bits )
-  val tga = Bits( 1 bits )
-  val tgd = Bits( 1 bits )
-  val tgc = Bits( 4 bits )
+  val data = Bits( config.dataWidth bits )
+  val tga = Bits( config.tgaWidth bits )
+  val tgd = Bits( config.tgdWidth bits )
+  val tgc = Bits( config.tgcWidth bits )
 }
 
-case class WishBone() extends Bundle with IMasterSlave {
-  val req = WishBoneReq()
+case class WishBone( config: WishBoneConfig ) extends Bundle with IMasterSlave {
+  val req = WishBoneReq( config )
   val stall = Bool
-  val rsp = WishBoneRsp()
+  val rsp = WishBoneRsp( config )
   override def asMaster(): Unit = {
     out( req )
     in( stall )

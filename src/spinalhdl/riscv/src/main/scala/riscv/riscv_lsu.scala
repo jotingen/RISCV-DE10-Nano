@@ -6,7 +6,7 @@ import wishbone._
 import spinal.core._
 import spinal.lib._
 
-class riscv_lsu extends Component {
+class riscv_lsu( config: riscv_config ) extends Component {
   val capture = in( Bool )
   val instDecoded = in( InstDecoded() )
   val x = in( Vec( Bits( 32 bits ), 32 ) )
@@ -20,7 +20,7 @@ class riscv_lsu extends Component {
   val data = out( Bits( 32 bits ) )
   val misfetch = out( Bool )
   val PCNext = out( UInt( 32 bits ) )
-  val busData = master( WishBone() )
+  val busData = master( WishBone( config.busWishBoneConfig ) )
 
   val order = in( UInt( 64 bits ) )
   val rvfi = out( RvfiMon() )
@@ -31,7 +31,7 @@ class riscv_lsu extends Component {
   val rvfi_order = Reg( UInt( 64 bits ) )
   rvfi_order init ( 0)
 
-  val busDataReq = Reg( WishBoneReq() )
+  val busDataReq = Reg( WishBoneReq( config.busWishBoneConfig ) )
   busData.req <> busDataReq
   busDataReq.cyc init ( False)
   busDataReq.stb init ( False)
@@ -43,7 +43,7 @@ class riscv_lsu extends Component {
   busDataReq.tgd init ( 0)
   busDataReq.tgc init ( 0)
 
-  val busDataRsp = Reg( WishBoneRsp() )
+  val busDataRsp = Reg( WishBoneRsp( config.busWishBoneConfig ) )
 
   val pendingRsp = Reg( Bool )
   pendingRsp init ( False)

@@ -72,9 +72,9 @@ class riscv_ifu( config: riscv_config ) extends Component {
   val freeze = in( Bool )
   val idle = in( Bool )
   val inst = out( Reg( Inst() ) )
-  val busInst = master( WishBone() )
+  val busInst = master( WishBone( config.busWishBoneConfig ) )
 
-  val busInstReq = Reg( WishBoneReq() )
+  val busInstReq = Reg( WishBoneReq( config.busWishBoneConfig ) )
   busInst.req <> busInstReq
 
   busInstReq.cyc init ( False)

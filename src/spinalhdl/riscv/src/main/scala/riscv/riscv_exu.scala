@@ -7,45 +7,16 @@ import spinal.core._
 import spinal.lib._
 
 //Hardware definition
-class riscv_exu extends Component {
+class riscv_exu( config: riscv_config ) extends Component {
   val instDecoded = in( InstDecoded() )
   val freeze = out( Bool )
   val idle = out( Bool )
   val misfetch = out( Bool )
   val misfetchAdr = out( UInt( 32 bits ) )
-  val busData = master( WishBone() )
+  val busData = master( WishBone( config.busWishBoneConfig ) )
+  val csrData = master( WishBone( config.csrWishBoneConfig ) )
 
   val rvfi = out( Vec( RvfiMon(), 6 ) )
-  for (i <- 5 to 5) {
-    rvfi( i ).valid := False
-    rvfi( i ).order := 0
-    rvfi( i ).insn := 0
-    rvfi( i ).trap := False
-    rvfi( i ).halt := False
-    rvfi( i ).intr := False
-    rvfi( i ).mode := 0
-    rvfi( i ).rs1_addr := 0
-    rvfi( i ).rs2_addr := 0
-    rvfi( i ).rs1_rdata := 0
-    rvfi( i ).rs2_rdata := 0
-    rvfi( i ).rd_addr := 0
-    rvfi( i ).rd_wdata := 0
-    rvfi( i ).pc_rdata := 0
-    rvfi( i ).pc_wdata := 0
-    rvfi( i ).mem_addr := 0
-    rvfi( i ).mem_rmask := 0
-    rvfi( i ).mem_wmask := 0
-    rvfi( i ).mem_rdata := 0
-    rvfi( i ).mem_wdata := 0
-    rvfi( i ).csr_mcycle_rmask := 0
-    rvfi( i ).csr_mcycle_wmask := 0
-    rvfi( i ).csr_mcycle_rdata := 0
-    rvfi( i ).csr_mcycle_wdata := 0
-    rvfi( i ).csr_minstret_rmask := 0
-    rvfi( i ).csr_minstret_wmask := 0
-    rvfi( i ).csr_minstret_rdata := 0
-    rvfi( i ).csr_minstret_wdata := 0
-  }
 
   val order = Reg( UInt( 64 bits ) )
   order init ( 0)
@@ -76,7 +47,7 @@ class riscv_exu extends Component {
   bru.rvfi <> rvfi( 1 )
   bru.capture := False
 
-  val lsu = new riscv_lsu()
+  val lsu = new riscv_lsu( config )
   val lsuOp = new Bool
   val lsuHazard = new Bool
   lsu.instDecoded <> instDecoded
@@ -104,11 +75,22 @@ class riscv_exu extends Component {
   dvu.rvfi <> rvfi( 4 )
   dvu.capture := False
 
+  val csu = new riscv_csu( config )
+  val csuOp = new Bool
+  val csuHazard = new Bool
+  csu.instDecoded <> instDecoded
+  csu.x <> x
+  csu.order <> order
+  csu.rvfi <> rvfi( 5 )
+  csu.csrData <> csrData
+  csu.capture := False
+
   idle := ~( alu.busy && ~alu.done) &
     ~( bru.busy && ~bru.done) &
     ~( lsu.busy && ~lsu.done) &
     ~( mpu.busy && ~mpu.done) &
-    ~( dvu.busy && ~dvu.done)
+    ~( dvu.busy && ~dvu.done) &
+    ~( csu.busy && ~csu.done)
 
   aluOp := instDecoded.Op === InstOp.LUI || instDecoded.Op === InstOp.AUIPC ||
     instDecoded.Op === InstOp.ADD || instDecoded.Op === InstOp.ADDI ||
@@ -133,6 +115,9 @@ class riscv_exu extends Component {
     instDecoded.Op === InstOp.MULHSU || instDecoded.Op === InstOp.MULHU
   dvuOp := instDecoded.Op === InstOp.DIV || instDecoded.Op === InstOp.DIVU ||
     instDecoded.Op === InstOp.REM || instDecoded.Op === InstOp.REMU
+  csuOp := instDecoded.Op === InstOp.CSRRW || instDecoded.Op === InstOp.CSRRS ||
+    instDecoded.Op === InstOp.CSRRC || instDecoded.Op === InstOp.CSRRWI ||
+    instDecoded.Op === InstOp.CSRRSI || instDecoded.Op === InstOp.CSRRCI
 
   //Simple hazard checking for now
   aluHazard := alu.busy &&
@@ -155,7 +140,15 @@ class riscv_exu extends Component {
     ( ( U( instDecoded.Rs1 ) =/= 0 && U( instDecoded.Rs1 ) === dvu.rs1) ||
       ( U( instDecoded.Rs2 ) =/= 0 && U( instDecoded.Rs2 ) === dvu.rs2) ||
       ( U( instDecoded.Rd ) =/= 0 && U( instDecoded.Rd ) === dvu.rd))
-  hazard := aluHazard || bruHazard || lsuHazard || mpuHazard || dvuHazard
+  csuHazard := csu.busy &&
+    ( ( U( instDecoded.Rs1 ) =/= 0 && U( instDecoded.Rs1 ) === csu.rs1) ||
+      ( U( instDecoded.Rs2 ) =/= 0 && U( instDecoded.Rs2 ) === csu.rs2) ||
+      ( U( instDecoded.Rd ) =/= 0 && U( instDecoded.Rd ) === csu.rd))
+  if (config.outOfOrder) {
+    hazard := aluHazard || bruHazard || lsuHazard || mpuHazard || dvuHazard || csuHazard
+  } else {
+    hazard := alu.busy || bru.busy || lsu.busy || mpuHazard || dvu.busy || csu.busy
+  }
 
   //detect any misfetches
   //TODO any reason why not just check bru?
@@ -179,6 +172,10 @@ class riscv_exu extends Component {
     ( dvu.done) {
       misfetch := dvu.misfetch
       misfetchAdr := dvu.PCNext
+    } elsewhen
+    ( csu.done) {
+      misfetch := csu.misfetch
+      misfetchAdr := csu.PCNext
     } otherwise {
       misfetch := False
       misfetchAdr := 0
@@ -221,6 +218,13 @@ class riscv_exu extends Component {
         dvu.capture := True
       }
     }
+    when( csuOp ) {
+      when( ( csu.busy && ~csu.done) || ( hazard) ) {
+        freeze := True
+      } otherwise {
+        csu.capture := True
+      }
+    }
     when( ~freeze ) {
       order := order + 1
     }
@@ -240,6 +244,9 @@ class riscv_exu extends Component {
   }
   when( dvu.done && dvu.wr && ( dvu.ndx =/= 0) ) {
     x( dvu.ndx ) := dvu.data
+  }
+  when( csu.done && csu.wr && ( csu.ndx =/= 0) ) {
+    x( csu.ndx ) := csu.data
   }
 
 }

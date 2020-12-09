@@ -65,7 +65,6 @@
 `include "../../src/rtl/waveshare/ILI9486/console_buffer.sv"
 `include "../../src/rtl/waveshare/ILI9486/fifo.v"
 `include "../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
-`include "../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
 
 `include "../../verif/spi_sd_model/spi_sd_model.v"
 `include "../../verif/ddr3/ddr3_model.sv"
@@ -287,6 +286,8 @@ module soc_unit_test;
   logic [5:0][63:0] rvfi_csr_minstret_wdata;
 
   logic [15:0]      errcode;
+
+  assign rvfi_mem_extamo = '0;
 
   //===================================
   // This is the UUT that we're 
@@ -724,6 +725,7 @@ always
                           .bus_rsp (de10nano.sdcard_mmc_data));
     debug_wb_mon.monitor(.bus_req (de10nano.mmc_debug_data),
                          .bus_rsp (de10nano.debug_mmc_data));
+    `FAIL_UNLESS(errcode == '0);
     step();
   end
 

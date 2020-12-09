@@ -249,36 +249,36 @@ output logic           HDMI_TX_VS
 
 `ifdef RISCV_FORMAL
   ,
-  output reg   [5:0]       rvfi_valid,
-  output reg   [5:0][63:0] rvfi_order,
-  output reg   [5:0][31:0] rvfi_insn,
-  output reg   [5:0]       rvfi_trap,
-  output reg   [5:0]       rvfi_halt,
-  output reg   [5:0]       rvfi_intr,
-  output reg   [5:0][ 1:0] rvfi_mode,
-  output reg   [5:0][ 4:0] rvfi_rs1_addr,
-  output reg   [5:0][ 4:0] rvfi_rs2_addr,
-  output reg   [5:0][31:0] rvfi_rs1_rdata,
-  output reg   [5:0][31:0] rvfi_rs2_rdata,
-  output reg   [5:0][ 4:0] rvfi_rd_addr,
-  output reg   [5:0][31:0] rvfi_rd_wdata,
-  output reg   [5:0][31:0] rvfi_pc_rdata,
-  output reg   [5:0][31:0] rvfi_pc_wdata,
-  output reg   [5:0][31:0] rvfi_mem_addr,
-  output reg   [5:0][ 3:0] rvfi_mem_rmask,
-  output reg   [5:0][ 3:0] rvfi_mem_wmask,
-  output reg   [5:0][31:0] rvfi_mem_rdata,
-  output reg   [5:0][31:0] rvfi_mem_wdata,
+  output logic   [5:0]       rvfi_valid,
+  output logic   [5:0][63:0] rvfi_order,
+  output logic   [5:0][31:0] rvfi_insn,
+  output logic   [5:0]       rvfi_trap,
+  output logic   [5:0]       rvfi_halt,
+  output logic   [5:0]       rvfi_intr,
+  output logic   [5:0][ 1:0] rvfi_mode,
+  output logic   [5:0][ 4:0] rvfi_rs1_addr,
+  output logic   [5:0][ 4:0] rvfi_rs2_addr,
+  output logic   [5:0][31:0] rvfi_rs1_rdata,
+  output logic   [5:0][31:0] rvfi_rs2_rdata,
+  output logic   [5:0][ 4:0] rvfi_rd_addr,
+  output logic   [5:0][31:0] rvfi_rd_wdata,
+  output logic   [5:0][31:0] rvfi_pc_rdata,
+  output logic   [5:0][31:0] rvfi_pc_wdata,
+  output logic   [5:0][31:0] rvfi_mem_addr,
+  output logic   [5:0][ 3:0] rvfi_mem_rmask,
+  output logic   [5:0][ 3:0] rvfi_mem_wmask,
+  output logic   [5:0][31:0] rvfi_mem_rdata,
+  output logic   [5:0][31:0] rvfi_mem_wdata,
 
-  output reg   [5:0][63:0] rvfi_csr_mcycle_rmask,
-  output reg   [5:0][63:0] rvfi_csr_mcycle_wmask,
-  output reg   [5:0][63:0] rvfi_csr_mcycle_rdata,
-  output reg   [5:0][63:0] rvfi_csr_mcycle_wdata,
+  output logic   [5:0][63:0] rvfi_csr_mcycle_rmask,
+  output logic   [5:0][63:0] rvfi_csr_mcycle_wmask,
+  output logic   [5:0][63:0] rvfi_csr_mcycle_rdata,
+  output logic   [5:0][63:0] rvfi_csr_mcycle_wdata,
 
-  output reg   [5:0][63:0] rvfi_csr_minstret_rmask,
-  output reg   [5:0][63:0] rvfi_csr_minstret_wmask,
-  output reg   [5:0][63:0] rvfi_csr_minstret_rdata,
-  output reg   [5:0][63:0] rvfi_csr_minstret_wdata,
+  output logic   [5:0][63:0] rvfi_csr_minstret_rmask,
+  output logic   [5:0][63:0] rvfi_csr_minstret_wmask,
+  output logic   [5:0][63:0] rvfi_csr_minstret_rdata,
+  output logic   [5:0][63:0] rvfi_csr_minstret_wdata,
   output logic clk,
   output logic rst
 `endif
@@ -380,6 +380,38 @@ wishbone_pkg::bus_rsp_t sdcard_mmc_data;
 wishbone_pkg::bus_req_t mmc_debug_data;
 wishbone_pkg::bus_rsp_t debug_mmc_data;
 
+`ifndef RISCV_FORMAL
+  logic   [5:0]       rvfi_valid;
+  logic   [5:0][63:0] rvfi_order;
+  logic   [5:0][31:0] rvfi_insn;
+  logic   [5:0]       rvfi_trap;
+  logic   [5:0]       rvfi_halt;
+  logic   [5:0]       rvfi_intr;
+  logic   [5:0][ 1:0] rvfi_mode;
+  logic   [5:0][ 4:0] rvfi_rs1_addr;
+  logic   [5:0][ 4:0] rvfi_rs2_addr;
+  logic   [5:0][31:0] rvfi_rs1_rdata;
+  logic   [5:0][31:0] rvfi_rs2_rdata;
+  logic   [5:0][ 4:0] rvfi_rd_addr;
+  logic   [5:0][31:0] rvfi_rd_wdata;
+  logic   [5:0][31:0] rvfi_pc_rdata;
+  logic   [5:0][31:0] rvfi_pc_wdata;
+  logic   [5:0][31:0] rvfi_mem_addr;
+  logic   [5:0][ 3:0] rvfi_mem_rmask;
+  logic   [5:0][ 3:0] rvfi_mem_wmask;
+  logic   [5:0][31:0] rvfi_mem_rdata;
+  logic   [5:0][31:0] rvfi_mem_wdata;
+
+  logic   [5:0][63:0] rvfi_csr_mcycle_rmask;
+  logic   [5:0][63:0] rvfi_csr_mcycle_wmask;
+  logic   [5:0][63:0] rvfi_csr_mcycle_rdata;
+  logic   [5:0][63:0] rvfi_csr_mcycle_wdata;
+
+  logic   [5:0][63:0] rvfi_csr_minstret_rmask;
+  logic   [5:0][63:0] rvfi_csr_minstret_wmask;
+  logic   [5:0][63:0] rvfi_csr_minstret_rdata;
+  logic   [5:0][63:0] rvfi_csr_minstret_wdata;
+`endif
 
 `ifndef SIM
 logic         DDR3_CLK;  //100MHz
@@ -861,7 +893,7 @@ riscv_top riscv (
     .sdcard_data_flat_o                 (sdcard_mmc_data)    
   );
   
-  mem #(.SIZE(11)) debug (
+  mem #(.SIZE(7)) debug (
     .clk         (clk),
     .rst         (rst),
   
