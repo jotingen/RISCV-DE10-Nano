@@ -43,6 +43,7 @@ class riscv_top extends Component {
 
   val rvfi = out( Vec( RvfiMon(), 6 ) )
 
+  val fsm = new riscv_fsm( config )
   val ifu = new riscv_ifu( config )
   val idu = new riscv_idu()
   val exu = new riscv_exu( config )
@@ -54,6 +55,8 @@ class riscv_top extends Component {
     exu.idle
 
   val csrData = WishBone( config.csrWishBoneConfig )
+
+  fsm.misfetch <> exu.misfetch
 
   ifu.misfetch <> exu.misfetch
   ifu.misfetchAdr <> exu.misfetchAdr

@@ -23,6 +23,7 @@ c5_pin_model_dump.txt
 *.sta.rpt
 *.sta.summary
 *.rpt
+*.qws
 *_assignment_defaults.qdf
 /simulation/modelsim/*.sft
 /simulation/modelsim/*.svo

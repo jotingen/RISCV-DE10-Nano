@@ -1,3 +1,4 @@
 all:
-	make -C ddr3
 	make -C soc
+
+#	make -C ddr3

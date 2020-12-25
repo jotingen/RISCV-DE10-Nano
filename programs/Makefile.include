@@ -27,3 +27,4 @@ VERILOG0_SUFFIX     =_0.v
 VERILOG1_SUFFIX     =_1.v
 VERILOG2_SUFFIX     =_2.v
 VERILOG3_SUFFIX     =_3.v
+HEX_SUFFIX          =.hex

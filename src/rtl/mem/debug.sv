@@ -1,5 +1,6 @@
 import wishbone_pkg::*;
-module mem #(
+
+module debug #(
   parameter SIZE = 15
 ) (
   input  logic           clk,
@@ -27,16 +28,16 @@ begin
   bus_data_flat_o = bus_data_o;
 end
 
-ram_mem ram (
+ram_debug ram (
   .clock (clk),
-  .address_a (bus_inst_i.Adr[14:2]),
+  .address_a (bus_inst_i.Adr[9:2]),
   .wren_a    (bus_inst_i.Cyc &
               bus_inst_i.Stb &
               bus_inst_i.We),
   .byteena_a (bus_inst_i.Sel[3:0]),
   .data_a    (bus_inst_i.Data[31:0]),
   .q_a       (q_a),
-  .address_b (bus_data_i.Adr[14:2]),
+  .address_b (bus_data_i.Adr[9:2]),
   .wren_b    (bus_data_i.Cyc &
               bus_data_i.Stb &
               bus_data_i.We),
@@ -82,22 +83,5 @@ begin
   bus_data_o.Data = {q_b[31:0]};
 end
 
-initial
-  begin
-    //$readmemh("../../output/programs/bootloader/bootloader_3.v", mem_array_3);
-    //$readmemh("../../output/programs/bootloader/bootloader_2.v", mem_array_2);
-    //$readmemh("../../output/programs/bootloader/bootloader_1.v", mem_array_1);
-    //$readmemh("../../output/programs/bootloader/bootloader_0.v", mem_array_0);
-
-    //$readmemh("../../output/programs/bootloader/bootloader_fast_3.v", mem_array_3);
-    //$readmemh("../../output/programs/bootloader/bootloader_fast_2.v", mem_array_2);
-    //$readmemh("../../output/programs/bootloader/bootloader_fast_1.v", mem_array_1);
-    //$readmemh("../../output/programs/bootloader/bootloader_fast_0.v", mem_array_0);
-
-    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_3.v", mem_array_3);
-    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_2.v", mem_array_2);
-    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_1.v", mem_array_1);
-    //$readmemh("../../output/programs/bootloader/bootloader_preloaded_0.v", mem_array_0);
-  end
 
 endmodule
