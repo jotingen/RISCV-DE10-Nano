@@ -3,7 +3,7 @@
 module soc_unit_test;
   `include "soc_unit_test_setup.svh"
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../output/programs/regressions/04_ddr3_sweep.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/04_ddr3_sweep.32.hex";
 
   //===================================
   // All tests are defined between the
@@ -24,11 +24,6 @@ module soc_unit_test;
 
   `SVTEST(SOC_04_DDR3_SWEEP)
   cycleCount = 0;
-  //$readmemh("../../output/programs/regressions/04_ddr3_sweep_3.v", de10nano.mem.mem_array_3);
-  //$readmemh("../../output/programs/regressions/04_ddr3_sweep_2.v", de10nano.mem.mem_array_2);
-  //$readmemh("../../output/programs/regressions/04_ddr3_sweep_1.v", de10nano.mem.mem_array_1);
-  //$readmemh("../../output/programs/regressions/04_ddr3_sweep_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
 
   while(!( cycleCount > 1000000 |
            rvfi_mon.endLoop) )

@@ -1,4 +1,4 @@
 all:
-	make -C soc
+	@make --no-print-directory -C soc
 
-#	make -C ddr3
+#	@make --no-print-directory -C ddr3

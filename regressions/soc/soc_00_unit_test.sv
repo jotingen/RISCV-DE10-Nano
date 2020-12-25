@@ -3,7 +3,7 @@
 module soc_unit_test;
   `include "soc_unit_test_setup.svh"
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../output/programs/regressions/00_led123.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/00_led123.32.hex";
 
   //===================================
   // All tests are defined between the
@@ -24,20 +24,15 @@ module soc_unit_test;
 
   `SVTEST(SOC_00_LED123)
   cycleCount = 0;
-  //$readmemh("../../output/programs/regressions/00_led123_3.v", de10nano.mem.mem_array_3);
-  //$readmemh("../../output/programs/regressions/00_led123_2.v", de10nano.mem.mem_array_2);
-  //$readmemh("../../output/programs/regressions/00_led123_1.v", de10nano.mem.mem_array_1);
-  //$readmemh("../../output/programs/regressions/00_led123_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../verif/sdcard.txt", sd.flash_mem);
 
-  while(!( cycleCount > 100000 |
+  while(!( cycleCount > 10000 |
            rvfi_mon.endLoop) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 100000);
+  `FAIL_IF(cycleCount >= 10000);
   $display("End Loop Detected");
 
 
