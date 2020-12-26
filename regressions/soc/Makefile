@@ -3,7 +3,7 @@ SVUNIT_INSTALL   := ${ROOT_DIR}/../svunit
 MODELSIM_INSTALL := ${HOME}/intelFPGA/20.1/modelsim_ase
 PATH             := ${SVUNIT_INSTALL}/bin:${MODELSIM_INSTALL}/bin:${PATH}
 
-unit_tests := $(sort $(wildcard soc_*_unit_test.sv)) 
+unit_tests := $(sort $(wildcard *_unit_test.sv)) 
 
 all: 
 	@($(foreach unit_test,$(unit_tests),echo make --no-print-directory $(unit_test);)) | parallel --progress --will-cite
@@ -14,7 +14,6 @@ $(unit_tests):
 	@mkdir -p ../../output/regressions/soc/$(patsubst %.sv,%,$@) && \
 	SVUNIT_INSTALL=${SVUNIT_INSTALL} \
 	PATH="${PATH}"                   \
-	chronic \
 	runSVUnit -s modelsim \
 	          -d SIM \
 						-d RISCV_FORMAL \
@@ -23,4 +22,4 @@ $(unit_tests):
 						-r "-wlf $(patsubst %.sv,%.wlf,$@)" \
 						-o ../../output/regressions/soc/$(patsubst %.sv,%,$@) \
 						-t $@; \
-	if grep 'testrunner.*FAILED' ../../output/regressions/soc/$(patsubst %.sv,%,$@)/run.log; then exit 1; fi
+	if grep -e 'testrunner.*FAILED' -e 'Error loading design' ../../output/regressions/soc/$(patsubst %.sv,%,$@)/run.log; then exit 1; fi
