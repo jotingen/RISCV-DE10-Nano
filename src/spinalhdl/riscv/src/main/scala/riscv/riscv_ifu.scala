@@ -101,7 +101,8 @@ class riscv_ifu( config: riscv_config ) extends Component {
     busInstReq.cyc := True
     busInstReq.stb := True
     busInstReq.we := False
-    busInstReq.sel := B"4'hF"
+    //Convert internal big endian to outgoing little endian
+    busInstReq.sel := Reverse( B"4'hF" )
     busInstReq.data := 0
     busInstReq.tga := 0
     busInstReq.tgd := 0
@@ -130,7 +131,8 @@ class riscv_ifu( config: riscv_config ) extends Component {
   }
 
   when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~misfetch ) {
-    buf.PushData( busInst.rsp.data )
+    //Convert incoming little endian data to big endian to work with
+    buf.PushData( EndiannessSwap( busInst.rsp.data ) )
   }
 
   when( misfetch ) {

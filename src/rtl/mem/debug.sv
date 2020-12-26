@@ -59,10 +59,7 @@ always_ff @(posedge clk)
 always_comb
 begin
   bus_inst_o.Data = '0;
-  bus_inst_o.Data = {q_a[7:0],
-                     q_a[15:8],
-                     q_a[23:16],
-                     q_a[31:24]};
+  bus_inst_o.Data = {q_a[31:0]};
 end
 
 
