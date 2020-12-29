@@ -92,32 +92,90 @@ class riscv_exu( config: riscv_config ) extends Component {
     ~( dvu.busy && ~dvu.done) &
     ~( csu.busy && ~csu.done)
 
-  aluOp := instDecoded.Op === InstOp.LUI || instDecoded.Op === InstOp.AUIPC ||
-    instDecoded.Op === InstOp.ADD || instDecoded.Op === InstOp.ADDI ||
-    instDecoded.Op === InstOp.SLTI || instDecoded.Op === InstOp.SLTIU ||
-    instDecoded.Op === InstOp.XORI || instDecoded.Op === InstOp.ORI ||
-    instDecoded.Op === InstOp.ANDI || instDecoded.Op === InstOp.SLLI ||
-    instDecoded.Op === InstOp.SRLI || instDecoded.Op === InstOp.SRAI ||
-    instDecoded.Op === InstOp.ADD || instDecoded.Op === InstOp.SUB ||
-    instDecoded.Op === InstOp.SLL || instDecoded.Op === InstOp.SLT ||
-    instDecoded.Op === InstOp.SLTU || instDecoded.Op === InstOp.XOR ||
-    instDecoded.Op === InstOp.SRL || instDecoded.Op === InstOp.SRA ||
-    instDecoded.Op === InstOp.OR || instDecoded.Op === InstOp.AND
-  bruOp := instDecoded.Op === InstOp.JAL || instDecoded.Op === InstOp.JALR ||
-    instDecoded.Op === InstOp.BEQ || instDecoded.Op === InstOp.BNE ||
-    instDecoded.Op === InstOp.BLT || instDecoded.Op === InstOp.BGE ||
-    instDecoded.Op === InstOp.BLTU || instDecoded.Op === InstOp.BGEU
-  lsuOp := instDecoded.Op === InstOp.LB || instDecoded.Op === InstOp.LH ||
-    instDecoded.Op === InstOp.LW || instDecoded.Op === InstOp.LBU ||
-    instDecoded.Op === InstOp.LHU || instDecoded.Op === InstOp.SB ||
-    instDecoded.Op === InstOp.SH || instDecoded.Op === InstOp.SW
-  mpuOp := instDecoded.Op === InstOp.MUL || instDecoded.Op === InstOp.MULH ||
-    instDecoded.Op === InstOp.MULHSU || instDecoded.Op === InstOp.MULHU
-  dvuOp := instDecoded.Op === InstOp.DIV || instDecoded.Op === InstOp.DIVU ||
-    instDecoded.Op === InstOp.REM || instDecoded.Op === InstOp.REMU
-  csuOp := instDecoded.Op === InstOp.CSRRW || instDecoded.Op === InstOp.CSRRS ||
-    instDecoded.Op === InstOp.CSRRC || instDecoded.Op === InstOp.CSRRWI ||
-    instDecoded.Op === InstOp.CSRRSI || instDecoded.Op === InstOp.CSRRCI
+  aluOp :=
+    instDecoded.Op === InstOp.LUI ||
+      instDecoded.Op === InstOp.AUIPC ||
+      instDecoded.Op === InstOp.ADD ||
+      instDecoded.Op === InstOp.ADDI ||
+      instDecoded.Op === InstOp.SLTI ||
+      instDecoded.Op === InstOp.SLTIU ||
+      instDecoded.Op === InstOp.XORI ||
+      instDecoded.Op === InstOp.ORI ||
+      instDecoded.Op === InstOp.ANDI ||
+      instDecoded.Op === InstOp.SLLI ||
+      instDecoded.Op === InstOp.SRLI ||
+      instDecoded.Op === InstOp.SRAI ||
+      instDecoded.Op === InstOp.ADD ||
+      instDecoded.Op === InstOp.SUB ||
+      instDecoded.Op === InstOp.SLL ||
+      instDecoded.Op === InstOp.SLT ||
+      instDecoded.Op === InstOp.SLTU ||
+      instDecoded.Op === InstOp.XOR ||
+      instDecoded.Op === InstOp.SRL ||
+      instDecoded.Op === InstOp.SRA ||
+      instDecoded.Op === InstOp.OR ||
+      instDecoded.Op === InstOp.AND ||
+      instDecoded.Op === InstOp.CLI ||
+      instDecoded.Op === InstOp.CLUI ||
+      instDecoded.Op === InstOp.CADDI ||
+      instDecoded.Op === InstOp.CADDI16SP ||
+      instDecoded.Op === InstOp.CADDI4SPN ||
+      instDecoded.Op === InstOp.CSLLI ||
+      instDecoded.Op === InstOp.CSRLI ||
+      instDecoded.Op === InstOp.CSRAI ||
+      instDecoded.Op === InstOp.CANDI ||
+      instDecoded.Op === InstOp.CMV ||
+      instDecoded.Op === InstOp.CADD ||
+      instDecoded.Op === InstOp.CAND ||
+      instDecoded.Op === InstOp.COR ||
+      instDecoded.Op === InstOp.CXOR ||
+      instDecoded.Op === InstOp.CSUB ||
+      instDecoded.Op === InstOp.CNOP
+  bruOp :=
+    instDecoded.Op === InstOp.JAL ||
+      instDecoded.Op === InstOp.JALR ||
+      instDecoded.Op === InstOp.BEQ ||
+      instDecoded.Op === InstOp.BNE ||
+      instDecoded.Op === InstOp.BLT ||
+      instDecoded.Op === InstOp.BGE ||
+      instDecoded.Op === InstOp.BLTU ||
+      instDecoded.Op === InstOp.BGEU ||
+      instDecoded.Op === InstOp.CJ ||
+      instDecoded.Op === InstOp.CJAL ||
+      instDecoded.Op === InstOp.CJR ||
+      instDecoded.Op === InstOp.CJALR ||
+      instDecoded.Op === InstOp.CBEQZ ||
+      instDecoded.Op === InstOp.CBNEZ
+  lsuOp :=
+    instDecoded.Op === InstOp.LB ||
+      instDecoded.Op === InstOp.LH ||
+      instDecoded.Op === InstOp.LW ||
+      instDecoded.Op === InstOp.LBU ||
+      instDecoded.Op === InstOp.LHU ||
+      instDecoded.Op === InstOp.SB ||
+      instDecoded.Op === InstOp.SH ||
+      instDecoded.Op === InstOp.SW ||
+      instDecoded.Op === InstOp.CLWSP ||
+      instDecoded.Op === InstOp.CSWSP ||
+      instDecoded.Op === InstOp.CLW ||
+      instDecoded.Op === InstOp.CSW
+  mpuOp :=
+    instDecoded.Op === InstOp.MUL ||
+      instDecoded.Op === InstOp.MULH ||
+      instDecoded.Op === InstOp.MULHSU ||
+      instDecoded.Op === InstOp.MULHU
+  dvuOp :=
+    instDecoded.Op === InstOp.DIV ||
+      instDecoded.Op === InstOp.DIVU ||
+      instDecoded.Op === InstOp.REM ||
+      instDecoded.Op === InstOp.REMU
+  csuOp :=
+    instDecoded.Op === InstOp.CSRRW ||
+      instDecoded.Op === InstOp.CSRRS ||
+      instDecoded.Op === InstOp.CSRRC ||
+      instDecoded.Op === InstOp.CSRRWI ||
+      instDecoded.Op === InstOp.CSRRSI ||
+      instDecoded.Op === InstOp.CSRRCI
 
   //Simple hazard checking for now
   aluHazard := alu.busy &&

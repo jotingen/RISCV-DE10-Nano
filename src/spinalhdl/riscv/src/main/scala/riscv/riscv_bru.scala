@@ -94,6 +94,40 @@ class riscv_bru extends Component {
         PCNext := inst.Adr + 4
       }
     }
+    is( InstOp.CJ ) {
+      wr := True
+      data := B( inst.Adr + 2 )
+      PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+    }
+    is( InstOp.CJAL ) {
+      wr := True
+      data := B( inst.Adr + 2 )
+      PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+    }
+    is( InstOp.CJR ) {
+      wr := True
+      data := B( inst.Adr + 2 )
+      PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+    }
+    is( InstOp.CJALR ) {
+      wr := True
+      data := B( inst.Adr + 2 )
+      PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+    }
+    is( InstOp.CBEQZ ) {
+      when( rs1Data === rs2Data ) {
+        PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+      } otherwise {
+        PCNext := inst.Adr + 2
+      }
+    }
+    is( InstOp.CBNEZ ) {
+      when( rs1Data =/= rs2Data ) {
+        PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+      } otherwise {
+        PCNext := inst.Adr + 2
+      }
+    }
     default {
       PCNext := U( inst.Immed )
     }

@@ -147,6 +147,12 @@ class rvfi_monitor;
       return '1;
     end
 
+    if(q_rvfi_insn[0] == 'h0000a001 &
+       q_rvfi_insn[1] == 'h0000a001)
+    begin
+      return '1;
+    end
+
     return '0;
 
   endfunction

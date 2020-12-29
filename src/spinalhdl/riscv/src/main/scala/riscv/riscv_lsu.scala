@@ -80,7 +80,14 @@ class riscv_lsu( config: riscv_config ) extends Component {
   ndx := U( inst.Rd )
   data := 0
   wr := False
+  when(inst.Op === InstOp.CLWSP ||
+       inst.Op === InstOp.CSWSP ||
+       inst.Op === InstOp.CLW ||
+       inst.Op === InstOp.CSW) {
+  PCNext := inst.Adr + 2
+       } otherwise {
   PCNext := inst.Adr + 4
+       }
   misfetch := inst.AdrNext =/= PCNext
 
   switch( state ) {
@@ -101,7 +108,9 @@ class riscv_lsu( config: riscv_config ) extends Component {
         busDataReq.we := False
         busDataReq.we.setWhen(inst.Op === InstOp.SB ||
           inst.Op === InstOp.SH ||
-          inst.Op === InstOp.SW)
+          inst.Op === InstOp.SW ||
+          inst.Op === InstOp.CSWSP ||
+          inst.Op === InstOp.CSW)
 
         //Build up sel from address
         when(inst.Op === InstOp.SB ||
@@ -135,6 +144,7 @@ class riscv_lsu( config: riscv_config ) extends Component {
               }.otherwise {
                 busDataReq.sel := B"4'b1111"
               }
+
               //Only Stores modify data
               when(inst.Op === InstOp.SB) {
                 busDataReq.data := 0
@@ -191,7 +201,9 @@ class riscv_lsu( config: riscv_config ) extends Component {
         inst.Op === InstOp.LH ||
         inst.Op === InstOp.LW ||
         inst.Op === InstOp.LBU ||
-        inst.Op === InstOp.LHU)
+        inst.Op === InstOp.LHU ||
+        inst.Op === InstOp.CLWSP ||
+        inst.Op === InstOp.CLW)
 
       switch( inst.Op ) {
         is( InstOp.LB ) {
@@ -239,6 +251,12 @@ class riscv_lsu( config: riscv_config ) extends Component {
           }
         }
         is( InstOp.LW ) {
+          data := busDataRsp.data
+        }
+        is( InstOp.CLWSP ) {
+          data := busDataRsp.data
+        }
+        is( InstOp.CLW ) {
           data := busDataRsp.data
         }
         is( InstOp.LBU ) {
@@ -307,7 +325,7 @@ class riscv_lsu( config: riscv_config ) extends Component {
   rvfi.mode := 0
   rvfi.rs1_addr := inst.Rs1
   when(
-    inst.Op === InstOp.SW || inst.Op === InstOp.SH || inst.Op === InstOp.SB
+    inst.Op === InstOp.SW || inst.Op === InstOp.SH || inst.Op === InstOp.SB || inst.Op === InstOp.CSWSP || inst.Op === InstOp.CSW
   ) {
     rvfi.rs2_addr := inst.Rs2
     rvfi.rs2_rdata := rs2Data

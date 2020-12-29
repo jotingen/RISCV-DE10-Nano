@@ -41,73 +41,159 @@ class riscv_alu extends Component {
   switch( inst.Op ) {
     is( InstOp.LUI ) {
       data := inst.Immed
+      PCNext := inst.Adr + 4
     }
     is( InstOp.AUIPC ) {
       data := B( U( inst.Immed ) + inst.Adr )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.ADDI ) {
       data := B( U( rs1Data ) + U( inst.Immed ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLTI ) {
       data := B(
         ( S( rs1Data ) < S( inst.Immed )) ? B( "32'd1" ) | B( "32'd0" )
       )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLTIU ) {
       data := B(
         ( U( rs1Data ) < U( inst.Immed )) ? B( "32'd1" ) | B( "32'd0" )
       )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.XORI ) {
       data := B( rs1Data ^ inst.Immed )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.ORI ) {
       data := B( rs1Data | inst.Immed )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.ANDI ) {
       data := B( rs1Data & inst.Immed )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLLI ) {
       data := B( rs1Data |<< U( inst.Rs2 ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SRLI ) {
       data := B( rs1Data |>> U( inst.Rs2 ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SRAI ) {
       data := B( S( rs1Data ) |>> U( inst.Rs2 ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.ADD ) {
       data := B( U( rs1Data ) + U( rs2Data ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SUB ) {
       data := B( U( rs1Data ) - U( rs2Data ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLL ) {
       data := B( rs1Data |<< U( rs2Data ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLT ) {
       data := B( ( S( rs1Data ) < S( rs2Data )) ? B( "32'd1" ) | B( "32'd0" ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SLTU ) {
       data := B( ( U( rs1Data ) < U( rs2Data )) ? B( "32'd1" ) | B( "32'd0" ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.XOR ) {
       data := B( rs1Data ^ rs2Data )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SRL ) {
       data := B( rs1Data |>> U( rs2Data ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.SRA ) {
       data := B( S( rs1Data ) |>> U( rs2Data ) )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.OR ) {
       data := B( rs1Data | rs2Data )
+      PCNext := inst.Adr + 4
     }
     is( InstOp.AND ) {
       data := B( rs1Data & rs2Data )
+      PCNext := inst.Adr + 4
+    }
+    is( InstOp.CLI ) {
+      data := B( U( rs1Data ) + U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CLUI ) {
+      data := inst.Immed
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CADDI ) {
+      data := B( U( rs1Data ) + U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CADDI16SP ) {
+      data := B( U( rs1Data ) + U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CADDI4SPN ) {
+      data := B( U( rs1Data ) + U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CSLLI ) {
+      data := B( rs1Data |<< U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CSRLI ) {
+      data := B( rs1Data |>> U( inst.Immed ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CSRAI ) {
+      data := B( S( rs1Data ) |>> U( inst.Rs2 ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CANDI ) {
+      data := B( rs1Data & inst.Immed )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CMV ) {
+      data := B( U( rs1Data ) + U( rs2Data ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CADD ) {
+      data := B( U( rs1Data ) + U( rs2Data ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CAND ) {
+      data := B( rs1Data & rs2Data )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.COR ) {
+      data := B( rs1Data | rs2Data )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CXOR ) {
+      data := B( rs1Data ^ rs2Data )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CSUB ) {
+      data := B( U( rs1Data ) - U( rs2Data ) )
+      PCNext := inst.Adr + 2
+    }
+    is( InstOp.CNOP ) {
+      data := 0
+      PCNext := inst.Adr + 2
     }
     default {
       data := B( "32'd0" )
+      PCNext := inst.Adr + 4
     }
   }
   when( inst.Rd === 0 ) {
@@ -117,11 +203,12 @@ class riscv_alu extends Component {
   done := False
   wr := False
   ndx := U( inst.Rd )
-  PCNext := inst.Adr + 4
   misfetch := inst.AdrNext =/= PCNext
   when( inst.Vld ) {
     done := True
-    wr := True
+    when( inst.Op !== InstOp.CNOP ) {
+      wr := True
+    }
     inst.Vld := False
   }
   when( capture ) {

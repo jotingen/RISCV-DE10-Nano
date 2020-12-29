@@ -48,17 +48,19 @@ case class InstBuff( config: riscv_config ) extends Bundle {
       wrNdx := wrNdx + 1
     }
   }
-  def PushData( data: Bits, number: UInt ): Unit = {
-    when( number === U"2'd2" ) {
+  def PushData( data: Bits ): Unit = {
+    //Unaligned
+    when( buffer( wrDataNdx ).Adr( 1 ) ) {
+      buffer( wrDataNdx ).Vld := True
+      buffer( wrDataNdx ).Data := data( 31 downto 16 )
+      wrDataNdx := wrDataNdx + 1
+      //Aligned
+    } otherwise {
       buffer( wrDataNdx ).Vld := True
       buffer( wrDataNdx + 1 ).Vld := True
       buffer( wrDataNdx ).Data := data( 15 downto 0 )
       buffer( wrDataNdx + 1 ).Data := data( 31 downto 16 )
       wrDataNdx := wrDataNdx + 2
-    } otherwise {
-      buffer( wrDataNdx ).Vld := True
-      buffer( wrDataNdx ).Data := data( 15 downto 0 )
-      wrDataNdx := wrDataNdx + 1
     }
   }
   def Pull(): Inst = {
@@ -95,7 +97,9 @@ case class InstBuff( config: riscv_config ) extends Bundle {
     ~buffer( rdNdx ).Vld ||
       ( buffer( rdNdx ).Data( 1 downto 0 ) === B"2'b11" &&
         ~buffer( rdNdx + 1 ).Vld)
-  def Full(): Bool = buffer( wrNdx ).Vld
+  def Full(): Bool =
+    buffer( wrNdx ).Vld ||
+      buffer( wrNdx + 1 ).Vld
 }
 
 //Hardware definition
@@ -127,6 +131,8 @@ class riscv_ifu( config: riscv_config ) extends Component {
   PC init ( 0)
 
   val buf = InstBuff( config )
+  val bufFull = Bool
+  bufFull := buf.Full()
 
   busInstReq.cyc := False
   busInstReq.stb := False
@@ -143,7 +149,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
       token := token + 1
       //Unaligned
       when( misfetchAdr( 1 ) ) {
-        busInstReq.sel := B"4'b1100"
+        busInstReq.sel := B"4'b0011"
         buf.PushAdr( misfetchAdr, U"2'd1" )
         PC := misfetchAdr + 2
         //Aligned
@@ -157,9 +163,9 @@ class riscv_ifu( config: riscv_config ) extends Component {
       busInstReq.tgc := B( token )
       //Unaligned
       when( PC( 1 ) ) {
-        busInstReq.sel := B"4'b1100"
+        busInstReq.sel := B"4'b0011"
         buf.PushAdr( PC, U"2'd1" )
-        PC := PC + 4
+        PC := PC + 2
         //Aligned
       } otherwise {
         busInstReq.sel := B"4'b1111"
@@ -181,7 +187,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
 
   when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~misfetch ) {
     //Convert incoming little endian data to big endian to work with
-    buf.PushData( EndiannessSwap( busInst.rsp.data ), U"2'd2" )
+    buf.PushData( EndiannessSwap( busInst.rsp.data ) )
   }
 
   when( misfetch ) {
