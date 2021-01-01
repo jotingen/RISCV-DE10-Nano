@@ -12,6 +12,7 @@ all:
 .PHONY: $(unit_tests)
 $(unit_tests): 
 	@mkdir -p ../../output/regressions/soc/$(patsubst %.sv,%,$@) && \
+	rm -rf ../../output/regressions/soc/$(patsubst %.sv,%,$@)/work && \
 	SVUNIT_INSTALL=${SVUNIT_INSTALL} \
 	PATH="${PATH}"                   \
 	runSVUnit -s modelsim \

@@ -2,11 +2,11 @@
 
 `include "../../../verif/clk_and_reset.svh"
 `include "../../../verif/ddr3_clk_and_reset.svh"
-
+             
 `include "../../../src/rtl/wishbone/wishbone_pkg.sv"
-
-`include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v" 
-
+             
+`include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v"
+             
 `include "../../../src/rtl/common/lru_16.sv"
 `include "../../../src/rtl/common/lru_32.sv"
 `include "../../../src/rtl/de10nano/ADC/simulation/ADC.v"
@@ -20,6 +20,7 @@
 `include "../../../src/rtl/de10nano/debounce.v"
 `include "../../../src/rtl/de10nano/keys.sv"
 `include "../../../src/rtl/de10nano/led.sv"
+`include "../../../src/rtl/mem/debug.sv"
 `include "../../../src/rtl/mem/mem.sv"
 `include "../../../src/rtl/mmc/mmc.sv"
 `include "../../../src/rtl/mmc/mmc_wb.sv"
@@ -34,24 +35,10 @@
 `include "../../../src/rtl/quartus/multiplier_unsigned/multiplier_unsigned.v"
 `include "../../../src/rtl/quartus/ram_1r1w_64kbx32b/ram_1r1w_64kbx32b.v"
 `include "../../../src/rtl/quartus/ram_1rw_8192x16/ram_1rw_8192x16.v"
+`include "../../../src/rtl/quartus/ram_mem/ram_mem.v"
+`include "../../../src/rtl/quartus/ram_debug/ram_debug.v"
 `include "../../../src/rtl/quartus/wishbone_buff/wishbone_buff.v"
 `include "../../../output/riscv_top.v"
-//`include "../../../src/rtl/riscv/riscv.sv"
-//`include "../../../src/rtl/riscv/riscv_alu.sv"
-//`include "../../../src/rtl/riscv/riscv_br_pred.sv"
-//`include "../../../src/rtl/riscv/riscv_bru.sv"
-//`include "../../../src/rtl/riscv/riscv_csr.sv"
-//`include "../../../src/rtl/riscv/riscv_csu.sv"
-//`include "../../../src/rtl/riscv/riscv_dpu.sv"
-//`include "../../../src/rtl/riscv/riscv_dvu.sv"
-//`include "../../../src/rtl/riscv/riscv_exu.sv"
-//`include "../../../src/rtl/riscv/riscv_idu.sv"
-//`include "../../../src/rtl/riscv/riscv_ifu.sv"
-//`include "../../../src/rtl/riscv/riscv_lsu.sv"
-//`include "../../../src/rtl/riscv/riscv_mpu.sv"
-//`include "../../../src/rtl/riscv/riscv_pkg.sv"
-//`include "../../../src/rtl/riscv/riscv_regfile.sv"
-//`include "../../../src/rtl/riscv/riscv_wbu.sv"
 `include "../../../src/rtl/sdcard/sdcard.sv"
 `include "../../../src/rtl/sdcard/sdcard_data_in_fifo.v"
 `include "../../../src/rtl/spi/spi.sv"
@@ -65,18 +52,14 @@
 `include "../../../src/rtl/waveshare/ILI9486/console_buffer.sv"
 `include "../../../src/rtl/waveshare/ILI9486/fifo.v"
 `include "../../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
-`include "../../../src/rtl/waveshare/waveshare_tft_touch_shield.sv"
              
 `include "../../../verif/spi_sd_model/spi_sd_model.v"
 `include "../../../verif/ddr3/ddr3_model.sv"
-
-`include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/altera_mf.v"
-`include "/mnt/c/intelFPGA_lite/19.1/quartus/eda/sim_lib/220model.v"
-
+             
 `include "../../../verif/rvfi_monitor.sv"
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
-
+             
 `include "../../../output/rvfi/riscv_rvfimon.v"
 
 module soc_unit_test;
@@ -751,21 +734,20 @@ always
   //   `SVTEST_END
   //===================================
 
-  int cycleCountMax = 1000;
+  int cycleCountMax = 10000;
   int cycleCount;
+
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../../output/programs/bootloader/bootloader_preloaded.32.hex";
+
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(SIM_BOOTLOADER_FAST)
   cycleCount = 0;
-  $readmemh("../../../output/programs/bootloader/bootloader_preloaded_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../../output/programs/bootloader/bootloader_preloaded_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../../output/programs/bootloader/bootloader_preloaded_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../../output/programs/bootloader/bootloader_preloaded_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../../output/programs/apps/demo_uart/demo_uart.ddr3mem.v", ddr3.ddr3);
+  $readmemh("../../../../../output/programs/apps/demo_uart/demo_uart.ddr3mem.v", ddr3.ddr3);
 
   //Blinky will repeat forever
   while(!( cycleCount > cycleCountMax |
-           (led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)) )
+           ( led_mon.q_LED[0] === 'h46 & led_mon.q_LED[1] === 'h45 & led_mon.q_LED[2] === 'h44 & led_mon.q_LED[3] === 'h43 & led_mon.q_LED[4] === 'h42 & led_mon.q_LED[5] === 'h41)) )
   begin
     cycleCount++;
     step();
@@ -773,7 +755,7 @@ always
 
   `FAIL_IF(cycleCount >= cycleCountMax);
 
-  `FAIL_UNLESS(led_mon.q_LED[0] === 'd255 & led_mon.q_LED[1] === 'd254 & led_mon.q_LED[2] === 'd253)
+  `FAIL_UNLESS(led_mon.q_LED[0] === 'h46 & led_mon.q_LED[1] === 'h45 & led_mon.q_LED[2] === 'h44 & led_mon.q_LED[3] === 'h43 & led_mon.q_LED[4] === 'h42 & led_mon.q_LED[5] === 'h41)
   $display("LED Pattern Detected");
 
 

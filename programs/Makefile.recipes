@@ -17,8 +17,8 @@
 %$(BIN_SUFFIX) :
 	mkdir -p $(dir $@)
 	$(OBJCOPY) -O binary $(patsubst %$(BIN_SUFFIX),%$(OUT_SUFFIX),$@) $@
-	xxd -e -c 4 $@ | awk '{print $$2;}' | paste -d' ' - - - - | sed 's/\s//g' | sed -e :a -e 's/^.\{1,31\}$$/&0/;ta' | fold -w8 | tac | paste -d' ' - - - - | tac | sed 's/\s//g' > $(patsubst %$(BIN_SUFFIX),%.ddr3mem.v,$@)
-	xxd -e -c 1 $@ | awk '{print $$2;}'                       | sed 's/\s//g' | sed -e :a -e 's/^.\{1,1\}$$/&0/;ta'  | fold -w8                                   | sed 's/\s//g' > $(patsubst %$(BIN_SUFFIX),%.sdcard.v,$@)
+	xxd -c 4 $@ | awk '{print $$2$$3;}' | paste -d' ' - - - - | sed 's/\s//g' | sed -e :a -e 's/^.\{1,31\}$$/&0/;ta' | fold -w8 | tac | paste -d' ' - - - - | tac | sed 's/\s//g' > $(patsubst %$(BIN_SUFFIX),%.ddr3mem.v,$@)
+	xxd -c 1 $@ | awk '{print $$2$$3;}'                       | sed 's/\s//g' | sed -e :a -e 's/^.\{1,1\}$$/&0/;ta'  | fold -w8                                   | sed 's/\s//g' > $(patsubst %$(BIN_SUFFIX),%.sdcard.v,$@)
 	$(OBJCOPY) -O verilog --interleave=4 -b 0 $(patsubst %$(BIN_SUFFIX),%$(OUT_SUFFIX),$@) $(patsubst %$(BIN_SUFFIX),%$(VERILOG0_SUFFIX),$@)
 	$(OBJCOPY) -O verilog --interleave=4 -b 1 $(patsubst %$(BIN_SUFFIX),%$(OUT_SUFFIX),$@) $(patsubst %$(BIN_SUFFIX),%$(VERILOG1_SUFFIX),$@)
 	$(OBJCOPY) -O verilog --interleave=4 -b 2 $(patsubst %$(BIN_SUFFIX),%$(OUT_SUFFIX),$@) $(patsubst %$(BIN_SUFFIX),%$(VERILOG2_SUFFIX),$@)

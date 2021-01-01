@@ -13,8 +13,9 @@ case class Inst() extends Bundle {
 }
 
 case class InstBuffEntry() extends Bundle {
-  val Vld = Bool
+  val AdrVld = Bool
   val Adr = UInt( 32 bits )
+  val DataVld = Bool
   val Data = Bits( 16 bits )
 }
 
@@ -28,22 +29,27 @@ case class InstBuff( config: riscv_config ) extends Bundle {
   wrDataNdx init ( 0)
   rdNdx init ( 0)
   for (entry <- buffer) {
-    entry.Vld init ( False)
+    entry.AdrVld init ( False)
+    entry.DataVld init ( False)
   }
 
   def Clear(): Unit = {
     wrDataNdx := wrNdx
     rdNdx := wrNdx
     for (entry <- buffer) {
-      entry.Vld := False
+      entry.AdrVld := False
+      entry.DataVld := False
     }
   }
   def PushAdr( adr: UInt, number: UInt ): Unit = {
     when( number === U"2'd2" ) {
+      buffer( wrNdx ).AdrVld := True
       buffer( wrNdx ).Adr := adr
+      buffer( wrNdx + 1 ).AdrVld := True
       buffer( wrNdx + 1 ).Adr := adr + 2
       wrNdx := wrNdx + 2
     } otherwise {
+      buffer( wrNdx ).AdrVld := True
       buffer( wrNdx ).Adr := adr
       wrNdx := wrNdx + 1
     }
@@ -51,13 +57,13 @@ case class InstBuff( config: riscv_config ) extends Bundle {
   def PushData( data: Bits ): Unit = {
     //Unaligned
     when( buffer( wrDataNdx ).Adr( 1 ) ) {
-      buffer( wrDataNdx ).Vld := True
+      buffer( wrDataNdx ).DataVld := True
       buffer( wrDataNdx ).Data := data( 31 downto 16 )
       wrDataNdx := wrDataNdx + 1
       //Aligned
     } otherwise {
-      buffer( wrDataNdx ).Vld := True
-      buffer( wrDataNdx + 1 ).Vld := True
+      buffer( wrDataNdx ).DataVld := True
+      buffer( wrDataNdx + 1 ).DataVld := True
       buffer( wrDataNdx ).Data := data( 15 downto 0 )
       buffer( wrDataNdx + 1 ).Data := data( 31 downto 16 )
       wrDataNdx := wrDataNdx + 2
@@ -65,7 +71,7 @@ case class InstBuff( config: riscv_config ) extends Bundle {
   }
   def Pull(): Inst = {
     val inst = Inst()
-    inst.Vld := buffer( rdNdx ).Vld
+    inst.Vld := buffer( rdNdx ).DataVld
     inst.Adr := buffer( rdNdx ).Adr
     inst.Data( 15 downto 0 ) := buffer( rdNdx ).Data
     //Normal instruction
@@ -75,8 +81,10 @@ case class InstBuff( config: riscv_config ) extends Bundle {
         buffer(
           rdNdx + 2
         ).Adr //Buffer always being filled, this should have been written
-      buffer( rdNdx ).Vld := False
-      buffer( rdNdx + 1 ).Vld := False
+      buffer( rdNdx ).AdrVld := False
+      buffer( rdNdx ).DataVld := False
+      buffer( rdNdx + 1 ).AdrVld := False
+      buffer( rdNdx + 1 ).DataVld := False
       rdNdx := rdNdx + 2
       //Compressed instruction
     } otherwise {
@@ -85,7 +93,8 @@ case class InstBuff( config: riscv_config ) extends Bundle {
         buffer(
           rdNdx + 1
         ).Adr //Buffer always being filled, this should have been written
-      buffer( rdNdx ).Vld := False
+      buffer( rdNdx ).AdrVld := False
+      buffer( rdNdx ).DataVld := False
       rdNdx := rdNdx + 1
     }
     return inst
@@ -94,12 +103,14 @@ case class InstBuff( config: riscv_config ) extends Bundle {
   //Emtpy if first entry is invalid,
   //or if first entry is normal op and second entry invalid
   def Empty(): Bool =
-    ~buffer( rdNdx ).Vld ||
-      ( buffer( rdNdx ).Data( 1 downto 0 ) === B"2'b11" &&
-        ~buffer( rdNdx + 1 ).Vld)
+    ~buffer( rdNdx ).DataVld ||
+      ~buffer( rdNdx + 1 ).DataVld
+  //  ( buffer( rdNdx ).Data( 1 downto 0 ) === B"2'b11" &&
+  //    ~buffer( rdNdx + 1 ).DataVld)
+
   def Full(): Bool =
-    buffer( wrNdx ).Vld ||
-      buffer( wrNdx + 1 ).Vld
+    buffer( wrNdx ).AdrVld ||
+      buffer( wrNdx + 1 ).AdrVld
 }
 
 //Hardware definition
@@ -133,56 +144,38 @@ class riscv_ifu( config: riscv_config ) extends Component {
   val buf = InstBuff( config )
   val bufFull = Bool
   bufFull := buf.Full()
+  val bufEmpty = Bool
+  bufEmpty := buf.Empty()
 
   busInstReq.cyc := False
   busInstReq.stb := False
-  when( ~busInst.stall & ~buf.Full() ) {
-    busInstReq.cyc := True
-    busInstReq.stb := True
-    busInstReq.we := False
-    busInstReq.data := 0
-    busInstReq.tga := 0
-    busInstReq.tgd := 0
-    when( misfetch ) {
-      busInstReq.adr := misfetchAdr
-      busInstReq.tgc := B( token + 1 )
-      token := token + 1
-      //Unaligned
-      when( misfetchAdr( 1 ) ) {
-        busInstReq.sel := B"4'b0011"
-        buf.PushAdr( misfetchAdr, U"2'd1" )
-        PC := misfetchAdr + 2
-        //Aligned
-      } otherwise {
-        busInstReq.sel := B"4'b1111"
-        buf.PushAdr( misfetchAdr, U"2'd2" )
-        PC := misfetchAdr + 4
-      }
-    } otherwise {
+  //If were misfetching, set up PC and clear buffer
+  when( misfetch ) {
+    buf.Clear()
+    token := token + 1
+    PC := misfetchAdr
+  } otherwise {
+    //If we get a stall or full, do nothing
+    when( busInst.stall || buf.Full() ) {} otherwise {
+      busInstReq.cyc := True
+      busInstReq.stb := True
+      busInstReq.we := False
       busInstReq.adr := PC
+      busInstReq.data := 0
+      busInstReq.tga := 0
+      busInstReq.tgd := 0
       busInstReq.tgc := B( token )
       //Unaligned
       when( PC( 1 ) ) {
         busInstReq.sel := B"4'b0011"
         buf.PushAdr( PC, U"2'd1" )
         PC := PC + 2
-        //Aligned
       } otherwise {
         busInstReq.sel := B"4'b1111"
         buf.PushAdr( PC, U"2'd2" )
         PC := PC + 4
       }
     }
-  } otherwise {
-    when( misfetch ) {
-      token := token + 1
-      PC := misfetchAdr
-    }
-  }
-
-  when( busInst.stall ) {
-    busInst.req.cyc := False
-    busInst.req.stb := False
   }
 
   when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~misfetch ) {
@@ -190,14 +183,15 @@ class riscv_ifu( config: riscv_config ) extends Component {
     buf.PushData( EndiannessSwap( busInst.rsp.data ) )
   }
 
-  when( misfetch ) {
+  //If were frozen, do nothing
+  when( freeze ) {
+    inst := inst
+    //If were misfetching, clear stage
+  } elsewhen ( misfetch) {
     inst.Vld := False
-    buf.Clear()
-  } elsewhen
-    ( freeze) {
-      inst := inst
-    } elsewhen
-    ( ~buf.Empty()) {
+    //Else just take from buffer
+  } otherwise {
+    when( ~buf.Empty() ) {
       if (config.oneShotInst) {
         when( ~idle ) {
           inst.Vld := False
@@ -210,5 +204,6 @@ class riscv_ifu( config: riscv_config ) extends Component {
     } otherwise {
       inst.Vld := False
     }
+  }
 
 }

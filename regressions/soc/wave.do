@@ -8,33 +8,45 @@ add wave -noupdate -group DDR3 -radix hexadecimal -childformat {{/testrunner/__t
 add wave -noupdate -group DDR3 -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Stall -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Ack -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Err -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Rty -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgc -radix hexadecimal}} -radixshowbase 1 -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Stall {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Ack {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Err {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Rty {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Data {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tga {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgd {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgc {-height 16 -radix hexadecimal -radixshowbase 1}} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o
 add wave -noupdate -group DDR3 -radix hexadecimal -radixshowbase 1 /testrunner/__ts/soc_ut/de10nano/ddr3/bus_data_i
 add wave -noupdate -group DDR3 -radix hexadecimal -radixshowbase 1 /testrunner/__ts/soc_ut/de10nano/ddr3/bus_data_o
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/misfetch
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/misfetchAdr
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrDataNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_rdNdx
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_0_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_1_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_2_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_3_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_4_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_5_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_6_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_AdrVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_DataVld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Data
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_buffer_7_Vld
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/bufEmpty
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/bufFull
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_Vld
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_Adr
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/inst_AdrNext
@@ -338,7 +350,6 @@ add wave -noupdate -height 16 -expand -group RVFI -height 16 -expand -group RVFI
 add wave -noupdate -height 16 -expand -group RVFI -height 16 -expand -group RVFI0 -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/rvfi_0_csr_mcycle_wdata
 add wave -noupdate -height 16 -expand -group RVFI -height 16 -expand -group RVFI0 -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/rvfi_0_csr_mcycle_rmask
 add wave -noupdate -height 16 -expand -group RVFI -height 16 -expand -group RVFI0 -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/rvfi_0_csr_mcycle_rdata
-add wave -noupdate -radix decimal -childformat {{{/testrunner/__ts/soc_ut/errcode[15]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[14]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[13]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[12]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[11]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[10]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[9]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[8]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[7]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[6]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[5]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[4]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[3]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[2]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[1]} -radix decimal} {{/testrunner/__ts/soc_ut/errcode[0]} -radix decimal}} -subitemconfig {{/testrunner/__ts/soc_ut/errcode[15]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[14]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[13]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[12]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[11]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[10]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[9]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[8]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[7]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[6]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[5]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[4]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[3]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[2]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[1]} {-height 15 -radix decimal} {/testrunner/__ts/soc_ut/errcode[0]} {-height 15 -radix decimal}} /testrunner/__ts/soc_ut/errcode
 add wave -noupdate -group LED /testrunner/__ts/soc_ut/de10nano/led/LED
 add wave -noupdate -group LED /testrunner/__ts/soc_ut/de10nano/led/bus_data_i
 add wave -noupdate -group LED /testrunner/__ts/soc_ut/de10nano/led/bus_data_o
@@ -375,7 +386,7 @@ add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_rsp_recieved
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_spi_req
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {8160000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {26679800 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 253
 configure wave -valuecolwidth 214
@@ -391,4 +402,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {7235717 ps} {8878475 ps}
+WaveRestoreZoom {0 ps} {420546 ns}

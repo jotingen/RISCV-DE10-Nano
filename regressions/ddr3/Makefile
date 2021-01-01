@@ -11,7 +11,8 @@ all:
 #Use chronic to hide output unless we have a fail
 .PHONY: $(unit_tests)
 $(unit_tests): 
-	mkdir -p ../../output/regressions/ddr3/$(patsubst %.sv,%,$@) && \
+	@mkdir -p ../../output/regressions/ddr3/$(patsubst %.sv,%,$@) && \
+	rm -rf ../../output/regressions/ddr3/$(patsubst %.sv,%,$@)/work && \
 	SVUNIT_INSTALL=${SVUNIT_INSTALL} \
 	PATH="${PATH}"                   \
 	runSVUnit -s modelsim \
