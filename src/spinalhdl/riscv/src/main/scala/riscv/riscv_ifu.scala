@@ -115,8 +115,8 @@ case class InstBuff( config: riscv_config ) extends Bundle {
 
 //Hardware definition
 class riscv_ifu( config: riscv_config ) extends Component {
-  val misfetch = in( Bool )
-  val misfetchAdr = in( UInt( 32 bits ) )
+  val flush = in( Bool )
+  val flushAdr = in( UInt( 32 bits ) )
   val freeze = in( Bool )
   val idle = in( Bool )
   val inst = out( Reg( Inst() ) )
@@ -149,11 +149,11 @@ class riscv_ifu( config: riscv_config ) extends Component {
 
   busInstReq.cyc := False
   busInstReq.stb := False
-  //If were misfetching, set up PC and clear buffer
-  when( misfetch ) {
+  //If were flushing, set up PC and clear buffer
+  when( flush ) {
     buf.Clear()
     token := token + 1
-    PC := misfetchAdr
+    PC := flushAdr
   } otherwise {
     //If we get a stall or full, do nothing
     when( busInst.stall || buf.Full() ) {} otherwise {
@@ -178,7 +178,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
     }
   }
 
-  when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~misfetch ) {
+  when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~flush ) {
     //Convert incoming little endian data to big endian to work with
     buf.PushData( EndiannessSwap( busInst.rsp.data ) )
   }
@@ -186,8 +186,8 @@ class riscv_ifu( config: riscv_config ) extends Component {
   //If were frozen, do nothing
   when( freeze ) {
     inst := inst
-    //If were misfetching, clear stage
-  } elsewhen ( misfetch) {
+    //If were flushing, clear stage
+  } elsewhen ( flush) {
     inst.Vld := False
     //Else just take from buffer
   } otherwise {

@@ -8,6 +8,7 @@ import spinal.lib._
 
 //Hardware definition
 class riscv_exu( config: riscv_config ) extends Component {
+  val flush = in( Bool )
   val instDecoded = in( InstDecoded() )
   val freeze = out( Bool )
   val idle = out( Bool )
@@ -240,7 +241,7 @@ class riscv_exu( config: riscv_config ) extends Component {
     }
 
   freeze := False
-  when( instDecoded.Vld && ~misfetch ) {
+  when( instDecoded.Vld && ~misfetch && ~flush ) {
     when( aluOp ) {
       when( ( alu.busy && ~alu.done) || ( hazard) ) {
         freeze := True

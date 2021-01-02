@@ -8,8 +8,12 @@ add wave -noupdate -group DDR3 -radix hexadecimal -childformat {{/testrunner/__t
 add wave -noupdate -group DDR3 -radix hexadecimal -childformat {{/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Stall -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Ack -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Err -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Rty -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Data -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tga -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgd -radix hexadecimal} {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgc -radix hexadecimal}} -radixshowbase 1 -expand -subitemconfig {/testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Stall {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Ack {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Err {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Rty {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Data {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tga {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgd {-height 16 -radix hexadecimal -radixshowbase 1} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o.Tgc {-height 16 -radix hexadecimal -radixshowbase 1}} /testrunner/__ts/soc_ut/de10nano/ddr3/bus_inst_o
 add wave -noupdate -group DDR3 -radix hexadecimal -radixshowbase 1 /testrunner/__ts/soc_ut/de10nano/ddr3/bus_data_i
 add wave -noupdate -group DDR3 -radix hexadecimal -radixshowbase 1 /testrunner/__ts/soc_ut/de10nano/ddr3/bus_data_o
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/misfetch
-add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/misfetchAdr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM /testrunner/__ts/soc_ut/de10nano/riscv/fsm/reset
+add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM /testrunner/__ts/soc_ut/de10nano/riscv/fsm/misfetch
+add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM -radix ascii /testrunner/__ts/soc_ut/de10nano/riscv/fsm/state_1__string
+add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM /testrunner/__ts/soc_ut/de10nano/riscv/fsm/flush
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/flush
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/flushAdr
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrDataNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_rdNdx
@@ -386,7 +390,7 @@ add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_rsp_recieved
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_spi_req
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {26679800 ps} 0}
+WaveRestoreCursors {{Cursor 1} {2080000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 253
 configure wave -valuecolwidth 214
@@ -402,4 +406,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {420546 ns}
+WaveRestoreZoom {0 ps} {6571032 ps}

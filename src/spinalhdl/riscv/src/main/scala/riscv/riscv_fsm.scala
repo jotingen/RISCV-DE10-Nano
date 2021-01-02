@@ -9,17 +9,23 @@ object RiscvState extends SpinalEnum {
 
 class riscv_fsm( config: riscv_config ) extends Component {
   val misfetch = in( Bool )
+  val misfetchAdr = in( UInt( 32 bits ) )
   val flush = out( Bool )
+  val flushAdr = out( Reg( UInt( 32 bits ) ) )
 
   import RiscvState._
 
   val state = Reg( RiscvState() )
 
   state init ( sReset)
+  flushAdr init ( 0)
 
   state := state
+  flush := False
+  flushAdr := flushAdr
   when( misfetch ) {
     state := sMisfetch
+    flushAdr := misfetchAdr
   } otherwise {
     switch( state ) {
       is( sReset ) {
@@ -30,6 +36,7 @@ class riscv_fsm( config: riscv_config ) extends Component {
       }
       is( sMisfetch ) {
         state := sNormal
+        flush := True
       }
     }
   }

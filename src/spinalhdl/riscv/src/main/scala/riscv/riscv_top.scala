@@ -57,17 +57,19 @@ class riscv_top extends Component {
   val csrData = WishBone( config.csrWishBoneConfig )
 
   fsm.misfetch <> exu.misfetch
+  fsm.misfetchAdr <> exu.misfetchAdr
 
-  ifu.misfetch <> exu.misfetch
-  ifu.misfetchAdr <> exu.misfetchAdr
+  ifu.flush <> fsm.flush
+  ifu.flushAdr <> fsm.flushAdr
   ifu.freeze <> exu.freeze
   ifu.busInst <> busInst
   ifu.idle <> idle
 
-  idu.misfetch <> exu.misfetch
+  idu.flush <> fsm.flush
   idu.freeze <> exu.freeze
   idu.inst <> ifu.inst
 
+  exu.flush <> fsm.flush
   exu.instDecoded <> idu.instDecoded
   exu.busData <> busData
   exu.csrData <> csrData
