@@ -17,6 +17,7 @@ class riscv_exu( config: riscv_config ) extends Component {
   val misfetchAdr = out( UInt( 32 bits ) )
   val brTaken = out( Bool )
   val brNotTaken = out( Bool )
+  val brCompressed = out( Bool )
   val brPC = out( UInt( 32 bits ) )
   val busData = master( WishBone( config.busWishBoneConfig ) )
   val csrData = master( WishBone( config.csrWishBoneConfig ) )
@@ -215,9 +216,11 @@ class riscv_exu( config: riscv_config ) extends Component {
 
   brTaken := False
   brNotTaken := False
+  brCompressed := False
   when( bru.done ) {
     brTaken := bru.taken
     brNotTaken := bru.nottaken
+    brCompressed := bru.compressed
   }
   brPC := bru.PC
 

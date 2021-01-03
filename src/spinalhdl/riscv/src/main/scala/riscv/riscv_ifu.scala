@@ -122,6 +122,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
   val misfetchAdr = in( UInt( 32 bits ) )
   val brTaken = in( Bool )
   val brNotTaken = in( Bool )
+  val brCompressed = in( Bool )
   val brPC = in( UInt( 32 bits ) )
   val freeze = in( Bool )
   val idle = in( Bool )
@@ -154,6 +155,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
   ibp.misfetchAdr <> misfetchAdr
   ibp.brTaken <> brTaken
   ibp.brNotTaken <> brNotTaken
+  ibp.brCompressed <> brCompressed
   ibp.brPC <> brPC
 
   val buf = InstBuff( config )
@@ -180,15 +182,17 @@ class riscv_ifu( config: riscv_config ) extends Component {
       busInstReq.tga := 0
       busInstReq.tgd := 0
       busInstReq.tgc := B( token )
+      busInstReq.sel := ibp.selNext
+      PC := ibp.adrNext
       //Unaligned
       when( PC( 1 ) ) {
-        busInstReq.sel := B"4'b0011"
         buf.PushAdr( PC, U"2'd1" )
-        PC := ibp.adrNext
       } otherwise {
-        busInstReq.sel := B"4'b1111"
-        buf.PushAdr( PC, U"2'd2" )
-        PC := ibp.adrNext
+        when( ibp.selNext === B"4'b1111" ) {
+          buf.PushAdr( PC, U"2'd2" )
+        } otherwise {
+          buf.PushAdr( PC, U"2'd1" )
+        }
       }
     }
   }

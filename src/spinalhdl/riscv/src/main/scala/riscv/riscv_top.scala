@@ -18,8 +18,8 @@ case class riscv_config(
 //Hardware definition
 class riscv_top extends Component {
   val config = riscv_config(
-    bufferSize        = 8,
-    branchPredSize    = 8,
+    bufferSize        = 32,
+    branchPredSize    = 32,
     oneShotInst       = false,
     outOfOrder        = false,
     busWishBoneConfig = WishBoneConfig(
@@ -68,6 +68,7 @@ class riscv_top extends Component {
   ifu.misfetchAdr <> exu.misfetchAdr
   ifu.brTaken <> exu.brTaken
   ifu.brNotTaken <> exu.brNotTaken
+  ifu.brCompressed <> exu.brCompressed
   ifu.brPC <> exu.brPC
   ifu.freeze <> exu.freeze
   ifu.busInst <> busInst

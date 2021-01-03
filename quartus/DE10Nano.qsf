@@ -1014,5 +1014,5 @@ set_global_assignment -name SEARCH_PATH ../src/rtl/quartus/ram_1r1w_64kbx32b
 set_global_assignment -name SEARCH_PATH ../src/rtl/quartus/ram_1rw_8192x16
 set_global_assignment -name SEARCH_PATH ../src/rtl/sdcard
 set_global_assignment -name SEARCH_PATH ../src/rtl/shield
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name SLD_FILE db/DE10Nano_auto_stripped.stp
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

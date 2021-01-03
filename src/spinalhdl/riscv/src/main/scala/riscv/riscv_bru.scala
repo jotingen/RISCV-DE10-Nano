@@ -21,6 +21,7 @@ class riscv_bru extends Component {
   val misfetch = out( Bool )
   val taken = out( Bool )
   val nottaken = out( Bool )
+  val compressed = out( Bool )
   val PC = out( UInt( 32 bits ) )
   val PCNext = out( UInt( 32 bits ) )
 
@@ -48,6 +49,7 @@ class riscv_bru extends Component {
   data := B( "32'd0" )
   taken := False
   nottaken := False
+  compressed := False
   switch( inst.Op ) {
     is( InstOp.JAL ) {
       wr := True
@@ -120,24 +122,28 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+      compressed := True
     }
     is( InstOp.CJAL ) {
       wr := True
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+      compressed := True
     }
     is( InstOp.CJR ) {
       wr := True
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+      compressed := True
     }
     is( InstOp.CJALR ) {
       wr := True
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+      compressed := True
     }
     is( InstOp.CBEQZ ) {
       when( rs1Data === rs2Data ) {
@@ -147,6 +153,7 @@ class riscv_bru extends Component {
         nottaken := True
         PCNext := inst.Adr + 2
       }
+      compressed := True
     }
     is( InstOp.CBNEZ ) {
       when( rs1Data =/= rs2Data ) {
@@ -156,6 +163,7 @@ class riscv_bru extends Component {
         nottaken := True
         PCNext := inst.Adr + 2
       }
+      compressed := True
     }
     default {
       taken := True

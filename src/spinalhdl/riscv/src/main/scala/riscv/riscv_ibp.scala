@@ -25,6 +25,7 @@ case class BrBuffEntry() extends Bundle {
   val Adr = UInt( 32 bits )
   val AdrNext = UInt( 32 bits )
   val Prediction = Bits( 4 bits )
+  val Compressed = Bool()
 }
 
 //Hardware definition
@@ -34,9 +35,11 @@ class riscv_ibp( config: riscv_config ) extends Component {
   val misfetchAdr = in( UInt( 32 bits ) )
   val brTaken = in( Bool )
   val brNotTaken = in( Bool )
+  val brCompressed = in( Bool )
   val brPC = in( UInt( 32 bits ) )
   val adr = in( UInt( 32 bits ) )
   val adrNext = out( UInt( 32 bits ) )
+  val selNext = out( Bits( 4 bits ) )
 
   val lru = new mor1kx_cache_lru_accessfix( config.branchPredSize )
   val lruCurrent = Reg( Bits )
@@ -48,6 +51,7 @@ class riscv_ibp( config: riscv_config ) extends Component {
     buffer( ndx ).Adr init ( ndx * 4)
     buffer( ndx ).AdrNext init ( ndx * 4 + 4)
     buffer( ndx ).Prediction init ( B"4'b0010")
+    buffer( ndx ).Compressed init ( False)
   }
 
   when( misfetch ) {
@@ -69,21 +73,39 @@ class riscv_ibp( config: riscv_config ) extends Component {
         buffer( ndx ).Adr := misfetchPC
         buffer( ndx ).AdrNext := misfetchAdr
         buffer( ndx ).Prediction := B"4'b0100"
+        buffer( ndx ).Compressed := brCompressed
       }
     }
 
     adrNext := misfetchAdr
+    when( misfetchAdr( 1 ) ) {
+      selNext := B"4'b0011"
+    } otherwise {
+      selNext := B"4'b1111"
+      //If the misfetch address is in the buffer
+      //check if it is compressed, if so just grab it
+      for (ndx <- buffer.indices) {
+        when( buffer( ndx ).Adr === misfetchAdr ) {
+          when( buffer( ndx ).Compressed ) {
+            when( misfetchAdr( 1 ) ) {
+              selNext := B"4'b0011"
+            } otherwise {
+              selNext := B"4'b1100"
+            }
+          }
+        }
+      }
+    }
 
   } otherwise {
 
     when( adr( 1 ) ) {
       adrNext := adr + 2
+      selNext := B"4'b0011"
     } otherwise {
       adrNext := adr + 4
+      selNext := B"4'b1111"
     }
-
-    //TODO val addressMatched = Bool
-    //TODO addressMatched := False
 
     //Mark entry accessed if address matched
     //Use stored address if so
@@ -91,22 +113,10 @@ class riscv_ibp( config: riscv_config ) extends Component {
       when( buffer( ndx ).Adr === adr ) {
         lruAccess( ndx ) := True
         adrNext := buffer( ndx ).AdrNext
-        //TODO addressMatched := True
       } otherwise {
         lruAccess( ndx ) := False
       }
     }
-
-    //TODO when(~addressMatched && ~adr(1)) {
-    //TODO   for (ndx <- buffer.indices) {
-    //TODO     when(buffer(ndx).Adr === (adr+2)) {
-    //TODO       lruAccess(ndx) := True
-    //TODO       adrNext := buffer(ndx).AdrNext
-    //TODO     } otherwise {
-    //TODO       lruAccess(ndx) := False
-    //TODO     }
-    //TODO   }
-    //TODO }
 
     //Update prediction
     for (ndx <- buffer.indices) {
