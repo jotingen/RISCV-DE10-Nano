@@ -19,6 +19,7 @@ class riscv_csu( config: riscv_config ) extends Component {
   val ndx = out( UInt( 5 bits ) )
   val data = out( Bits( 32 bits ) )
   val misfetch = out( Bool )
+  val PC = out( UInt( 32 bits ) )
   val PCNext = out( UInt( 32 bits ) )
   val csrData = master( WishBone( config.csrWishBoneConfig ) )
 
@@ -49,6 +50,8 @@ class riscv_csu( config: riscv_config ) extends Component {
   rs1 <> U( inst.Rs1 )
   rs2 <> U( inst.Rs2 )
   rd <> U( inst.Rd )
+
+  PC := inst.Adr
 
   //Calculate new data
   val rs1Data = B( x( U( inst.Rs1 ) ) )

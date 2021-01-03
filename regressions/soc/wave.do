@@ -14,6 +14,42 @@ add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM -radix asc
 add wave -noupdate -expand -group RISCV -height 16 -expand -group FSM /testrunner/__ts/soc_ut/de10nano/riscv/fsm/flush
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU /testrunner/__ts/soc_ut/de10nano/riscv/ifu/flush
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/flushAdr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/brTaken
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/brNotTaken
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/brPC
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/misfetch
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/misfetchPC
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/misfetchAdr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/lruAccess
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/lru_lru_pre
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/lru_lru_post
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/lruCurrent
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/adrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_0_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_0_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_0_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_1_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_1_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_1_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_2_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_2_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_2_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_3_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_3_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_3_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_4_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_4_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_4_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_5_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_5_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_5_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_6_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_6_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_6_Prediction
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_7_Adr
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_7_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -height 16 -expand -group IBP -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/ifu/ibp/buffer_7_Prediction
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_wrDataNdx
 add wave -noupdate -expand -group RISCV -height 16 -expand -group IFU -radix unsigned /testrunner/__ts/soc_ut/de10nano/riscv/ifu/buf_rdNdx
@@ -100,6 +136,9 @@ add wave -noupdate -expand -group RISCV -height 16 -group REG -radix hexadecimal
 add wave -noupdate -expand -group RISCV -height 16 -group REG -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_30
 add wave -noupdate -expand -group RISCV -height 16 -group REG -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/x_31
 add wave -noupdate -expand -group RISCV -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/order
+add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/misfetch
+add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_AdrNext
+add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/PCNext
 add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/capture
 add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/order
 add wave -noupdate -expand -group RISCV -height 16 -expand -group BRU -radix hexadecimal /testrunner/__ts/soc_ut/de10nano/riscv/exu/bru/inst_Vld
@@ -390,7 +429,7 @@ add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_rsp_recieved
 add wave -noupdate -expand -group SDCARD /testrunner/__ts/soc_ut/de10nano/shield/sdcard/state_spi_req
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {2080000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {882200000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 253
 configure wave -valuecolwidth 214
@@ -406,4 +445,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {6571032 ps}
+WaveRestoreZoom {0 ps} {949914 ns}

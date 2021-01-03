@@ -8,6 +8,7 @@ import spinal.lib._
 
 case class riscv_config(
     bufferSize: Int,
+    branchPredSize: Int,
     oneShotInst: Boolean,
     outOfOrder: Boolean,
     busWishBoneConfig: WishBoneConfig,
@@ -18,6 +19,7 @@ case class riscv_config(
 class riscv_top extends Component {
   val config = riscv_config(
     bufferSize        = 8,
+    branchPredSize    = 8,
     oneShotInst       = false,
     outOfOrder        = false,
     busWishBoneConfig = WishBoneConfig(
@@ -61,6 +63,12 @@ class riscv_top extends Component {
 
   ifu.flush <> fsm.flush
   ifu.flushAdr <> fsm.flushAdr
+  ifu.misfetch <> exu.misfetch
+  ifu.misfetchPC <> exu.misfetchPC
+  ifu.misfetchAdr <> exu.misfetchAdr
+  ifu.brTaken <> exu.brTaken
+  ifu.brNotTaken <> exu.brNotTaken
+  ifu.brPC <> exu.brPC
   ifu.freeze <> exu.freeze
   ifu.busInst <> busInst
   ifu.idle <> idle

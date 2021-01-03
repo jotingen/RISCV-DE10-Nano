@@ -117,6 +117,12 @@ case class InstBuff( config: riscv_config ) extends Bundle {
 class riscv_ifu( config: riscv_config ) extends Component {
   val flush = in( Bool )
   val flushAdr = in( UInt( 32 bits ) )
+  val misfetch = in( Bool )
+  val misfetchPC = in( UInt( 32 bits ) )
+  val misfetchAdr = in( UInt( 32 bits ) )
+  val brTaken = in( Bool )
+  val brNotTaken = in( Bool )
+  val brPC = in( UInt( 32 bits ) )
   val freeze = in( Bool )
   val idle = in( Bool )
   val inst = out( Reg( Inst() ) )
@@ -140,6 +146,15 @@ class riscv_ifu( config: riscv_config ) extends Component {
 
   val PC = Reg( UInt( 32 bits ) )
   PC init ( 0)
+
+  val ibp = new riscv_ibp( config )
+  ibp.adr <> PC
+  ibp.misfetch <> misfetch
+  ibp.misfetchPC <> misfetchPC
+  ibp.misfetchAdr <> misfetchAdr
+  ibp.brTaken <> brTaken
+  ibp.brNotTaken <> brNotTaken
+  ibp.brPC <> brPC
 
   val buf = InstBuff( config )
   val bufFull = Bool
@@ -169,11 +184,11 @@ class riscv_ifu( config: riscv_config ) extends Component {
       when( PC( 1 ) ) {
         busInstReq.sel := B"4'b0011"
         buf.PushAdr( PC, U"2'd1" )
-        PC := PC + 2
+        PC := ibp.adrNext
       } otherwise {
         busInstReq.sel := B"4'b1111"
         buf.PushAdr( PC, U"2'd2" )
-        PC := PC + 4
+        PC := ibp.adrNext
       }
     }
   }

@@ -13,7 +13,11 @@ class riscv_exu( config: riscv_config ) extends Component {
   val freeze = out( Bool )
   val idle = out( Bool )
   val misfetch = out( Bool )
+  val misfetchPC = out( UInt( 32 bits ) )
   val misfetchAdr = out( UInt( 32 bits ) )
+  val brTaken = out( Bool )
+  val brNotTaken = out( Bool )
+  val brPC = out( UInt( 32 bits ) )
   val busData = master( WishBone( config.busWishBoneConfig ) )
   val csrData = master( WishBone( config.csrWishBoneConfig ) )
 
@@ -209,34 +213,49 @@ class riscv_exu( config: riscv_config ) extends Component {
     hazard := alu.busy || bru.busy || lsu.busy || mpuHazard || dvu.busy || csu.busy
   }
 
-  //detect any misfetches
+  brTaken := False
+  brNotTaken := False
+  when( bru.done ) {
+    brTaken := bru.taken
+    brNotTaken := bru.nottaken
+  }
+  brPC := bru.PC
+
+  //Detect any misfetches
   //TODO any reason why not just check bru?
   //TODO figure put how to mux UInt
   when( alu.done ) {
     misfetch := alu.misfetch
+    misfetchPC := alu.PC
     misfetchAdr := alu.PCNext
   } elsewhen
     ( bru.done) {
       misfetch := bru.misfetch
+      misfetchPC := bru.PC
       misfetchAdr := bru.PCNext
     } elsewhen
     ( lsu.done) {
       misfetch := lsu.misfetch
+      misfetchPC := lsu.PC
       misfetchAdr := lsu.PCNext
     } elsewhen
     ( mpu.done) {
       misfetch := mpu.misfetch
+      misfetchPC := mpu.PC
       misfetchAdr := mpu.PCNext
     } elsewhen
     ( dvu.done) {
       misfetch := dvu.misfetch
+      misfetchPC := dvu.PC
       misfetchAdr := dvu.PCNext
     } elsewhen
     ( csu.done) {
       misfetch := csu.misfetch
+      misfetchPC := csu.PC
       misfetchAdr := csu.PCNext
     } otherwise {
       misfetch := False
+      misfetchPC := 0
       misfetchAdr := 0
     }
 

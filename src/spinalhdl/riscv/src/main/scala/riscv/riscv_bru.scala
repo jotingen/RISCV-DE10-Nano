@@ -19,6 +19,9 @@ class riscv_bru extends Component {
   val ndx = out( UInt( 5 bits ) )
   val data = out( Bits( 32 bits ) )
   val misfetch = out( Bool )
+  val taken = out( Bool )
+  val nottaken = out( Bool )
+  val PC = out( UInt( 32 bits ) )
   val PCNext = out( UInt( 32 bits ) )
 
   val order = in( UInt( 64 bits ) )
@@ -35,100 +38,127 @@ class riscv_bru extends Component {
   rs2 <> U( inst.Rs2 )
   rd <> U( inst.Rd )
 
+  PC := inst.Adr
+
   //Calculate new data
   val rs1Data = B( x( U( inst.Rs1 ) ) )
   val rs2Data = B( x( U( inst.Rs2 ) ) )
   //TODO check for misaligned
   wr := False
   data := B( "32'd0" )
+  taken := False
+  nottaken := False
   switch( inst.Op ) {
     is( InstOp.JAL ) {
       wr := True
       data := B( inst.Adr + 4 )
+      taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
     }
     is( InstOp.JALR ) {
       wr := True
       data := B( inst.Adr + 4 )
+      taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
     }
     is( InstOp.BEQ ) {
       when( rs1Data === rs2Data ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.BNE ) {
       when( rs1Data =/= rs2Data ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.BLT ) {
       when( S( rs1Data ) < S( rs2Data ) ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.BGE ) {
       when( S( rs1Data ) >= S( rs2Data ) ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.BLTU ) {
       when( U( rs1Data ) < U( rs2Data ) ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.BGEU ) {
       when( U( rs1Data ) >= U( rs2Data ) ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 4
       }
     }
     is( InstOp.CJ ) {
       wr := True
       data := B( inst.Adr + 2 )
+      taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
     }
     is( InstOp.CJAL ) {
       wr := True
       data := B( inst.Adr + 2 )
+      taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
     }
     is( InstOp.CJR ) {
       wr := True
       data := B( inst.Adr + 2 )
+      taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
     }
     is( InstOp.CJALR ) {
       wr := True
       data := B( inst.Adr + 2 )
+      taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
     }
     is( InstOp.CBEQZ ) {
       when( rs1Data === rs2Data ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 2
       }
     }
     is( InstOp.CBNEZ ) {
       when( rs1Data =/= rs2Data ) {
+        taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
       } otherwise {
+        nottaken := True
         PCNext := inst.Adr + 2
       }
     }
     default {
+      taken := True
       PCNext := U( inst.Immed )
     }
   }

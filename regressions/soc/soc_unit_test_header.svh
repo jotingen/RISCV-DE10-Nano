@@ -6,6 +6,7 @@
 `include "../../../src/rtl/wishbone/wishbone_pkg.sv"
              
 `include "../../../submodules/mor1kx/rtl/verilog/mor1kx_cache_lru.v"
+`include "../../../src/rtl/mor1kx/mor1kx_cache_lru_accessfix.v"
              
 `include "../../../src/rtl/common/lru_16.sv"
 `include "../../../src/rtl/common/lru_32.sv"
