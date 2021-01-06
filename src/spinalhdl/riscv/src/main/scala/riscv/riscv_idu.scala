@@ -484,10 +484,11 @@ class riscv_idu          extends Component {
                   instDecoded.Immed := B(
                     U(
                       Cat(
-                        inst.Data( 8 downto 7 ),
-                        inst.Data( 12 downto 9 ),
+                        inst.Data( 10 downto 7 ),
+                        inst.Data( 12 downto 11 ),
                         inst.Data( 5 ),
-                        inst.Data( 6 )
+                        inst.Data( 6 ),
+                        B"2'b00"
                       ),
                       32 bits
                     )

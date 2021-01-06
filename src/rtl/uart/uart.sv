@@ -62,15 +62,18 @@ always_ff @(posedge clk)
       'd0:     begin
                state_sending <= '1;
                msg <= {2'b11,
-                       ^bus_data_i.Data[7:0],
-                       bus_data_i.Data[7:0],
+                       ^bus_data_i.Data[31:24],
+                       bus_data_i.Data[31:24],
                        1'b0};
                bus_data_o.Data <= '0;
                bus_data_o.Data <= '0;
                end
       'd1:     begin
                state_idle    <= '1;
-               baud_rate <= bus_data_i.Data;
+               baud_rate <= {bus_data_i.Data[7:0],   
+                             bus_data_i.Data[15:8],    
+                             bus_data_i.Data[23:16],  
+                             bus_data_i.Data[31:24]};
                bus_data_o.Ack <= '1;
                bus_data_o.Data <= '0;
                end

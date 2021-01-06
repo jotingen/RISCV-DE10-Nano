@@ -15,6 +15,7 @@ case class Inst() extends Bundle {
 case class InstBuffEntry() extends Bundle {
   val AdrVld = Bool
   val Adr = UInt( 32 bits )
+  val Sel = Bits( 4 bits )
   val DataVld = Bool
   val Data = Bits( 16 bits )
 }
@@ -41,16 +42,19 @@ case class InstBuff( config: riscv_config ) extends Bundle {
       entry.DataVld := False
     }
   }
-  def PushAdr( adr: UInt, number: UInt ): Unit = {
+  def PushAdr( adr: UInt, sel: Bits, number: UInt ): Unit = {
     when( number === U"2'd2" ) {
       buffer( wrNdx ).AdrVld := True
       buffer( wrNdx ).Adr := adr
+      buffer( wrNdx ).Sel := sel
       buffer( wrNdx + 1 ).AdrVld := True
       buffer( wrNdx + 1 ).Adr := adr + 2
+      buffer( wrNdx + 1 ).Sel := B"4'b0000"
       wrNdx := wrNdx + 2
     } otherwise {
       buffer( wrNdx ).AdrVld := True
       buffer( wrNdx ).Adr := adr
+      buffer( wrNdx ).Sel := sel
       wrNdx := wrNdx + 1
     }
   }
@@ -62,11 +66,21 @@ case class InstBuff( config: riscv_config ) extends Bundle {
       wrDataNdx := wrDataNdx + 1
       //Aligned
     } otherwise {
+      //If the two address spaces are not contiguous,
+      //then we only wanted first half
       buffer( wrDataNdx ).DataVld := True
-      buffer( wrDataNdx + 1 ).DataVld := True
       buffer( wrDataNdx ).Data := data( 15 downto 0 )
-      buffer( wrDataNdx + 1 ).Data := data( 31 downto 16 )
-      wrDataNdx := wrDataNdx + 2
+      when(
+        ( buffer( wrDataNdx ).Sel( 1 downto 0 ) === B"2'b11") && ( buffer(
+          wrDataNdx
+        ).Adr + 2) === buffer( wrDataNdx + 1 ).Adr
+      ) {
+        buffer( wrDataNdx + 1 ).DataVld := True
+        buffer( wrDataNdx + 1 ).Data := data( 31 downto 16 )
+        wrDataNdx := wrDataNdx + 2
+      } otherwise {
+        wrDataNdx := wrDataNdx + 1
+      }
     }
   }
   def Pull(): Inst = {
@@ -172,8 +186,13 @@ class riscv_ifu( config: riscv_config ) extends Component {
     token := token + 1
     PC := flushAdr
   } otherwise {
-    //If we get a stall or full, do nothing
-    when( busInst.stall || buf.Full() ) {} otherwise {
+    //If we get a stall, hold same command
+    when( busInst.stall ) {
+      busInstReq := busInstReq
+      //If buffer is full, do nothing
+    } elsewhen ( buf.Full() ) {
+      //Else continue requesting
+    } otherwise {
       busInstReq.cyc := True
       busInstReq.stb := True
       busInstReq.we := False
@@ -182,16 +201,16 @@ class riscv_ifu( config: riscv_config ) extends Component {
       busInstReq.tga := 0
       busInstReq.tgd := 0
       busInstReq.tgc := B( token )
-      busInstReq.sel := ibp.selNext
+      busInstReq.sel := ibp.sel
       PC := ibp.adrNext
       //Unaligned
       when( PC( 1 ) ) {
-        buf.PushAdr( PC, U"2'd1" )
+        buf.PushAdr( PC, ibp.sel, U"2'd1" )
       } otherwise {
-        when( ibp.selNext === B"4'b1111" ) {
-          buf.PushAdr( PC, U"2'd2" )
+        when( ibp.sel === B"4'b1111" ) {
+          buf.PushAdr( PC, ibp.sel, U"2'd2" )
         } otherwise {
-          buf.PushAdr( PC, U"2'd1" )
+          buf.PushAdr( PC, ibp.sel, U"2'd1" )
         }
       }
     }

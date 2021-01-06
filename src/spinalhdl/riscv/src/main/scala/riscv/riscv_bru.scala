@@ -56,17 +56,23 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 4 )
       taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
     }
     is( InstOp.JALR ) {
       wr := True
       data := B( inst.Adr + 4 )
       taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
     }
     is( InstOp.BEQ ) {
       when( rs1Data === rs2Data ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -76,6 +82,8 @@ class riscv_bru extends Component {
       when( rs1Data =/= rs2Data ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -85,6 +93,8 @@ class riscv_bru extends Component {
       when( S( rs1Data ) < S( rs2Data ) ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -94,6 +104,8 @@ class riscv_bru extends Component {
       when( S( rs1Data ) >= S( rs2Data ) ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -103,6 +115,8 @@ class riscv_bru extends Component {
       when( U( rs1Data ) < U( rs2Data ) ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -112,6 +126,8 @@ class riscv_bru extends Component {
       when( U( rs1Data ) >= U( rs2Data ) ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 4
@@ -122,6 +138,8 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
       compressed := True
     }
     is( InstOp.CJAL ) {
@@ -129,6 +147,8 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( inst.Adr ) + S( inst.Immed( 19 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
       compressed := True
     }
     is( InstOp.CJR ) {
@@ -136,6 +156,8 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
       compressed := True
     }
     is( InstOp.CJALR ) {
@@ -143,12 +165,16 @@ class riscv_bru extends Component {
       data := B( inst.Adr + 2 )
       taken := True
       PCNext := U( S( rs1Data ) + S( inst.Immed( 11 downto 0 ) ) )
+      PCNext.allowOverride
+      PCNext( 0 ) := False
       compressed := True
     }
     is( InstOp.CBEQZ ) {
       when( rs1Data === rs2Data ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 2
@@ -159,6 +185,8 @@ class riscv_bru extends Component {
       when( rs1Data =/= rs2Data ) {
         taken := True
         PCNext := U( S( inst.Adr ) + S( inst.Immed( 12 downto 0 ) ) )
+        PCNext.allowOverride
+        PCNext( 0 ) := False
       } otherwise {
         nottaken := True
         PCNext := inst.Adr + 2

@@ -38,6 +38,7 @@ class riscv_ibp( config: riscv_config ) extends Component {
   val brCompressed = in( Bool )
   val brPC = in( UInt( 32 bits ) )
   val adr = in( UInt( 32 bits ) )
+  val sel = out( Bits( 4 bits ) )
   val adrNext = out( UInt( 32 bits ) )
   val selNext = out( Bits( 4 bits ) )
 
@@ -54,7 +55,9 @@ class riscv_ibp( config: riscv_config ) extends Component {
     buffer( ndx ).Compressed init ( False)
   }
 
-  when( misfetch ) {
+  sel := B"4'b1111"
+
+  when( misfetch && ( brTaken || brNotTaken) ) {
 
     //Default to lru value
     lruAccess := lru.lru_pre
@@ -78,33 +81,33 @@ class riscv_ibp( config: riscv_config ) extends Component {
     }
 
     adrNext := misfetchAdr
-    when( misfetchAdr( 1 ) ) {
-      selNext := B"4'b0011"
-    } otherwise {
-      selNext := B"4'b1111"
-      //If the misfetch address is in the buffer
-      //check if it is compressed, if so just grab it
-      for (ndx <- buffer.indices) {
-        when( buffer( ndx ).Adr === misfetchAdr ) {
-          when( buffer( ndx ).Compressed ) {
-            when( misfetchAdr( 1 ) ) {
-              selNext := B"4'b0011"
-            } otherwise {
-              selNext := B"4'b1100"
-            }
-          }
-        }
-      }
-    }
+    //when( misfetchAdr( 1 ) ) {
+    //  selNext := B"4'b0011"
+    //} otherwise {
+    //  selNext := B"4'b1111"
+    //  //If the misfetch address is in the buffer
+    //  //check if it is compressed
+    //  for (ndx <- buffer.indices) {
+    //    when( buffer( ndx ).Adr === misfetchAdr ) {
+    //      when( buffer( ndx ).Compressed ) {
+    //        when( misfetchAdr( 1 ) ) {
+    //          selNext := B"4'b0011"
+    //        } otherwise {
+    //          selNext := B"4'b1100"
+    //        }
+    //      }
+    //    }
+    //  }
+    //}
 
   } otherwise {
 
     when( adr( 1 ) ) {
       adrNext := adr + 2
-      selNext := B"4'b0011"
+      sel := B"4'b0011"
     } otherwise {
       adrNext := adr + 4
-      selNext := B"4'b1111"
+      sel := B"4'b1111"
     }
 
     //Mark entry accessed if address matched
@@ -113,6 +116,13 @@ class riscv_ibp( config: riscv_config ) extends Component {
       when( buffer( ndx ).Adr === adr ) {
         lruAccess( ndx ) := True
         adrNext := buffer( ndx ).AdrNext
+        when( buffer( ndx ).Compressed ) {
+          when( adr( 1 ) ) {
+            sel := B"4'b0011"
+          } otherwise {
+            sel := B"4'b1100"
+          }
+        }
       } otherwise {
         lruAccess( ndx ) := False
       }
