@@ -12,6 +12,7 @@ class riscv_exu( config: riscv_config ) extends Component {
   val instDecoded = in( InstDecoded() )
   val freeze = out( Bool )
   val idle = out( Bool )
+  val retired = out( Bool )
   val misfetch = out( Bool )
   val misfetchPC = out( UInt( 32 bits ) )
   val misfetchAdr = out( UInt( 32 bits ) )
@@ -97,6 +98,13 @@ class riscv_exu( config: riscv_config ) extends Component {
     ~( mpu.busy && ~mpu.done) &
     ~( dvu.busy && ~dvu.done) &
     ~( csu.busy && ~csu.done)
+
+  retired := alu.done |
+    bru.done |
+    lsu.done |
+    mpu.done |
+    dvu.done |
+    csu.done
 
   aluOp :=
     instDecoded.Op === InstOp.LUI ||

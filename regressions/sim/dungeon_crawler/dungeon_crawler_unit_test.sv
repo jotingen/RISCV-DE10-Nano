@@ -745,7 +745,7 @@ always
   //   `SVTEST_END
   //===================================
 
-  int cycleCountMax = 200000;
+  int cycleCountMax = 500000;
   int cycleCount;
 
   defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../../output/programs/bootloader/bootloader_preloaded.32.hex";

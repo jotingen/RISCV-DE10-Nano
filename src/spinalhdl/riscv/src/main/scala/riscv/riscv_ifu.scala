@@ -15,7 +15,7 @@ case class Inst() extends Bundle {
 case class InstBuffEntry() extends Bundle {
   val AdrVld = Bool
   val Adr = UInt( 32 bits )
-  val Sel = Bits( 4 bits )
+  val PairedWithNextEntry = Bool
   val DataVld = Bool
   val Data = Bits( 16 bits )
 }
@@ -43,18 +43,15 @@ case class InstBuff( config: riscv_config ) extends Bundle {
     }
   }
   def PushAdr( adr: UInt, sel: Bits, number: UInt ): Unit = {
+    buffer( wrNdx ).AdrVld := True
+    buffer( wrNdx ).Adr := adr
+    buffer( wrNdx ).PairedWithNextEntry := sel( 1 downto 0 ).orR
     when( number === U"2'd2" ) {
-      buffer( wrNdx ).AdrVld := True
-      buffer( wrNdx ).Adr := adr
-      buffer( wrNdx ).Sel := sel
       buffer( wrNdx + 1 ).AdrVld := True
       buffer( wrNdx + 1 ).Adr := adr + 2
-      buffer( wrNdx + 1 ).Sel := B"4'b0000"
+      buffer( wrNdx + 1 ).PairedWithNextEntry := False
       wrNdx := wrNdx + 2
     } otherwise {
-      buffer( wrNdx ).AdrVld := True
-      buffer( wrNdx ).Adr := adr
-      buffer( wrNdx ).Sel := sel
       wrNdx := wrNdx + 1
     }
   }
@@ -70,11 +67,7 @@ case class InstBuff( config: riscv_config ) extends Bundle {
       //then we only wanted first half
       buffer( wrDataNdx ).DataVld := True
       buffer( wrDataNdx ).Data := data( 15 downto 0 )
-      when(
-        ( buffer( wrDataNdx ).Sel( 1 downto 0 ) === B"2'b11") && ( buffer(
-          wrDataNdx
-        ).Adr + 2) === buffer( wrDataNdx + 1 ).Adr
-      ) {
+      when( buffer( wrDataNdx ).PairedWithNextEntry ) {
         buffer( wrDataNdx + 1 ).DataVld := True
         buffer( wrDataNdx + 1 ).Data := data( 31 downto 16 )
         wrDataNdx := wrDataNdx + 2

@@ -9,6 +9,11 @@ class riscv_csr( config: riscv_config ) extends Component {
 
   val csrData = slave( WishBone( config.csrWishBoneConfig ) )
 
+  val retired = in( Bool )
+  val brTaken = in( Bool )
+  val brNotTaken = in( Bool )
+  val misfetch = in( Bool )
+
   csrData.stall := False
 
   val csrDataRsp = Reg( WishBoneRsp( config.csrWishBoneConfig ) )
@@ -36,17 +41,29 @@ class riscv_csr( config: riscv_config ) extends Component {
   //Retired Counter
   val retired_counter = Reg( UInt( 64 bits ) )
   retired_counter init ( 0)
-  retired_counter := retired_counter + 1
+  when( retired ) {
+    retired_counter := retired_counter + 1
+  } otherwise {
+    retired_counter := retired_counter
+  }
 
   //Branch Counter
   val branch_counter = Reg( UInt( 64 bits ) )
   branch_counter init ( 0)
-  branch_counter := branch_counter + 1
+  when( brTaken || brNotTaken ) {
+    branch_counter := branch_counter + 1
+  } otherwise {
+    branch_counter := branch_counter
+  }
 
   //Branch Miss Counter
   val brmiss_counter = Reg( UInt( 64 bits ) )
   brmiss_counter init ( 0)
-  brmiss_counter := brmiss_counter + 1
+  when( misfetch ) {
+    brmiss_counter := brmiss_counter + 1
+  } otherwise {
+    brmiss_counter := brmiss_counter
+  }
 
   when( csrData.req.cyc ) {
     switch( csrData.req.adr ) {

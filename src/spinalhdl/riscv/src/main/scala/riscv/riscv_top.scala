@@ -85,6 +85,10 @@ class riscv_top extends Component {
   exu.rvfi <> rvfi
 
   csr.csrData <> csrData
+  csr.retired <> exu.retired
+  csr.brTaken <> exu.brTaken
+  csr.brNotTaken <> exu.brNotTaken
+  csr.misfetch <> exu.misfetch
 }
 
 //Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
