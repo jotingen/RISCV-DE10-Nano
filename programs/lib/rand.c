@@ -12,7 +12,15 @@ void xorshift(uint32_t * lfsr) {
 }
 
 extern void     rand_init(void) {
-  lfsr = get_cycle();
+  rand_seed_init(get_cycle());
+  return;
+}
+extern void     rand_seed_init(uint32_t seed) {
+  if(seed == 0) {
+    lfsr = get_cycle();
+  } else {
+    lfsr = seed;
+  }
   return;
 }
 extern uint32_t rand(void) {

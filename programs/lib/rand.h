@@ -4,6 +4,7 @@
        void xorshift(uint32_t * lfsr);
 
 extern void     rand_init(void);
+extern void     rand_seed_init(uint32_t seed);
 extern uint32_t rand(void);
 
 #endif
