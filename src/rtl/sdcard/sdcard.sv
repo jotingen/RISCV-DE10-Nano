@@ -207,57 +207,57 @@ always_ff @(posedge clk)
                    'h0002:  begin 
                            if(bus_data_i.We)
                              begin
-                             cmd[31:24]            <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[31:24];
-                             cmd[23:16]            <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[23:16];
-                             cmd[15:8]             <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[15:8] ;
-                             cmd[7:0]              <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[7:0]  ;
+                             cmd[31:24]            <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[31:24];
+                             cmd[23:16]            <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[23:16];
+                             cmd[15:8]             <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[15:8] ;
+                             cmd[7:0]              <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[7:0]  ;
                              end
                             bus_data_o.Ack             <= '1;
-                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[31:24] : '0;
-                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[23:16] : '0;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[15:8]  : '0;
-                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[7:0]   : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[31:24] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[23:16] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[15:8]  : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Cmd Hi
                    'h0003:  begin 
                             if(bus_data_i.We)
                               begin
-                              cmd[63:56]            <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[63:56] ;
-                              cmd[55:48]            <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[55:48] ;
-                              cmd[47:40]            <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[47:40] ;
-                              cmd[39:32]            <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[39:32] ;
+                              cmd[63:56]            <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : cmd[63:56] ;
+                              cmd[55:48]            <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : cmd[55:48] ;
+                              cmd[47:40]            <= bus_data_i.Sel ? bus_data_i.Data[23:16] : cmd[47:40] ;
+                              cmd[39:32]            <= bus_data_i.Sel ? bus_data_i.Data[31:24] : cmd[39:32] ;
                               end
                             bus_data_o.Ack             <= '1;
-                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[63:56]  : '0;
-                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[55:48]  : '0;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[47:40]  : '0;
-                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[39:32]  : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? cmd[63:56]  : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? cmd[55:48]  : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? cmd[47:40]  : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? cmd[39:32]  : '0;
                             state_idle            <= '1;
                             end
                    //Rsp  Arrived
                    'h0004:  begin 
                             bus_data_o.Ack             <= '1;
-                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rspArrived[31:24] : '0;
-                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rspArrived[23:16] : '0;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rspArrived[15:8]  : '0;
-                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rspArrived[7:0]   : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rspArrived[31:24] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rspArrived[23:16] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rspArrived[15:8]  : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rspArrived[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Rsp Lo
                    'h0005:  begin 
                             bus_data_o.Ack             <= '1;
-                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rsp[31:24] : '0;
-                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rsp[23:16] : '0;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rsp[15:8]  : '0;
-                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rsp[7:0]   : '0;
+                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rsp[31:24] : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rsp[23:16] : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rsp[15:8]  : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rsp[7:0]   : '0;
                             state_idle            <= '1;
                             end
                    //Rsp Hi
                    'h0006:  begin 
                             bus_data_o.Ack             <= '1;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? rsp[47:40]  : '0;
-                            bus_data_o.Data[7:0]       <= bus_data_i.Sel ? rsp[39:32]  : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? rsp[47:40]  : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? rsp[39:32]  : '0;
                             state_idle            <= '1;
                             end
                    //Data
@@ -267,17 +267,17 @@ always_ff @(posedge clk)
                                     //                                                           mem_array_1[(bus_data_i.Adr - 'h0200)>>2],
                                     //                                                           mem_array_0[(bus_data_i.Adr - 'h0200)>>2]});
                                     bus_data_o.Ack             <= '1;
-                                    bus_data_o.Data[31:24] <= {8{bus_data_i.Sel[3]}} & mem_array_3[(bus_data_i.Adr - 'h0200)>>2];
-                                    bus_data_o.Data[23:16] <= {8{bus_data_i.Sel[2]}} & mem_array_2[(bus_data_i.Adr - 'h0200)>>2];
-                                    bus_data_o.Data[15:8]  <= {8{bus_data_i.Sel[1]}} & mem_array_1[(bus_data_i.Adr - 'h0200)>>2];
-                                    bus_data_o.Data[7:0]   <= {8{bus_data_i.Sel[0]}} & mem_array_0[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[7:0]   <= {8{bus_data_i.Sel[3]}} & mem_array_3[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[15:8]  <= {8{bus_data_i.Sel[2]}} & mem_array_2[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[23:16] <= {8{bus_data_i.Sel[1]}} & mem_array_1[(bus_data_i.Adr - 'h0200)>>2];
+                                    bus_data_o.Data[31:24] <= {8{bus_data_i.Sel[0]}} & mem_array_0[(bus_data_i.Adr - 'h0200)>>2];
                                     end
                    default: begin
                             bus_data_o.Ack      <= '1;
-                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? bus_data_i.Data[31:24] : '0;
-                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? bus_data_i.Data[23:16] : '0;
-                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : '0;
                             bus_data_o.Data[7:0]       <= bus_data_i.Sel ? bus_data_i.Data[7:0]   : '0;
+                            bus_data_o.Data[15:8]      <= bus_data_i.Sel ? bus_data_i.Data[15:8]  : '0;
+                            bus_data_o.Data[23:16]     <= bus_data_i.Sel ? bus_data_i.Data[23:16] : '0;
+                            bus_data_o.Data[31:24]     <= bus_data_i.Sel ? bus_data_i.Data[31:24] : '0;
                             state_idle <= '1;
                             end
                  endcase

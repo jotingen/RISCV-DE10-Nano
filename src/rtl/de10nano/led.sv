@@ -43,12 +43,12 @@ always_ff @(posedge clk)
     bus_data_o.Ack <= '1;
     case (bus_data_i.Adr[SIZE+2:2] - ADDR_BASE[SIZE+2:2])
       'd0:     begin
-               if (bus_data_i.We & bus_data_i.Sel[0])
+               if (bus_data_i.We & bus_data_i.Sel[3])
                  begin
-                 LED[7:0]        <= bus_data_i.Data[7:0];
+                 LED[7:0]        <= bus_data_i.Data[31:24];
                  end
                bus_data_o.Data      <= '0;
-               bus_data_o.Data[7:0] <= LED[7:0];
+               bus_data_o.Data[31:24] <= LED[7:0];
                end
       default: begin
                bus_data_o.Data      <= '0;
