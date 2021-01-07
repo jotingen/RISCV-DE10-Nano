@@ -18,7 +18,7 @@ case class riscv_config(
 //Hardware definition
 class riscv_top extends Component {
   val config = riscv_config(
-    bufferSize        = 64,
+    bufferSize        = 8,
     branchPredSize    = 64,
     oneShotInst       = false,
     outOfOrder        = false,
