@@ -823,14 +823,30 @@ riscv_top riscv (
     .bus_data_flat_o                (ddr3_mmc_data)
   );
   
-  led #(.SIZE(5),.ADDR_BASE(32'h00000000)) led (
+  //SpinalHDL version
+  led_top led (
     .clk         (clk),
-    .rst         (rst),
+    .reset         (rst),
   
     .LED         (LED),
   
-    .bus_data_flat_i                (mmc_led_data),
-    .bus_data_flat_o                (led_mmc_data)    
+    .bus_req_cyc     (mmc_led_data.Cyc  ),
+    .bus_req_stb     (mmc_led_data.Stb  ),
+    .bus_req_we      (mmc_led_data.We   ),
+    .bus_req_adr     (mmc_led_data.Adr  ),
+    .bus_req_sel     (mmc_led_data.Sel  ),
+    .bus_req_data    (mmc_led_data.Data ),
+    .bus_req_tga     (mmc_led_data.Tga  ),
+    .bus_req_tgd     (mmc_led_data.Tgd  ),
+    .bus_req_tgc     (mmc_led_data.Tgc  ),
+    .bus_stall       (led_mmc_data.Stall),
+    .bus_rsp_ack     (led_mmc_data.Ack  ),
+    .bus_rsp_err     (led_mmc_data.Err  ),
+    .bus_rsp_rty     (led_mmc_data.Rty  ),
+    .bus_rsp_data    (led_mmc_data.Data ),
+    .bus_rsp_tga     (led_mmc_data.Tga  ),
+    .bus_rsp_tgd     (led_mmc_data.Tgd  ),
+    .bus_rsp_tgc     (led_mmc_data.Tgc  )
   );
   
   keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (

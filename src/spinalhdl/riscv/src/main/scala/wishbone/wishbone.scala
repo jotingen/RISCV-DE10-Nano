@@ -22,7 +22,19 @@ case class WishBoneReq( config: WishBoneConfig ) extends Bundle {
   val tga = Bits( config.tgaWidth bits )
   val tgd = Bits( config.tgdWidth bits )
   val tgc = Bits( config.tgcWidth bits )
-
+  def ReverseEndian(): WishBoneReq = {
+    val req = WishBoneReq( config )
+    req.cyc := this.cyc
+    req.stb := this.stb
+    req.we := this.we
+    req.adr := this.adr
+    req.sel := Reverse( this.sel )
+    req.data := EndiannessSwap( this.data )
+    req.tga := this.tga
+    req.tgd := this.tgd
+    req.tgc := this.tgc
+    return req
+  }
 }
 
 case class WishBoneRsp( config: WishBoneConfig ) extends Bundle {
@@ -33,6 +45,17 @@ case class WishBoneRsp( config: WishBoneConfig ) extends Bundle {
   val tga = Bits( config.tgaWidth bits )
   val tgd = Bits( config.tgdWidth bits )
   val tgc = Bits( config.tgcWidth bits )
+  def ReverseEndian(): WishBoneRsp = {
+    val rsp = WishBoneRsp( config )
+    rsp.ack := this.ack
+    rsp.err := this.err
+    rsp.rty := this.rty
+    rsp.data := EndiannessSwap( this.data )
+    rsp.tga := this.tga
+    rsp.tgd := this.tgd
+    rsp.tgc := this.tgc
+    return rsp
+  }
 }
 
 case class WishBone( config: WishBoneConfig ) extends Bundle with IMasterSlave {

@@ -16,6 +16,7 @@ build: rvfimon riscv
 riscv:
 	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/wishbone
 	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/riscv
+	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/led
 	cd src/spinalhdl/riscv; \
 	sbt run
 
