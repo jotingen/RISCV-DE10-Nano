@@ -15,3 +15,4 @@ EclipseKeys.withSource := true
 //mainClass in (Compile, run) := Some("de10nano.de10nano")
 mainClass in (Compile, run) := Some("riscv.riscv_top")
 mainClass in (Compile, run) := Some("led.led_top")
+mainClass in (Compile, run) := Some("keys.keys_top")

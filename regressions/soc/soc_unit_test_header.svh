@@ -19,7 +19,7 @@
 `include "../../../src/rtl/de10nano/ddr3/ddr3_cache_set.sv"
 `include "../../../src/rtl/de10nano/ddr3/ddr3_fifo.v"
 `include "../../../src/rtl/de10nano/debounce.v"
-`include "../../../src/rtl/de10nano/keys.sv"
+`include "../../../output/keys_top.v"
 `include "../../../output/led_top.v"
 `include "../../../src/rtl/mem/debug.sv"
 `include "../../../src/rtl/mem/mem.sv"

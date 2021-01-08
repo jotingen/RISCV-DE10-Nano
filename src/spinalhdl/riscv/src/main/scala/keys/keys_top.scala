@@ -1,4 +1,4 @@
-package led
+package keys
 
 import wishbone._
 
@@ -9,7 +9,7 @@ case class riscv_config(
     busWishBoneConfig: WishBoneConfig
 )
 
-class led_top extends Component {
+class keys_top extends Component {
   val config = riscv_config(
     busWishBoneConfig = WishBoneConfig(
       adrWidth  = 32,
@@ -21,7 +21,7 @@ class led_top extends Component {
     )
   )
 
-  val LED = out( Reg( Bits( 8 bits ) ) )
+  val KEY = in( Bits( 2 bits ) )
   val bus = slave( WishBone( config.busWishBoneConfig ) )
 
   val busReq = WishBoneReq( config.busWishBoneConfig )
@@ -35,8 +35,32 @@ class led_top extends Component {
   bus.stall := busStall
   busStall init ( False)
 
-  LED init ( B"xAA")
-  LED := LED
+  def debounce( in: Bool ): Bool = {
+    val NDELAY = 1000000;
+
+    val count = Reg( UInt( log2Up( NDELAY ) bits ) )
+    val xnew = Reg( Bool )
+    val out = Reg( Bool )
+
+    xnew init ( in)
+    out init ( in)
+    count init ( 0)
+
+    when( in =/= xnew ) {
+      xnew := in
+      count := 0
+    } elsewhen ( count === NDELAY) {
+      out := xnew
+    } otherwise {
+      count := count + 1
+    }
+
+    return out
+  }
+
+  val BUTTON = Reg( Bits( 2 bits ) )
+  BUTTON( 1 ) := debounce( ~KEY( 1 ) )
+  BUTTON( 0 ) := debounce( ~KEY( 0 ) )
 
   busStall := False
 
@@ -59,13 +83,16 @@ class led_top extends Component {
 
     switch( bus.req.adr.asBits.resizeLeft( bus.req.adr.getWidth - 2 ) ) {
       is( 0 ) {
-        when( bus.req.we ) {
+        when( bus.req.we ) {} otherwise {
           when( bus.req.sel( 0 ) ) {
-            LED := busReq.data( 7 downto 0 )
+            busRsp.data( 0 ) := BUTTON( 0 )
           }
-        } otherwise {
+        }
+      }
+      is( 1 ) {
+        when( bus.req.we ) {} otherwise {
           when( bus.req.sel( 0 ) ) {
-            busRsp.data( 7 downto 0 ) := LED
+            busRsp.data( 0 ) := BUTTON( 1 )
           }
         }
       }
@@ -75,15 +102,15 @@ class led_top extends Component {
 }
 
 //Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
-object led_config
+object keys_config
     extends SpinalConfig(
       defaultConfigForClockDomains = ClockDomainConfig( resetKind = SYNC ),
       targetDirectory              = "../../../output"
     )
 
 //Generate the riscv's Verilog using the above custom configuration.
-object led_top {
+object keys_top {
   def main( args: Array[String] ) {
-    led_config.generateVerilog( new led_top )
+    keys_config.generateVerilog( new keys_top )
   }
 }

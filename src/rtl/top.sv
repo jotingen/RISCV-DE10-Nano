@@ -826,7 +826,7 @@ riscv_top riscv (
   //SpinalHDL version
   led_top led (
     .clk         (clk),
-    .reset         (rst),
+    .reset       (rst),
   
     .LED         (LED),
   
@@ -849,14 +849,30 @@ riscv_top riscv (
     .bus_rsp_tgc     (led_mmc_data.Tgc  )
   );
   
-  keys #(.SIZE(5),.ADDR_BASE(32'hC0000000)) keys (
+  //SpinalHDL version
+  keys_top keys (
     .clk         (clk),
-    .rst         (rst),
+    .reset       (rst),
   
     .KEY         (KEY),
   
-    .bus_data_flat_i                (mmc_keys_data),
-    .bus_data_flat_o                (keys_mmc_data)    
+    .bus_req_cyc     (mmc_keys_data.Cyc  ),
+    .bus_req_stb     (mmc_keys_data.Stb  ),
+    .bus_req_we      (mmc_keys_data.We   ),
+    .bus_req_adr     (mmc_keys_data.Adr  ),
+    .bus_req_sel     (mmc_keys_data.Sel  ),
+    .bus_req_data    (mmc_keys_data.Data ),
+    .bus_req_tga     (mmc_keys_data.Tga  ),
+    .bus_req_tgd     (mmc_keys_data.Tgd  ),
+    .bus_req_tgc     (mmc_keys_data.Tgc  ),
+    .bus_stall       (keys_mmc_data.Stall),
+    .bus_rsp_ack     (keys_mmc_data.Ack  ),
+    .bus_rsp_err     (keys_mmc_data.Err  ),
+    .bus_rsp_rty     (keys_mmc_data.Rty  ),
+    .bus_rsp_data    (keys_mmc_data.Data ),
+    .bus_rsp_tga     (keys_mmc_data.Tga  ),
+    .bus_rsp_tgd     (keys_mmc_data.Tgd  ),
+    .bus_rsp_tgc     (keys_mmc_data.Tgc  )
   );
   
   uart uart (
