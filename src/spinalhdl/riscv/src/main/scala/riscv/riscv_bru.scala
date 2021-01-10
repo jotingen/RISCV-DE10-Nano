@@ -204,9 +204,10 @@ class riscv_bru extends Component {
 
   done := False
   ndx := U( inst.Rd )
-  misfetch := inst.AdrNext =/= PCNext
+  misfetch := False
   when( inst.Vld ) {
     done := True
+    misfetch := inst.AdrNext =/= PCNext
     inst.Vld := False
   }
   when( capture ) {
