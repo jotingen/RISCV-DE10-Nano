@@ -72,7 +72,7 @@ class keys_top extends Component {
   busRsp.tgd := busRsp.tgd
   busRsp.tgc := busRsp.tgc
 
-  when( bus.req.cyc && bus.req.stb ) {
+  when( busReq.cyc && busReq.stb ) {
     busRsp.ack := True
     busRsp.err := False
     busRsp.rty := False
@@ -81,17 +81,17 @@ class keys_top extends Component {
     busRsp.tgd := busReq.tgd
     busRsp.tgc := busReq.tgc
 
-    switch( bus.req.adr.asBits.resizeLeft( bus.req.adr.getWidth - 2 ) ) {
+    switch( busReq.adr.asBits.resizeLeft( busReq.adr.getWidth - 2 ) ) {
       is( 0 ) {
-        when( bus.req.we ) {} otherwise {
-          when( bus.req.sel( 0 ) ) {
+        when( busReq.we ) {} otherwise {
+          when( busReq.sel( 0 ) ) {
             busRsp.data( 0 ) := BUTTON( 0 )
           }
         }
       }
       is( 1 ) {
-        when( bus.req.we ) {} otherwise {
-          when( bus.req.sel( 0 ) ) {
+        when( busReq.we ) {} otherwise {
+          when( busReq.sel( 0 ) ) {
             busRsp.data( 0 ) := BUTTON( 1 )
           }
         }

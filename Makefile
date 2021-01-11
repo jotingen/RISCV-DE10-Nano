@@ -18,8 +18,12 @@ riscv:
 	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/riscv
 	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/led
 	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/keys
+	scalafmt -c src/spinalhdl/riscv/scalafmt.conf src/spinalhdl/riscv/src/main/scala/uart
 	cd src/spinalhdl/riscv; \
-	sbt run
+	sbt "; set mainClass in (Compile, run) := Some(\"riscv.riscv_top\"); run\
+             ; set mainClass in (Compile, run) := Some(\"led.led_top\"); run\
+             ; set mainClass in (Compile, run) := Some(\"keys.keys_top\"); run\
+             ; set mainClass in (Compile, run) := Some(\"uart.uart_top\"); run"
 
 .PHONY: rvfimon
 rvfimon: 

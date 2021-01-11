@@ -875,19 +875,35 @@ riscv_top riscv (
     .bus_rsp_tgc     (keys_mmc_data.Tgc  )
   );
   
-  uart uart (
-    .clk (clk),
-    .rst (rst),
-    
+  //SpinalHDL version
+  uart_top uart (
+    .clk         (clk),
+    .reset       (rst),
+  
     .GND (GPIO_0_01),
     .TXD (GPIO_0_05),
     .RXD (GPIO_0_03),
     .CTS (GPIO_0_09),
     .RTS (GPIO_0_07),
   
-    .bus_data_flat_i                (mmc_uart_data),
-    .bus_data_flat_o                (uart_mmc_data)    
-  );
+    .bus_req_cyc     (mmc_uart_data.Cyc  ),
+    .bus_req_stb     (mmc_uart_data.Stb  ),
+    .bus_req_we      (mmc_uart_data.We   ),
+    .bus_req_adr     (mmc_uart_data.Adr  ),
+    .bus_req_sel     (mmc_uart_data.Sel  ),
+    .bus_req_data    (mmc_uart_data.Data ),
+    .bus_req_tga     (mmc_uart_data.Tga  ),
+    .bus_req_tgd     (mmc_uart_data.Tgd  ),
+    .bus_req_tgc     (mmc_uart_data.Tgc  ),
+    .bus_stall       (uart_mmc_data.Stall),
+    .bus_rsp_ack     (uart_mmc_data.Ack  ),
+    .bus_rsp_err     (uart_mmc_data.Err  ),
+    .bus_rsp_rty     (uart_mmc_data.Rty  ),
+    .bus_rsp_data    (uart_mmc_data.Data ),
+    .bus_rsp_tga     (uart_mmc_data.Tga  ),
+    .bus_rsp_tgd     (uart_mmc_data.Tgd  ),
+    .bus_rsp_tgc     (uart_mmc_data.Tgc  )
+  );               
   
   waveshare_tft_touch_shield shield (
     .clk (FPGA_CLK1_50),

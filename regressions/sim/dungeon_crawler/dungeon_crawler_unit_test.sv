@@ -45,7 +45,7 @@
 `include "../../../src/rtl/spi/spi.sv"
 `include "../../../src/rtl/spi/spi_arb.sv"
 `include "../../../src/rtl/top.sv"
-`include "../../../src/rtl/uart/uart.sv"
+`include "../../../output/uart_top.v"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486.sv"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486_buffer.sv"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486_clk.sv"
@@ -60,6 +60,7 @@
 `include "../../../verif/rvfi_monitor.sv"
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
+`include "../../../verif/ddr3_monitor.sv"
              
 `include "../../../output/rvfi/riscv_rvfimon.v"
 
@@ -82,6 +83,7 @@ module soc_unit_test;
   wishbone_monitor consolebuff_wb_mon ;
   wishbone_monitor sdcard_wb_mon      ;
   wishbone_monitor debug_wb_mon       ;
+  ddr3_monitor     ddr3_mon;
 
   wire rst_n;
   `CLK_RESET_FIXTURE(20,10)
@@ -137,9 +139,9 @@ module soc_unit_test;
   logic           GPIO_0_04;
   logic           GPIO_0_05; //UART TXD
   logic           GPIO_0_06;
-  logic           GPIO_0_07; //UART CTS
+  logic           GPIO_0_07; //UART RTS
   logic           GPIO_0_08;
-  logic           GPIO_0_09; //UART RTS
+  logic           GPIO_0_09; //UART CTS
   logic           GPIO_0_10;
   logic           GPIO_0_11;
   logic           GPIO_0_12;
@@ -318,9 +320,9 @@ module soc_unit_test;
     .GPIO_0_04,
     .GPIO_0_05, //UART TXD
     .GPIO_0_06,
-    .GPIO_0_07, //UART CTS
+    .GPIO_0_07, //UART RTS
     .GPIO_0_08,
-    .GPIO_0_09, //UART RTS
+    .GPIO_0_09, //UART CTS
     .GPIO_0_10,
     .GPIO_0_11,
     .GPIO_0_12,
@@ -509,6 +511,9 @@ spi_sd_model sd (
   .miso  (MISO)
 );
 
+assign  GPIO_0_03 = '1;
+assign  GPIO_0_09 = '1;
+
 logic uart_state_idle;
 logic uart_state_something;
 logic [3:0] uart_state_timer;
@@ -580,6 +585,7 @@ always
   endcase
   end
 
+
   //===================================
   // Build
   //===================================
@@ -622,6 +628,8 @@ always
     debug_wb_mon               = new();
     debug_wb_mon.name          = "debug_wb_mon";
     debug_wb_mon.verbose       = VERBOSE;
+    ddr3_mon                   = new();
+    ddr3_mon.verbose           = VERBOSE;
   endfunction
 
 
@@ -636,6 +644,7 @@ always
       ddr3_reset();
     join
     rvfi_mon.reset();
+    ddr3_mon.reset();
 
   endtask
 
@@ -708,9 +717,14 @@ always
                           .bus_rsp (de10nano.sdcard_mmc_data));
     debug_wb_mon.monitor(.bus_req (de10nano.mmc_debug_data),
                          .bus_rsp (de10nano.debug_mmc_data));
+    ddr3_mon.monitor(.rvfi_valid             (rvfi_valid),            
+                     .rvfi_insn              (rvfi_insn),             
+                     .rvfi_pc_rdata          (rvfi_pc_rdata),
+                     .ddr3                   (ddr3.ddr3));         
+    `FAIL_IF(ddr3_mon.fail());
     //Comment out if were getting a ROB error, 
     // real first instruction is printed later
-    //`FAIL_UNLESS(errcode == '0);
+    `FAIL_UNLESS(errcode == '0);
     step();
   end
 
@@ -756,7 +770,6 @@ always
   cycleCount = 0;
   $readmemh("../../../../../output/programs/apps/dungeon_crawler/dungeon_crawler.ddr3mem.v", ddr3.ddr3);
 
-  //Blinky will repeat forever
   while(!( cycleCount > cycleCountMax |
            rvfi_mon.endLoop) )
   begin

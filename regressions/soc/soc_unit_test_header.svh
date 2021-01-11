@@ -45,7 +45,7 @@
 `include "../../../src/rtl/spi/spi.sv"
 `include "../../../src/rtl/spi/spi_arb.sv"
 `include "../../../src/rtl/top.sv"
-`include "../../../src/rtl/uart/uart.sv"
+`include "../../../output/uart_top.v"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486.sv"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486_buffer.sv"
 `include "../../../src/rtl/waveshare/ILI9486/ILI9486_clk.sv"
@@ -60,6 +60,7 @@
 `include "../../../verif/rvfi_monitor.sv"
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
+`include "../../../verif/ddr3_monitor.sv"
              
 `include "../../../output/rvfi/riscv_rvfimon.v"
 

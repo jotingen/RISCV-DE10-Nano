@@ -19,7 +19,7 @@ $(unit_tests):
 	          -d SIM \
 						-d RISCV_FORMAL \
 						-c "-L altera_mf_ver -L 220model_ver" \
-						-r "-L altera_mf_ver -L 220model_ver" \
+						-r "-L altera_mf_ver -L 220model_ver -wlfcollapsetime" \
 						-r "-wlf $(patsubst %.sv,%.wlf,$@)" \
 						-o ../../output/regressions/soc/$(patsubst %.sv,%,$@) \
 						-t $@; \

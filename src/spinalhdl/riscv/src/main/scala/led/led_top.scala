@@ -48,7 +48,7 @@ class led_top extends Component {
   busRsp.tgd := busRsp.tgd
   busRsp.tgc := busRsp.tgc
 
-  when( bus.req.cyc && bus.req.stb ) {
+  when( busReq.cyc && busReq.stb ) {
     busRsp.ack := True
     busRsp.err := False
     busRsp.rty := False
@@ -57,14 +57,14 @@ class led_top extends Component {
     busRsp.tgd := busReq.tgd
     busRsp.tgc := busReq.tgc
 
-    switch( bus.req.adr.asBits.resizeLeft( bus.req.adr.getWidth - 2 ) ) {
+    switch( busReq.adr.asBits.resizeLeft( busReq.adr.getWidth - 2 ) ) {
       is( 0 ) {
-        when( bus.req.we ) {
-          when( bus.req.sel( 0 ) ) {
+        when( busReq.we ) {
+          when( busReq.sel( 0 ) ) {
             LED := busReq.data( 7 downto 0 )
           }
         } otherwise {
-          when( bus.req.sel( 0 ) ) {
+          when( busReq.sel( 0 ) ) {
             busRsp.data( 7 downto 0 ) := LED
           }
         }

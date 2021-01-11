@@ -16,6 +16,7 @@ wishbone_monitor displaybuff_wb_mon ;
 wishbone_monitor consolebuff_wb_mon ;
 wishbone_monitor sdcard_wb_mon      ;
 wishbone_monitor debug_wb_mon       ;
+ddr3_monitor     ddr3_mon;
 
 wire rst_n;
 `CLK_RESET_FIXTURE(20,10)
@@ -71,9 +72,9 @@ logic           GPIO_0_03; //UART RXD
 logic           GPIO_0_04;
 logic           GPIO_0_05; //UART TXD
 logic           GPIO_0_06;
-logic           GPIO_0_07; //UART CTS
+logic           GPIO_0_07; //UART RTS
 logic           GPIO_0_08;
-logic           GPIO_0_09; //UART RTS
+logic           GPIO_0_09; //UART CTS
 logic           GPIO_0_10;
 logic           GPIO_0_11;
 logic           GPIO_0_12;
@@ -253,9 +254,9 @@ top de10nano(
   .GPIO_0_04,
   .GPIO_0_05, //UART TXD
   .GPIO_0_06,
-  .GPIO_0_07, //UART CTS
+  .GPIO_0_07, //UART RTS
   .GPIO_0_08,
-  .GPIO_0_09, //UART RTS
+  .GPIO_0_09, //UART CTS
   .GPIO_0_10,
   .GPIO_0_11,
   .GPIO_0_12,
@@ -444,6 +445,9 @@ riscv_rvfimon monitor (
   .errcode
 );
 
+assign  GPIO_0_03 = '1;
+assign  GPIO_0_09 = '1;
+
 logic uart_state_idle;
 logic uart_state_something;
 logic [3:0] uart_state_timer;
@@ -557,6 +561,8 @@ always
     debug_wb_mon               = new();
     debug_wb_mon.name          = "debug_wb_mon";
     debug_wb_mon.verbose       = VERBOSE;
+    ddr3_mon                   = new();
+    ddr3_mon.verbose           = VERBOSE;
   endfunction
 
 
@@ -571,6 +577,7 @@ always
       ddr3_reset();
     join
     rvfi_mon.reset();
+    ddr3_mon.reset();
 
   endtask
 
@@ -644,7 +651,14 @@ always
                           .bus_rsp (de10nano.sdcard_mmc_data));
     debug_wb_mon.monitor(.bus_req (de10nano.mmc_debug_data),
                          .bus_rsp (de10nano.debug_mmc_data));
-    //`FAIL_UNLESS(errcode == '0);
+    ddr3_mon.monitor(.rvfi_valid             (rvfi_valid),            
+                     .rvfi_insn              (rvfi_insn),             
+                     .rvfi_pc_rdata          (rvfi_pc_rdata),
+                     .ddr3                   (ddr3.ddr3));         
+    `FAIL_IF(ddr3_mon.fail());
+    //Comment out if were getting a ROB error, 
+    // real first instruction is printed later
+    `FAIL_UNLESS(errcode == '0);
     step();
   end
 
