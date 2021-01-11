@@ -19,7 +19,7 @@ case class riscv_config(
 class riscv_top extends Component {
   val config = riscv_config(
     bufferSize        = 8,
-    branchPredSize    = 64,
+    branchPredSize    = 16,
     oneShotInst       = false,
     outOfOrder        = false,
     busWishBoneConfig = WishBoneConfig(

@@ -235,359 +235,356 @@ class riscv_ibp( config: riscv_config ) extends Component {
 
   } otherwise {
 
-    switch(
-      adrUnaligned ##
-        adrM2Hit ##
-        adrM2Compressed ##
-        adrM2Taken ##
-        adrHit ##
-        adrCompressed ##
-        adrTaken ##
-        adrP2Hit ##
-        adrP2Compressed ##
-        adrP2Taken
-    ) {
-      is( M"00--0--0--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
+    //Should not get hit, make 0 to find faster
+    adrNext := 0 //adrP4
+    sel := 0     //B"4'b1111"
+    lruAccess := 0
 
-      is( M"00--0--10-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"00--0--110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := adrAccess
-      }
-      is( M"00--0--111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
+    val caseSel = Bits( 10 bits )
+    caseSel := adrUnaligned ##
+      adrM2Hit ##
+      adrM2Compressed ##
+      adrM2Taken ##
+      adrHit ##
+      adrCompressed ##
+      adrTaken ##
+      adrP2Hit ##
+      adrP2Compressed ##
+      adrP2Taken
 
-      is( M"00--100---" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"00--101---" ) {
-        adrNext := adrPred
-        sel := B"4'b1111"
-        lruAccess := adrAccess
-      }
-      is( M"00--1100--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"00--11010-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"00--110110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"00--110111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
-      is( M"00--111---" ) {
-        adrNext := adrPred
-        sel := B"4'b1100"
-        lruAccess := adrAccess
-      }
+    when( caseSel === M"00--0--0--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
 
-      is( M"01000--0--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"01000--10-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"01000--110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"01000--111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
-      is( M"01010-----" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b1100"
-        lruAccess := adrM2Access
-      }
-      is( M"011-0--0--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-0--10-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-0--110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-0--111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
+    when( caseSel === M"00--0--10-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"00--0--110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := adrAccess
+    }
+    when( caseSel === M"00--0--111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
 
-      is( M"01001000--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"010010010-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"0100100110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"0100100111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
-      is( M"0101100---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b1100"
-        lruAccess := adrM2Access
-      }
-      is( M"011-1000--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-10010-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-100110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-100111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
+    when( caseSel === M"00--100---" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"00--101---" ) {
+      adrNext := adrPred
+      sel := B"4'b1111"
+      lruAccess := adrAccess
+    }
+    when( caseSel === M"00--1100--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"00--11010-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"00--110110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"00--110111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
+    when( caseSel === M"00--111---" ) {
+      adrNext := adrPred
+      sel := B"4'b1100"
+      lruAccess := adrAccess
+    }
 
-      is( M"0100101---" ) {
-        adrNext := adrPred
-        sel := B"4'b1111"
-        lruAccess := adrAccess
-      }
-      is( M"0101101---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b1100"
-        lruAccess := adrM2Access
-      }
-      is( M"011-101---" ) {
-        adrNext := adrPred
-        sel := B"4'b1111"
-        lruAccess := adrAccess
-      }
+    when( caseSel === M"01000--0--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"01000--10-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"01000--110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"01000--111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
+    when( caseSel === M"01010-----" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b1100"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"011-0--0--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-0--10-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-0--110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-0--111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
 
-      is( M"01001100--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"010011010-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"0100110110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"0100110111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
-      is( M"0101110---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b1100"
-        lruAccess := adrM2Access
-      }
-      is( M"011-1100--" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-11010-" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-110110" ) {
-        adrNext := adrP4
-        sel := B"4'b1111"
-        lruAccess := 0
-      }
-      is( M"011-110111" ) {
-        adrNext := adrP2Pred
-        sel := B"4'b1111"
-        lruAccess := adrP2Access
-      }
+    when( caseSel === M"01001000--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"010010010-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"0100100110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"0100100111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
+    when( caseSel === M"0101100---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b1100"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"011-1000--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-10010-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-100110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-100111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
 
-      is( M"0100111---" ) {
-        adrNext := adrPred
-        sel := B"4'b1100"
-        lruAccess := adrAccess
-      }
-      is( M"0101111---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b1100"
-        lruAccess := adrM2Access
-      }
-      is( M"011-111---" ) {
-        adrNext := adrPred
-        sel := B"4'b1100"
-        lruAccess := adrAccess
-      }
+    when( caseSel === M"0100101---" ) {
+      adrNext := adrPred
+      sel := B"4'b1111"
+      lruAccess := adrAccess
+    }
+    when( caseSel === M"0101101---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b1100"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"011-101---" ) {
+      adrNext := adrPred
+      sel := B"4'b1111"
+      lruAccess := adrAccess
+    }
 
-      is( M"10--0-----" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
+    when( caseSel === M"01001100--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"010011010-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"0100110110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"0100110111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
+    when( caseSel === M"0101110---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b1100"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"011-1100--" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-11010-" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-110110" ) {
+      adrNext := adrP4
+      sel := B"4'b1111"
+      lruAccess := 0
+    }
+    when( caseSel === M"011-110111" ) {
+      adrNext := adrP2Pred
+      sel := B"4'b1111"
+      lruAccess := adrP2Access
+    }
 
-      is( M"10--100---" ) {
-        adrNext := adr + 1
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"10--101---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"10--110---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"10--111---" ) {
-        adrNext := adrPred
-        sel := B"4'b0011"
-        lruAccess := adrAccess
-      }
+    when( caseSel === M"0100111---" ) {
+      adrNext := adrPred
+      sel := B"4'b1100"
+      lruAccess := adrAccess
+    }
+    when( caseSel === M"0101111---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b1100"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"011-111---" ) {
+      adrNext := adrPred
+      sel := B"4'b1100"
+      lruAccess := adrAccess
+    }
 
-      is( M"11000-----" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"11010-----" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b0011"
-        lruAccess := adrM2Access
-      }
-      is( M"111-0-----" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
+    when( caseSel === M"10--0-----" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
 
-      is( M"1100100---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"1101100---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"111-100---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
+    when( caseSel === M"10--100---" ) {
+      adrNext := adr + 1
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"10--101---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"10--110---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"10--111---" ) {
+      adrNext := adrPred
+      sel := B"4'b0011"
+      lruAccess := adrAccess
+    }
 
-      is( M"1100101---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"1101101---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b0011"
-        lruAccess := adrM2Access
-      }
-      is( M"111-101---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
+    when( caseSel === M"11000-----" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"11010-----" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b0011"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"111-0-----" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
 
-      is( M"1100110---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"1101110---" ) {
-        adrNext := adrM2Pred
-        sel := B"4'b0011"
-        lruAccess := adrM2Access
-      }
-      is( M"111-110---" ) {
-        adrNext := adrP2
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
+    when( caseSel === M"1100100---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"1101100---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"111-100---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
 
-      is( M"1100111---" ) {
-        adrNext := adrPred
-        sel := B"4'b0011"
-        lruAccess := adrAccess
-      }
-      is( M"1101111---" ) {
-        adrNext := adrP2 //Wierd case
-        sel := B"4'b0011"
-        lruAccess := 0
-      }
-      is( M"111-111---" ) {
-        adrNext := adrPred
-        sel := B"4'b0011"
-        lruAccess := adrAccess
-      }
+    when( caseSel === M"1100101---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"1101101---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b0011"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"111-101---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
 
-      //Should not get hit, make 0 to find faster
-      default {
-        adrNext := 0 //adrP4
-        sel := 0     //B"4'b1111"
-        lruAccess := 0
-      }
+    when( caseSel === M"1100110---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"1101110---" ) {
+      adrNext := adrM2Pred
+      sel := B"4'b0011"
+      lruAccess := adrM2Access
+    }
+    when( caseSel === M"111-110---" ) {
+      adrNext := adrP2
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+
+    when( caseSel === M"1100111---" ) {
+      adrNext := adrPred
+      sel := B"4'b0011"
+      lruAccess := adrAccess
+    }
+    when( caseSel === M"1101111---" ) {
+      adrNext := adrP2 //Weird case
+      sel := B"4'b0011"
+      lruAccess := 0
+    }
+    when( caseSel === M"111-111---" ) {
+      adrNext := adrPred
+      sel := B"4'b0011"
+      lruAccess := adrAccess
     }
 
     //Update prediction
