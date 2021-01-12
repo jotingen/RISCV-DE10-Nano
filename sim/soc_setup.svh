@@ -207,6 +207,9 @@ logic [5:0][63:0] rvfi_csr_minstret_wdata;
 
 logic [15:0]      errcode;
 
+int unsigned cycleCount;
+int unsigned cycleCountMax;
+
 assign rvfi_mem_extamo = '0;
 
 //===================================
@@ -460,7 +463,7 @@ initial
   end
 always
   begin
-  #120
+  #240
   uart_state_idle <=        '0;
   uart_state_something  <=  '0;
   uart_state_timer  <=            uart_state_timer;             

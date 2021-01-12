@@ -1,7 +1,7 @@
-`include "soc_unit_test_header.svh"
+`include "../../soc_header.svh"
 
 module soc_unit_test;
-  `include "soc_unit_test_setup.svh"
+  `include "../../soc_setup.svh"
 
   defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/00_led123.32.hex";
 
@@ -19,13 +19,13 @@ module soc_unit_test;
   //   `SVTEST_END
   //===================================
 
-  int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(SOC_00_LED123)
+  cycleCountMax = 10000;
   cycleCount = 0;
 
-  while(!( cycleCount > 10000 |
+  while(!( cycleCount > cycleCountMax |
            rvfi_mon.endLoop) )
   begin
     cycleCount++;

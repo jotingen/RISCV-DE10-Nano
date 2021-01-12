@@ -1,9 +1,9 @@
-`include "soc_unit_test_header.svh"
+`include "../../soc_header.svh"
 
 module soc_unit_test;
-  `include "soc_unit_test_setup.svh"
+  `include "../../soc_setup.svh"
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/01_debug.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/02_debug_sweep.32.hex";
 
   //===================================
   // All tests are defined between the
@@ -19,26 +19,27 @@ module soc_unit_test;
   //   `SVTEST_END
   //===================================
 
-  int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
-  `SVTEST(SOC_01_DEBUG)
+  `SVTEST(SOC_02_DEBUG_SWEEP)
+  cycleCountMax = 1000000;
   cycleCount = 0;
 
-  while(!( cycleCount > 1000000 |
+  while(!( cycleCount > cycleCountMax |
            rvfi_mon.endLoop) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 1000000);
+  `FAIL_IF(cycleCount >= cycleCountMax);
   $display("End Loop Detected");
 
   `FAIL_UNLESS(led_mon.q_LED[0] === 'd0)
   $display("LED Pattern Detected");
 
   `SVTEST_END                        
+
 
   `SVUNIT_TESTS_END
 

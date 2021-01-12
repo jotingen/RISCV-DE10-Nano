@@ -1,7 +1,7 @@
-`include "soc_unit_test_header.svh"
+`include "../../soc_header.svh"
 
 module soc_unit_test;
-  `include "soc_unit_test_setup.svh"
+  `include "../../soc_setup.svh"
 
   defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/03_sdcard.32.hex";
 
@@ -19,21 +19,21 @@ module soc_unit_test;
   //   `SVTEST_END
   //===================================
 
-  int cycleCount;
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(SOC_03_SDCARD)
+  cycleCountMax = 2000000;
   cycleCount = 0;
   $readmemh("../../../../verif/sdcard.txt", sd.flash_mem);
 
-  while(!( cycleCount > 2000000 |
+  while(!( cycleCount > cycleCountMax |
            rvfi_mon.endLoop) )
   begin
     cycleCount++;
     step();
   end
 
-  `FAIL_IF(cycleCount >= 2000000);
+  `FAIL_IF(cycleCount >= cycleCountMax);
   $display("End Loop Detected");
 
   for(int i = 0; i < 127; i++)

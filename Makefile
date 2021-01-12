@@ -2,12 +2,12 @@
 .PHONY: all
 all:    build
 	make -C programs
-	make -C regressions
+	make -C sim/regression
 
 .PHONY: clean
 clean: 
 	make -C programs clean
-	make -C regressions clean
+	make -C sim/regression clean
 
 .PHONY: build
 build: rvfimon riscv

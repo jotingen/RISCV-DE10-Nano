@@ -46,3 +46,6 @@ vsim_stacktrace.vstf
 *.orig
 
 src/spinalhdl/target
+
+#Excel
+~$*
