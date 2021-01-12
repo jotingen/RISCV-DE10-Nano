@@ -425,6 +425,8 @@ logic         ddr3_avl_write_req;              //             .write
 logic [8:0]   ddr3_avl_size;                   //             .burstcount
 `endif
 
+logic [31:0] IRQ;
+
 logic arst;
 logic arst_1;
 logic arst_2;
@@ -457,6 +459,7 @@ assign HDMI_TX_VS  = '0;
 
 //SpinalHDL version
 riscv_top riscv (
+  .IRQ                 (IRQ),
   .busInst_req_cyc     (riscv_mmc_inst.Cyc  ),
   .busInst_req_stb     (riscv_mmc_inst.Stb  ),
   .busInst_req_we      (riscv_mmc_inst.We   ),
@@ -880,6 +883,8 @@ riscv_top riscv (
     .clk         (clk),
     .reset       (rst),
   
+    .IRQ         (IRQ[0]),
+
     .GND (GPIO_0_01),
     .TXD (GPIO_0_05),
     .RXD (GPIO_0_03),

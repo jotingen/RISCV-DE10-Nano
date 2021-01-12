@@ -57,10 +57,13 @@
 `include "../../../verif/spi_sd_model/spi_sd_model.v"
 `include "../../../verif/ddr3/ddr3_model.sv"
              
+`include "../../../verif/uart_driver.sv"
+
 `include "../../../verif/rvfi_monitor.sv"
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
 `include "../../../verif/ddr3_monitor.sv"
+`include "../../../verif/uart_monitor.sv"
              
 `include "../../../output/rvfi/riscv_rvfimon.v"
 

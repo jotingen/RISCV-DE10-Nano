@@ -8,6 +8,7 @@ object RiscvState extends SpinalEnum {
 }
 
 class riscv_fsm( config: riscv_config ) extends Component {
+  val IRQ = in( Bits( 32 bits ) )
   val misfetch = in( Bool )
   val misfetchAdr = in( UInt( 32 bits ) )
   val flush = out( Bool )

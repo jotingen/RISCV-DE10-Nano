@@ -67,6 +67,17 @@ case class UartBuff() extends Bundle {
 
   def Full(): Bool = buffer( wrNdx ).Vld
 
+  def Count(): UInt = {
+    var count = UInt( 32 bits );
+    count := 0
+    for (entry <- buffer) {
+      when( entry.Vld ) {
+        count \= count + 1
+      }
+    }
+    return count
+  }
+
 }
 
 class uart_top extends Component {
@@ -89,6 +100,8 @@ class uart_top extends Component {
   val RXD = in( Bool )
   val CTS = in( Bool )
   val RTS = out( Bool )
+
+  val IRQ = out( Bool )
 
   val bus = slave( WishBone( config.busWishBoneConfig ) )
 
@@ -114,6 +127,9 @@ class uart_top extends Component {
 
   //Send stall if the TX buffer is filled
   busStall := txBuf.Full()
+
+  //Set IRQ if RX buffer is not empty
+  IRQ := ~rxBuf.Empty()
 
   busRsp.ack := False
   busRsp.err := False
@@ -141,7 +157,7 @@ class uart_top extends Component {
         } otherwise {
           when( ~rxBuf.Empty() ) {
             when( busReq.sel( 0 ) ) {
-              busReq.data( 7 downto 0 ) := rxBuf.Pull()
+              busRsp.data( 7 downto 0 ) := rxBuf.Pull()
             }
           }
         }
@@ -172,6 +188,24 @@ class uart_top extends Component {
           }
           when( busReq.sel( 0 ) ) {
             busRsp.data( 7 downto 0 ) := baudRate( 7 downto 0 )
+          }
+        }
+      }
+      is( 2 ) {
+        when( busReq.we ) {} otherwise {
+          val rxBufCount = UInt( 32 bits )
+          rxBufCount := rxBuf.Count()
+          when( busReq.sel( 3 ) ) {
+            busRsp.data( 31 downto 24 ) := B( rxBufCount( 31 downto 24 ) )
+          }
+          when( busReq.sel( 2 ) ) {
+            busRsp.data( 23 downto 16 ) := B( rxBufCount( 23 downto 16 ) )
+          }
+          when( busReq.sel( 1 ) ) {
+            busRsp.data( 15 downto 8 ) := B( rxBufCount( 15 downto 8 ) )
+          }
+          when( busReq.sel( 0 ) ) {
+            busRsp.data( 7 downto 0 ) := B( rxBufCount( 7 downto 0 ) )
           }
         }
       }
@@ -211,63 +245,81 @@ class uart_top extends Component {
       }
     }
     is( sRxD0 ) {
-      rxData( 0 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 0 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD1
       }
     }
     is( sRxD1 ) {
-      rxData( 1 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 1 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD2
       }
     }
     is( sRxD2 ) {
-      rxData( 2 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 2 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD3
       }
     }
     is( sRxD3 ) {
-      rxData( 3 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 3 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD4
       }
     }
     is( sRxD4 ) {
-      rxData( 4 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 4 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD5
       }
     }
     is( sRxD5 ) {
-      rxData( 5 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 5 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD6
       }
     }
     is( sRxD6 ) {
-      rxData( 6 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 6 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxD7
       }
     }
     is( sRxD7 ) {
-      rxData( 7 ) := RXD
+      when( B( rxCounter ) === 1 ) {
+        rxData( 7 ) := RXD
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxP0
       }
     }
     is( sRxP0 ) {
-      rxBuf.Push( rxData )
+      when( B( rxCounter ) === 1 ) {
+        rxBuf.Push( rxData )
+      }
       when( B( rxCounter ) === baudRate ) {
         rxCounter := 0
         rxState := sRxStop

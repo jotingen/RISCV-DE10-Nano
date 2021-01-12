@@ -43,6 +43,8 @@ class riscv_top extends Component {
   val busInst = master( WishBone( config.busWishBoneConfig ) )
   val busData = master( WishBone( config.busWishBoneConfig ) )
 
+  val IRQ = in( Bits( 32 bits ) )
+
   val rvfi = out( Vec( RvfiMon(), 6 ) )
 
   val fsm = new riscv_fsm( config )
@@ -58,6 +60,7 @@ class riscv_top extends Component {
 
   val csrData = WishBone( config.csrWishBoneConfig )
 
+  fsm.IRQ <> IRQ
   fsm.misfetch <> exu.misfetch
   fsm.misfetchAdr <> exu.misfetchAdr
 

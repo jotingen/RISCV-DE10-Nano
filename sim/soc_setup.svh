@@ -17,6 +17,9 @@ wishbone_monitor consolebuff_wb_mon ;
 wishbone_monitor sdcard_wb_mon      ;
 wishbone_monitor debug_wb_mon       ;
 ddr3_monitor     ddr3_mon;
+uart_monitor     uart_mon;
+
+uart_driver      uart_dvr;
 
 wire rst_n;
 `CLK_RESET_FIXTURE(20,10)
@@ -448,79 +451,79 @@ riscv_rvfimon monitor (
   .errcode
 );
 
-assign  GPIO_0_03 = '1;
-assign  GPIO_0_09 = '1;
-
-logic uart_state_idle;
-logic uart_state_something;
-logic [3:0] uart_state_timer;
-logic [11:0] uart_buffer;
-initial
-  begin
-  uart_state_idle = '1;
-  uart_state_something  = '0;
-  uart_state_timer  = '0;
-  end
-always
-  begin
-  #240
-  uart_state_idle <=        '0;
-  uart_state_something  <=  '0;
-  uart_state_timer  <=            uart_state_timer;             
-  uart_buffer <= {uart_buffer[10:0],GPIO_0_05};
-  case('1)
-    uart_state_idle: begin
-                     if(GPIO_0_05 == '0)
-                       begin
-                       //$write(GPIO_0_05);
-                       uart_state_something <= '1;
-                       end 
-                     else
-                       begin
-                       uart_state_idle <= '1;
-                       end 
-                     end
-    uart_state_something: begin
-                     //$write(GPIO_0_05);
-                     if(uart_state_timer == 'd10)
-                       begin
-                       //$display("");
-                       //$display("%b",{uart_buffer[10:0],GPIO_0_05});
-                       //$display("%h",{uart_buffer[2],
-                       //               uart_buffer[3],
-                       //               uart_buffer[4],
-                       //               uart_buffer[5],
-                       //               uart_buffer[6],
-                       //               uart_buffer[7],
-                       //               uart_buffer[8],
-                       //               uart_buffer[9]});
-                       //$display("%c",{uart_buffer[2],
-                       //               uart_buffer[3],
-                       //               uart_buffer[4],
-                       //               uart_buffer[5],
-                       //               uart_buffer[6],
-                       //               uart_buffer[7],
-                       //               uart_buffer[8],
-                       //               uart_buffer[9]});
-                       $write("%c",{uart_buffer[2],
-                                    uart_buffer[3],
-                                    uart_buffer[4],
-                                    uart_buffer[5],
-                                    uart_buffer[6],
-                                    uart_buffer[7],
-                                    uart_buffer[8],
-                                    uart_buffer[9]});
-                       uart_state_timer <= '0;
-                       uart_state_idle <= '1;
-                       end 
-                     else
-                       begin
-                       uart_state_timer <= uart_state_timer + 1;
-                       uart_state_something <= '1;
-                       end 
-                     end
-  endcase
-  end
+//assign  GPIO_0_03 = '1;
+//assign  GPIO_0_09 = '1;
+//
+//logic uart_state_idle;
+//logic uart_state_something;
+//logic [3:0] uart_state_timer;
+//logic [11:0] uart_buffer;
+//initial
+//  begin
+//  uart_state_idle = '1;
+//  uart_state_something  = '0;
+//  uart_state_timer  = '0;
+//  end
+//always
+//  begin
+//  #240
+//  uart_state_idle <=        '0;
+//  uart_state_something  <=  '0;
+//  uart_state_timer  <=            uart_state_timer;             
+//  uart_buffer <= {uart_buffer[10:0],GPIO_0_05};
+//  case('1)
+//    uart_state_idle: begin
+//                     if(GPIO_0_05 == '0)
+//                       begin
+//                       //$write(GPIO_0_05);
+//                       uart_state_something <= '1;
+//                       end 
+//                     else
+//                       begin
+//                       uart_state_idle <= '1;
+//                       end 
+//                     end
+//    uart_state_something: begin
+//                     //$write(GPIO_0_05);
+//                     if(uart_state_timer == 'd10)
+//                       begin
+//                       //$display("");
+//                       //$display("%b",{uart_buffer[10:0],GPIO_0_05});
+//                       //$display("%h",{uart_buffer[2],
+//                       //               uart_buffer[3],
+//                       //               uart_buffer[4],
+//                       //               uart_buffer[5],
+//                       //               uart_buffer[6],
+//                       //               uart_buffer[7],
+//                       //               uart_buffer[8],
+//                       //               uart_buffer[9]});
+//                       //$display("%c",{uart_buffer[2],
+//                       //               uart_buffer[3],
+//                       //               uart_buffer[4],
+//                       //               uart_buffer[5],
+//                       //               uart_buffer[6],
+//                       //               uart_buffer[7],
+//                       //               uart_buffer[8],
+//                       //               uart_buffer[9]});
+//                       $write("%c",{uart_buffer[2],
+//                                    uart_buffer[3],
+//                                    uart_buffer[4],
+//                                    uart_buffer[5],
+//                                    uart_buffer[6],
+//                                    uart_buffer[7],
+//                                    uart_buffer[8],
+//                                    uart_buffer[9]});
+//                       uart_state_timer <= '0;
+//                       uart_state_idle <= '1;
+//                       end 
+//                     else
+//                       begin
+//                       uart_state_timer <= uart_state_timer + 1;
+//                       uart_state_something <= '1;
+//                       end 
+//                     end
+//  endcase
+//  end
 
   //===================================
   // Build
@@ -566,6 +569,10 @@ always
     debug_wb_mon.verbose       = VERBOSE;
     ddr3_mon                   = new();
     ddr3_mon.verbose           = VERBOSE;
+    uart_mon                   = new();
+    uart_mon.verbose           = VERBOSE;
+    uart_dvr                   = new();
+    uart_dvr.verbose           = VERBOSE;
   endfunction
 
 
@@ -581,6 +588,8 @@ always
     join
     rvfi_mon.reset();
     ddr3_mon.reset();
+    uart_mon.reset();
+    uart_dvr.reset();
 
   endtask
 
@@ -658,6 +667,10 @@ always
                      .rvfi_insn              (rvfi_insn),             
                      .rvfi_pc_rdata          (rvfi_pc_rdata),
                      .ddr3                   (ddr3.ddr3));         
+    uart_mon.monitor(.RTS (GPIO_0_07),
+                     .TXD (GPIO_0_05));
+    uart_dvr.drive(.CTS (GPIO_0_09),
+                   .RXD (GPIO_0_03));
     `FAIL_IF(ddr3_mon.fail());
     //Comment out if were getting a ROB error, 
     // real first instruction is printed later
