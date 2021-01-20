@@ -441,6 +441,8 @@ always @(posedge clk)
   rst    <= arst_3;
   end  
 
+//IRQ tmp
+assign IRQ[31:1] = '0;
   
 //PLL pll (
 //  .inclk0 (FPGA_CLK1_50),

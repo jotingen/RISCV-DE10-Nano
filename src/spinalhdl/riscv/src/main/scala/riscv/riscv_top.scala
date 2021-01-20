@@ -60,12 +60,16 @@ class riscv_top extends Component {
 
   val csrData = WishBone( config.csrWishBoneConfig )
 
+  fsm.idle <> idle
+  fsm.exuCntl <> exu.cntl
   fsm.IRQ <> IRQ
-  fsm.misfetch <> exu.misfetch
-  fsm.misfetchAdr <> exu.misfetchAdr
+  fsm.mstatus <> csr.mstatusReg.mstatus
+  fsm.mie <> csr.mieReg.mie
+  fsm.mip <> csr.mipReg.mip
+  fsm.mtvec <> csr.mtvecReg.mtvec
+  fsm.mepc <> csr.mepcReg.mepc
 
-  ifu.flush <> fsm.flush
-  ifu.flushAdr <> fsm.flushAdr
+  ifu.fsmCntl <> fsm.cntl
   ifu.misfetch <> exu.misfetch
   ifu.misfetchPC <> exu.misfetchPC
   ifu.misfetchAdr <> exu.misfetchAdr
@@ -77,16 +81,18 @@ class riscv_top extends Component {
   ifu.busInst <> busInst
   ifu.idle <> idle
 
-  idu.flush <> fsm.flush
+  idu.fsmCntl <> fsm.cntl
   idu.freeze <> exu.freeze
   idu.inst <> ifu.inst
 
-  exu.flush <> fsm.flush
+  exu.fsmCntl <> fsm.cntl
   exu.instDecoded <> idu.instDecoded
   exu.busData <> busData
   exu.csrData <> csrData
   exu.rvfi <> rvfi
+  exu.mepc <> csr.mepcReg.mepc
 
+  csr.fsmCntl <> fsm.cntl
   csr.csrData <> csrData
   csr.retired <> exu.retired
   csr.brTaken <> exu.brTaken

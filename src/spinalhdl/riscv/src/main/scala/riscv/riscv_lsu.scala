@@ -324,7 +324,7 @@ class riscv_lsu( config: riscv_config ) extends Component {
   rvfi.insn := inst.Data
   rvfi.trap := False
   rvfi.halt := False
-  rvfi.intr := False
+  rvfi.intr := inst.Interrupt
   rvfi.mode := 0
   rvfi.rs1_addr := inst.Rs1
   when(

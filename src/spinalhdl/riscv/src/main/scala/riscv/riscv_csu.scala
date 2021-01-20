@@ -92,30 +92,45 @@ class riscv_csu( config: riscv_config ) extends Component {
         csrDataReq.cyc := True
         csrDataReq.stb := True
 
+        csrDataReq.we  := False
         csrDataReq.adr := U(inst.CSR)
 
         switch( inst.Op ) {
           is( InstOp.CSRRW ) {
+            csrDataReq.we := True
             csrDataReq.data := rs1Data
             csrDataReq.sel := B"hFFFFFFFF"
           }
           is( InstOp.CSRRS ) {
+            when( rs1Data =/= 0 ) {
+              csrDataReq.we := True
+            }
             csrDataReq.data := B"hFFFFFFFF"
             csrDataReq.sel := rs1Data
           }
           is( InstOp.CSRRC ) {
+            when( rs1Data =/= 0 ) {
+              csrDataReq.we := True
+            }
             csrDataReq.data := B"h00000000"
             csrDataReq.sel := rs1Data
           }
           is( InstOp.CSRRWI ) {
+            csrDataReq.we := True
             csrDataReq.data := B"hFFFFFFFF"
             csrDataReq.sel := B( U(inst.Rs1, 32 bits) )
           }                                            
           is( InstOp.CSRRSI ) {                        
+            when( rs1Data =/= 0 ) {
+              csrDataReq.we := True
+            }
             csrDataReq.data := B"hFFFFFFFF"            
             csrDataReq.sel := B( U(inst.Rs1, 32 bits) )
           }                                            
           is( InstOp.CSRRCI ) {                        
+            when( rs1Data =/= 0 ) {
+              csrDataReq.we := True
+            }
             csrDataReq.data := B"h00000000"            
             csrDataReq.sel := B( U(inst.Rs1, 32 bits) )
           }
@@ -175,7 +190,7 @@ class riscv_csu( config: riscv_config ) extends Component {
   rvfi.insn := inst.Data
   rvfi.trap := False
   rvfi.halt := False
-  rvfi.intr := False
+  rvfi.intr := inst.Interrupt
   rvfi.mode := 0
   rvfi.rs1_addr := inst.Rs1
   rvfi.rs2_addr := inst.Rs2

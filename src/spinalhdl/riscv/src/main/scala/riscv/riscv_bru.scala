@@ -9,6 +9,7 @@ import spinal.lib._
 class riscv_bru extends Component {
   val capture = in( Bool )
   val instDecoded = in( InstDecoded() )
+  val mepc = in( MEPC() )
   val x = in( Vec( Bits( 32 bits ), 32 ) )
   val busy = out( Bool )
   val rs1 = out( UInt( 5 bits ) )
@@ -22,6 +23,7 @@ class riscv_bru extends Component {
   val taken = out( Bool )
   val nottaken = out( Bool )
   val compressed = out( Bool )
+  val interruptReturn = out( Bool )
   val PC = out( UInt( 32 bits ) )
   val PCNext = out( UInt( 32 bits ) )
 
@@ -50,6 +52,7 @@ class riscv_bru extends Component {
   taken := False
   nottaken := False
   compressed := False
+  interruptReturn := False
   switch( inst.Op ) {
     is( InstOp.JAL ) {
       wr := True
@@ -193,6 +196,13 @@ class riscv_bru extends Component {
       }
       compressed := True
     }
+    is( InstOp.MRET ) {
+      taken := True
+      interruptReturn := True
+      PCNext := mepc.PC.asUInt
+      PCNext.allowOverride
+      PCNext( 0 ) := False
+    }
     default {
       taken := True
       PCNext := U( inst.Immed )
@@ -220,7 +230,7 @@ class riscv_bru extends Component {
   rvfi.insn := inst.Data
   rvfi.trap := False
   rvfi.halt := False
-  rvfi.intr := False
+  rvfi.intr := inst.Interrupt
   rvfi.mode := 0
   rvfi.rs1_addr := inst.Rs1
   rvfi.rs2_addr := inst.Rs2

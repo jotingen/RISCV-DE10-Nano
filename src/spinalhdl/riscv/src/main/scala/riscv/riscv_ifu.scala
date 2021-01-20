@@ -7,6 +7,7 @@ import spinal.lib._
 
 case class Inst() extends Bundle {
   val Vld = Bool
+  val Interrupt = Bool
   val Adr = UInt( 32 bits )
   val AdrNext = UInt( 32 bits )
   val Data = Bits( 32 bits )
@@ -79,6 +80,7 @@ case class InstBuff( config: riscv_config ) extends Bundle {
   def Pull(): Inst = {
     val inst = Inst()
     inst.Vld := buffer( rdNdx ).DataVld
+    inst.Interrupt := False
     inst.Adr := buffer( rdNdx ).Adr
     inst.Data( 15 downto 0 ) := buffer( rdNdx ).Data
     //Normal instruction
@@ -122,8 +124,7 @@ case class InstBuff( config: riscv_config ) extends Bundle {
 
 //Hardware definition
 class riscv_ifu( config: riscv_config ) extends Component {
-  val flush = in( Bool )
-  val flushAdr = in( UInt( 32 bits ) )
+  val fsmCntl = in( FSMCntl() )
   val misfetch = in( Bool )
   val misfetchPC = in( UInt( 32 bits ) )
   val misfetchAdr = in( UInt( 32 bits ) )
@@ -150,7 +151,7 @@ class riscv_ifu( config: riscv_config ) extends Component {
   busInstReq.tgc init ( 0)
 
   val token = Reg( UInt( 4 bits ) )
-  token init ( 0)
+  token init ( 1)
 
   val PC = Reg( UInt( 32 bits ) )
   PC init ( 0)
@@ -171,13 +172,20 @@ class riscv_ifu( config: riscv_config ) extends Component {
   val bufEmpty = Bool
   bufEmpty := buf.Empty()
 
+  //Toggle on when flushing for interrupt
+  val interrupt = Reg( Bool )
+  interrupt init ( False)
+
   busInstReq.cyc := False
   busInstReq.stb := False
   //If were flushing, set up PC and clear buffer
-  when( flush ) {
+  when( fsmCntl.flush ) {
     buf.Clear()
     token := token + 1
-    PC := flushAdr
+    PC := fsmCntl.flushPC
+    when( fsmCntl.flushIntr ) {
+      interrupt := True
+    }
   } otherwise {
     //If we get a stall, hold same command
     when( busInst.stall ) {
@@ -209,28 +217,48 @@ class riscv_ifu( config: riscv_config ) extends Component {
     }
   }
 
-  when( busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~flush ) {
+  when(
+    busInst.rsp.ack && ( U( busInst.rsp.tgc ) === token) && ~fsmCntl.flush
+  ) {
     //Convert incoming little endian data to big endian to work with
     buf.PushData( EndiannessSwap( busInst.rsp.data ) )
   }
+
+  val interruptedSent = Reg( Bool )
+  interruptedSent init ( False)
+  interruptedSent := interruptedSent
 
   //If were frozen, do nothing
   when( freeze ) {
     inst := inst
     //If were flushing, clear stage
-  } elsewhen ( flush) {
+  } elsewhen ( fsmCntl.flush) {
+    inst.Vld := False
+    //If were halted, clear and do nothing
+  } elsewhen ( fsmCntl.halt) {
     inst.Vld := False
     //Else just take from buffer
   } otherwise {
+    interruptedSent := False
     when( ~buf.Empty() ) {
       if (config.oneShotInst) {
         when( ~idle ) {
           inst.Vld := False
         } otherwise {
           inst := buf.Pull()
+          when( interrupt ) {
+            inst.Interrupt := True
+            interruptedSent := True
+          }
+          interrupt := False
         }
       } else {
         inst := buf.Pull()
+        when( interrupt ) {
+          inst.Interrupt := True
+          interruptedSent := True
+        }
+        interrupt := False
       }
     } otherwise {
       inst.Vld := False

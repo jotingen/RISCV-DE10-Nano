@@ -13,6 +13,31 @@
 #define CSR_INSTRET   0xC02
 #define CSR_INSTRET_H 0xC82
 
+//Machine Information Registers
+
+#define CSR_MVENDORID 0xF11
+#define CSR_MARCHID   0xF12
+#define CSR_MIMPID    0xF13
+#define CSR_MHARTID   0xF14
+
+//Machine Trap Setup
+
+#define CSR_MSTATUS    0x300
+#define CSR_MISA       0x301
+#define CSR_MEDELEG    0x302
+#define CSR_MIDELEG    0x303
+#define CSR_MIE        0x304
+#define CSR_MTVEC      0x305
+#define CSR_MCOUNTEREN 0x306
+
+//Machine Trap Handling
+
+#define CSR_MSCRATCH 0x340 
+#define CSR_MEPC     0x341 
+#define CSR_MCAUSE   0x342 
+#define CSR_MTVAL    0x343 
+#define CSR_MIP      0x344 
+
 uint32_t get_csr_cycle() {
   uint32_t csr;
   __asm__(
@@ -109,3 +134,140 @@ extern void reset_instret() {
   );
 }
 
+uint32_t get_csr_mstatus() {
+  uint32_t csr;
+  __asm__(
+    "csrrs %[result], mstatus, x0" : [result] "=r" (csr)
+  );
+  return csr;
+}
+
+extern uint32_t get_mstatus() {
+  uint32_t mstatus;
+  mstatus = get_csr_mstatus();
+  return mstatus;
+}
+
+       uint32_t clr_csr_mstatus(uint32_t mask) {
+  __asm__(
+    "csrc mstatus, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t clr_mstatus(uint32_t mask) {
+	clr_csr_mstatus(mask);
+}
+
+       uint32_t set_csr_mstatus(uint32_t mask) {
+  __asm__(
+    "csrs mstatus, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t set_mstatus(uint32_t mask) {
+	set_csr_mstatus(mask);
+}
+
+uint32_t get_csr_mie() {
+  uint32_t csr;
+  __asm__(
+    "csrrs %[result], mie, x0" : [result] "=r" (csr)
+  );
+  return csr;
+}
+
+extern uint32_t get_mie() {
+  uint32_t mie;
+  mie = get_csr_mie();
+  return mie;
+}
+
+       uint32_t clr_csr_mie(uint32_t mask) {
+  __asm__(
+    "csrc mie, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t clr_mie(uint32_t mask) {
+	clr_csr_mie(mask);
+}
+
+       uint32_t set_csr_mie(uint32_t mask) {
+  __asm__(
+    "csrs mie, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t set_mie(uint32_t mask) {
+	set_csr_mie(mask);
+}
+
+
+uint32_t get_csr_mtvec() {
+  uint32_t csr;
+  __asm__(
+    "csrrs %[result], mtvec, x0" : [result] "=r" (csr)
+  );
+  return csr;
+}
+
+extern uint32_t get_mtvec() {
+  uint32_t mtvec;
+  mtvec = get_csr_mtvec();
+  return mtvec;
+}
+
+       uint32_t clr_csr_mtvec(uint32_t mask) {
+  __asm__(
+    "csrc mtvec, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t clr_mtvec(uint32_t mask) {
+	clr_csr_mtvec(mask);
+}
+
+       uint32_t set_csr_mtvec(uint32_t mask) {
+  __asm__(
+    "csrs mtvec, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t set_mtvec(uint32_t mask) {
+	set_csr_mtvec(mask);
+}
+
+
+uint32_t get_csr_mip() {
+  uint32_t csr;
+  __asm__(
+    "csrrs %[result], mip, x0" : [result] "=r" (csr)
+  );
+  return csr;
+}
+
+extern uint32_t get_mip() {
+  uint32_t mip;
+  mip = get_csr_mip();
+  return mip;
+}
+
+       uint32_t clr_csr_mip(uint32_t mask) {
+  __asm__(
+    "csrc mip, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t clr_mip(uint32_t mask) {
+	clr_csr_mip(mask);
+}
+
+       uint32_t set_csr_mip(uint32_t mask) {
+  __asm__(
+    "csrs mip, %[mask]" : [mask] "=r" (mask)
+  );
+}
+
+extern uint32_t set_mip(uint32_t mask) {
+	set_csr_mip(mask);
+}

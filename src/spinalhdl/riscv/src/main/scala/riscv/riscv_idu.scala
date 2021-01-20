@@ -40,12 +40,14 @@ object InstOp extends SpinalEnum( defaultEncoding = binaryOneHot ) {
         CAND, COR, CXOR, CSUB, 
         CNOP,
         CEBREAK,
-        CTRAP = newElement()
+        CTRAP,
+        MRET = newElement()
         //format: on
 }
 
 case class InstDecoded() extends Bundle    {
   val Vld = Bool
+  val Interrupt = Bool
   val Adr = UInt( 32 bits )
   val AdrNext = UInt( 32 bits )
   val Data = Bits( 32 bits )
@@ -60,14 +62,14 @@ case class InstDecoded() extends Bundle    {
 }
 //Hardware definition
 class riscv_idu          extends Component {
+  val fsmCntl = in( FSMCntl() )
   val inst = in( Inst() )
-  val flush = in( Bool )
   val freeze = in( Bool )
   val instDecoded = out( Reg( InstDecoded() ) )
 
   instDecoded.Vld init ( False)
 
-  when( flush ) {
+  when( fsmCntl.flush ) {
     //instDecoded := instDecoded
     instDecoded.Vld := False
   } elsewhen
@@ -135,6 +137,7 @@ class riscv_idu          extends Component {
           )
 
         instDecoded.Vld := inst.Vld
+        instDecoded.Interrupt := inst.Interrupt
         instDecoded.Adr := inst.Adr
         instDecoded.AdrNext := inst.AdrNext
         instDecoded.Data := inst.Data
@@ -429,6 +432,9 @@ class riscv_idu          extends Component {
                   is( B"12'b000000000001" ) {
                     instDecoded.Op := InstOp.EBREAK
                   }
+                  is( B"12'b001100000010" ) {
+                    instDecoded.Op := InstOp.MRET
+                  }
                   default {
                     instDecoded.Op := InstOp.TRAP
                   }
@@ -466,6 +472,7 @@ class riscv_idu          extends Component {
       } otherwise {
 
         instDecoded.Vld := inst.Vld
+        instDecoded.Interrupt := inst.Interrupt
         instDecoded.Adr := inst.Adr
         instDecoded.AdrNext := inst.AdrNext
         instDecoded.Data := inst.Data

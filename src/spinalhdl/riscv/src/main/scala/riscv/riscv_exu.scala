@@ -6,10 +6,29 @@ import wishbone._
 import spinal.core._
 import spinal.lib._
 
+case class EXUCntlInstr() extends Bundle {
+  val vld = Bool
+  val misfetch = Bool
+  val brTaken = Bool
+  val brNotTaken = Bool
+  val brCompressed = Bool
+  val brInterruptReturn = Bool
+  val PC = UInt( 32 bits )
+  val PCNext = UInt( 32 bits )
+}
+
+case class EXUCntl() extends Bundle {
+  val idle = Bool
+  val freeze = Bool
+  val instr = EXUCntlInstr()
+}
+
 //Hardware definition
 class riscv_exu( config: riscv_config ) extends Component {
-  val flush = in( Bool )
+  val fsmCntl = in( FSMCntl() )
   val instDecoded = in( InstDecoded() )
+  val mepc = in( MEPC() )
+  val cntl = out( EXUCntl() )
   val freeze = out( Bool )
   val idle = out( Bool )
   val retired = out( Bool )
@@ -20,6 +39,7 @@ class riscv_exu( config: riscv_config ) extends Component {
   val brNotTaken = out( Bool )
   val brCompressed = out( Bool )
   val brPC = out( UInt( 32 bits ) )
+  val brInterruptReturn = out( Bool )
   val busData = master( WishBone( config.busWishBoneConfig ) )
   val csrData = master( WishBone( config.csrWishBoneConfig ) )
 
@@ -49,6 +69,7 @@ class riscv_exu( config: riscv_config ) extends Component {
   val bruOp = new Bool
   val bruHazard = new Bool
   bru.instDecoded <> instDecoded
+  bru.mepc <> mepc
   bru.x <> x
   bru.order <> order
   bru.rvfi <> rvfi( 1 )
@@ -98,8 +119,20 @@ class riscv_exu( config: riscv_config ) extends Component {
     ~( mpu.busy && ~mpu.done) &
     ~( dvu.busy && ~dvu.done) &
     ~( csu.busy && ~csu.done)
+  cntl.idle := ~( alu.busy && ~alu.done) &
+    ~( bru.busy && ~bru.done) &
+    ~( lsu.busy && ~lsu.done) &
+    ~( mpu.busy && ~mpu.done) &
+    ~( dvu.busy && ~dvu.done) &
+    ~( csu.busy && ~csu.done)
 
   retired := alu.done |
+    bru.done |
+    lsu.done |
+    mpu.done |
+    dvu.done |
+    csu.done
+  cntl.instr.vld := alu.done |
     bru.done |
     lsu.done |
     mpu.done |
@@ -159,7 +192,8 @@ class riscv_exu( config: riscv_config ) extends Component {
       instDecoded.Op === InstOp.CJR ||
       instDecoded.Op === InstOp.CJALR ||
       instDecoded.Op === InstOp.CBEQZ ||
-      instDecoded.Op === InstOp.CBNEZ
+      instDecoded.Op === InstOp.CBNEZ ||
+      instDecoded.Op === InstOp.MRET
   lsuOp :=
     instDecoded.Op === InstOp.LB ||
       instDecoded.Op === InstOp.LH ||
@@ -225,10 +259,20 @@ class riscv_exu( config: riscv_config ) extends Component {
   brTaken := False
   brNotTaken := False
   brCompressed := False
+  brInterruptReturn := False
+  cntl.instr.brTaken := False
+  cntl.instr.brNotTaken := False
+  cntl.instr.brCompressed := False
+  cntl.instr.brInterruptReturn := False
   when( bru.done ) {
     brTaken := bru.taken
     brNotTaken := bru.nottaken
     brCompressed := bru.compressed
+    brInterruptReturn := bru.interruptReturn
+    cntl.instr.brTaken := bru.taken
+    cntl.instr.brNotTaken := bru.nottaken
+    cntl.instr.brCompressed := bru.compressed
+    cntl.instr.brInterruptReturn := bru.interruptReturn
   }
   brPC := bru.PC
 
@@ -239,42 +283,65 @@ class riscv_exu( config: riscv_config ) extends Component {
     misfetch := alu.misfetch
     misfetchPC := alu.PC
     misfetchAdr := alu.PCNext
+    cntl.instr.misfetch := alu.misfetch
+    cntl.instr.PC := alu.PC
+    cntl.instr.PCNext := alu.PCNext
   } elsewhen
     ( bru.done) {
       misfetch := bru.misfetch
       misfetchPC := bru.PC
       misfetchAdr := bru.PCNext
+      cntl.instr.misfetch := bru.misfetch
+      cntl.instr.PC := bru.PC
+      cntl.instr.PCNext := bru.PCNext
     } elsewhen
     ( lsu.done) {
       misfetch := lsu.misfetch
       misfetchPC := lsu.PC
       misfetchAdr := lsu.PCNext
+      cntl.instr.misfetch := lsu.misfetch
+      cntl.instr.PC := lsu.PC
+      cntl.instr.PCNext := lsu.PCNext
     } elsewhen
     ( mpu.done) {
       misfetch := mpu.misfetch
       misfetchPC := mpu.PC
       misfetchAdr := mpu.PCNext
+      cntl.instr.misfetch := mpu.misfetch
+      cntl.instr.PC := mpu.PC
+      cntl.instr.PCNext := mpu.PCNext
     } elsewhen
     ( dvu.done) {
       misfetch := dvu.misfetch
       misfetchPC := dvu.PC
       misfetchAdr := dvu.PCNext
+      cntl.instr.misfetch := dvu.misfetch
+      cntl.instr.PC := dvu.PC
+      cntl.instr.PCNext := dvu.PCNext
     } elsewhen
     ( csu.done) {
       misfetch := csu.misfetch
       misfetchPC := csu.PC
       misfetchAdr := csu.PCNext
+      cntl.instr.misfetch := csu.misfetch
+      cntl.instr.PC := csu.PC
+      cntl.instr.PCNext := csu.PCNext
     } otherwise {
       misfetch := False
       misfetchPC := 0
       misfetchAdr := 0
+      cntl.instr.misfetch := False
+      cntl.instr.PC := 0
+      cntl.instr.PCNext := 0
     }
 
   freeze := False
-  when( instDecoded.Vld && ~misfetch && ~flush ) {
+  cntl.freeze := False
+  when( instDecoded.Vld && ~cntl.instr.misfetch && ~fsmCntl.flush ) {
     when( aluOp ) {
       when( ( alu.busy && ~alu.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         alu.capture := True
       }
@@ -282,6 +349,7 @@ class riscv_exu( config: riscv_config ) extends Component {
     when( bruOp ) {
       when( ( bru.busy && ~bru.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         bru.capture := True
       }
@@ -289,6 +357,7 @@ class riscv_exu( config: riscv_config ) extends Component {
     when( lsuOp ) {
       when( ( lsu.busy && ~lsu.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         lsu.capture := True
       }
@@ -296,6 +365,7 @@ class riscv_exu( config: riscv_config ) extends Component {
     when( mpuOp ) {
       when( ( mpu.busy && ~mpu.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         mpu.capture := True
       }
@@ -303,6 +373,7 @@ class riscv_exu( config: riscv_config ) extends Component {
     when( dvuOp ) {
       when( ( dvu.busy && ~dvu.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         dvu.capture := True
       }
@@ -310,11 +381,12 @@ class riscv_exu( config: riscv_config ) extends Component {
     when( csuOp ) {
       when( ( csu.busy && ~csu.done) || ( hazard) ) {
         freeze := True
+        cntl.freeze := True
       } otherwise {
         csu.capture := True
       }
     }
-    when( ~freeze ) {
+    when( ~cntl.freeze ) {
       order := order + 1
     }
   }
