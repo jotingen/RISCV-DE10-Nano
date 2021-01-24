@@ -72,18 +72,40 @@ class led_top extends Component {
     }
   }
 
+  val asserts = new ledAsserts();
+}
+
+class ledAsserts() extends Component {
+  import spinal.core.GenerationFlags._
+  import spinal.core.Formal._
+
+  //Signal toggles after initial reset, nothing matters before the first reset
+  var reset_seen = Reg( Bool )
+  reset_seen := reset_seen
+  when( clockDomain.isResetActive ) {
+    reset_seen := True
+  }
+
+  GenerationFlags.formal {
+    when( reset_seen ) {}
+  }
+
 }
 
 //Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
 object led_config
     extends SpinalConfig(
-      defaultConfigForClockDomains = ClockDomainConfig( resetKind = SYNC ),
+      defaultConfigForClockDomains = ClockDomainConfig(
+        resetKind        = SYNC,
+        resetActiveLevel = HIGH
+      ),
       targetDirectory              = "../../../output"
     )
 
 //Generate the riscv's Verilog using the above custom configuration.
 object led_top {
   def main( args: Array[String] ) {
-    led_config.generateVerilog( new led_top )
+    led_config.includeFormal.generateVerilog( new led_top )
+    led_config.includeFormal.generateSystemVerilog( new led_formal )
   }
 }

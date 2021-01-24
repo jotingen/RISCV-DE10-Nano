@@ -1,0 +1,30 @@
+[options]
+mode bmc
+aigsmt z3
+depth 100
+#mode prove
+
+[engines]
+abc bmc3
+
+[script]
+read_verilog -sv riscv_formal.sv
+read_verilog multiplier.v
+read_verilog multiplier_unsigned.v
+read_verilog multiplier_signed_unsigned.v
+read_verilog divider.v
+read_verilog divider_unsigned.v
+read_verilog mor1kx_cache_lru_accessfix.v
+read_verilog 220model.v
+prep -top riscv_formal
+
+[files]
+../output/riscv_formal.sv
+../src/rtl/quartus/multiplier/multiplier.v
+../src/rtl/quartus/multiplier_unsigned/multiplier_unsigned.v
+../src/rtl/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v
+../src/rtl/quartus/divider/divider.v
+../src/rtl/quartus/divider_unsigned/divider_unsigned.v
+../src/rtl/mor1kx/mor1kx_cache_lru_accessfix.v
+/home/jotingen/intelFPGA/20.1/modelsim_ase/altera/verilog/src/220model.v
+

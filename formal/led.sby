@@ -1,0 +1,14 @@
+[options]
+mode bmc
+depth 100
+#mode prove
+
+[engines]
+smtbmc
+
+[script]
+read -sv led_formal.sv
+prep -top led_formal
+
+[files]
+../output/led_formal.sv

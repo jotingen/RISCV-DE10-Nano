@@ -24,6 +24,8 @@ riscv:
              ; set mainClass in (Compile, run) := Some(\"led.led_top\"); run\
              ; set mainClass in (Compile, run) := Some(\"keys.keys_top\"); run\
              ; set mainClass in (Compile, run) := Some(\"uart.uart_top\"); run"
+	sed -i 's/^\(\s*assert.*)\)\s*$$/\1;/' output/*.v
+
 
 .PHONY: rvfimon
 rvfimon: 

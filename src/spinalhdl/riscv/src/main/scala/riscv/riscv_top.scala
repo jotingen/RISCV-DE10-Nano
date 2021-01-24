@@ -110,6 +110,7 @@ object riscv_config
 //Generate the riscv's Verilog using the above custom configuration.
 object riscv_top {
   def main( args: Array[String] ) {
-    riscv_config.generateVerilog( new riscv_top )
+    riscv_config.includeFormal.generateVerilog( new riscv_top )
+    riscv_config.includeFormal.generateSystemVerilog( new riscv_formal )
   }
 }
