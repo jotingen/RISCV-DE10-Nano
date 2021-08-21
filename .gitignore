@@ -1,6 +1,9 @@
 *.sw?
 
 output
+obj_dir
+.metals
+
 
 db
 incremental_db
