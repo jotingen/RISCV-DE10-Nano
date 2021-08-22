@@ -1,0 +1,51 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	    {
+		"label": "Compile RISCV",
+		"type": "shell",
+		"options": {"cwd": "${workspaceFolder}/src/spinalhdl/riscv"},
+		"command": "sbt 'runMain riscv.riscv_top'",
+		"group": "build",
+		"presentation": {
+		    "reveal" : "always",
+		}
+	    },
+	    {
+		"label": "Compile LED",
+		"type": "shell",
+		"options": {"cwd": "${workspaceFolder}/src/spinalhdl/riscv"},
+		"command": "sbt 'runMain led.led_top'",
+		"group": "build",
+		"presentation": {
+		    "reveal" : "always",
+		}
+	    },
+	    {
+		"label": "Compile Keys",
+		"type": "shell",
+		"options": {"cwd": "${workspaceFolder}/src/spinalhdl/riscv"},
+		"command": "sbt 'runMain keys.keys_top'",
+		"group": "build",
+		"presentation": {
+		    "reveal" : "always",
+		}
+	    },
+	    {
+		"label": "Compile UART",
+		"type": "shell",
+		"options": {"cwd": "${workspaceFolder}/src/spinalhdl/riscv"},
+		"command": "sbt 'runMain uart.uart_top'",
+		"group": "build",
+		"presentation": {
+		    "reveal" : "always",
+		}
+	    },
+	    {
+		"label": "Compile",
+		"group": "build",
+		"dependsOn": ["Compile RISCV", "Compile LED", "Compile Keys", "Compile UART"]
+	    },
+	]
+    }
+//		"command": "pwd; sbt \"; set mainClass in (Compile, run) := Some(\\\"riscv.riscv_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"led.led_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"keys.keys_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"uart.uart_top\\\"); run\"; sed -i 's/^\\(\\s*assert.*)\\)\\s*$$/\\1;/' output/*.v",
