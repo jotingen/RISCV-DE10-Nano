@@ -13,3 +13,6 @@
 [submodule "submodules/mpaland_printf"]
 	path = submodules/mpaland_printf
 	url = https://github.com/mpaland/printf.git
+[submodule ".\\submodules\\jtframe"]
+	path = .\\submodules\\jtframe
+	url = https://github.com/jotego/jtframe

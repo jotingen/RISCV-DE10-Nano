@@ -62,6 +62,18 @@
 			}
 		},
 		{
+			"label": "Compile FPGA",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"command": "sbt 'runMain fpga.fpga_top'"
+			},
+		{
 			"label": "Compile",
 			"type": "shell",
 			"group": "build",
@@ -71,15 +83,68 @@
 			"presentation": {
 				"reveal": "always",
 			},
-			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc -Ioutput/220model -Ioutput/altera_mf -Isrc/rtl/quartus/multiplier -Isrc/rtl/quartus/multiplier_signed_unsigned -Isrc/rtl/quartus/multiplier_unsigned -Isrc/rtl/quartus/divider -Isrc/rtl/quartus/divider_unsigned -Isrc/rtl/mor1kx output/riscv_top.v",
+			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc  -Ioutput/220model -Ioutput/altera_mf -Iip/soc_system/soc_system/synthesis -Isrc/rtl/quartus/multiplier -Isrc/rtl/quartus/multiplier_signed_unsigned -Isrc/rtl/quartus/multiplier_unsigned -Isrc/rtl/quartus/divider -Isrc/rtl/quartus/divider_unsigned -Isrc/rtl/de10nano -Isrc/rtl/de10nano/ddr3 -Isrc/rtl/mem -Isrc/rtl/mmc -Isrc/rtl/mor1kx -Isrc/rtl/sdcard -Isrc/rtl/waveshare -Isrc/rtl/waveshare/ILI9486 src/rtl/wishbone/wishbone_pkg.sv output/fpga_top.v",
 			"dependsOn": [
 				"Compile Altera Files",
-				"Compile RISCV",
-				"Compile LED",
-				"Compile Keys",
-				"Compile UART"
+				"Compile FPGA"
+			]
+		},
+		{
+			"label": "Synthesize - Analysis",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/quartus"
+			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"command": "quartus_map --read_settings_files=on --write_settings_files=off DE10Nano -c DE10Nano",
+			"dependsOn": []
+		},
+		{
+			"label": "Synthesize - Fitter",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/quartus"
+			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"command": "quartus_fit --read_settings_files=on --write_settings_files=off DE10Nano -c DE10Nano",
+			"dependsOn": []
+		},
+		{
+			"label": "Synthesize - Assembler",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/quartus"
+			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"command": "quartus_asm --read_settings_files=on --write_settings_files=off DE10Nano -c DE10Nano",
+			"dependsOn": []
+		},
+		{
+			"label": "Synthesize",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/quartus"
+			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Compile FPGA",
+				"Synthesize - Analysis",
+				"Synthesize - Fitter",
+				"Synthesize - Assembler"
 			]
 		},
 	]
 }
-//		"command": "pwd; sbt \"; set mainClass in (Compile, run) := Some(\\\"riscv.riscv_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"led.led_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"keys.keys_top\\\"); run; set mainClass in (Compile, run) := Some(\\\"uart.uart_top\\\"); run\"; sed -i 's/^\\(\\s*assert.*)\\)\\s*$$/\\1;/' output/*.v",

@@ -40,7 +40,7 @@
 # Project-Wide Assignments
 # ========================
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.0.2
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:41:47 AUGUST 03,2019"
 set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
@@ -168,7 +168,7 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 # Analysis & Synthesis Assignments
 # ================================
 set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name TOP_LEVEL_ENTITY top
+set_global_assignment -name TOP_LEVEL_ENTITY fpga_top
 set_global_assignment -name DEVICE_FILTER_PACKAGE UFBGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 672
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 7
@@ -981,10 +981,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../src/rtl/de10nano/ddr3/ddr3_cac
 set_global_assignment -name SYSTEMVERILOG_FILE ../src/rtl/wishbone/wishbone_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../src/rtl/common/lru_32.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../src/rtl/common/lru_16.sv
-set_global_assignment -name VERILOG_FILE ../output/uart_top.v
-set_global_assignment -name VERILOG_FILE ../output/keys_top.v
-set_global_assignment -name VERILOG_FILE ../output/led_top.v
-set_global_assignment -name VERILOG_FILE ../output/riscv_top.v
+set_global_assignment -name VERILOG_FILE ../output/fpga_top.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../src/rtl/top.sv
 set_global_assignment -name SDC_FILE DE10Nano.sdc
 set_global_assignment -name SIGNALTAP_FILE DE10Nano.stp
