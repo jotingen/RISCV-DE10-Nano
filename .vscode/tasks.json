@@ -72,7 +72,19 @@
 				"reveal": "always",
 			},
 			"command": "sbt 'runMain fpga.fpga_top'"
+		},
+		{
+			"label": "Compile TB",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
 			},
+			"presentation": {
+				"reveal": "always",
+			},
+			"command": "sbt 'runMain tb.tb_top'"
+		},
 		{
 			"label": "Compile",
 			"type": "shell",
@@ -83,10 +95,11 @@
 			"presentation": {
 				"reveal": "always",
 			},
-			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc  -Ioutput/220model -Ioutput/altera_mf -Iip/soc_system/soc_system/synthesis -Isrc/rtl/quartus/multiplier -Isrc/rtl/quartus/multiplier_signed_unsigned -Isrc/rtl/quartus/multiplier_unsigned -Isrc/rtl/quartus/divider -Isrc/rtl/quartus/divider_unsigned -Isrc/rtl/de10nano -Isrc/rtl/de10nano/ddr3 -Isrc/rtl/mem -Isrc/rtl/mmc -Isrc/rtl/mor1kx -Isrc/rtl/sdcard -Isrc/rtl/waveshare -Isrc/rtl/waveshare/ILI9486 src/rtl/wishbone/wishbone_pkg.sv output/fpga_top.v",
+			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc --no-order-clock-delay +libext+.vo+ -Ioutput/220model -Ioutput/altera_mf -Isrc/rtl/quartus/multiplier -Isrc/rtl/quartus/multiplier_signed_unsigned -Isrc/rtl/quartus/multiplier_unsigned -Isrc/rtl/quartus/divider -Isrc/rtl/quartus/divider_unsigned -Isrc/rtl/quartus/ram_debug -Isrc/rtl/quartus/ram_mem -Isrc/rtl/quartus/wishbone_buff -Isrc/rtl/de10nano -Isrc/rtl/de10nano/ddr3 -Isrc/rtl/mem -Isrc/rtl/mmc -Isrc/rtl/mor1kx -Isubmodules/mor1kx/rtl/verilog -Isrc/rtl/sdcard -Isrc/rtl/spi -Isrc/rtl/waveshare -Isrc/rtl/waveshare/ILI9486 src/rtl/wishbone/wishbone_pkg.sv output/tb_top.v",
+			"dependsOrder": "sequence",
 			"dependsOn": [
 				"Compile Altera Files",
-				"Compile FPGA"
+				"Compile TB"
 			]
 		},
 		{

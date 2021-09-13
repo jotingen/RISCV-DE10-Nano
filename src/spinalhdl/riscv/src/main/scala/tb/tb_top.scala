@@ -1,4 +1,4 @@
-package fpga
+package tb
 
 import core._
 
@@ -18,7 +18,7 @@ case class TriState[T <: Data]( dataType: HardType[T] )
   }
 }
 
-class fpga_top extends Component {
+class tb_top extends Component {
   val FPGA_CLK1_50 = in( Bool )
   val FPGA_CLK2_50 = in( Bool )
   val FPGA_CLK3_50 = in( Bool )
@@ -357,7 +357,7 @@ class fpga_top extends Component {
     }
 }
 
-class soc_system extends BlackBox {
+class soc_system extends Component {
   val clk_clk = in( Bool )
   val ddr3_clk_clk = out( Bool )
 
@@ -388,9 +388,28 @@ class soc_system extends BlackBox {
   val ddr3_hps_f2h_sdram0_data_waitrequest = out( Bool )
   val ddr3_hps_f2h_sdram0_data_byteenable = in( Bits( 16 bits ) )
   val ddr3_hps_f2h_sdram0_data_burstcount = in( Bits( 9 bits ) )
+
+  ddr3_clk_clk <> clk_clk
+
+  memory_mem_a.clearAll()
+  memory_mem_ba.clearAll()
+  memory_mem_ck := False
+  memory_mem_ck_n := False
+  memory_mem_cke := False
+  memory_mem_cs_n := False
+  memory_mem_ras_n := False
+  memory_mem_cas_n := False
+  memory_mem_we_n := False
+  memory_mem_reset_n := False
+  memory_mem_odt := False
+  memory_mem_dm.clearAll()
+
+  ddr3_hps_f2h_sdram0_data_readdata.clearAll()
+  ddr3_hps_f2h_sdram0_data_readdatavalid := False
+  ddr3_hps_f2h_sdram0_data_waitrequest := False
 }
 
-class fpgaAsserts() extends Component {
+class tbAsserts() extends Component {
   import spinal.core.GenerationFlags._
   import spinal.core.Formal._
 
@@ -408,7 +427,7 @@ class fpgaAsserts() extends Component {
 }
 
 //Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
-object fpga_config
+object tb_config
     extends SpinalConfig(
       defaultConfigForClockDomains = ClockDomainConfig(
         resetKind        = SYNC,
@@ -418,8 +437,8 @@ object fpga_config
     )
 
 //Generate the riscv's Verilog using the above custom configuration.
-object fpga_top {
+object tb_top {
   def main( args: Array[String] ) {
-    fpga_config.includeFormal.generateVerilog( new fpga_top )
+    tb_config.includeFormal.generateVerilog( new tb_top )
   }
 }
