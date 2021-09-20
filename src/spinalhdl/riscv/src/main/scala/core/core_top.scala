@@ -5,6 +5,7 @@ import rvfimon._
 import riscv._
 import led._
 import keys._
+import mem._
 import uart._
 
 import spinal.core._
@@ -226,16 +227,15 @@ class core_top extends Component {
       val led = new led_top()
       val keys = new keys_top()
       val uart = new uart_top()
-      val mem = new mem()
+      val mem = new mem_top()
       val shield = new waveshare_tft_touch_shield()
-      val debug = new debug()
+      val debug = new debug_top()
 
       mmc_inst.ddr3cntl_mmc_flat_i.clearAll()
       mmc_inst.led_mmc_flat_i.clearAll()
       mmc_inst.keys_mmc_flat_i.clearAll()
       mmc_inst.uart_mmc_flat_i.clearAll()
       mmc_inst.sdcard_mmc_flat_i.clearAll()
-      mmc_inst.debug_mmc_flat_i.clearAll()
 
       cpu.IRQ <> IRQ
       Cat(
@@ -353,10 +353,44 @@ class core_top extends Component {
       ddr3.bus_data_flat_i <> mmc_data.mmc_ddr3_flat_o
       ddr3.bus_data_flat_o <> mmc_data.ddr3_mmc_flat_i
 
-      mem.bus_inst_flat_i <> mmc_inst.mmc_mem_flat_o
-      mem.bus_inst_flat_o <> mmc_inst.mem_mmc_flat_i
-      mem.bus_data_flat_i <> mmc_data.mmc_mem_flat_o
-      mem.bus_data_flat_o <> mmc_data.mem_mmc_flat_i
+      Cat(
+        mem.busInst.stall,
+        mem.busInst.rsp.ack,
+        mem.busInst.rsp.err,
+        mem.busInst.rsp.rty,
+        mem.busInst.rsp.data,
+        mem.busInst.rsp.tga,
+        mem.busInst.rsp.tgd,
+        mem.busInst.rsp.tgc
+      ) <> mmc_inst.mem_mmc_flat_i
+      mem.busInst.req.cyc := mmc_inst.mmc_mem_flat_o( 76 )
+      mem.busInst.req.stb := mmc_inst.mmc_mem_flat_o( 75 )
+      mem.busInst.req.we := mmc_inst.mmc_mem_flat_o( 74 )
+      mem.busInst.req.adr := mmc_inst.mmc_mem_flat_o( 73 downto 42 ).asUInt
+      mem.busInst.req.sel := mmc_inst.mmc_mem_flat_o( 41 downto 38 )
+      mem.busInst.req.data := mmc_inst.mmc_mem_flat_o( 37 downto 6 )
+      mem.busInst.req.tga := mmc_inst.mmc_mem_flat_o( 5 downto 5 )
+      mem.busInst.req.tgd := mmc_inst.mmc_mem_flat_o( 4 downto 4 )
+      mem.busInst.req.tgc := mmc_inst.mmc_mem_flat_o( 3 downto 0 )
+      Cat(
+        mem.busData.stall,
+        mem.busData.rsp.ack,
+        mem.busData.rsp.err,
+        mem.busData.rsp.rty,
+        mem.busData.rsp.data,
+        mem.busData.rsp.tga,
+        mem.busData.rsp.tgd,
+        mem.busData.rsp.tgc
+      ) <> mmc_data.mem_mmc_flat_i
+      mem.busData.req.cyc := mmc_data.mmc_mem_flat_o( 76 )
+      mem.busData.req.stb := mmc_data.mmc_mem_flat_o( 75 )
+      mem.busData.req.we := mmc_data.mmc_mem_flat_o( 74 )
+      mem.busData.req.adr := mmc_data.mmc_mem_flat_o( 73 downto 42 ).asUInt
+      mem.busData.req.sel := mmc_data.mmc_mem_flat_o( 41 downto 38 )
+      mem.busData.req.data := mmc_data.mmc_mem_flat_o( 37 downto 6 )
+      mem.busData.req.tga := mmc_data.mmc_mem_flat_o( 5 downto 5 )
+      mem.busData.req.tgd := mmc_data.mmc_mem_flat_o( 4 downto 4 )
+      mem.busData.req.tgc := mmc_data.mmc_mem_flat_o( 3 downto 0 )
 
       shield.ADC_CONVST      <> ADC_CONVST     
       shield.ADC_SCK         <> ADC_SCK        
@@ -386,8 +420,44 @@ class core_top extends Component {
       shield.sdcard_data_flat_i <> mmc_data.mmc_sdcard_flat_o
       shield.sdcard_data_flat_o <> mmc_data.sdcard_mmc_flat_i
 
-      debug.bus_data_flat_i <> mmc_data.mmc_debug_flat_o
-      debug.bus_data_flat_o <> mmc_data.debug_mmc_flat_i
+      Cat(
+        debug.busInst.stall,
+        debug.busInst.rsp.ack,
+        debug.busInst.rsp.err,
+        debug.busInst.rsp.rty,
+        debug.busInst.rsp.data,
+        debug.busInst.rsp.tga,
+        debug.busInst.rsp.tgd,
+        debug.busInst.rsp.tgc
+      ) <> mmc_inst.debug_mmc_flat_i
+      debug.busInst.req.cyc := mmc_inst.mmc_debug_flat_o( 76 )
+      debug.busInst.req.stb := mmc_inst.mmc_debug_flat_o( 75 )
+      debug.busInst.req.we := mmc_inst.mmc_debug_flat_o( 74 )
+      debug.busInst.req.adr := mmc_inst.mmc_debug_flat_o( 73 downto 42 ).asUInt
+      debug.busInst.req.sel := mmc_inst.mmc_debug_flat_o( 41 downto 38 )
+      debug.busInst.req.data := mmc_inst.mmc_debug_flat_o( 37 downto 6 )
+      debug.busInst.req.tga := mmc_inst.mmc_debug_flat_o( 5 downto 5 )
+      debug.busInst.req.tgd := mmc_inst.mmc_debug_flat_o( 4 downto 4 )
+      debug.busInst.req.tgc := mmc_inst.mmc_debug_flat_o( 3 downto 0 )
+      Cat(
+        debug.busData.stall,
+        debug.busData.rsp.ack,
+        debug.busData.rsp.err,
+        debug.busData.rsp.rty,
+        debug.busData.rsp.data,
+        debug.busData.rsp.tga,
+        debug.busData.rsp.tgd,
+        debug.busData.rsp.tgc
+      ) <> mmc_data.debug_mmc_flat_i
+      debug.busData.req.cyc := mmc_data.mmc_debug_flat_o( 76 )
+      debug.busData.req.stb := mmc_data.mmc_debug_flat_o( 75 )
+      debug.busData.req.we := mmc_data.mmc_debug_flat_o( 74 )
+      debug.busData.req.adr := mmc_data.mmc_debug_flat_o( 73 downto 42 ).asUInt
+      debug.busData.req.sel := mmc_data.mmc_debug_flat_o( 41 downto 38 )
+      debug.busData.req.data := mmc_data.mmc_debug_flat_o( 37 downto 6 )
+      debug.busData.req.tga := mmc_data.mmc_debug_flat_o( 5 downto 5 )
+      debug.busData.req.tgd := mmc_data.mmc_debug_flat_o( 4 downto 4 )
+      debug.busData.req.tgc := mmc_data.mmc_debug_flat_o( 3 downto 0 )
 
       HDMI_TX_CLK := False
       HDMI_TX_DE := False
@@ -494,38 +564,6 @@ class mmc_wb extends BlackBox {
   mapCurrentClockDomain( clock = clk, reset = rst )
 }
 
-class mem extends BlackBox {
-  val config = riscv_config(
-    busWishBoneConfig = WishBoneConfig(
-      adrWidth  = 32,
-      selWidth  = 4,
-      dataWidth = 32,
-      tgaWidth  = 1,
-      tgdWidth  = 1,
-      tgcWidth  = 4
-    )
-  )
-
-  val clk = in( Bool )
-  val rst = in( Bool )
-
-  val bus_inst_flat_i = in(
-    Bits( widthOf( WishBoneReq( config.busWishBoneConfig ) ) bits )
-  )
-  val bus_inst_flat_o = out(
-    Bits( ( widthOf( WishBoneRsp( config.busWishBoneConfig ) ) + 1 ) bits )
-  )
-
-  val bus_data_flat_i = in(
-    Bits( widthOf( WishBoneReq( config.busWishBoneConfig ) ) bits )
-  )
-  val bus_data_flat_o = out(
-    Bits( ( widthOf( WishBoneRsp( config.busWishBoneConfig ) ) + 1 ) bits )
-  )
-
-  mapCurrentClockDomain( clock = clk, reset = rst )
-}
-
 class waveshare_tft_touch_shield extends BlackBox {
   val config = riscv_config(
     busWishBoneConfig = WishBoneConfig(
@@ -599,31 +637,6 @@ class waveshare_tft_touch_shield extends BlackBox {
     Bits( ( widthOf( WishBoneRsp( config.busWishBoneConfig ) ) + 1 ) bits )
   )
   
-  mapCurrentClockDomain( clock = clk, reset = rst )
-}
-
-class debug extends BlackBox {
-  val config = riscv_config(
-    busWishBoneConfig = WishBoneConfig(
-      adrWidth  = 32,
-      selWidth  = 4,
-      dataWidth = 32,
-      tgaWidth  = 1,
-      tgdWidth  = 1,
-      tgcWidth  = 4
-    )
-  )
-
-  val clk = in( Bool )
-  val rst = in( Bool )
-
-  val bus_data_flat_i = in(
-    Bits( widthOf( WishBoneReq( config.busWishBoneConfig ) ) bits )
-  )
-  val bus_data_flat_o = out(
-    Bits( ( widthOf( WishBoneRsp( config.busWishBoneConfig ) ) + 1 ) bits )
-  )
-
   mapCurrentClockDomain( clock = clk, reset = rst )
 }
 

@@ -26,6 +26,18 @@
 			}
 		},
 		{
+			"label": "Compile Mem",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+			},
+			"command": "sbt 'runMain mem.mem_top'",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+			}
+		},
+		{
 			"label": "Compile Keys",
 			"type": "shell",
 			"options": {
