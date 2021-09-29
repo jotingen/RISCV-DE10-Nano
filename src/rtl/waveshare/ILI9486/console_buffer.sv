@@ -73,24 +73,24 @@ always_ff @(posedge clk)
     bus_data_o.Ack <= '1;
     if (bus_data_i.We & bus_data_i.Sel[0])
       begin
-      mem_array_0[bus_data_i.Adr[31:2]] <= bus_data_i.Data[7:0];
+      mem_array_0[bus_data_i.Adr[13:2]] <= bus_data_i.Data[7:0];
       end
     if (bus_data_i.We & bus_data_i.Sel[1])
       begin
-      mem_array_1[bus_data_i.Adr[31:2]] <= bus_data_i.Data[15:8];
+      mem_array_1[bus_data_i.Adr[13:2]] <= bus_data_i.Data[15:8];
       end
     if (bus_data_i.We & bus_data_i.Sel[2])
       begin
-      mem_array_2[bus_data_i.Adr[31:2]] <= bus_data_i.Data[23:16];
+      mem_array_2[bus_data_i.Adr[13:2]] <= bus_data_i.Data[23:16];
       end
     if (bus_data_i.We & bus_data_i.Sel[3])
       begin
-      mem_array_3[bus_data_i.Adr[31:2]] <= bus_data_i.Data[31:24];
+      mem_array_3[bus_data_i.Adr[13:2]] <= bus_data_i.Data[31:24];
       end
-    bus_data_o.Data[7:0]   <= mem_array_0[bus_data_i.Adr[31:2]];
-    bus_data_o.Data[15:8]  <= mem_array_1[bus_data_i.Adr[31:2]];
-    bus_data_o.Data[23:16] <= mem_array_2[bus_data_i.Adr[31:2]];
-    bus_data_o.Data[31:24] <= mem_array_3[bus_data_i.Adr[31:2]];
+    bus_data_o.Data[7:0]   <= mem_array_0[bus_data_i.Adr[13:2]];
+    bus_data_o.Data[15:8]  <= mem_array_1[bus_data_i.Adr[13:2]];
+    bus_data_o.Data[23:16] <= mem_array_2[bus_data_i.Adr[13:2]];
+    bus_data_o.Data[31:24] <= mem_array_3[bus_data_i.Adr[13:2]];
     end
   end
 

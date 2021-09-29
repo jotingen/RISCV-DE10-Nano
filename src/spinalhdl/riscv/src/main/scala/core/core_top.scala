@@ -212,7 +212,6 @@ class core_top extends Component {
   val ddr3 = new ddr3()
   ddr3.clk <> FPGA_CLK1_50
   ddr3.ddr3_clk <> DDR3_CLK
-  ddr3.rst <> KEY( 0 )
 
   val FPGA_CLK1_50_area =
     new ClockingArea( FPGA_CLK1_50_domain ) {
@@ -230,6 +229,11 @@ class core_top extends Component {
       val mem = new mem_top()
       val shield = new waveshare_tft_touch_shield()
       val debug = new debug_top()
+
+      val arst = Bool()
+      val rst = Bool()
+      //rst := BufferCC( arst ) //Reset pin got shocked and is burned out, using key0
+      rst := BufferCC( KEY( 0 ) )
 
       mmc_inst.ddr3cntl_mmc_flat_i.clearAll()
       mmc_inst.led_mmc_flat_i.clearAll()
@@ -346,6 +350,7 @@ class core_top extends Component {
       uart.bus.req.tgd := mmc_data.mmc_uart_flat_o( 4 downto 4 )
       uart.bus.req.tgc := mmc_data.mmc_uart_flat_o( 3 downto 0 )
 
+      ddr3.rst <> rst
       ddr3.bus_cntl_flat_i <> mmc_data.mmc_ddr3cntl_flat_o
       ddr3.bus_cntl_flat_o <> mmc_data.ddr3cntl_mmc_flat_i
       ddr3.bus_inst_flat_i <> mmc_inst.mmc_ddr3_flat_o
@@ -392,6 +397,7 @@ class core_top extends Component {
       mem.busData.req.tgd := mmc_data.mmc_mem_flat_o( 4 downto 4 )
       mem.busData.req.tgc := mmc_data.mmc_mem_flat_o( 3 downto 0 )
 
+      shield.arst            <> arst
       shield.ADC_CONVST      <> ADC_CONVST     
       shield.ADC_SCK         <> ADC_SCK        
       shield.ADC_SDI         <> ADC_SDI        
@@ -578,6 +584,7 @@ class waveshare_tft_touch_shield extends BlackBox {
 
   val clk = in( Bool )
   val rst = in( Bool )
+  val arst = out( Bool )
 
   val ADC_CONVST = out( Bool )
   val ADC_SCK = out( Bool )

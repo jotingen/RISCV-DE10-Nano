@@ -1,0 +1,16 @@
+`verilator_config
+
+//Ignore TIMESCALEMOD
+lint_off -rule TIMESCALEMOD
+
+//Ignore UNOPTFLAT
+lint_off -rule UNOPTFLAT
+
+//Ignore LATCH
+lint_off -rule LATCH
+
+//Disable warnings for quartus files
+lint_off -rule PINMISSING  -file "*/220model/*.v"
+lint_off -rule PINMISSING  -file "*/altera_mf/*.v"
+lint_off -rule WIDTH  -file "*/220model/*.v"
+lint_off -rule WIDTH  -file "*/altera_mf/*.v"

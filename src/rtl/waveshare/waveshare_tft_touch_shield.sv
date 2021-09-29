@@ -102,6 +102,7 @@ end
 logic SCLK;
 logic MISO;
 logic MOSI;
+logic GND;
 logic LCD_CS;
 logic LCD_BL;
 logic LCD_RST;
@@ -138,18 +139,23 @@ assign MISO    = ARDUINO_IO_12;
 
 assign arst = ~ARDUINO_RESET_N;
 
-logic display_SPIReq;
+logic display_SPIAck;
 logic display_SPIDone;
+logic display_SPIReq;
 logic display_SCK;
 logic display_CS;
 logic display_RS_DC;
 logic display_DATA;
+logic display_MOSI;
 
+logic sdcard_SPIAck;
+logic sdcard_SPIDone;
 logic sdcard_SPIReq;
 logic sdcard_SCK;
 logic sdcard_CS;
 logic sdcard_RS_DC;
 logic sdcard_DATA;
+logic sdcard_MOSI;
 
 
 //Display

@@ -155,7 +155,7 @@ begin
   ddr3_fifo_out_addr  <= ddr3_fifo_out_addr;
   ddr3_fifo_in_rdack  <= '0;
  
-  casex (1'b1)
+  casez (1'b1)
     state_idle: begin
                 if(state_inst)
                   begin
@@ -313,7 +313,7 @@ always_ff @(posedge ddr3_clk)
   ddr3_fifo_out_rdack <= '0;
   ddr3_fifo_in_wrreq  <= '0;
 
-  casex(1'b1)
+  casez(1'b1)
     ddr3_state_idle: begin
                      if(~ddr3_fifo_out_rdempty)
                        begin

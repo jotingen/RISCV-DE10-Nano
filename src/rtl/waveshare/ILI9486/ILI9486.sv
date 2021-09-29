@@ -68,7 +68,7 @@ always_ff @(posedge clk)
                  end
         'h1: begin 
                  cmd           <= '1;
-                 data          <= bus_data_i.Data;
+                 data          <= bus_data_i.Data[15:0];
                  if(fifo_full)
                    begin
                    pending_cmd  <= '1;
@@ -82,7 +82,7 @@ always_ff @(posedge clk)
                  end
         'h2: begin 
                  cmd           <= '0;
-                 data          <= bus_data_i.Data;
+                 data          <= bus_data_i.Data[15:0];
                  if(fifo_full)
                    begin
                    pending_data <= '1;

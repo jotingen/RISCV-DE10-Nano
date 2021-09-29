@@ -123,14 +123,14 @@ logic [31:0]    DEBUG_ADDR_HI    = 'hD000_07FF;
 //Instruction counters
 always_ff @(posedge clk)
   begin
-  mem_stb_cnt      <= mem_stb_cnt      + mmc_mem_o.Stb      - mem_mmc_i.Ack;
-  ddr3_stb_cnt     <= ddr3_stb_cnt     + mmc_ddr3_o.Stb     - ddr3_mmc_i.Ack;
-  ddr3cntl_stb_cnt <= ddr3cntl_stb_cnt + mmc_ddr3cntl_o.Stb - ddr3cntl_mmc_i.Ack;
-  led_stb_cnt      <= led_stb_cnt      + mmc_led_o.Stb      - led_mmc_i.Ack;
-  keys_stb_cnt     <= keys_stb_cnt     + mmc_keys_o.Stb     - keys_mmc_i.Ack;
-  uart_stb_cnt     <= uart_stb_cnt     + mmc_uart_o.Stb     - uart_mmc_i.Ack;
-  sdcard_stb_cnt   <= sdcard_stb_cnt   + mmc_sdcard_o.Stb   - sdcard_mmc_i.Ack;
-  debug_stb_cnt    <= debug_stb_cnt    + mmc_debug_o.Stb    - debug_mmc_i.Ack;
+  mem_stb_cnt      <= mem_stb_cnt      + {{15{1'b0}},mmc_mem_o.Stb}      - {{15{1'b0}},mem_mmc_i.Ack};
+  ddr3_stb_cnt     <= ddr3_stb_cnt     + {{15{1'b0}},mmc_ddr3_o.Stb}     - {{15{1'b0}},ddr3_mmc_i.Ack};
+  ddr3cntl_stb_cnt <= ddr3cntl_stb_cnt + {{15{1'b0}},mmc_ddr3cntl_o.Stb} - {{15{1'b0}},ddr3cntl_mmc_i.Ack};
+  led_stb_cnt      <= led_stb_cnt      + {{15{1'b0}},mmc_led_o.Stb}      - {{15{1'b0}},led_mmc_i.Ack};
+  keys_stb_cnt     <= keys_stb_cnt     + {{15{1'b0}},mmc_keys_o.Stb}     - {{15{1'b0}},keys_mmc_i.Ack};
+  uart_stb_cnt     <= uart_stb_cnt     + {{15{1'b0}},mmc_uart_o.Stb}     - {{15{1'b0}},uart_mmc_i.Ack};
+  sdcard_stb_cnt   <= sdcard_stb_cnt   + {{15{1'b0}},mmc_sdcard_o.Stb}   - {{15{1'b0}},sdcard_mmc_i.Ack};
+  debug_stb_cnt    <= debug_stb_cnt    + {{15{1'b0}},mmc_debug_o.Stb}    - {{15{1'b0}},debug_mmc_i.Ack};
 
   if(rst)
     begin
@@ -298,42 +298,42 @@ always_comb
   mmc_riscv_o.Tgd   = '0;
   mmc_riscv_o.Tgc   = '0;
 
-  if(mem_stb_cnt)
+  if(mem_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = mem_mmc_i.Stall;
     end
 
-  if(ddr3_stb_cnt)
+  if(ddr3_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = ddr3_mmc_i.Stall;
     end
 
-  if(ddr3cntl_stb_cnt)
+  if(ddr3cntl_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = ddr3cntl_mmc_i.Stall;
     end
 
-  if(led_stb_cnt)
+  if(led_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = led_mmc_i.Stall;
     end
 
-  if(keys_stb_cnt)
+  if(keys_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = keys_mmc_i.Stall;
     end
 
-  if(uart_stb_cnt)
+  if(uart_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = uart_mmc_i.Stall;
     end
 
-  if(sdcard_stb_cnt)
+  if(sdcard_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = sdcard_mmc_i.Stall;
     end
 
-  if(debug_stb_cnt)
+  if(debug_stb_cnt > 0)
     begin
     mmc_riscv_o.Stall = debug_mmc_i.Stall;
     end

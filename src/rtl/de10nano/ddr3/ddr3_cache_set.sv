@@ -31,7 +31,7 @@ localparam ADR_TAG_LSB = $clog2(SETS)+4;
 
 typedef struct packed {
   logic             Vld;
-  logic      [26:ADR_TAG_LSB] Addr;
+  logic      [25:ADR_TAG_LSB] Addr;
   logic             Dirty;
   logic [3:0][31:0] Data;
 } buffer_entry_t;
@@ -86,7 +86,7 @@ begin
     begin
       if(lru_post[i])
       begin
-        mem_buffer_lru = i;
+        mem_buffer_lru = i[$clog2(WAYS)-1:0];
         break;
       end
     end
@@ -122,7 +122,7 @@ always_comb
        mem_buffer[i].Addr[25:ADR_TAG_LSB] == bus_i_stgd.Adr[25:ADR_TAG_LSB])
       begin
       mem_buffer_in_lru         = '1;
-      mem_buffer_lru_entry_next =  i;
+      mem_buffer_lru_entry_next =  i[$clog2(WAYS)-1:0];
       end
     end
   end
@@ -143,7 +143,7 @@ begin
 
   if(set_target)
   begin
-    casex (1'b1)
+    casez (1'b1)
       state_idle: begin
                   if((bus_req_stgd ))
                     begin
@@ -158,14 +158,14 @@ begin
                       end
                     else
                       begin
-                      logic [WAYS-1:0] lru_entry;
+                      logic [$clog2(WAYS)-1:0] lru_entry;
                       mem_buffer_lru_touch <= '1;
                       lru_entry = mem_buffer_lru;
                       for(int i = 0; i < WAYS; i++)
                         begin
                         if(~mem_buffer[i].Vld)
                           begin
-                          lru_entry = i;
+                          lru_entry = i[$clog2(WAYS)-1:0];
                           break;
                           end
                         end

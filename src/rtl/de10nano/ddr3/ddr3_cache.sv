@@ -47,17 +47,19 @@ localparam ADR_TAG_LSB = $clog2(SETS)+4;
 
 typedef struct packed {
   logic             Vld;
-  logic      [26:ADR_TAG_LSB] Addr;
+  logic      [25:ADR_TAG_LSB] Addr;
   logic             Dirty;
   logic [3:0][31:0] Data;
 } buffer_entry_t;
 logic                            bus_buff_almost_empty;
 logic                            bus_buff_empty;
 
-logic  [4:0]                     bus_unused_stgd;
+logic  [2:0]                     bus_unused_stgd;
 wishbone_pkg::bus_req_t          bus_i_stgd;
 
 logic                            bus_rd_ack;
+
+logic                            bus_req_stgd;
 
 logic                            state_idle;
 logic                            state_flush;
@@ -89,7 +91,7 @@ logic [SETS-1:0][$clog2(WAYS)-1:0]         set_mem_buffer_lru_entry;
 assign bus_req_stgd = ~bus_buff_empty; 
 wishbone_buff	bus_buff (
 	.clock        ( clk ),
-	.data         ( {5'd0,
+	.data         ( {3'd0,
                    bus_i} ),
 	.rdreq        ( bus_rd_ack ),
 	.sclr         ( rst ),
@@ -204,7 +206,7 @@ begin
   dst_i.Tgd  <= '0;
   dst_i.Tgc  <= '0;
 
-  casex (1'b1)
+  casez (1'b1)
     state_idle: begin
                 if(flushStart)
                 begin
@@ -224,13 +226,13 @@ begin
                     end
                   else
                     begin
-                    logic [WAYS-1:0] lru_entry;
+                    logic [$clog2(WAYS)-1:0] lru_entry;
                     lru_entry = mem_buffer_lru;
                     for(int i = 0; i < WAYS; i++)
                       begin
                       if(~mem_buffer[i].Vld)
                         begin
-                        lru_entry = i;
+                        lru_entry = i[$clog2(WAYS)-1:0];
                         break;
                         end
                       end
