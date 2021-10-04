@@ -730,10 +730,10 @@ always
 
   `SVTEST(SIM_BOOTLOADER_FAST)
   cycleCount = 0;
-  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../../output/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../../target/programs/bootloader/bootloader_sdtest_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../../target/programs/bootloader/bootloader_sdtest_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../../target/programs/bootloader/bootloader_sdtest_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../../target/programs/bootloader/bootloader_sdtest_0.v", de10nano.mem.mem_array_0);
   //$readmemh("../../../verif/sdcard.txt", sd.flash_mem);
   $readmemh("sdcard.txt", sd.flash_mem);
 

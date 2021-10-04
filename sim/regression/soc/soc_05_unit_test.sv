@@ -3,7 +3,7 @@
 module soc_unit_test;
   `include "../../soc_setup.svh"
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/bootloader/bootloader_preloaded.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../target/programs/bootloader/bootloader_preloaded.32.hex";
 
   //===================================
   // All tests are defined between the
@@ -24,7 +24,7 @@ module soc_unit_test;
   `SVTEST(SOC_05_SOFT_FLOAT)
   cycleCountMax = 1000000;
   cycleCount = 0;
-  $readmemh("../../../../output/programs/apps/regressions/05_soft_float.ddr3mem.v", ddr3.ddr3);
+  $readmemh("../../../../target/programs/apps/regressions/05_soft_float.ddr3mem.v", ddr3.ddr3);
 
   while(!( cycleCount > cycleCountMax |
            rvfi_mon.endLoop) )

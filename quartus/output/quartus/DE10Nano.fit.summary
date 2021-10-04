@@ -1,0 +1,20 @@
+Fitter Status : Successful - Sun Sep 12 17:41:51 2021
+Quartus Prime Version : 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name : DE10Nano
+Top-level Entity Name : fpga_top
+Family : Cyclone V
+Device : 5CSEBA6U23I7
+Timing Models : Final
+Logic utilization (in ALMs) : 20,834 / 41,910 ( 50 % )
+Total registers : 20098
+Total pins : 217 / 314 ( 69 % )
+Total virtual pins : 0
+Total block memory bits : 274,198 / 5,662,720 ( 5 % )
+Total RAM Blocks : 55 / 553 ( 10 % )
+Total DSP Blocks : 9 / 112 ( 8 % )
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 1 / 6 ( 17 % )
+Total DLLs : 1 / 4 ( 25 % )

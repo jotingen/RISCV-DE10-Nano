@@ -11,8 +11,8 @@ all:
 #Use chronic to hide output unless we have a fail
 .PHONY: $(unit_tests)
 $(unit_tests): 
-	@mkdir -p ../../../output/regressions/sim/uart_demo/$(patsubst %.sv,%,$@) && \
-	rm -rf ../../../output/regressions/sim/uart_demo/$(patsubst %.sv,%,$@)/work && \
+	@mkdir -p ../../../target/regressions/sim/uart_demo/$(patsubst %.sv,%,$@) && \
+	rm -rf ../../../target/regressions/sim/uart_demo/$(patsubst %.sv,%,$@)/work && \
 	SVUNIT_INSTALL=${SVUNIT_INSTALL} \
 	PATH="${PATH}"                   \
 	runSVUnit -s modelsim \
@@ -21,6 +21,6 @@ $(unit_tests):
 						-c "-L altera_mf_ver -L 220model_ver" \
 						-r "-L altera_mf_ver -L 220model_ver" \
 						-r "-wlf $(patsubst %.sv,%.wlf,$@)" \
-						-o ../../../output/regressions/sim/uart_demo/$(patsubst %.sv,%,$@) \
+						-o ../../../target/regressions/sim/uart_demo/$(patsubst %.sv,%,$@) \
 						-t $@; \
-	if grep -e 'testrunner.*FAILED' -e 'Error loading design' ../../../output/regressions/sim/uart_demo/$(patsubst %.sv,%,$@)/run.log; then exit 1; fi
+	if grep -e 'testrunner.*FAILED' -e 'Error loading design' ../../../target/regressions/sim/uart_demo/$(patsubst %.sv,%,$@)/run.log; then exit 1; fi

@@ -24,14 +24,14 @@ riscv:
              ; set mainClass in (Compile, run) := Some(\"led.led_top\"); run\
              ; set mainClass in (Compile, run) := Some(\"keys.keys_top\"); run\
              ; set mainClass in (Compile, run) := Some(\"uart.uart_top\"); run"
-	sed -i 's/^\(\s*assert.*)\)\s*$$/\1;/' output/*.v
+	sed -i 's/^\(\s*assert.*)\)\s*$$/\1;/' target/*.v
 
 
 .PHONY: rvfimon
 rvfimon: 
 	mkdir -p output/rvfi; \
 	cd submodules/riscv-formal/monitor; \
-	./generate.py -irv32imc -c 6 -a -p riscv_rvfimon  > ../../../output/rvfi/riscv_rvfimon.v
+	./generate.py -irv32imc -c 6 -a -p riscv_rvfimon  > ../../../target/rvfi/riscv_rvfimon.v
 
 #.PHONY: all
 #all: 

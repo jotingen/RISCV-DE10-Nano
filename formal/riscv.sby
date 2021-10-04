@@ -19,7 +19,7 @@ read_verilog 220model.v
 prep -top riscv_formal
 
 [files]
-../output/riscv_formal.sv
+../target/riscv_formal.sv
 ../src/rtl/quartus/multiplier/multiplier.v
 ../src/rtl/quartus/multiplier_unsigned/multiplier_unsigned.v
 ../src/rtl/quartus/multiplier_signed_unsigned/multiplier_signed_unsigned.v

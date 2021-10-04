@@ -39,7 +39,7 @@
 `include "../../../src/rtl/quartus/ram_mem/ram_mem.v"
 `include "../../../src/rtl/quartus/ram_debug/ram_debug.v"
 `include "../../../src/rtl/quartus/wishbone_buff/wishbone_buff.v"
-`include "../../../output/riscv_top.v"
+`include "../../../target/riscv_top.v"
 `include "../../../src/rtl/sdcard/sdcard.sv"
 `include "../../../src/rtl/sdcard/sdcard_data_in_fifo.v"
 `include "../../../src/rtl/spi/spi.sv"
@@ -61,7 +61,7 @@
 `include "../../../verif/led_monitor.sv"
 `include "../../../verif/wishbone_monitor.sv"
              
-`include "../../../output/rvfi/riscv_rvfimon.v"
+`include "../../../target/rvfi/riscv_rvfimon.v"
 
 module soc_unit_test;
   import svunit_pkg::svunit_testcase;
@@ -738,13 +738,13 @@ always
   int cycleCountMax = 10000;
   int cycleCount;
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../../output/programs/bootloader/bootloader_preloaded.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../../target/programs/bootloader/bootloader_preloaded.32.hex";
 
   `SVUNIT_TESTS_BEGIN
 
   `SVTEST(SIM_BOOTLOADER_FAST)
   cycleCount = 0;
-  $readmemh("../../../../../output/programs/apps/demo_uart/demo_uart.ddr3mem.v", ddr3.ddr3);
+  $readmemh("../../../../../target/programs/apps/demo_uart/demo_uart.ddr3mem.v", ddr3.ddr3);
 
   //Blinky will repeat forever
   while(!( cycleCount > cycleCountMax |

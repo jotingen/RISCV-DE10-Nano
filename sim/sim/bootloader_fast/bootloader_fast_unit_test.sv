@@ -730,11 +730,11 @@ always
 
   `SVTEST(SIM_BOOTLOADER_FAST)
   cycleCount = 0;
-  $readmemh("../../../output/programs/bootloader/bootloader_fast_3.v", de10nano.mem.mem_array_3);
-  $readmemh("../../../output/programs/bootloader/bootloader_fast_2.v", de10nano.mem.mem_array_2);
-  $readmemh("../../../output/programs/bootloader/bootloader_fast_1.v", de10nano.mem.mem_array_1);
-  $readmemh("../../../output/programs/bootloader/bootloader_fast_0.v", de10nano.mem.mem_array_0);
-  $readmemh("../../../output/programs/apps/blinky/blinky_sdc.v", sd.flash_mem);
+  $readmemh("../../../target/programs/bootloader/bootloader_fast_3.v", de10nano.mem.mem_array_3);
+  $readmemh("../../../target/programs/bootloader/bootloader_fast_2.v", de10nano.mem.mem_array_2);
+  $readmemh("../../../target/programs/bootloader/bootloader_fast_1.v", de10nano.mem.mem_array_1);
+  $readmemh("../../../target/programs/bootloader/bootloader_fast_0.v", de10nano.mem.mem_array_0);
+  $readmemh("../../../target/programs/apps/blinky/blinky_sdc.v", sd.flash_mem);
 
   //Blinky will repeat forever
   while(!( cycleCount > 2000000 |

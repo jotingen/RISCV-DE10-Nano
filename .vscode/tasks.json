@@ -5,7 +5,7 @@
 			"label": "Compile RISCV",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"command": "sbt 'runMain riscv.riscv_top'",
 			"group": "build",
@@ -17,7 +17,7 @@
 			"label": "Compile LED",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"command": "sbt 'runMain led.led_top'",
 			"group": "build",
@@ -29,7 +29,7 @@
 			"label": "Compile Mem",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"command": "sbt 'runMain mem.mem_top'",
 			"group": "build",
@@ -41,7 +41,7 @@
 			"label": "Compile Keys",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"command": "sbt 'runMain keys.keys_top'",
 			"group": "build",
@@ -53,7 +53,7 @@
 			"label": "Compile UART",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"command": "sbt 'runMain uart.uart_top'",
 			"group": "build",
@@ -67,7 +67,7 @@
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
-			"command": "perl ${workspaceFolder}/bin/altera_lib_mf.pl ${workspaceFolder}/output/altera_mf C:/intelFPGA_lite/20.1/quartus/eda/sim_lib/altera_mf.v; perl ${workspaceFolder}/bin/altera_lib_lpm.pl ${workspaceFolder}/output/220model C:/intelFPGA_lite/20.1/quartus/eda/sim_lib/220model.v",
+			"command": "perl ${workspaceFolder}/bin/altera_lib_mf.pl ${workspaceFolder}/target/altera_mf C:/intelFPGA_lite/20.1/quartus/eda/sim_lib/altera_mf.v; perl ${workspaceFolder}/bin/altera_lib_lpm.pl ${workspaceFolder}/target/220model C:/intelFPGA_lite/20.1/quartus/eda/sim_lib/220model.v",
 			"group": "build",
 			"presentation": {
 				"reveal": "always",
@@ -78,7 +78,7 @@
 			"type": "shell",
 			"group": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"presentation": {
 				"reveal": "always",
@@ -90,7 +90,7 @@
 			"type": "shell",
 			"group": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/src/spinalhdl/riscv"
+				"cwd": "${workspaceFolder}"
 			},
 			"presentation": {
 				"reveal": "always",
@@ -107,7 +107,7 @@
 			"presentation": {
 				"reveal": "always",
 			},
-			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc --exe --build --no-order-clock-delay +libext+.vo+ --top-module core_top -Ioutput/220model -Ioutput/altera_mf -Isrc/rtl/quartus/multiplier -Isrc/rtl/quartus/multiplier_signed_unsigned -Isrc/rtl/quartus/multiplier_unsigned -Isrc/rtl/quartus/divider -Isrc/rtl/quartus/divider_unsigned -Isrc/rtl/quartus/ram_debug -Isrc/rtl/quartus/ram_mem -Isrc/rtl/quartus/wishbone_buff -Isrc/rtl/de10nano -Isrc/rtl/de10nano/ddr3 -Isrc/rtl/mem -Isrc/rtl/mmc -Isrc/rtl/mor1kx -Isubmodules/mor1kx/rtl/verilog -Isrc/rtl/sdcard -Isrc/rtl/spi -Isrc/rtl/waveshare -Isrc/rtl/waveshare/ILI9486 src/rtl/wishbone/wishbone_pkg.sv tools/verilator/config.vlt output/tb_top.v",
+			"command": "docker run --rm -v ${workspaceFolder}:/${workspaceFolderBasename} -w /${workspaceFolderBasename} verilator/verilator:latest --cc --exe --Mdir target/verilator --prefix tb_top --no-order-clock-delay +libext+.vo+ --top-module core_top -Itarget/220model -Itarget/altera_mf -Isrc/main/sv/quartus/multiplier -Isrc/main/sv/quartus/multiplier_signed_unsigned -Isrc/main/sv/quartus/multiplier_unsigned -Isrc/main/sv/quartus/divider -Isrc/main/sv/quartus/divider_unsigned -Isrc/main/sv/quartus/ram_debug -Isrc/main/sv/quartus/ram_mem -Isrc/main/sv/quartus/wishbone_buff -Isrc/main/sv/de10nano -Isrc/main/sv/de10nano/ddr3 -Isrc/main/sv/mem -Isrc/main/sv/mmc -Isrc/main/sv/mor1kx -Isubmodules/mor1kx/rtl/verilog -Isrc/main/sv/sdcard -Isrc/main/sv/spi -Isrc/main/sv/waveshare -Isrc/main/sv/waveshare/ILI9486 src/main/sv/wishbone/wishbone_pkg.sv tools/verilator/config.vlt target/tb_top.v",
 			"dependsOrder": "sequence",
 			"dependsOn": [
 				"Compile Altera Files",

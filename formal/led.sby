@@ -11,4 +11,4 @@ read -sv led_formal.sv
 prep -top led_formal
 
 [files]
-../output/led_formal.sv
+../target/led_formal.sv

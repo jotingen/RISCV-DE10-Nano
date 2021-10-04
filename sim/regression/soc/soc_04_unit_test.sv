@@ -3,7 +3,7 @@
 module soc_unit_test;
   `include "../../soc_setup.svh"
 
-  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../output/programs/regressions/04_ddr3_sweep.32.hex";
+  defparam de10nano.mem.ram.altsyncram_component.init_file = "../../../../target/programs/regressions/04_ddr3_sweep.32.hex";
 
   //===================================
   // All tests are defined between the
